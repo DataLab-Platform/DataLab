@@ -39,11 +39,13 @@ from sigimax.config import (
     FormatStringOptionField,
     OptionField,
     SigimaXOptions,
+    TupleOptionField,
     TypedOptionField,
 )
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
 from datalab.config.appinfo import APP_NAME, DATAPATH
+from datalab.plugins.catalog import DEFAULT_CATALOG_URL
 
 if TYPE_CHECKING:
     from datalab.config.persistence import OptionStore
@@ -106,6 +108,14 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="If True, allow localhost Web API connections without a token.",
         )
+        self.capsule_registry_address = TypedOptionField(
+            self,
+            "capsule_registry_address",
+            category="main",
+            default="",
+            expected_type=str,
+            description="Address of the capsule registry (empty: no registry).",
+        )
         # current_tab may be None or an int panel index: no type check.
         self.current_tab = OptionField(
             self,
@@ -128,7 +138,7 @@ class DataLabOptions(SigimaXOptions):
             "plugins_enabled_list",
             category="main",
             default=None,
-            description="Enabled plugin names (None = all, [] = none, or a list).",
+            description="Enabled plugin IDs (None = all, [] = none, or a list).",
         )
         self.plugins_path = TypedOptionField(
             self,
@@ -147,13 +157,126 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="List of extra plugin directories.",
         )
-        self.tour_enabled = TypedOptionField(
+        self.plugins_catalog_url = TypedOptionField(
             self,
-            "tour_enabled",
+            "plugins_catalog_url",
+            category="main",
+            default=DEFAULT_CATALOG_URL,
+            expected_type=str,
+            description="URL of the plugin catalog (empty to disable it).",
+        )
+        self.plugins_catalog_path_list = TypedOptionField(
+            self,
+            "plugins_catalog_path_list",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="Local plugin catalog folders, by priority.",
+        )
+        self.plugins_dialog_size = TupleOptionField(
+            self,
+            "plugins_dialog_size",
+            category="main",
+            default=None,
+            description="Plugin configuration dialog size as (width, height) tuple, "
+            "or None for the default size.",
+        )
+        self.welcome_on_startup = TypedOptionField(
+            self,
+            "welcome_on_startup",
             category="main",
             default=True,
             expected_type=bool,
-            description="If True, offer the guided tour on first startup.",
+            description=(
+                "If True, show the welcome page at startup and whenever the "
+                "current signal or image panel is empty."
+            ),
+        )
+        self.welcome_application_rows = TypedOptionField(
+            self,
+            "welcome_application_rows",
+            category="main",
+            default=2,
+            expected_type=int,
+            description="Maximum number of application tile rows on the welcome page.",
+        )
+        self.welcome_pinned_applications = TypedOptionField(
+            self,
+            "welcome_pinned_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the applications pinned on the welcome page.",
+        )
+        self.welcome_hidden_applications = TypedOptionField(
+            self,
+            "welcome_hidden_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the applications hidden from the welcome page.",
+        )
+        self.welcome_recent_applications = TypedOptionField(
+            self,
+            "welcome_recent_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the recently used applications, most recent first.",
+        )
+        self.applications_panel_shown = TypedOptionField(
+            self,
+            "applications_panel_shown",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description="True once the Applications panel has been shown: it floats "
+            "beside the main window the first time only.",
+        )
+        self.applications_panel_docked_size = TupleOptionField(
+            self,
+            "applications_panel_docked_size",
+            category="main",
+            default=None,
+            description="Size of the docked Applications panel when it was closed, "
+            "as (width, height) tuple, given back when it is shown again, or None.",
+        )
+        self.applications_collapsed_sections = TypedOptionField(
+            self,
+            "applications_collapsed_sections",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="Keys of the collapsed sections of the Applications panel "
+            "('methods', 'tools', 'datasets').",
+        )
+        self.applications_details_sizes = TupleOptionField(
+            self,
+            "applications_details_sizes",
+            category="main",
+            default=None,
+            description="Heights of the method list and of the method details in "
+            "the Applications panel, as (list, details) tuple, or None.",
+        )
+        self.applications_selected_methods = TypedOptionField(
+            self,
+            "applications_selected_methods",
+            category="main",
+            default={},
+            expected_type=dict,
+            description="Recipe ID of the method selected in the Applications "
+            "panel, by application plugin ID.",
+        )
+        self.instrument_new_group = TypedOptionField(
+            self,
+            "instrument_new_group",
+            category="main",
+            default={},
+            expected_type=dict,
+            description=(
+                "State of the 'New group' option of each instrument window, chosen "
+                "by the user (key: 'plugin_id/tool_id')."
+            ),
         )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,
@@ -174,6 +297,14 @@ class DataLabOptions(SigimaXOptions):
             category="proc",
             default=(configtools.MONOSPACE, 8, False),
             description="Monospace font used by history and analysis tabs.",
+        )
+        self.result_title_mode = EnumOptionField(
+            self,
+            "result_title_mode",
+            category="proc",
+            default="uuid",
+            choices=["uuid", "title"],
+            description="Reference display mode in generated object titles.",
         )
         self.history_auto_record = TypedOptionField(
             self,
@@ -226,6 +357,15 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="Ignore the message shown when inserting a title as an "
             "annotation label.",
+        )
+        self.show_delete_button_on_hover = TypedOptionField(
+            self,
+            "show_delete_button_on_hover",
+            category="view",
+            default=True,
+            expected_type=bool,
+            description="Show a delete button at the right of the signal, image or "
+            "group under the mouse cursor in the object lists.",
         )
         self.auto_refresh = TypedOptionField(
             self,
@@ -524,6 +664,10 @@ class DataLabOptions(SigimaXOptions):
         self.watermark_image_path.set(
             configtools.get_image_file_path("DataLab-watermark.png")
         )
+        # The watermark path depends on the running installation: persisting it
+        # would make other installations sharing the user configuration (e.g. in
+        # another Python environment) display this one's image.
+        self.watermark_image_path.category = ""
         self.app_docurl.set(__docurl__)
         self.app_homeurl.set(__homeurl__)
         self.app_supporturl.set(__supporturl__)

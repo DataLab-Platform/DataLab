@@ -242,19 +242,70 @@ class AbstractDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def load_from_files(self, filenames: list[str]) -> None:
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files declared in the capsule (16 MiB at most
+             each), never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+
+    @abc.abstractmethod
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+
+    @abc.abstractmethod
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images).
 
         Args:
             filenames: list of file names
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
 
     @abc.abstractmethod
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
 
     @abc.abstractmethod
@@ -360,13 +411,16 @@ class AbstractDLControl(abc.ABC):
     @abc.abstractmethod
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name (valid values: "signal", "image"). Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
 
     @abc.abstractmethod
@@ -796,21 +850,80 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
         """
         self._datalab.save_h5_workspace(filename)
 
-    def load_from_files(self, filenames: list[str]) -> None:
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files declared in the capsule (16 MiB at most
+             each), never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+        return self._datalab.export_capsule(
+            filename,
+            name,
+            description,
+            as_revision,
+            workspace_ref,
+            workspace_filename,
+            attachments,
+        )
+
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+        self._datalab.open_capsule(filename, workspace)
+
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images).
 
         Args:
             filenames: list of file names
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
-        self._datalab.load_from_files(filenames)
+        self._datalab.load_from_files(filenames, param)
 
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
-        self._datalab.load_from_directory(path)
+        self._datalab.load_from_directory(path, param)
 
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
@@ -833,15 +946,18 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
 
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name (valid values: "signal", "image"). Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
-        self._datalab.add_group(title, panel, select)
+        return self._datalab.add_group(title, panel, select)
 
     def select_objects(
         self,

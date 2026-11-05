@@ -547,14 +547,14 @@ The following parameters are available:
 
     * - Parameter
       - Description
-    * - math:`x_{min}`
-      - Minimum x-coordinate of the output image
+    * - :math:`x_{min}`
+      - X-coordinate of the center of the first output pixel
     * - :math:`x_{max}`
-      - Maximum x-coordinate of the output image
+      - X-coordinate of the center of the last output pixel
     * - :math:`y_{min}`
-      - Minimum y-coordinate of the output image
+      - Y-coordinate of the center of the first output pixel
     * - :math:`y_{max}`
-      - Maximum y-coordinate of the output image
+      - Y-coordinate of the center of the last output pixel
     * - Mode
       - Image size definition mode: 'Pixel size' or 'Output shape'. The 'Pixel size' mode
         allows to define the pixel size of the new image, while the 'Output shape' mode

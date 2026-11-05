@@ -36,6 +36,18 @@ msgstr "**Mode couleur**"
 msgid "Choose the color mode for the application interface (e.g., light, dark, or auto)."
 msgstr "Choisir le mode couleur de l'interface de l'application (par exemple, clair, sombre ou automatique)."
 
+msgid "**Show welcome page when the current panel is empty**"
+msgstr "**Afficher la page d'accueil lorsque le panneau courant est vide**"
+
+msgid "When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`)."
+msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est affichée au démarrage de DataLab et chaque fois que le panneau signal ou image courant est vide (voir :ref:`welcome_page`)."
+
+msgid "**Welcome page application rows**"
+msgstr "**Lignes d'applications de la page d'accueil**"
+
+msgid "Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the :ref:`applications_panel`."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil, de 1 à 10 (par défaut : 2). Les autres applications restent accessibles depuis le :ref:`applications_panel`."
+
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"
 
@@ -135,6 +147,21 @@ msgstr "Nouveau groupe 1 : A-E, B-F"
 
 msgid "New group 2: C-E, D-F"
 msgstr "Nouveau groupe 2 : C-E, D-F"
+
+msgid "**References in result titles**"
+msgstr "**Références dans les titres de résultats**"
+
+msgid "Choose how source objects are represented in titles generated for computation results:"
+msgstr "Choisir comment les objets sources sont représentés dans les titres générés pour les résultats des calculs :"
+
+msgid "**Source UUID** (default): use stable 8-character references derived from each source object's UUID."
+msgstr "**UUID source** (par défaut) : utiliser des références stables de 8 caractères dérivées de l'UUID de chaque objet source."
+
+msgid "**Source title**: use the source objects' live current titles, so references follow later renames. References nested in processing chains are resolved too, e.g. ``derivative(derivative(My signal))``."
+msgstr "**Titre de la source** : utiliser les titres actuels des objets sources, afin que les références suivent les renommages ultérieurs. Les références imbriquées dans les chaînes de traitement sont également résolues, par exemple ``derivative(derivative(Mon signal))``."
+
+msgid "This setting changes only the displayed reference, in the object trees, plot legends, plot titles and labels added with *Add object title to plot*. The title edited in the Properties panel keeps its stored references. Result titles store 8-character references (``g``-prefixed for groups), while each object's identity remains its full UUID. Signal, image and group items in the trees show their own ``#UUID8`` (or ``#gUUID8``) reference below their title."
+msgstr "Ce réglage modifie uniquement la référence affichée, dans les arborescences d'objets, les légendes et titres des graphiques et les étiquettes ajoutées avec *Ajouter le titre de l'objet au graphique*. Le titre modifié dans le panneau Propriétés conserve ses références enregistrées. Les titres de résultats stockent des références de 8 caractères (préfixées par ``g`` pour les groupes), tandis que l'identité de chaque objet reste son UUID complet. Les signaux, images et groupes des arborescences affichent leur propre référence ``#UUID8`` (ou ``#gUUID8``) sous leur titre."
 
 msgid "**Use signal bounds for new signals**"
 msgstr "**Utiliser les bornes du signal pour les nouveaux signaux**"
@@ -274,6 +301,12 @@ msgstr "**Ignorer le message d'insertion de titre**"
 msgid "Suppress the information message when inserting an object title as an annotation label."
 msgstr "Supprimer le message d'information lors de l'insertion d'un titre d'objet comme étiquette d'annotation."
 
+msgid "**Show delete button when hovering list items**"
+msgstr "**Afficher un bouton de suppression au survol des éléments des listes**"
+
+msgid "When enabled (default), a delete button appears at the right of the signal, image or group under the mouse cursor in the signal and image lists (see :ref:`overview`). Disable this option to hide the button: items can still be deleted with the \"Remove\" action of the \"Edit\" menu, or with the :kbd:`Delete` key."
+msgstr "Lorsque cette option est activée (par défaut), un bouton de suppression apparaît à droite du signal, de l'image ou du groupe situé sous le curseur de la souris, dans les listes de signaux et d'images (voir :ref:`overview`). Désactivez cette option pour masquer le bouton : les éléments peuvent toujours être supprimés avec l'action « Supprimer » du menu « Édition », ou avec la touche :kbd:`Suppr`."
+
 msgid "Signals"
 msgstr "Signaux"
 
@@ -286,8 +319,9 @@ msgstr "Préférences de visualisation - Sous-onglet Signaux"
 msgid "**Default line width**"
 msgstr "**Épaisseur par défaut**"
 
-msgid "Default line width for curves representing signals. This setting affects all signal visualizations unless overridden individually. Note: for signals exceeding the line width performance threshold (see below), the line width is automatically clamped to 1.0 for optimal rendering performance."
-msgstr "Épaisseur de trait par défaut pour les courbes représentant les signaux. Ce paramètre affecte toutes les visualisations de signaux, sauf si elles sont remplacées individuellement. Remarque : pour les signaux dépassant le seuil de performance de l'épaisseur de trait (voir ci-dessous), l'épaisseur de trait est automatiquement plafonnée à 1,0 pour des performances de rendu optimales."
+#, python-format
+msgid "Default line width for curves representing signals. This setting affects all signal visualizations unless overridden individually. Note: for signals exceeding the line width performance threshold (see below), the line width is automatically clamped to 1.0 for optimal rendering performance. Curves of width 1.0 or less are drawn one screen pixel wide, also on high-DPI screens (e.g. with a 150% display scaling), which keeps their rendering fast."
+msgstr "Épaisseur de trait par défaut pour les courbes représentant les signaux. Ce paramètre affecte toutes les visualisations de signaux, sauf si elles sont remplacées individuellement. Remarque : pour les signaux dépassant le seuil de performance de l'épaisseur de trait (voir ci-dessous), l'épaisseur de trait est automatiquement plafonnée à 1,0 pour des performances de rendu optimales. Les courbes d'épaisseur 1,0 ou moins sont tracées avec une largeur d'un pixel de l'écran, y compris sur les écrans haute résolution (par exemple avec une mise à l'échelle de l'affichage de 150%), ce qui préserve la rapidité de leur tracé."
 
 msgid "**Line width performance threshold**"
 msgstr "**Seuil de performance de l'épaisseur de trait**"
@@ -298,14 +332,14 @@ msgstr "Pour les signaux comportant plus de ce nombre de points (par défaut : 1
 msgid "**Use auto downsampling**"
 msgstr "**Utiliser le sous-échantillonnage automatique**"
 
-msgid "Enable automatic downsampling for large signals to improve performance and visualization clarity."
-msgstr "Activer le sous-échantillonnage automatique pour les grands signaux afin d'améliorer les performances et la clarté de la visualisation."
+msgid "Enable automatic downsampling for large signals to improve performance and visualization clarity. Downsampling only affects the display: signal data and processing are not modified."
+msgstr "Activer le sous-échantillonnage automatique pour les grands signaux afin d'améliorer les performances et la clarté de la visualisation. Le sous-échantillonnage ne concerne que l'affichage : les données des signaux et les traitements ne sont pas modifiés."
 
 msgid "**Downsampling max points**"
 msgstr "**Nombre maximum de points de sous-échantillonnage**"
 
-msgid "Maximum number of points to display when downsampling is enabled (default: 10,000)."
-msgstr "Nombre maximum de points à afficher lorsque le sous-échantillonnage est activé (par défaut : 10 000)."
+msgid "Maximum number of points displayed for a signal when auto downsampling is enabled (default: 100,000). Signals with more points are downsampled so that at most this number of points is displayed."
+msgstr "Nombre maximal de points affichés pour un signal lorsque le sous-échantillonnage automatique est activé (par défaut : 100 000). Les signaux comportant plus de points sont sous-échantillonnés de sorte qu'au plus ce nombre de points soit affiché."
 
 msgid "**Autoscale margin**"
 msgstr "**Marge d'échelle automatique**"
@@ -597,3 +631,4 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
+

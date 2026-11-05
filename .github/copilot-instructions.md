@@ -19,7 +19,7 @@ This document provides comprehensive guidance for AI coding agents working on th
 
 ### Technology Stack
 
-- **Python**: 3.9+ (using `from __future__ import annotations`)
+- **Python**: 3.10+ (using `from __future__ import annotations`)
 - **Core Libraries**: NumPy (>=1.22), SciPy (>=1.10.1), scikit-image (>=0.19.2), OpenCV (optional)
 - **GUI**: Qt via PlotPy (>=2.8.2) and guidata (>=3.13.4)
 - **Computation**: Sigima (>=1.1.2) - separate package
@@ -57,8 +57,10 @@ DataLab/
 │   +-- h5/               # HDF5 I/O layer
 │   +-- widgets/          # Qt widgets (dialogs, editors, viewers)
 │   +-- utils/            # Utilities (instance check, etc.)
-│   +-- plugins/          # Built-in plugins
-│   +-- plugins.py        # Plugin system implementation
+│   +-- plugins/          # Plugin system (lazy facade over base.py, Qt-free contracts)
+│   │   +-- base.py       # Plugin host: registry, PluginBase, discovery (Qt)
+│   │   +-- recipes.py, recipe_binding.py, examples.py, tools.py, ...  # Contracts
+│   │   +-- builtin/      # Built-in plugins (data folder, not a package)
 │   +-- tests/            # pytest test suite
 │   +-- locale/           # Translations (.po files)
 │   +-- config.py         # Configuration management
@@ -177,7 +179,14 @@ python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D l
 **Example: Implementing a New Processing Feature**
 
 ```python
-# 1. Implement computation in Sigima (sigima/proc/signal/processing.py)
+# 1. Implement computation in Sigima (sigima/proc/signal/processing.py), with its
+#    operation contract (see "Adding a New Signal Processing Feature" for the
+#    contract versioning rule)
+@computation_function(
+    operation_id="sigima.signal.my_processing_func",
+    contract_version=1,
+    qualification=ReplayQualification(contract_version=1, comparison=EXACT),
+)
 def my_processing_func(src: SignalObj, param: MyParam) -> SignalObj:
     """My processing function."""
     dst = src.copy()
@@ -297,7 +306,7 @@ generated with `scripts/print_datalab_menus.py`).
 
 ### 4. Plugin System
 
-**Location**: `datalab/plugins.py`, `datalab/plugins/`, `datalab/gui/pluginconfig.py`
+**Location**: `datalab/plugins/`, `datalab/plugins/builtin/`, `datalab/gui/plugins/`
 
 **Key Classes**:
 - `PluginBase`: Abstract base class for all plugins (uses metaclass `PluginBaseMeta`)
@@ -342,7 +351,7 @@ class MyPlugin(PluginBase):
 - `self.edit_new_signal_parameters()`, `self.edit_new_image_parameters()`: Object parameter dialogs
 
 **Plugin Discovery**: Plugins are loaded from:
-1. `datalab/plugins/` (built-in)
+1. `datalab/plugins/builtin/` (built-in)
 2. User plugin directory (`~/.DataLab/plugins`)
 3. Custom plugin directory (configurable in preferences)
 4. For frozen apps, from `plugins/` directory next to executable
@@ -544,14 +553,31 @@ menu_title = "Processing"  # Not translatable!
 
 **Complete workflow**:
 
-1. **Implement computation in Sigima** (`sigima/proc/signal/processing.py`):
+1. **Implement computation in Sigima** (`sigima/proc/signal/processing.py`), with its
+   operation contract (identifier, version, replay qualification):
    ```python
+   @computation_function(
+       operation_id="sigima.signal.my_feature",
+       contract_version=1,
+       qualification=ReplayQualification(contract_version=1, comparison=EXACT),
+   )
    def my_feature(src: SignalObj, param: MyParam | None = None) -> SignalObj:
        """My feature."""
        dst = src.copy()
        # ... computation ...
        return dst
    ```
+
+   **Contract versioning rule (mandatory)**: when a change of an existing Sigima computation
+   function changes the result it returns (values, outputs, defaults, parameters, inputs now
+   refused), increase its `contract_version` (and its qualification) in Sigima in the same change,
+   **whatever the releases of DataLab**: Sigima is a reference of its own. Only previously refused
+   inputs now accepted, changes without effect on the result, or changes covered by a versioned
+   rule of the execution context (image ROI convention, X alignment) do not require it. The 1.4
+   exception (contracts kept at version 1) was one-off and does not apply anymore. Then update the
+   DataLab provenance tests that check a contract version
+   (`datalab/tests/features/common/provenance_*_test.py`). Full rules: Sigima
+   `doc/contributing/guidelines.rst` and `doc/user_guide/contracts.rst`.
 
 2. **Export from Sigima** (`sigima/proc/signal/__init__.py`):
    ```python
@@ -707,8 +733,8 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 | `datalab/gui/processor/base.py` | Base processor class (generic methods) |
 | `datalab/gui/actionhandler.py` | Menu and action management |
 | `datalab/config.py` | Configuration, `_()` translation function |
-| `datalab/plugins.py` | Plugin system implementation |
-| `datalab/gui/pluginconfig.py` | Plugin configuration dialog |
+| `datalab/plugins/base.py` | Plugin system implementation (public names re-exported by `datalab.plugins`) |
+| `datalab/gui/plugins/config.py` | Plugin configuration dialog |
 | `datalab/control/baseproxy.py` | Abstract base proxy (API definition) |
 | `datalab/control/proxy.py` | Remote control API (RemoteProxy, LocalProxy) |
 | `datalab/webapi/routes.py` | Web API endpoint definitions |

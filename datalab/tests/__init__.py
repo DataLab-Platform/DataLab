@@ -29,6 +29,12 @@ import time
 from contextlib import contextmanager
 from typing import Generator
 
+# Tests check English messages: under pytest, the system language applies only
+# when LANG is set (before the translations are loaded by ``datalab.config``)
+if "pytest" in sys.modules:
+    os.environ.setdefault("LANG", "en_US.UTF-8")
+
+# pylint: disable=wrong-import-position
 import psutil
 import pytest
 from guidata.guitest import run_testlauncher
@@ -164,7 +170,7 @@ def run_datalab_in_background(wait_until_ready: bool = True) -> None:
             "load_user_config": False,
             "option_overrides": {
                 "rpc_server_enabled": True,
-                "tour_enabled": False,
+                "welcome_on_startup": False,
             },
             "xmlrpc_port": port,
         },

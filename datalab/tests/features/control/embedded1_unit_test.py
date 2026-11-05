@@ -12,11 +12,7 @@ It is rebuilt from scratch when reopening application.
 
 import abc
 
-from guidata.qthelpers import (
-    get_std_icon,
-    qt_app_context,
-    win32_fix_title_bar_background,
-)
+from guidata.qthelpers import get_std_icon, qt_app_context
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 from sigima.objects import NewImageParam
@@ -92,7 +88,6 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
 
     def __init__(self):
         super().__init__()
-        win32_fix_title_bar_background(self)
         self.setWindowTitle(_("Host application"))
         self.setWindowIcon(get_std_icon("ComputerIcon"))
         self.datalab: DLMainWindow = None

@@ -65,7 +65,7 @@ def __save_signals_to_directory(win: DLMainWindow, screenshot: bool = False) -> 
                 param.overwrite = False
                 param.update_preview()
                 execenv.print(f"  Preview: {param.preview}")
-                assert "s001: 001_Sine Wave.csv" in param.preview
+                assert "Sine Wave: 001_Sine Wave.csv" in param.preview
                 execenv.print("  ✓ Save to directory parameter configured correctly")
 
                 # Edit the parameter to show the dialog
@@ -117,7 +117,7 @@ def __save_images_to_directory(win: DLMainWindow, screenshot: bool = False) -> N
                 param.overwrite = False
                 param.update_preview()
                 execenv.print(f"  Preview: {param.preview}")
-                assert "i001: Random Noise_0001.png" in param.preview
+                assert "Random Noise: Random Noise_0001.png" in param.preview
                 execenv.print("  ✓ Save to directory parameter configured correctly")
 
                 # Edit the parameter to show the dialog

@@ -791,32 +791,32 @@ msgid "Generate new images by resampling each selected image. The following para
 msgstr "Génère de nouvelles images en rééchantillonnant chaque image sélectionnée. Les paramètres suivants sont disponibles :"
 
 #, python-brace-format
-msgid "math:`x_{min}`"
+msgid ":math:`x_{min}`"
 msgstr ""
 
-msgid "Minimum x-coordinate of the output image"
-msgstr "Coordonnée x minimale de l'image de sortie"
+msgid "X-coordinate of the center of the first output pixel"
+msgstr "Coordonnée x du centre du premier pixel de sortie"
 
 #, python-brace-format
 msgid ":math:`x_{max}`"
 msgstr ""
 
-msgid "Maximum x-coordinate of the output image"
-msgstr "Coordonnée x maximale de l'image de sortie"
+msgid "X-coordinate of the center of the last output pixel"
+msgstr "Coordonnée x du centre du dernier pixel de sortie"
 
 #, python-brace-format
 msgid ":math:`y_{min}`"
 msgstr ""
 
-msgid "Minimum y-coordinate of the output image"
-msgstr "Coordonnée y minimale de l'image de sortie"
+msgid "Y-coordinate of the center of the first output pixel"
+msgstr "Coordonnée y du centre du premier pixel de sortie"
 
 #, python-brace-format
 msgid ":math:`y_{max}`"
 msgstr ""
 
-msgid "Maximum y-coordinate of the output image"
-msgstr "Coordonnée y maximale de l'image de sortie"
+msgid "Y-coordinate of the center of the last output pixel"
+msgstr "Coordonnée y du centre du dernier pixel de sortie"
 
 msgid "Mode"
 msgstr "Mode"

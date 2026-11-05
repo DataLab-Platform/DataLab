@@ -13,12 +13,13 @@ from copy import deepcopy
 from typing import Any
 
 import numpy as np
-from guidata.dataset.conv import dataset_to_json, json_to_dataset
+from guidata.dataset.conv import dataset_to_json
 from guidata.dataset.datatypes import DataSet
 from qtpy import QtCore as QC
 from sigima.objects.base import BaseROI
 
 from datalab.config import _
+from datalab.utils.datasetjson import decode_dataset_json
 
 _TRUSTED_ROI_MODULE_PREFIX = "sigima."
 
@@ -27,13 +28,16 @@ _TRUSTED_ROI_MODULE_PREFIX = "sigima."
 # handling in serialize/deserialize) when the on-disk layout evolves.
 # Action schema v2: optional ``effects`` manifest for 1_to_0 compute actions,
 # and optional mutation descriptors (``mutation_key``/``target_uuids``).
+# Action schema v3: optional ``provenance_activity_ids`` (activities of the last
+# successful execution of the action, in the workspace provenance ledger).
 HISTORY_SCHEMA_VERSION = 1
-HISTORY_ACTION_SCHEMA_VERSION = 2
+HISTORY_ACTION_SCHEMA_VERSION = 3
 # Keys used in the kwargs dict to mark DataSet payloads, so that the
 # serialization layer can round-trip them as JSON strings instead of pickling
 # arbitrary Python objects.
 _DATASET_MARKER = "__dataset_json__"
 _DATASET_LIST_MARKER = "__dataset_list_json__"
+_DATASET_LIST_NONE_SENTINEL = "__datalab_history_dataset_none__"
 _ROI_MARKER = "__roi_json__"
 
 
@@ -60,6 +64,8 @@ def numpy_to_json_safe(obj: Any) -> Any:
     """Recursively convert numpy arrays to lists for JSON serialization."""
     if isinstance(obj, np.ndarray):
         return obj.tolist()
+    if isinstance(obj, np.generic):
+        return obj.item()
     if isinstance(obj, dict):
         return {k: numpy_to_json_safe(v) for k, v in obj.items()}
     if isinstance(obj, list):
@@ -111,7 +117,7 @@ def decode_roi(encoded: str) -> Any:
 
 
 def encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
-    """Encode kwargs for HDF5 storage: replace ``DataSet``, ``list[DataSet]``,
+    """Encode kwargs for HDF5 storage: replace ``DataSet``, DataSet lists,
     and sigima ROI values with marker dicts holding their JSON representation.
 
     All other values must already be HDF5-friendly primitives (str, int, float,
@@ -134,10 +140,16 @@ def encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
         elif (
             isinstance(value, list)
             and value
-            and all(isinstance(item, DataSet) for item in value)
+            and any(isinstance(item, DataSet) for item in value)
+            and all(item is None or isinstance(item, DataSet) for item in value)
         ):
             encoded[key] = {
-                _DATASET_LIST_MARKER: [dataset_to_json(item) for item in value]
+                _DATASET_LIST_MARKER: [
+                    dataset_to_json(item)
+                    if item is not None
+                    else _DATASET_LIST_NONE_SENTINEL
+                    for item in value
+                ]
             }
         else:
             encoded[key] = value
@@ -158,7 +170,7 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     for key, value in kwargs.items():
         if isinstance(value, dict) and _DATASET_MARKER in value:
             try:
-                decoded[key] = json_to_dataset(value[_DATASET_MARKER])
+                decoded[key] = decode_dataset_json(value[_DATASET_MARKER])
             except (TypeError, ValueError, KeyError):
                 warnings.warn(
                     _("Failed to deserialize history DataSet kwarg %r.") % key
@@ -179,7 +191,10 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
         elif isinstance(value, dict) and _DATASET_LIST_MARKER in value:
             try:
                 decoded[key] = [
-                    json_to_dataset(item) for item in value[_DATASET_LIST_MARKER]
+                    None
+                    if item in (None, "", _DATASET_LIST_NONE_SENTINEL)
+                    else decode_dataset_json(item)
+                    for item in value[_DATASET_LIST_MARKER]
                 ]
             except (TypeError, ValueError, KeyError):
                 warnings.warn(
@@ -187,7 +202,7 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
                 )
                 decoded[key] = []
         else:
-            decoded[key] = value
+            decoded[key] = numpy_to_json_safe(value)
     return decoded
 
 
@@ -196,7 +211,7 @@ def copy_history_value(value: Any) -> Any:
     if callable(value):
         raise TypeError("History duplication does not support callable kwargs")
     if isinstance(value, DataSet):
-        return json_to_dataset(dataset_to_json(value))
+        return decode_dataset_json(dataset_to_json(value))
     if isinstance(value, BaseROI):
         return decode_roi(encode_roi(value))
     if isinstance(value, dict):

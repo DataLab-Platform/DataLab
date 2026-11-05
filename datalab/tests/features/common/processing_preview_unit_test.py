@@ -849,18 +849,23 @@ def test_live_image_to_signal_preview(tmp_path, monkeypatch):
         source.xlabel, source.xunit = "Position", "mm"
         source.zlabel, source.zunit = "Intensity", "a.u."
         set_number(source, 1)
-        param = LineProfileParam.create(direction="horizontal", row=3)
+        param = LineProfileParam.create(direction="horizontal", y=-2.5)
         expected = line_profile(
-            source.copy(), LineProfileParam.create(direction="horizontal", row=3)
+            source.copy(), LineProfileParam.create(direction="horizontal", y=-2.5)
         )
         assert expected.x.size == 8
         dialog = ProcessingPreviewDialog(param, line_profile, [source])
         loop = QW.QApplication.instance()
+
+        def stop_loop(*_args) -> None:
+            # Unlike quit(), exit() does not close top-level windows with Qt 6
+            loop.exit()
+
         timeout = QC.QTimer()
         timeout.setSingleShot(True)
-        timeout.timeout.connect(loop.quit)
-        dialog.preview.controller.SIG_RESULT.connect(loop.quit)
-        dialog.preview.controller.SIG_ERROR.connect(loop.quit)
+        timeout.timeout.connect(stop_loop)
+        dialog.preview.controller.SIG_RESULT.connect(stop_loop)
+        dialog.preview.controller.SIG_ERROR.connect(stop_loop)
         dialog.show()
         executor = None
         try:
@@ -882,7 +887,7 @@ def test_live_image_to_signal_preview(tmp_path, monkeypatch):
             np.testing.assert_allclose(dialog.preview.item.get_data()[1], expected.y)
             assert source.data.dtype == np.uint16
             np.testing.assert_array_equal(source.data, np.arange(120).reshape(10, 12))
-            assert param.row == 3
+            assert param.y == -2.5
             assert dialog.grab().save(str(tmp_path / "processing-preview.png"))
         finally:
             timeout.stop()

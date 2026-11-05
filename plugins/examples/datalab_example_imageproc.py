@@ -79,6 +79,7 @@ class ExtractBlobs(datalab.plugins.PluginBase):
     """DataLab Example Plugin"""
 
     PLUGIN_INFO = datalab.plugins.PluginInfo(
+        id="org.datalab.examples.extract-blobs",
         name="Extract blobs (example)",
         version="1.0.0",
         description="This is an example plugin",

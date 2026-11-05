@@ -75,7 +75,7 @@ Create a new signal from various models:
            :width: 30px
       - Triangle
       - :math:`y = y_{0}+A \sawtooth\left(2 \pi f x + \phi, \text{width} = 0.5\right)`
-    * - .. image:: ../../../datalab/data/icons/create/square.svg
+    * - .. image:: ../../../datalab/data/icons/create/square_wave.svg
            :width: 30px
       - Square
       - :math:`y = y_0 + A \sgn\left( \sin\left( 2\pi f x + \phi \right) \right)`
@@ -142,3 +142,8 @@ Create a new signal from various models:
 
 For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
 above the baseline :math:`y_0`, expressed in the signal's Y unit.
+
+The blackbody signal is the spectral radiance per unit wavelength of a blackbody
+at temperature :math:`T`: wavelengths :math:`\lambda` are expressed in meters and
+the spectral radiance in W·sr⁻¹·m⁻³. These axis titles and units are set by
+default, and may be changed in the creation dialog.

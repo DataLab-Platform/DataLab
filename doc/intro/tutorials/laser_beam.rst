@@ -120,7 +120,7 @@ in the visualization panel, and activate the "Cross section" tool |cross_section
 the vertical toolbar on the left side of the visualization panel. This
 reveals that the background noise level is approximately 30 lsb.
 
-.. |cross_section| image:: ../../images/tutorials/csection.png
+.. |cross_section| image:: ../../images/tutorials/csection.svg
 
 .. figure:: ../../images/tutorials/laser_beam/04.png
 
@@ -139,7 +139,7 @@ across the image. This analysis confirms that the background noise level is appr
     The "Image statistics" tool
     |imagestats| in the vertical toolbar.
 
-.. |imagestats| image:: ../../images/tutorials/imagestats.png
+.. |imagestats| image:: ../../images/tutorials/imagestats.svg
 
 Note that these tools are not persistent: the analysis results disappear when you select
 another image, they are intended to provide a fast insight on the image data.
@@ -163,8 +163,9 @@ To do this, select "Analysis > Centroid" from the menu.
     The centroid position is displayed on the image.
 
 Next, we can extract a line profile along the horizontal axis using
-"Analysis > Intensity profiles > Line profile". Set the row position to the
-previously computed centroid position (i.e., 668) using the "Set Parameters" button.
+"Analysis > Intensity profiles > Line profile". Set the Y coordinate of the
+row to the Y coordinate of the previously computed centroid (i.e., 668) using the
+"Set Parameters" button.
 See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction.
 
 The intensity profile will be displayed in the "Signal panel". We can then fit the profile
@@ -274,7 +275,7 @@ will display the FWHM values for all profiles.
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../datalab/data/icons/analysis/show_results.svg
+.. |show_results| image:: ../../images/icons/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -315,7 +316,7 @@ all the images and signals that were loaded or processed in DataLab. It also con
 the analysis results, the visualization settings (colormaps, contrast, etc.), the
 metadata, and the annotations.
 
-.. |filesave_h5| image:: ../../../datalab/data/icons/io/filesave_h5.svg
+.. |filesave_h5| image:: ../../images/icons/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -325,12 +326,12 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../images/icons/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |h5browser| image:: ../../../datalab/data/icons/h5/h5browser.svg
+.. |h5browser| image:: ../../images/icons/h5browser.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

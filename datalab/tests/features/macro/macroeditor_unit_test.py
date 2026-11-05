@@ -128,6 +128,25 @@ def test_macro_uid_and_new_actions():
                     restored.deserialize(reader)
             assert restored.uid == m1.uid
 
+            # Macros without ``uid`` (workspaces before 1.4, DataLab-Web) are read
+            # and the reader stays usable for the following groups.
+            legacy_path = osp.join(tmpdir, "macro_no_uid.h5")
+            with HDF5Writer(legacy_path) as writer:
+                with writer.group("macro"):
+                    with writer.group("title"):
+                        writer.write("Legacy")
+                    with writer.group("contents"):
+                        writer.write("print('legacy')")
+                with writer.group("after"):
+                    writer.write("ok")
+            legacy = Macro(widget.console)
+            with HDF5Reader(legacy_path) as reader:
+                with reader.group("macro"):
+                    legacy.deserialize(reader)
+                with reader.group("after"):
+                    assert reader.read_any() == "ok"
+            assert legacy.title == "Legacy" and legacy.uid
+
         # --- duplicate_macro ---
         widget.remove_all_objects()
         original = widget.add_macro()

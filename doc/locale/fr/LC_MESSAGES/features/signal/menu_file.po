@@ -34,6 +34,9 @@ msgstr "Ouvrir, enregistrer et fermer des signaux (voir ci-dessous)."
 msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`overview`)."
 msgstr "Sauvegarder et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`overview`)."
 
+msgid "Export, inspect, replay and compare workspace capsules, i.e. a workspace with the provenance of its processing (see :ref:`capsules`)."
+msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail, c'est-à-dire un espace de travail avec la provenance de ses traitements (voir :ref:`capsules`)."
+
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
 
@@ -120,27 +123,27 @@ msgstr "Le modèle de nom de fichier prend en charge les espaces réservés suiv
 
 #, python-brace-format
 msgid "``{title}``: Signal title"
-msgstr ""
+msgstr "``{title}``: Titre du signal"
 
 #, python-brace-format
 msgid "``{index}``: 1-based index of the signal in the selection (with zero-padding)"
-msgstr ""
+msgstr "``{index}``: Index du signal dans la sélection (avec remplissage de zéros)"
 
 #, python-brace-format
 msgid "``{count}``: Total number of selected signals"
-msgstr ""
+msgstr "``{count}``: Nombre total de signaux sélectionnés"
 
 #, python-brace-format
 msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units"
-msgstr ""
+msgstr "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Étiquettes et unités des axes"
 
 #, python-brace-format
 msgid "``{metadata[key]}``: Access metadata values"
-msgstr ""
+msgstr "``{metadata[key]}``: Accéder aux valeurs des métadonnées"
 
 #, python-brace-format
 msgid "You can also use format modifiers, for example ``{index:03d}`` will format the index with 3 digits zero-padding (001, 002, 003, etc.)."
-msgstr ""
+msgstr "Vous pouvez également utiliser des modificateurs de format, par exemple ``{index:03d}`` formatera l'index avec un remplissage de zéros sur 3 chiffres (001, 002, 003, etc.)."
 
 msgid "Import text file"
 msgstr "Importer un fichier texte"
@@ -201,3 +204,4 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
+

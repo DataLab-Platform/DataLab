@@ -18,15 +18,30 @@ from __future__ import annotations
 
 import io
 import json
+import threading
+import time
 import zipfile
+from collections.abc import Generator
+from contextlib import nullcontext
+from types import SimpleNamespace
 from typing import Union
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from guidata.qthelpers import qt_app_context
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima import ImageObj, SignalObj
 
+from datalab.gui.processor.base import (
+    PROCESSING_PARAMETERS_OPTION,
+    FeatureNotFoundError,
+)
+from datalab.objectmodel import get_uuid
+from datalab.webapi.adapter import MainThreadExecutor, WorkspaceAdapter
 from datalab.webapi.routes import (
     router,
     set_adapter,
@@ -35,8 +50,6 @@ from datalab.webapi.routes import (
     set_server_url,
 )
 from datalab.webapi.serialization import (
-    _deserialize_obj_metadata,
-    _make_json_serializable,
     _to_python_scalar,
     deserialize_object_from_npz,
     object_to_metadata,
@@ -48,6 +61,13 @@ from datalab.webapi.serialization import (
 # =============================================================================
 
 DataObject = Union[SignalObj, ImageObj]
+
+
+@pytest.fixture(name="qt_app")
+def fixture_qt_app() -> Generator[QW.QApplication, None, None]:
+    """Qt application, whose thread runs the functions of the main-thread executor"""
+    with qt_app_context() as qt_app:
+        yield qt_app
 
 
 def _make_signal(title: str = "S", n: int = 32) -> SignalObj:
@@ -68,8 +88,204 @@ def _make_image(title: str = "I", shape: tuple[int, int] = (16, 24)) -> ImageObj
     return obj
 
 
+class ObjectListModel(list):
+    """Minimal object model used to exercise the real workspace adapter."""
+
+    def remove_object(self, obj: DataObject) -> None:
+        """Remove an object from the model."""
+        self.remove(obj)
+
+
+def make_panel(objects: list[DataObject]) -> SimpleNamespace:
+    """Build the panel surface required by :class:`WorkspaceAdapter`."""
+    return SimpleNamespace(
+        objmodel=ObjectListModel(objects),
+        plothandler=SimpleNamespace(remove_item=Mock()),
+        objview=SimpleNamespace(
+            remove_item=Mock(), update_tree=Mock(), select_objects=Mock()
+        ),
+        SIG_OBJECT_REMOVED=SimpleNamespace(emit=Mock()),
+        SIG_OBJECT_MODIFIED=SimpleNamespace(emit=Mock()),
+        SIG_REFRESH_PLOT=SimpleNamespace(emit=Mock()),
+    )
+
+
+def make_main_window(
+    signalpanel: SimpleNamespace, imagepanel: SimpleNamespace
+) -> SimpleNamespace:
+    """Build the main window surface required by :class:`WorkspaceAdapter`."""
+    return SimpleNamespace(
+        signalpanel=signalpanel,
+        imagepanel=imagepanel,
+        remote_request_context=nullcontext,
+    )
+
+
+@pytest.mark.usefixtures("qt_app")
+def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
+    """Use stable UUIDs for mutations and reject ambiguous title lookups."""
+    signal = _make_signal("Duplicate", n=10)
+    image = _make_image("Duplicate")
+    signal_panel = make_panel([signal])
+    image_panel = make_panel([image])
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, image_panel))
+    signal_uuid = get_uuid(signal)
+    image_uuid = get_uuid(image)
+    processing_parameters = {
+        "func_name": "derivative",
+        "pattern": "1-to-1",
+        "source_uuid": signal_uuid,
+    }
+    signal.set_metadata_option(PROCESSING_PARAMETERS_OPTION, processing_parameters)
+
+    assert adapter.get_object_panel(signal_uuid) == "signal"
+    fetched = adapter.get_object(signal_uuid)
+    assert fetched.get_metadata_option(PROCESSING_PARAMETERS_OPTION) == (
+        processing_parameters
+    )
+    with pytest.raises(ValueError, match="ambiguous"):
+        adapter.get_object_panel("Duplicate")
+    with pytest.raises(ValueError, match="ambiguous"):
+        adapter.select_objects(["Duplicate"])
+
+    selected, panel_str = adapter.select_objects([image_uuid], "image")
+    assert selected == [image_uuid]
+    assert panel_str == "image"
+    image_panel.objview.select_objects.assert_called_once_with([1])
+
+    assert adapter.update_metadata(signal_uuid, {"title": "Renamed"}) == signal_uuid
+    assert adapter.get_object(signal_uuid).title == "Renamed"
+    replacement = _make_signal("Ignored payload title", n=20)
+    replacement.set_metadata_option(PROCESSING_PARAMETERS_OPTION, processing_parameters)
+    assert adapter.set_object(signal_uuid, replacement) == signal_uuid
+    updated = adapter.get_object(signal_uuid)
+    assert updated.title == "Renamed"
+    assert updated.y.shape == (20,)
+    assert get_uuid(updated) == signal_uuid
+    assert updated.get_metadata_option(PROCESSING_PARAMETERS_OPTION) == (
+        processing_parameters
+    )
+    assert signal_panel.SIG_OBJECT_MODIFIED.emit.call_count == 2
+
+    adapter.remove_object(image_uuid)
+    assert image not in image_panel.objmodel
+    image_panel.SIG_OBJECT_REMOVED.emit.assert_called_once_with()
+
+
+@pytest.mark.usefixtures("qt_app")
+def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
+    """An object downloaded then uploaded under another name is a new object.
+
+    Regression: the copy carried the UUID of the original object, the panel
+    refused it and showed the error in a modal dialog, so that the request hung
+    until the main-thread timeout (DataLab-Kernel ``rename``).
+    """
+    signal = _make_signal("Original", n=10)
+    signal_panel = make_panel([signal])
+
+    def add_object(obj: DataObject) -> None:
+        if get_uuid(obj) in [get_uuid(other) for other in signal_panel.objmodel]:
+            raise ValueError("Object already in panel")
+        signal_panel.objmodel.append(obj)
+
+    signal_panel._add_object = add_object  # pylint: disable=protected-access
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, make_panel([])))
+    copy = adapter.get_object(get_uuid(signal))
+    assert get_uuid(copy) == get_uuid(signal)
+    copy.title = "Renamed"
+    adapter.add_object(copy)
+    assert len(signal_panel.objmodel) == 2
+    assert get_uuid(signal_panel.objmodel[1]) != get_uuid(signal)
+    assert get_uuid(signal) == get_uuid(signal_panel.objmodel[0])
+
+    # Errors of the panel are raised to the caller, not shown in a dialog
+    def failing_add(_obj: DataObject) -> None:
+        raise ValueError("refused")
+
+    signal_panel._add_object = failing_add  # pylint: disable=protected-access
+    with pytest.raises(ValueError, match="refused"):
+        adapter.add_object(_make_signal("Other"))
+
+
+@pytest.mark.usefixtures("qt_app")
+def test_workspace_adapter_calc_errors() -> None:
+    """Only unknown computation functions are reported as such (HTTP 404).
+
+    Computation errors, including ``ValueError`` (e.g. invalid parameters), are
+    reported as computation failures (HTTP 500).
+    """
+    main_window = make_main_window(make_panel([]), make_panel([]))
+    adapter = WorkspaceAdapter(main_window)
+
+    def unknown_calc(name: str, *_args, **_kwargs) -> None:
+        raise FeatureNotFoundError(name, message=f"Unknown computation function {name}")
+
+    main_window.calc = unknown_calc
+    with pytest.raises(FeatureNotFoundError, match="Unknown computation function"):
+        adapter.calc("unknown_function")
+
+    def failing_calc(*_args, **_kwargs) -> None:
+        raise ValueError("Invalid parameter")
+
+    main_window.calc = failing_calc
+    with pytest.raises(RuntimeError, match="'derivative' failed: Invalid parameter"):
+        adapter.calc("derivative")
+
+
+def test_main_thread_executor_created_in_worker_thread(qt_app: QW.QApplication):
+    """Functions are run by the main thread, whatever the thread of the executor.
+
+    Regression: started by a remote client, the Web API server created its executor
+    in the XML-RPC server thread, which has no event loop: requests were not run,
+    and timed out after 30 seconds (see DataLab Issue #403).
+
+    Args:
+        qt_app: Qt application
+    """
+    executors: list[MainThreadExecutor] = []
+    created = threading.Event()
+    release = threading.Event()
+
+    def create_executor() -> None:
+        """Create the executor in a thread without event loop, kept alive"""
+        executors.append(MainThreadExecutor())
+        created.set()
+        release.wait(20.0)
+
+    creator = threading.Thread(target=create_executor, daemon=True)
+    creator.start()
+    try:
+        assert created.wait(10.0)
+        executor = executors[0]
+        main_thread = qt_app.thread()
+        assert executor.thread() == main_thread
+
+        results: dict[str, object] = {}
+
+        def request() -> None:
+            """Run a function on the main thread, as a Web API request"""
+            try:
+                results["value"] = executor.run_on_main_thread(
+                    lambda: QC.QThread.currentThread() == main_thread
+                )
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                results["error"] = exc
+
+        caller = threading.Thread(target=request, daemon=True)
+        caller.start()
+        deadline = time.monotonic() + 10.0
+        while caller.is_alive() and time.monotonic() < deadline:
+            QC.QCoreApplication.processEvents()
+            time.sleep(0.01)
+        assert not caller.is_alive(), "Function not run by the main thread"
+        assert results == {"value": True}
+    finally:
+        release.set()
+        creator.join(10.0)
+
+
 # =============================================================================
-# Serialization helpers — _to_python_scalar / _make_json_serializable
+# Serialization helpers — _to_python_scalar
 # =============================================================================
 
 
@@ -99,71 +315,6 @@ class TestToPythonScalar:
         assert _to_python_scalar("hello") == "hello"
         assert _to_python_scalar(None) is None
         assert _to_python_scalar(3.14) == pytest.approx(3.14)
-
-
-class TestMakeJsonSerializable:
-    """Tests for the ``_make_json_serializable`` recursive helper."""
-
-    def test_nested_dict_with_numpy(self) -> None:
-        """Numpy values nested in dicts are recursively converted."""
-        data = {
-            "outer": {
-                "ints": np.int32(2),
-                "floats": np.float64(2.5),
-                "bools": np.bool_(False),
-                "arr": np.array([1, 2, 3]),
-            }
-        }
-        result = _make_json_serializable(data)
-        assert result == {
-            "outer": {
-                "ints": 2,
-                "floats": 2.5,
-                "bools": False,
-                "arr": [1, 2, 3],
-            }
-        }
-        # Round-trip through JSON to confirm true serialisability:
-        json.dumps(result)
-
-    def test_tuple_becomes_list(self) -> None:
-        """Tuples are converted to lists for JSON compatibility."""
-        result = _make_json_serializable((1, np.float64(2.0), "x"))
-        assert result == [1, 2.0, "x"]
-
-    def test_list_with_arrays(self) -> None:
-        """Lists of numpy arrays/scalars are recursively converted."""
-        result = _make_json_serializable([np.array([1, 2]), np.int8(5)])
-        assert result == [[1, 2], 5]
-
-    def test_passthrough_basic_types(self) -> None:
-        """Basic JSON-compatible values are returned unchanged."""
-        assert _make_json_serializable(42) == 42
-        assert _make_json_serializable("abc") == "abc"
-        assert _make_json_serializable(None) is None
-
-
-class TestDeserializeObjMetadata:
-    """Tests for ``_deserialize_obj_metadata`` (coords → ndarray restoration)."""
-
-    def test_coords_restored_to_array(self) -> None:
-        """Geometry ``coords`` lists are restored to numpy arrays."""
-        serialized = {"Geometry_circle": {"coords": [[1.0, 2.0], [3.0, 4.0]]}}
-        result = _deserialize_obj_metadata(serialized)
-        coords = result["Geometry_circle"]["coords"]
-        assert isinstance(coords, np.ndarray)
-        np.testing.assert_array_equal(coords, [[1.0, 2.0], [3.0, 4.0]])
-
-    def test_non_coords_list_kept_as_list(self) -> None:
-        """Non-``coords`` list entries remain Python lists."""
-        result = _deserialize_obj_metadata({"labels": ["a", "b"]})
-        assert result == {"labels": ["a", "b"]}
-        assert isinstance(result["labels"], list)
-
-    def test_scalar_passthrough(self) -> None:
-        """Scalar metadata values are returned unchanged."""
-        result = _deserialize_obj_metadata({"title": "T", "count": 7})
-        assert result == {"title": "T", "count": 7}
 
 
 # =============================================================================
@@ -284,6 +435,76 @@ class TestSerializationEdgeCases:
         assert result.x0 == pytest.approx(1.5)
         assert result.dx == pytest.approx(0.1)
 
+    def test_image_non_uniform_coords_round_trip(self) -> None:
+        """Non-uniform image coordinates survive a round trip.
+
+        Regression: they were lost, the image being rebuilt with uniform
+        coordinates (its pixels survived, but not their physical positions).
+        """
+        obj = _make_image(shape=(3, 4))
+        obj.xunit, obj.yunit = "mm", "s"
+        obj.set_coords(np.array([1.0, 2.0, 4.0, 8.0]), np.array([10.0, 11.0, 15.0]))
+        result = deserialize_object_from_npz(serialize_object_to_npz(obj))
+        assert not result.is_uniform_coords
+        np.testing.assert_array_equal(result.xcoords, obj.xcoords)
+        np.testing.assert_array_equal(result.ycoords, obj.ycoords)
+        np.testing.assert_array_equal(result.data, obj.data)
+        assert (result.xunit, result.yunit) == ("mm", "s")
+
+    def test_image_uniform_coords_round_trip(self) -> None:
+        """Uniform images are stored without coordinate arrays."""
+        obj = _make_image(shape=(3, 4))
+        obj.set_uniform_coords(0.5, 2.0, -1.0, 3.0)
+        data = serialize_object_to_npz(obj)
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            assert sorted(zf.namelist()) == ["data.npy", "metadata.json"]
+            assert json.loads(zf.read("metadata.json"))["is_uniform_coords"] is True
+        result = deserialize_object_from_npz(data)
+        assert result.is_uniform_coords
+        assert (result.dx, result.dy, result.x0, result.y0) == (0.5, 2.0, -1.0, 3.0)
+
+    def test_image_archive_without_coords_flag_is_uniform(self) -> None:
+        """Archives written by earlier versions (no ``is_uniform_coords``) are read
+        with uniform coordinates."""
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            arr = io.BytesIO()
+            np.save(arr, np.zeros((3, 4)))
+            zf.writestr("data.npy", arr.getvalue())
+            metadata = {"type": "image", "x0": 1.0, "y0": 2.0, "dx": 0.5, "dy": 0.25}
+            zf.writestr("metadata.json", json.dumps(metadata))
+        result = deserialize_object_from_npz(buf.getvalue())
+        assert result.is_uniform_coords
+        assert (result.dx, result.dy, result.x0, result.y0) == (0.5, 0.25, 1.0, 2.0)
+
+    @pytest.mark.parametrize(
+        "xcoords, ycoords, match",
+        [
+            (None, np.arange(3.0), "missing xcoords.npy"),
+            (np.arange(3.0), np.arange(3.0), "do not match image shape"),
+            (np.arange(4.0), np.arange(4.0), "do not match image shape"),
+        ],
+    )
+    def test_image_invalid_non_uniform_coords_raise(
+        self, xcoords, ycoords, match: str
+    ) -> None:
+        """Missing or mismatched coordinate arrays are rejected."""
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            for name, array in (
+                ("data.npy", np.zeros((3, 4))),
+                ("xcoords.npy", xcoords),
+                ("ycoords.npy", ycoords),
+            ):
+                if array is not None:
+                    arr = io.BytesIO()
+                    np.save(arr, array)
+                    zf.writestr(name, arr.getvalue())
+            metadata = {"type": "image", "is_uniform_coords": False}
+            zf.writestr("metadata.json", json.dumps(metadata))
+        with pytest.raises(ValueError, match=match):
+            deserialize_object_from_npz(buf.getvalue())
+
 
 # =============================================================================
 # Routes integration tests
@@ -297,22 +518,33 @@ class FullMockAdapter:
         self._objects: dict[str, DataObject] = {}
 
     # --- queries ------------------------------------------------------------
-    def list_objects(self) -> list[tuple[str, str]]:
-        """Return ``(name, type)`` pairs for every stored object."""
+    def list_objects(self) -> list[tuple[str, str, str]]:
+        """Return ``(uuid, name, type)`` tuples for every stored object."""
         return [
-            (name, "signal" if isinstance(obj, SignalObj) else "image")
+            (
+                get_uuid(obj),
+                name,
+                "signal" if isinstance(obj, SignalObj) else "image",
+            )
             for name, obj in self._objects.items()
         ]
 
     def get_object(self, name: str) -> DataObject:
-        """Return the stored object for ``name`` or raise ``KeyError``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        return self._objects[name]
+        """Return the stored object for ``name`` or its UUID."""
+        if name in self._objects:
+            return self._objects[name]
+        for obj in self._objects.values():
+            if get_uuid(obj) == name:
+                return obj
+        raise KeyError(f"Object '{name}' not found")
 
     def object_exists(self, name: str) -> bool:
         """Return whether an object named ``name`` is stored."""
-        return name in self._objects
+        try:
+            self.get_object(name)
+            return True
+        except KeyError:
+            return False
 
     # --- mutations ----------------------------------------------------------
     def add_object(self, obj: DataObject, overwrite: bool = False) -> None:
@@ -324,26 +556,33 @@ class FullMockAdapter:
 
     def remove_object(self, name: str) -> None:
         """Remove the object stored under ``name`` or raise ``KeyError``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        del self._objects[name]
+        obj = self.get_object(name)
+        stored_name = next(key for key, value in self._objects.items() if value is obj)
+        del self._objects[stored_name]
 
-    def update_metadata(self, name: str, metadata: dict) -> None:
+    def update_metadata(self, name: str, metadata: dict) -> str:
         """Update non-``None`` attributes of the object stored under ``name``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        obj = self._objects[name]
+        obj = self.get_object(name)
+        stored_name = next(key for key, value in self._objects.items() if value is obj)
         for k, v in metadata.items():
             if v is not None and hasattr(obj, k):
                 setattr(obj, k, v)
+        if obj.title != stored_name:
+            del self._objects[stored_name]
+            self._objects[obj.title] = obj
+        return get_uuid(obj)
 
-    def set_object(self, name: str, obj: DataObject) -> None:
+    def set_object(self, name: str, obj: DataObject) -> str:
         """Replace the data of the object stored under ``name``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        # Replace the underlying data while keeping the entry.
-        obj.title = name
-        self._objects[name] = obj
+        existing = self.get_object(name)
+        stored_name = next(
+            key for key, value in self._objects.items() if value is existing
+        )
+        object_uuid = get_uuid(existing)
+        obj.title = existing.title
+        obj.set_metadata_option("uuid", object_uuid)
+        self._objects[stored_name] = obj
+        return object_uuid
 
 
 @pytest.fixture(name="api_client")
@@ -415,6 +654,17 @@ class TestObjectListing:
         assert body["name"] == "S1"
         assert body["type"] == "signal"
 
+    def test_metadata_by_uuid_returns_title_as_name(self, api_client) -> None:
+        """``GET`` by UUID keeps title and UUID response fields distinct."""
+        client, token, adapter = api_client
+        obj = _make_signal("S1")
+        adapter.add_object(obj)
+        object_uuid = get_uuid(obj)
+        response = client.get(f"/api/v1/objects/{object_uuid}", headers=_auth(token))
+        assert response.status_code == 200
+        assert response.json()["name"] == "S1"
+        assert response.json()["uuid"] == object_uuid
+
     def test_metadata_missing_object(self, api_client) -> None:
         """``GET /objects/{name}`` returns 404 for an unknown object."""
         client, token, _adapter = api_client
@@ -439,6 +689,19 @@ class TestPatchAndDelete:
         assert body["xlabel"] == "Time"
         assert body["ylabel"] == "Volts"
 
+    def test_patch_rename_returns_updated_metadata(self, api_client) -> None:
+        """``PATCH`` reloads a renamed object through its stable UUID."""
+        client, token, adapter = api_client
+        adapter.add_object(_make_signal("Old"))
+        response = client.patch(
+            "/api/v1/objects/Old/metadata",
+            json={"title": "New"},
+            headers=_auth(token),
+        )
+        assert response.status_code == 200
+        assert response.json()["name"] == "New"
+        assert adapter.object_exists("New")
+
     def test_patch_missing_object(self, api_client) -> None:
         """``PATCH`` on an unknown object returns 404."""
         client, token, _adapter = api_client
@@ -454,6 +717,17 @@ class TestPatchAndDelete:
         client, token, adapter = api_client
         adapter.add_object(_make_signal("S1"))
         response = client.delete("/api/v1/objects/S1", headers=_auth(token))
+        assert response.status_code == 204
+        assert not adapter.object_exists("S1")
+
+    def test_delete_by_uuid(self, api_client) -> None:
+        """``DELETE`` removes an object addressed by full UUID."""
+        client, token, adapter = api_client
+        obj = _make_signal("S1")
+        adapter.add_object(obj)
+        response = client.delete(
+            f"/api/v1/objects/{get_uuid(obj)}", headers=_auth(token)
+        )
         assert response.status_code == 204
         assert not adapter.object_exists("S1")
 
@@ -505,6 +779,29 @@ class TestBinaryDataEndpoints:
         client, token, _adapter = api_client
         response = client.get("/api/v1/objects/nope/data", headers=_auth(token))
         assert response.status_code == 404
+
+    def test_non_uniform_image_round_trip_through_endpoints(self, api_client) -> None:
+        """An image with non-uniform coordinates keeps them when uploaded with
+        ``PUT data`` and downloaded with ``GET data``."""
+        client, token, adapter = api_client
+        obj = _make_image("NU", shape=(3, 4))
+        xcoords, ycoords = np.array([1.0, 2.0, 4.0, 8.0]), np.array([10.0, 11.0, 15.0])
+        obj.set_coords(xcoords, ycoords)
+        response = client.put(
+            "/api/v1/objects/NU/data",
+            content=serialize_object_to_npz(obj),
+            headers={**_auth(token), "Content-Type": "application/x-npz"},
+        )
+        assert response.status_code == 201
+        stored = adapter.get_object("NU")
+        assert not stored.is_uniform_coords
+        np.testing.assert_array_equal(stored.xcoords, xcoords)
+        response = client.get("/api/v1/objects/NU/data", headers=_auth(token))
+        assert response.status_code == 200
+        result = deserialize_object_from_npz(response.content)
+        assert not result.is_uniform_coords
+        np.testing.assert_array_equal(result.xcoords, xcoords)
+        np.testing.assert_array_equal(result.ycoords, ycoords)
 
     def test_put_creates_object(self, api_client) -> None:
         """``PUT data`` creates a new object from an NPZ payload."""
@@ -578,6 +875,23 @@ class TestBinaryDataEndpoints:
         assert response.status_code == 200
         # Adapter now has the updated object
         assert adapter.get_object("Live").y.shape == (20,)
+
+    def test_set_object_by_uuid(self, api_client) -> None:
+        """``PUT /objects/{uuid}`` preserves title and stable identity."""
+        client, token, adapter = api_client
+        original = _make_signal("Live", n=10)
+        adapter.add_object(original)
+        object_uuid = get_uuid(original)
+        payload = serialize_object_to_npz(_make_signal("Payload", n=20))
+        response = client.put(
+            f"/api/v1/objects/{object_uuid}",
+            content=payload,
+            headers={**_auth(token), "Content-Type": "application/x-npz"},
+        )
+        assert response.status_code == 200
+        assert response.json()["name"] == "Live"
+        assert response.json()["uuid"] == object_uuid
+        assert adapter.get_object(object_uuid).y.shape == (20,)
 
 
 if __name__ == "__main__":

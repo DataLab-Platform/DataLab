@@ -10,7 +10,7 @@ from guidata.configtools import get_icon
 from guidata.dataset import DataSet, update_dataset
 from guidata.dataset.backends import get_handler
 from guidata.dataset.qtwidgets import DataSetEditLayout
-from guidata.qthelpers import exec_dialog, win32_fix_title_bar_background
+from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -21,7 +21,7 @@ from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
 from datalab.gui.processor.catcher import CompOut
 from datalab.gui.processor.preview import PreviewController
-from datalab.objectmodel import get_short_id, patch_title_with_ids
+from datalab.objectmodel import get_title_reference, patch_title_with_ids
 
 __all__ = [
     "ProcessingPreviewDialog",
@@ -89,6 +89,12 @@ class ProcessingPreviewWidget(QW.QWidget):
         super().__init__(parent)
         self.sources = tuple(sources)
         self.editor: DataSetEditLayout | None = None
+        # Optional conversion of the edited parameters into the parameters sent to
+        # the preview process (e.g. when the form class cannot be pickled)
+        self.prepare_param: Callable[[DataSet], DataSet] | None = None
+        # Optional formatting of preview error messages (e.g. to hide the traceback
+        # of expected validation errors)
+        self.format_error: Callable[[str], str] | None = None
         self.controller = controller_factory(function, self)
         self._dragging = False
         self._plot_kind = None
@@ -113,7 +119,7 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.source_combo.setMinimumContentsLength(16)
         self.source_combo.setToolTip(_("Preview source"))
         for source in sources:
-            self.source_combo.addItem(f"{get_short_id(source)}: {source.title}")
+            self.source_combo.addItem(f"{get_title_reference(source)}: {source.title}")
         self.source_combo.setVisible(len(sources) > 1)
         self.source_combo.setEnabled(False)
         controls.addWidget(self.source_combo, 1)
@@ -268,12 +274,22 @@ class ProcessingPreviewWidget(QW.QWidget):
             self.status.setText(_("Invalid parameters"))
             return
         self.editor.accept_changes()
+        param = self.editor.instance
+        if self.prepare_param is not None:
+            try:
+                param = self.prepare_param(param)
+            except (TypeError, ValueError) as error:
+                self.controller.invalidate()
+                self.status.setText(_("Invalid parameters"))
+                self.details.setPlainText(str(error))
+                self.details.show()
+                return
         self.status.setText(_("Computing preview..."))
-        self.controller.request(
-            self.sources[self.source_combo.currentIndex()], self.editor.instance
-        )
+        self.controller.request(self.sources[self.source_combo.currentIndex()], param)
 
     def _show_error(self, message: str) -> None:
+        if self.format_error is not None:
+            message = self.format_error(message)
         self.status.setText(_("Preview failed"))
         self.details.setPlainText(message)
         self.details.show()
@@ -286,7 +302,7 @@ class ProcessingPreviewWidget(QW.QWidget):
         original_title = result.title
         try:
             patch_title_with_ids(
-                result, [self.sources[self.source_combo.currentIndex()]], get_short_id
+                result, [self.sources[self.source_combo.currentIndex()]]
             )
             self._render(result)
         except Exception as error:
@@ -387,7 +403,6 @@ class ProcessingPreviewDialog(QW.QDialog):
         controller_factory: Callable = PreviewController,
     ) -> None:
         super().__init__(parent)
-        win32_fix_title_bar_background(self)
         self.instance = copy.deepcopy(instance)
         self._original = instance
         self.preview_result = None

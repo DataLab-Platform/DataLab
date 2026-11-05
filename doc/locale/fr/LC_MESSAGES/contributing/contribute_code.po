@@ -69,3 +69,6 @@ msgstr "L'icône de l'application (``resources/DataLab.ico``) et les bitmaps de 
 
 msgid "or via the **🎨 Generate resources** VS Code task."
 msgstr "ou via la tâche VS Code **🎨 Generate resources**."
+
+msgid "The images displayed by the application (splash screen, logos, plot watermark) are generated in ``datalab/data/logo/`` together with their ``@2x`` high-resolution variants, used on high-DPI displays: to regenerate only these images, run ``scripts\\build_resources.bat logo``."
+msgstr "Les images affichées par l'application (écran de démarrage, logos, filigrane des graphiques) sont générées dans ``datalab/data/logo/`` avec leurs variantes haute résolution ``@2x``, utilisées sur les écrans haute résolution : pour ne régénérer que ces images, exécutez ``scripts\\build_resources.bat logo``."

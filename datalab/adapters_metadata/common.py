@@ -20,7 +20,7 @@ from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
 from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import Conf, _
-from datalab.objectmodel import get_short_id
+from datalab.objectmodel import get_short_uuid
 
 if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
@@ -154,8 +154,8 @@ class ResultData:
         self.results.append(adapter)
         df = adapter.to_dataframe()
         for i_row_res in range(len(df)):
-            sid = get_short_id(obj)
-            ylabel = f"{adapter.func_name}({sid})"
+            short_uuid = get_short_uuid(obj)
+            ylabel = f"{adapter.func_name}({short_uuid})"
             if "roi_index" in df.columns:
                 i_roi = int(df.iloc[i_row_res]["roi_index"])
                 roititle = ""
@@ -163,7 +163,7 @@ class ResultData:
                     roititle = obj.roi.get_single_roi_title(i_roi)
                     ylabel += f"|{roititle}"
             self.ylabels.append(ylabel)
-            self.short_ids.append(sid)
+            self.short_ids.append(short_uuid)
 
 
 def have_results(objs: list[SignalObj | ImageObj]) -> bool:

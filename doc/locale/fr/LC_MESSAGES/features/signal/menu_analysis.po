@@ -232,7 +232,7 @@ msgstr "Le contraste est défini comme le rapport de la différence et de la som
 msgid ""
 "\\text{Contrast} = \\dfrac{\\text{max}(y) - \\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n"
 "\n"
-msgstr ""
+msgstr "\\text{Contraste} = \\dfrac{\\text{max}(y) - \\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n\n"
 
 msgid "This feature assumes that the signal is a profile from an image, where the contrast is meaningful. This justifies the optical definition of contrast."
 msgstr "Cette fonctionnalité suppose que le signal est un profil extrait d'une image, pour laquelle le contraste a un sens. Cela justifie la définition optique du contraste."

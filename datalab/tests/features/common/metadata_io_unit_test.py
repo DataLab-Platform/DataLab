@@ -64,5 +64,32 @@ def test_metadata_io_unit():
                 )
 
 
+def test_metadata_import_keeps_identity():
+    """Metadata exported from an object, imported into another: the latter keeps
+    its own UUID and number, so that provenance and titles still refer to it."""
+    with execenv.context(unattended=True):
+        with helpers.WorkdirRestoringTempDir() as tmpdir:
+            fname = osp.join(tmpdir, "other.dlabmeta")
+            with datalab_test_app_context() as win:
+                panel = win.signalpanel
+                for _index in range(2):
+                    panel.new_object(edit=False)
+                objects = panel.objmodel.get_all_objects()
+                first, second = objects[0], objects[1]
+                first.metadata["custom"] = "value"
+                panel.objview.set_current_object(first)
+                panel.export_metadata_from_file(fname)
+                panel.objview.set_current_object(second)
+                uuid, number = get_uuid(second), second.metadata["__number"]
+                panel.import_metadata_from_file(fname)
+                assert second.metadata["custom"] == "value"
+                assert (get_uuid(second), second.metadata["__number"]) == (
+                    uuid,
+                    number,
+                )
+                assert get_uuid(first) != uuid
+                assert panel.objmodel[uuid] is second
+
+
 if __name__ == "__main__":
     test_metadata_io_unit()

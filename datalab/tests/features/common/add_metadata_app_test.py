@@ -17,6 +17,8 @@ import warnings
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
+import numpy as np
+from sigima.objects import create_signal
 
 from datalab.env import execenv
 from datalab.gui.panel.base import AddMetadataParam
@@ -116,6 +118,32 @@ def test_add_metadata_to_images() -> None:
     """Test Add metadata feature for images."""
     with datalab_test_app_context() as win:
         __add_metadata_to_images(win)
+
+
+def test_add_metadata_extraction_marks_workspace_modified() -> None:
+    """Test extracted values, unchanged objects and the modified state."""
+    with datalab_test_app_context() as win:
+        panel = win.signalpanel
+        for title in ("Flat 5 ms 01", "Dark 01"):
+            panel.add_object(
+                create_signal(title=title, x=np.arange(3.0), y=np.zeros(3))
+            )
+        panel.objview.select_objects([1, 2])
+        win.set_modified(False)
+
+        objs = panel.objview.get_sel_objects(include_groups=True)
+        param = AddMetadataParam(objs)
+        param.metadata_key = "plugin.org.example.camera.exposure_time_s"
+        param.value_pattern = "{title}"
+        param.extraction_pattern = r"([\d.]+)\s*ms"
+        param.conversion = "float"
+        param.scale = 0.001
+        panel.add_metadata(param)
+
+        flat, dark = objs
+        assert flat.metadata[param.metadata_key] == 0.005
+        assert param.metadata_key not in dark.metadata
+        assert win.is_modified()
 
 
 def add_metadata_screenshots():

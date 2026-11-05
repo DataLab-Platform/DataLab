@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=DataLab
+GenericName=Signal and Image Processing
+Comment=Process and visualize scientific signals and images
+TryExec=datalab
+Exec=datalab
+Icon=com.datalab_platform.DataLab
+Categories=Science;Physics;DataVisualization;
+Keywords=signal;image;processing;visualization;FFT;fitting;HDF5;

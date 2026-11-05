@@ -30,7 +30,7 @@ allows to access DataLab main features from a separate process.
 
     This class supersedes ``cdlclient.SimpleRemoteProxy``: the ``cdlclient``
     package is deprecated and archived since DataLab 1.3. Its connection dialog
-    is now provided by SigimaX (see `Connection dialog`_ below).
+    is now provided by SigimaX (see :ref:`remote_connection_dialog` below).
 
 .. _Sigima: https://github.com/DataLab-Platform/Sigima
 
@@ -115,6 +115,8 @@ structure of the script make it convenient to be used in `Spyder`_ IDE):
 Here is a Python 2.7 reimplementation of this class:
 
 .. literalinclude:: ../../remotecontrol_py27.py
+
+.. _remote_connection_dialog:
 
 Connection dialog
 ^^^^^^^^^^^^^^^^^

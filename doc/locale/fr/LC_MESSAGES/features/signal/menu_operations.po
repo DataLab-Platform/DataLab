@@ -334,14 +334,12 @@ msgid ""
 "\\bar{y})^{2}}}`"
 msgstr ""
 
-#, fuzzy
 msgid "|quadratic_difference| Quadratic Difference"
 msgstr "|quadratic_difference| Différence quadratique"
 
 msgid "quadratic_difference"
 msgstr ""
 
-#, fuzzy
 msgid ":math:`y_{2} = \\sqrt{y_{1}^{2} - y_{0}^{2}}`"
 msgstr ""
 

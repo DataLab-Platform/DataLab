@@ -1079,6 +1079,58 @@ def test_replay_recreates_deleted_output_under_recorded_uuid() -> None:
         assert parameters.source_uuid == source_uuid
 
 
+@pytest.mark.parametrize("record", (False, True))
+def test_group_deletion_warns_only_for_unreconnectable_operations(
+    record: bool,
+) -> None:
+    """Deleting raw signals whose results live in another group shows no message;
+    deleting the processed group then lists its recorded operation only once."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(record)
+        raw_group = panel.add_group("Raw")
+        for _index in range(3):
+            win.add_object(create_paracetamol_signal(), get_uuid(raw_group))
+        raw_uuids = panel.objmodel.get_object_ids()
+        panel.objview.select_groups([get_uuid(raw_group)])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        normalize_title = history[len(history)].title if record else None
+        normalized_group = panel.objmodel.get_groups()[-1]
+        normalized_uuids = [get_uuid(obj) for obj in normalized_group.get_objects()]
+        panel.objview.select_groups([get_uuid(normalized_group)])
+        panel.processor.run_feature(
+            sips.moving_average, sigima.params.MovingAverageParam.create(n=3)
+        )
+        averaged_group = panel.objmodel.get_groups()[-1]
+        averaged_uuids = [get_uuid(obj) for obj in averaged_group.get_objects()]
+        with (
+            patch.object(hchain, "execenv", SimpleNamespace(unattended=False)),
+            patch.object(hchain.QW, "QMessageBox") as message_box,
+        ):
+            panel.objview.select_groups([get_uuid(raw_group)])
+            panel.remove_object(force=True)
+            message_box.warning.assert_not_called()
+            assert [
+                extract_processing_parameters(panel.objmodel[uuid]).source_uuid
+                for uuid in normalized_uuids
+            ] == raw_uuids
+
+            panel.objview.select_groups([get_uuid(normalized_group)])
+            panel.remove_object(force=True)
+            if record:
+                message_box.warning.assert_called_once()
+                text = message_box.warning.call_args.args[2]
+                assert text.count("• ") == 1 and text.count(normalize_title) == 1
+            else:
+                message_box.warning.assert_not_called()
+        assert [
+            extract_processing_parameters(panel.objmodel[uuid]).source_uuid
+            for uuid in averaged_uuids
+        ] == normalized_uuids
+
+
 def test_deletion_reconnects_and_splices_chain() -> None:
     """Reconnect after data deletion, then splice the producing action."""
     with datalab_test_app_context(history=True) as win:
@@ -1588,3 +1640,55 @@ def test_interactive_fit_records_replays_in_place_and_refuses_edit() -> None:
         assert restored.method_name == "recompute_fit"
         assert restored.kwargs["fit_params"] == fit_params
         assert restored.kwargs["output_uuid"] == fitted_uuid
+
+
+def test_nonempty_dlhist_import_remaps_interactive_fit_references() -> None:
+    """Replay an imported fit only against its cloned source and output."""
+
+    def fake_gaussian_dialog(x, y, parent=None):
+        del parent, y
+        fit_params = signal_fitting.create_fit_params(
+            "gaussian",
+            {"amplitude": 1200.0, "sigma": 20.0, "x0": 100.0, "y0": 5.0},
+            interactive=True,
+        )
+        return signal_fitting.evaluate_fit(x, **fit_params), [], fit_params
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "fit-import.dlhist")
+        with datalab_test_app_context(history=True) as source:
+            history, panel = source.historypanel, source.signalpanel
+            history.toggle_record_mode(True)
+            original_source_uuid = add_paracetamol_signals(panel, 1)[0]
+            panel.objview.select_objects([original_source_uuid])
+            panel.processor.compute_fit("Gaussian fit", fake_gaussian_dialog)
+            original_action = history[len(history)]
+            original_output_uuid = original_action.output_uuids[0]
+            exported_session_count = len(history.history_sessions)
+            assert history.save_to_dlhist_file(path)
+
+        with datalab_test_app_context(history=True) as target:
+            target.signalpanel.add_object(create_paracetamol_signal())
+            assert target.historypanel.open_dlhist_file(path)
+            imported_sessions = target.historypanel.history_sessions[
+                -exported_session_count:
+            ]
+            imported_action = next(
+                action
+                for session in imported_sessions
+                for action in session.actions
+                if action.method_name == "recompute_fit"
+            )
+            imported_source_uuid = imported_action.kwargs["source_uuid"]
+            imported_output_uuid = imported_action.kwargs["output_uuid"]
+            assert imported_source_uuid != original_source_uuid
+            assert imported_output_uuid != original_output_uuid
+            assert imported_action.output_uuids == [imported_output_uuid]
+            assert target.signalpanel.objmodel.has_uuid(imported_source_uuid)
+            assert target.signalpanel.objmodel.has_uuid(imported_output_uuid)
+
+            output = target.signalpanel.objmodel[imported_output_uuid]
+            object_count = len(target.signalpanel.objmodel)
+            imported_action.replay(target, restore_selection=True, edit=False)
+            assert len(target.signalpanel.objmodel) == object_count
+            assert target.signalpanel.objmodel[imported_output_uuid] is output

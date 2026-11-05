@@ -8,11 +8,15 @@ and image objects.
 
 from __future__ import annotations
 
+import warnings
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, ClassVar, Generator
 
 import guidata.dataset as gds
 from sigima.objects import ImageObj, SignalObj
+
+from datalab.config import _
+from datalab.utils.datasetjson import decode_dataset_json
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -175,11 +179,15 @@ class BaseResultAdapter(ABC):
         """Get parameter dataset associated with this result.
 
         Returns:
-            Parameter dataset if present, None otherwise
+            Parameter dataset if present and readable (a warning is emitted for
+            stored parameters that cannot be decoded), None otherwise
         """
         param_json = self.result.attrs.get("param_json")
         if param_json is not None:
-            return gds.json_to_dataset(param_json)
+            try:
+                return decode_dataset_json(param_json)
+            except ValueError:
+                warnings.warn(_("Failed to deserialize analysis parameters from JSON."))
         return None
 
     def remove_from(self, obj: SignalObj | ImageObj) -> None:

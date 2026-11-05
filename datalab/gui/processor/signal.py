@@ -42,7 +42,7 @@ from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.processor.base import BaseProcessor, SourcePreparationTransaction
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import get_title_reference, get_uuid
 from datalab.utils.qthelpers import qt_try_except
 from datalab.widgets.replacespecialvalues import (
     ReplaceSpecialValuesSignalParamDL,
@@ -545,26 +545,6 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
-            sips.modified_allan_variance,
-            _("Modified Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.hadamard_variance,
-            _("Hadamard variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.modified_allan_variance,
-            _("Modified Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.hadamard_variance,
-            _("Hadamard variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
             sips.total_variance,
             _("Total variance"),
             paramclass=sigima.params.AllanVarianceParam,
@@ -582,6 +562,16 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             comment=_("Plot one signal as a fonction of the other one"),
         )
         self.register_1_to_n(sips.extract_roi, "ROI", icon_name="roi.svg")
+        # Without menu entry: results of these features (several ROIs extracted
+        # into one signal, or saved by DataLab-Web) are applied again from the
+        # Processing tab and History
+        self.register_1_to_1(sips.extract_rois, _("Extract ROI"), icon_name="roi.svg")
+        self.register_1_to_1(
+            sips.peak_detection,
+            _("Peak detection"),
+            paramclass=sigima.params.PeakDetectionParam,
+            icon_name="peak_detect.svg",
+        )
 
     def register_analysis(self) -> None:
         """Register analysis functions."""
@@ -590,7 +580,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sips.histogram,
             _("Histogram"),
             paramclass=sigima.params.HistogramParam,
-            icon_name="histogram.svg",
+            icon_name="datalab:histogram.svg",
         )
         self.register_1_to_0(
             sips.fwhm,
@@ -844,7 +834,9 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                         pvalues[param.name] = param.value
                 metadata = {fitdlgfunc.__name__: pvalues}
             # Creating new signal
-            signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
+            signal = create_signal(
+                f"{name}({get_title_reference(obj)})", obj.x, y, metadata=metadata
+            )
             # Record a replayable history action when the dialog returned
             # canonical fit parameters (third-party dialogs returning legacy
             # 2-tuples cannot be replayed deterministically).
@@ -928,7 +920,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         if obj is None:
             return
         y = signal_fitting.evaluate_fit(obj.x, **fit_params)
-        title = f"{fit_name}({obj.title})"
+        title = f"{fit_name}({get_title_reference(obj)})"
         if output_uuid is not None and self.panel.objmodel.has_uuid(output_uuid):
             # Update the recorded output in place (no duplicate on replay)
             target = self.panel.objmodel[output_uuid]

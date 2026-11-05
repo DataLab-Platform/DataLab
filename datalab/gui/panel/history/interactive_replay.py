@@ -338,9 +338,10 @@ def confirm_file_output_replay(panel: HistoryPanel, action: HistoryAction) -> bo
     if execenv.unattended:
         return bool(execenv.accept_dialogs)
     names: list[str] = []
-    filename = action.kwargs.get("filename")
-    if isinstance(filename, str):
-        names.append(filename)
+    for key in ("filename", "workspace_filename"):  # ``workspace_filename``: capsule
+        filename = action.kwargs.get(key)
+        if isinstance(filename, str):
+            names.append(filename)
     filenames = action.kwargs.get("filenames")
     if isinstance(filenames, (list, tuple)):
         names.extend(str(fname) for fname in filenames)

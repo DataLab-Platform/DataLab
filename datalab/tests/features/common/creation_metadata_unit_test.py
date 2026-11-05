@@ -14,10 +14,13 @@ from sigima.objects import (
     PEAK_PARAMETERIZATION,
     GaussParam,
     SineParam,
+    SinusoidalGrating2DParam,
+    create_image,
     create_signal,
 )
 from sigima.tools.signal.pulse import GaussianModel, LegacyPeakParameterizationError
 
+from datalab.gui.creation import create_image_from_param
 from datalab.gui.newobject import (
     CREATION_PARAMETERS_FORMAT_VERSION,
     CREATION_PARAMETERS_OPTION,
@@ -26,6 +29,7 @@ from datalab.gui.newobject import (
     extract_creation_parameters,
     insert_creation_parameters,
 )
+from datalab.history.core import decode_kwargs
 
 
 def _legacy_gaussian_json(
@@ -117,3 +121,42 @@ def test_creation_parameter_formats_never_fall_back_implicitly() -> None:
     obj.set_metadata_option(LEGACY_CREATION_PARAMETERS_OPTION, _legacy_gaussian_json())
     with pytest.raises(ValueError, match="Conflicting creation parameter formats"):
         extract_creation_parameters(obj)
+
+
+def test_domain_image_creation_parameters_keep_their_coordinates() -> None:
+    """Images created before the "Physical coordinates" option stay in pixels.
+
+    Recreating an image from creation parameters stored by DataLab 1.3 (without
+    the option) must give back the original pixel coordinates, while parameters
+    stored by this version are restored as they were.
+    """
+    param = SinusoidalGrating2DParam.create(height=16, width=32)
+    image = create_image_from_param(param)
+    assert (image.x0, image.dx) == (param.xmin, (param.xmax - param.xmin) / 31)
+    restored = extract_creation_parameters(image)
+    assert isinstance(restored, SinusoidalGrating2DParam)
+    assert restored.physical_coords is True
+
+    payload = json.loads(dataset_to_json(param))
+    del payload["physical_coords"]
+    legacy = create_image("Legacy grating", np.zeros((16, 32)))
+    legacy.set_metadata_option(
+        CREATION_PARAMETERS_OPTION,
+        {
+            "format_version": CREATION_PARAMETERS_FORMAT_VERSION,
+            "dataset_json": json.dumps(payload),
+        },
+    )
+    legacy_param = extract_creation_parameters(legacy)
+    assert isinstance(legacy_param, SinusoidalGrating2DParam)
+    assert legacy_param.physical_coords is False
+    recreated = create_image_from_param(legacy_param)
+    assert (recreated.x0, recreated.y0, recreated.dx, recreated.dy) == (
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+    )
+
+    history_kwargs = decode_kwargs({"param": {"__dataset_json__": json.dumps(payload)}})
+    assert history_kwargs["param"].physical_coords is False

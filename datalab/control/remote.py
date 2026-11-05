@@ -50,6 +50,8 @@ def remote_call(func: Callable) -> object:
         """Decorator wrapper function"""
         self: RemoteServer = args[0]  # extracting 'self' from method arguments
         self.is_ready = False
+        self.exception = None
+        self.result = None
         output = func(*args, **kwargs)
         while not self.is_ready:
             QC.QCoreApplication.processEvents()
@@ -86,8 +88,8 @@ class RemoteServer(QC.QThread):
     SIG_ADD_OBJECT = QC.Signal(object, str, bool)
     SIG_SET_OBJECT = QC.Signal(object)
     SIG_ADD_GROUP = QC.Signal(str, str, bool)
-    SIG_LOAD_FROM_FILES = QC.Signal(list)
-    SIG_LOAD_FROM_DIRECTORY = QC.Signal(str)
+    SIG_LOAD_FROM_FILES = QC.Signal(list, object)
+    SIG_LOAD_FROM_DIRECTORY = QC.Signal(str, object)
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
@@ -116,33 +118,39 @@ class RemoteServer(QC.QThread):
         self.win = win
         self.result = None
         self.exception = None
+        self.__window_ready = threading.Event()
         win.SIG_READY.connect(self.datalab_is_ready)
         win.SIG_CLOSING.connect(self.shutdown_server)
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
-        self.SIG_ADD_OBJECT.connect(win.add_object)
-        self.SIG_SET_OBJECT.connect(win.set_object)
-        self.SIG_ADD_GROUP.connect(win.add_group)
-        self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
-        self.SIG_LOAD_FROM_DIRECTORY.connect(win.load_from_directory)
-        self.SIG_SELECT_OBJECTS.connect(win.select_objects)
-        self.SIG_SELECT_GROUPS.connect(win.select_groups)
-        self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel))
-        self.SIG_DELETE_METADATA.connect(win.delete_metadata)
-        self.SIG_SWITCH_TO_PANEL.connect(win.set_current_panel)
-        self.SIG_TOGGLE_AUTO_REFRESH.connect(win.toggle_auto_refresh)
-        self.SIG_TOGGLE_SHOW_TITLES.connect(win.toggle_show_titles)
-        self.SIG_RESET_ALL.connect(win.reset_all)
-        self.SIG_REMOVE_OBJECT.connect(win.remove_object)
-        self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
-        self.SIG_OPEN_H5.connect(win.open_h5_files)
-        self.SIG_IMPORT_H5.connect(win.import_h5_file)
-        self.SIG_LOAD_H5_WORKSPACE.connect(win.load_h5_workspace)
-        self.SIG_SAVE_H5_WORKSPACE.connect(win.save_h5_workspace)
-        self.SIG_CALC.connect(win.calc)
-        self.SIG_RUN_MACRO.connect(win.run_macro)
-        self.SIG_STOP_MACRO.connect(win.stop_macro)
-        self.SIG_IMPORT_MACRO_FROM_FILE.connect(win.import_macro_from_file)
+        for signal, command in (
+            (self.SIG_ADD_OBJECT, win.add_object),
+            (self.SIG_SET_OBJECT, win.set_object),
+            (self.SIG_LOAD_FROM_FILES, win.load_from_files),
+            (self.SIG_LOAD_FROM_DIRECTORY, win.load_from_directory),
+            (self.SIG_SELECT_OBJECTS, win.select_objects),
+            (self.SIG_SELECT_GROUPS, win.select_groups),
+            (self.SIG_SELECT_ALL_GROUPS, functools.partial(win.select_groups, None)),
+            (self.SIG_DELETE_METADATA, win.delete_metadata),
+            (self.SIG_SWITCH_TO_PANEL, win.set_current_panel),
+            (self.SIG_TOGGLE_AUTO_REFRESH, win.toggle_auto_refresh),
+            (self.SIG_TOGGLE_SHOW_TITLES, win.toggle_show_titles),
+            (self.SIG_RESET_ALL, win.reset_all),
+            (self.SIG_REMOVE_OBJECT, win.remove_object),
+            (self.SIG_SAVE_TO_H5, win.save_to_h5_file),
+            (self.SIG_OPEN_H5, win.open_h5_files),
+            (self.SIG_IMPORT_H5, win.import_h5_file),
+            (self.SIG_LOAD_H5_WORKSPACE, win.load_h5_workspace),
+            (self.SIG_SAVE_H5_WORKSPACE, win.save_h5_workspace),
+            (self.SIG_CALC, win.calc),
+            (self.SIG_RUN_MACRO, win.run_macro),
+            (self.SIG_STOP_MACRO, win.stop_macro),
+            (self.SIG_IMPORT_MACRO_FROM_FILE, win.import_macro_from_file),
+        ):
+            signal.connect(functools.partial(win.run_remote_command, command))
+        self.SIG_ADD_GROUP.connect(
+            functools.partial(win.run_remote_command, win.add_group, return_result=True)
+        )
         self.SIG_CALL_METHOD.connect(win.call_method_slot)
 
     def serve(self) -> None:
@@ -157,11 +165,27 @@ class RemoteServer(QC.QThread):
             self.register_functions(server)
             self.port = server.server_address[1]
             self.notify_port(self.port)
+            # Clients may already connect: their requests wait for the main window
+            self.__window_ready.wait()
             with execenv.context(xmlrpcport=self.port):
                 server.serve_forever()
 
+    def notify_window_ready(self) -> None:
+        """Notify that the main window is fully set up.
+
+        Requests are processed from then on: processing them earlier would run
+        commands on a partially built main window.
+        """
+        self.__window_ready.set()
+
     def shutdown_server(self) -> None:
         """Shutdown server"""
+        # A server still waiting for the main window must be able to stop
+        self.__window_ready.set()
+        # Release the remote call waiting for DataLab to be ready, if any (e.g. the
+        # one closing DataLab): the main window, blocked below until the request is
+        # done, could not signal it, hence a deadlock
+        self.is_ready = True
         if self.server is not None:
             self.server.shutdown()
             self.server = None
@@ -337,22 +361,85 @@ class RemoteServer(QC.QThread):
         self.SIG_SAVE_H5_WORKSPACE.emit(filename)
 
     @remote_call
-    def load_from_files(self, filenames: list[str]) -> None:
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref*.
+            attachments: Light files declared in the capsule.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+        self.result = None
+        kwargs = {
+            "name": name,
+            "description": description,
+            "as_revision": as_revision,
+            "workspace_ref": workspace_ref,
+            "workspace_filename": workspace_filename,
+            "attachments": attachments,
+        }
+        # The call-method slot returns the result and the exception, if any
+        self.SIG_CALL_METHOD.emit("export_capsule", [filename], None, kwargs)
+        return self.result
+
+    @remote_call
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace.
+        """
+        self.result = None
+        self.SIG_CALL_METHOD.emit(
+            "open_capsule", [filename], None, {"workspace": workspace}
+        )
+
+    @remote_call
+    def load_from_files(
+        self, filenames: list[str], param_data: list[str] | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images).
 
         Args:
             filenames: list of file names
+            param_data: Optional serialized format-specific import parameters
+             applied to every file requiring them. Defaults to None.
         """
-        self.SIG_LOAD_FROM_FILES.emit(filenames)
+        param = None if param_data is None else utils.rpcjson_to_dataset(param_data)
+        self.SIG_LOAD_FROM_FILES.emit(filenames, param)
 
     @remote_call
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(
+        self, path: str, param_data: list[str] | None = None
+    ) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param_data: Optional serialized format-specific import parameters
+             applied to every file requiring them. Defaults to None.
         """
-        self.SIG_LOAD_FROM_DIRECTORY.emit(path)
+        param = None if param_data is None else utils.rpcjson_to_dataset(param_data)
+        self.SIG_LOAD_FROM_DIRECTORY.emit(path, param)
 
     @remote_call
     def add_signal(
@@ -497,15 +584,20 @@ class RemoteServer(QC.QThread):
     @remote_call
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name (valid values: "signal", "image"). Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
         self.SIG_ADD_GROUP.emit(title, panel, select)
+        # The decorator waits for the main window slot, which sets the result
+        return self.result
 
     @remote_call
     def select_objects(
@@ -778,15 +870,18 @@ class RemoteServer(QC.QThread):
             RuntimeError: If Web API dependencies not installed or server
              already running.
         """
-        # Delegate to main window method which is @remote_controlled
-        # This ensures SIG_READY is emitted for the @remote_call decorator
-        return self.win.start_webapi_server(host, port)
+        # The server and its workspace adapter must be created in the GUI thread:
+        # created in this thread, which has no event loop, the adapter would never
+        # run the requests it receives (see DataLab Issue #403)
+        self.result = None
+        self.SIG_CALL_METHOD.emit("start_webapi_server", [host, port], None, {})
+        return self.result
 
     @remote_call
     def stop_webapi_server(self) -> None:
         """Stop the Web API server."""
-        # Delegate to main window method which is @remote_controlled
-        return self.win.stop_webapi_server()
+        self.result = None
+        self.SIG_CALL_METHOD.emit("stop_webapi_server", [], None, {})
 
     @remote_call
     def get_webapi_status(self) -> dict:
@@ -795,8 +890,9 @@ class RemoteServer(QC.QThread):
         Returns:
             Dictionary with "running", "url", and "token" keys.
         """
-        # Delegate to main window method which is @remote_controlled
-        return self.win.get_webapi_status()
+        self.result = None
+        self.SIG_CALL_METHOD.emit("get_webapi_status", [], None, {})
+        return self.result
 
 
 RemoteServer.check_remote_functions()
@@ -829,7 +925,7 @@ def get_datalab_xmlrpc_port() -> str:
     Raises:
         ConnectionRefusedError: DataLab has not yet been executed
     """
-    #  The following is valid only when using Python 3.9+ with DataLab
+    #  The following is valid when using Python 3.10+ with DataLab
     #  installed on the client side. In any other situation, please use the
     #  ``get_datalab_xmlrpc_port`` function from doc/remotecontrol_py27.py.
     ensure_initialized(load_user_config=True)
@@ -1117,6 +1213,38 @@ class RemoteClient(BaseProxy):
         """
         obj_data = utils.dataset_to_rpcjson(obj)
         self._datalab.set_object(obj_data)
+
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
+        """Open objects from files in current panel (signals/images).
+
+        Args:
+            filenames: list of file names
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
+        """
+        if param is None:
+            self._datalab.load_from_files(filenames)
+        else:
+            self._datalab.load_from_files(filenames, utils.dataset_to_rpcjson(param))
+
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
+        """
+        if param is None:
+            self._datalab.load_from_directory(path)
+        else:
+            self._datalab.load_from_directory(path, utils.dataset_to_rpcjson(param))
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call computation feature ``name``

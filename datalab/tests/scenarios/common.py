@@ -70,7 +70,10 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     assert len(panel) == 2
 
     panel.objview.select_objects((2,))
-    panel.processor.run_feature("difference", panel[1])  # difference with obj #1
+    # A signal operand must share the units and cover the source grid: the
+    # reference spectrum does neither for the tested signals.
+    operand = panel[2] if isinstance(panel, SignalPanel) else panel[1]
+    panel.processor.run_feature("difference", operand)
     panel.remove_object()
     panel.objview.select_objects((2,))
     panel.processor.run_feature("quadratic_difference", panel[2])
@@ -325,9 +328,9 @@ def run_image_computations(
             width=width_param,
             height=height_param,
             xmin=ima1.x0,
-            xmax=ima1.x0 + ima1.width,
+            xmax=ima1.x0 + ima1.width - ima1.dx,
             ymin=ima1.y0,
-            ymax=ima1.y0 + ima1.height,
+            ymax=ima1.y0 + ima1.height - ima1.dy,
         )
         panel.processor.run_feature("resampling", param)
 

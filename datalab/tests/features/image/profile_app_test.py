@@ -33,7 +33,7 @@ def test_profile():
             ("vertical", 102, 131),
         ):
             profparam = sigima.params.LineProfileParam.create(
-                direction=direction, row=row, col=col
+                direction=direction, y=row, x=col
             )
             proc.compute_line_profile(profparam)
         for direction, row1, col1, row2, col2 in (
@@ -42,14 +42,14 @@ def test_profile():
         ):
             avgprofparam = sigima.params.AverageProfileParam.create(
                 direction=direction,
-                row1=row1,
-                col1=col1,
-                row2=row2,
-                col2=col2,
+                x1=col1,
+                y1=row1,
+                x2=col2,
+                y2=row2,
             )
             proc.compute_average_profile(avgprofparam)
         segprofparam = sigima.params.SegmentProfileParam.create(
-            row1=10, col1=10, row2=102, col2=131
+            x1=10, y1=10, x2=131, y2=102
         )
         proc.compute_segment_profile(segprofparam)
         image2 = create_noisy_gaussian_image(center=(0.0, 0.0), add_annotations=False)
@@ -64,7 +64,7 @@ def test_profile():
                 proc.compute_radial_profile()
             else:
                 param = sigima.params.RadialProfileParam.create(
-                    center=center, x0=x0, y0=y0
+                    center=center, xc=x0, yc=y0
                 )
                 proc.compute_radial_profile(param)
 

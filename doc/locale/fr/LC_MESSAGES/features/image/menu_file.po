@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,6 +33,9 @@ msgstr "Ouvrir, enregistrer et fermer des images (voir ci-dessous)."
 
 msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`overview`)."
 msgstr "Enregistrer et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`overview`)."
+
+msgid "Export, inspect, replay and compare workspace capsules, i.e. a workspace with the provenance of its processing (see :ref:`capsules`)."
+msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail, c'est-à-dire un espace de travail avec la provenance de ses traitements (voir :ref:`capsules`)."
 
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
@@ -140,6 +142,15 @@ msgstr "Fichiers FT-Lab"
 msgid ".ima"
 msgstr ""
 
+msgid "Headerless RAW files"
+msgstr "Fichiers RAW sans en-tête"
+
+msgid ".raw"
+msgstr ""
+
+msgid "When opening a headerless RAW file (``.raw``), DataLab displays a **RAW image import** dialog to describe its binary layout: pixel data type, image width and height, offset to the first image, number of images, gap between consecutive images, byte order, and the **White is zero** option (which displays the imported image with an inverted gray colormap without altering pixel values). Multi-image files create one image per frame. When several RAW files are opened at once, DataLab asks whether to apply the same import parameters to all of them or to set the parameters of each file individually."
+msgstr "À l'ouverture d'un fichier RAW sans en-tête (``.raw``), DataLab affiche une boîte de dialogue **Import d'image RAW** permettant de décrire sa structure binaire : type de données des pixels, largeur et hauteur de l'image, décalage avant la première image, nombre d'images, espacement entre images consécutives, ordre des octets, ainsi que l'option **Blanc à zéro** (qui affiche l'image importée avec une palette de niveaux de gris inversée sans modifier les valeurs des pixels). Les fichiers multi-images créent une image par trame. Lorsque plusieurs fichiers RAW sont ouverts simultanément, DataLab demande s'il faut appliquer les mêmes paramètres d'import à tous les fichiers ou définir les paramètres de chaque fichier individuellement."
+
 msgid "DataLab also supports any image format that can be read by the `imageio` library, provided that the associated plugin(s) are installed (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) and that the output NumPy array data type and shape are supported by DataLab."
 msgstr "DataLab prend également en charge tout format d'image pouvant être lu par la bibliothèque `imageio`, à condition que le(s) plugin(s) associé(s) soient installé(s) (voir `documentation imageio <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) et que le type de données et la forme du tableau NumPy de sortie soient pris en charge par DataLab."
 
@@ -147,13 +158,13 @@ msgid "To add a new file format, you may use the `imageio_formats` entry of Data
 msgstr "Pour ajouter un nouveau format de fichier, vous pouvez utiliser l'entrée `imageio_formats` du fichier de configuration de DataLab. Cette entrée est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats pris en charge nativement :"
 
 msgid "Built-in immutable sequence."
-msgstr ""
+msgstr "Séquence immuable intégrée."
 
 msgid "If no argument is given, the constructor returns an empty tuple. If iterable is specified the tuple is initialized from iterable's items."
-msgstr ""
+msgstr "Si aucun argument n'est fourni, le constructeur renvoie un tuple vide. Si iterable est fourni, le tuple est initialisé à partir des éléments de cet itérable."
 
 msgid "If the argument is a tuple, the return value is the same object."
-msgstr ""
+msgstr "Si l'argument est un tuple, la valeur renvoyée est ce même objet."
 
 msgid "Open from directory"
 msgstr "Ouvrir depuis un répertoire"
@@ -164,8 +175,17 @@ msgstr "Ouvrir plusieurs images depuis un répertoire spécifié."
 msgid "Save image"
 msgstr "Enregistrer l'image"
 
-msgid "Save current image (see \"Open image\" supported filetypes)."
-msgstr "Enregistre l'image sélectionnée dans l'un des types de fichier pris en charge :"
+msgid "Save current image (see \"Open image\" supported filetypes; writing ``.raw`` files is not supported)."
+msgstr "Enregistre l'image courante (voir les types de fichiers pris en charge dans « Ouvrir une image » ; l'écriture de fichiers ``.raw`` n'est pas prise en charge)."
+
+msgid "After choosing the destination file, DataLab opens an **Export image** dialog tailored to the selected file format, with a live preview of the exported image (displayed in gray levels as it will be read back from the file):"
+msgstr "Après le choix du fichier de destination, DataLab ouvre une boîte de dialogue **Exporter l'image** adaptée au format de fichier sélectionné, avec un aperçu en direct de l'image exportée (affichée en niveaux de gris telle qu'elle sera relue depuis le fichier) :"
+
+msgid "**Data preparation**: normalization mode (none, min-max, percentile or manual bounds), out-of-range behavior (clip or rescale), non-finite value policy (error, clip or replace), gamma correction, inversion and target data type among those supported by the destination format. When a format only supports integer pixels (e.g. PNG, JPEG or BMP) and the source image uses another data type, min-max rescaling is selected by default."
+msgstr "**Préparation des données** : mode de normalisation (aucune, min-max, percentiles ou bornes manuelles), comportement hors plage (écrêtage ou rééchelonnage), traitement des valeurs non finies (erreur, écrêtage ou remplacement), correction gamma, inversion et type de données cible parmi ceux pris en charge par le format de destination. Lorsqu'un format ne prend en charge que des pixels entiers (par exemple PNG, JPEG ou BMP) et que l'image source utilise un autre type de données, le rééchelonnage min-max est sélectionné par défaut."
+
+msgid "**Format-specific options**: compression, quality, predictor, tiling, resolution, photometric interpretation, text delimiter and precision, or MAT compression, depending on the chosen format."
+msgstr "**Options propres au format** : compression, qualité, prédicteur, tuilage, résolution, interprétation photométrique, séparateur et précision des fichiers texte, ou compression MAT, selon le format choisi."
 
 msgid "Save images to directory"
 msgstr "Enregistrer les images dans un répertoire"

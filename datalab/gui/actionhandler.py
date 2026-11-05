@@ -61,6 +61,7 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.gui.processor.base import ProcessingParameters
     from datalab.objectmodel import ObjectGroup
 
 
@@ -375,7 +376,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         analysis_params = extract_analysis_parameters(obj)
         if (
             analysis_params is not None
-            and analysis_params.func_name == adapter.func_name
+            and self.__get_analysis_function_name(analysis_params) == adapter.func_name
         ):
             clear_analysis_parameters(obj)
         adapter.remove_from(obj)
@@ -389,6 +390,27 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Refresh the plot to update the display
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)
+
+    def __get_analysis_function_name(self, params: ProcessingParameters) -> str:
+        """Return the computation function name behind stored analysis parameters.
+
+        Results are named after their computation function, whereas analysis
+        parameters store the feature ID, which is namespaced for plugin features.
+
+        Args:
+            params: Stored analysis parameters
+
+        Returns:
+            Function name of the registered feature, or the local part of the
+            stored feature ID if the feature is not registered.
+        """
+        try:
+            feature = self.panel.processor.get_feature(
+                params.func_name, plugin_origin=params.plugin_origin
+            )
+        except ValueError:
+            return params.func_name.rsplit(":", 1)[-1]
+        return feature.name
 
     def clear_plugin_actions(self) -> None:
         """Clear plugin actions and submenus"""
@@ -646,7 +668,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             feature.action_title,
             position=position,
             separator=separator,
-            triggered=lambda: self.panel.processor.run_feature(feature.function),
+            triggered=lambda: self.panel.processor.run_feature(feature.feature_id),
             select_condition=condition,
             icon_name=feature.icon_name,
             tip=feature.comment,
@@ -851,7 +873,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Rename"),
-                icon_name="rename.svg",
+                icon_name="datalab:rename.svg",
                 shortcut="F2",
                 tip=_("Edit title of selected %s or group") % self.OBJECT_STR,
                 triggered=self.panel.rename_selected_object_or_group,
@@ -898,7 +920,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Remove"),
-                icon_name="delete.svg",
+                icon_name="datalab:delete.svg",
                 tip=_("Remove selected %s") % self.OBJECT_STR,
                 triggered=self.panel.remove_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
@@ -1282,7 +1304,7 @@ class SignalActionHandler(BaseActionHandler):
                 (_("Cosine"), sio.CosineParam, "cosine.svg", False),
                 (_("Sawtooth"), sio.SawtoothParam, "sawtooth.svg", False),
                 (_("Triangle"), sio.TriangleParam, "triangle.svg", False),
-                (_("Square"), sio.SquareParam, "square.svg", False),
+                (_("Square"), sio.SquareParam, "square_wave.svg", False),
                 (_("Cardinal sine"), sio.SincParam, "sinc.svg", False),
                 (_("Linear chirp"), sio.LinearChirpParam, "linear_chirp.svg", False),
                 (_("Step"), sio.StepParam, "step.svg", True),
@@ -1488,12 +1510,14 @@ class SignalActionHandler(BaseActionHandler):
             antialiasing_action.setChecked(Conf.sig_antialiasing.get(True))
             self.new_action(
                 _("Reset curve styles"),
-                select_condition=SelectCond.always,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
                 icon_name="reset_curve_styles.svg",
                 triggered=self.panel.reset_curve_styles,
                 tip=_(
-                    "Curve styles are looped over a list of predefined styles.\n"
-                    "This action resets the list to its initial state."
+                    "Curves are given automatic styles according to their "
+                    "position on the plot.\n"
+                    "This action removes the colors and line styles chosen for "
+                    "the selected signals, which are given automatic styles again."
                 ),
                 toolbar_pos=-1,
             )
@@ -1732,7 +1756,7 @@ class ImageActionHandler(BaseActionHandler):
             self.new_action(
                 _("Resize") + "...",
                 triggered=self.panel.processor.compute_resize,
-                icon_name="resize.svg",
+                icon_name="datalab:resize.svg",
                 separator=True,
             )
             self.new_action(
@@ -1763,7 +1787,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.VIEW):
             showcontrast_action = self.new_action(
                 _("Show contrast panel"),
-                icon_name="contrast.png",
+                icon_name="contrast.svg",
                 tip=_("Show or hide contrast adjustment panel"),
                 select_condition=SelectCond.always,
                 toggled=self.panel.toggle_show_contrast,

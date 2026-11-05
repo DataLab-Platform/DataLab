@@ -270,31 +270,36 @@ def capture_outputs(
         return
     panels = (panel.mainwindow.signalpanel, panel.mainwindow.imagepanel)
     before = {p.PANEL_STR_ID: set(p.objmodel.get_object_ids()) for p in panels}
-    try:
-        yield
-    finally:
-        new_uuids: list[str] = []
-        for p in panels:
-            before_p = before[p.PANEL_STR_ID]
-            for uid in p.objmodel.get_object_ids():
-                if uid not in before_p:
-                    new_uuids.append(uid)
-        panel.register_action_outputs(action, new_uuids)
-        if not new_uuids:
-            no_output_compute = action.kind == HistoryAction.KIND_COMPUTE and (
-                action.pattern
-                in {"1_to_1", "multiple_1_to_1", "1_to_n", "n_to_1", "2_to_1"}
-            )
-            no_output_load = (
-                action.kind == HistoryAction.KIND_UI
-                and action.method_name in HistoryAction.UI_LOAD_METHODS
-            )
-            if no_output_compute or no_output_load:
-                # The action produced no output object: either the compute
-                # failed (or was a full no-op), or the load found nothing
-                # readable for the panel. Do not keep a misleading entry in
-                # the history.
-                discard_empty_output_action(panel, action)
+    # The activities recorded by this execution link the action to its
+    # provenance (identifiers returned by the capture itself).
+    with panel.mainwindow.provenance.collecting() as activity_ids:
+        try:
+            yield
+        finally:
+            new_uuids: list[str] = []
+            for p in panels:
+                before_p = before[p.PANEL_STR_ID]
+                for uid in p.objmodel.get_object_ids():
+                    if uid not in before_p:
+                        new_uuids.append(uid)
+            panel.register_action_outputs(action, new_uuids)
+            if not new_uuids:
+                no_output_compute = action.kind == HistoryAction.KIND_COMPUTE and (
+                    action.pattern
+                    in {"1_to_1", "multiple_1_to_1", "1_to_n", "n_to_1", "2_to_1"}
+                )
+                no_output_load = (
+                    action.kind == HistoryAction.KIND_UI
+                    and action.method_name in HistoryAction.UI_LOAD_METHODS
+                )
+                if no_output_compute or no_output_load:
+                    # The action produced no output object: either the compute
+                    # failed (or was a full no-op), or the load found nothing
+                    # readable for the panel. Do not keep a misleading entry in
+                    # the history.
+                    discard_empty_output_action(panel, action)
+        if activity_ids:
+            action.provenance_activity_ids = list(activity_ids)
 
 
 def discard_empty_output_action(panel: HistoryPanel, action: HistoryAction) -> None:

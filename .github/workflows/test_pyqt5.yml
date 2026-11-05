@@ -36,12 +36,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.14"]
+        python-version: ["3.10", "3.14"]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -52,7 +52,13 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest httpx
         pip install PyQt5
-        if [ "${{ github.base_ref || github.ref_name }}" = "develop" ]; then
+        # PRs select by target branch; pushes and manual runs by their own branch.
+        case "${{ github.base_ref || github.ref_name }}" in
+          develop|feature/*|fix/*) DEPENDENCIES=development ;;
+          release) DEPENDENCIES=release ;;
+          *) DEPENDENCIES=published ;;
+        esac
+        if [ "$DEPENDENCIES" = "development" ]; then
            # Clone and install development versions of key dependencies with editable install
            cd ..
            git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git
@@ -61,20 +67,23 @@ jobs:
            DEPENDENCY_BRANCH="${{ github.head_ref || github.ref_name }}"
            git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
            git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/SigimaX.git
+           git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/DataLab-Capsule.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/DataLab-Capsule.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../PythonQwt
            pip install -e ../plotpy
            pip install -e ../sigima
            pip install -e ../SigimaX --no-deps
+           pip install -e ../DataLab-Capsule
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
-           # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX'])]; open('deps.txt','w').write('\n'.join(deps))"
+           # Extract dependencies of DataLab and SigimaX (installed with --no-deps
+           # above), save them to file, then install
+           python -c "import tomli; deps=[d for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomli.load(open(p,'rb'))['project']['dependencies'] if not any(n in d for n in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
-        elif [ "${{ github.base_ref || github.ref_name }}" = "release" ]; then
+        elif [ "$DEPENDENCIES" = "release" ]; then
            # Clone dependencies from release branches (with fallback to main/master)
            cd ..
            # Try cloning PythonQwt from main or master
@@ -87,16 +96,19 @@ jobs:
            git clone --depth 1 --branch release https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git
            # Try cloning SigimaX from release, fallback to main
            git clone --depth 1 --branch release https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 https://github.com/DataLab-Platform/SigimaX.git
+           git clone --depth 1 --branch release https://github.com/DataLab-Platform/DataLab-Capsule.git || git clone --depth 1 https://github.com/DataLab-Platform/DataLab-Capsule.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../PythonQwt
            pip install -e ../plotpy
            pip install -e ../sigima
            pip install -e ../SigimaX --no-deps
+           pip install -e ../DataLab-Capsule
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
-           # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX'])]; open('deps.txt','w').write('\n'.join(deps))"
+           # Extract dependencies of DataLab and SigimaX (installed with --no-deps
+           # above), save them to file, then install
+           python -c "import tomli; deps=[d for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomli.load(open(p,'rb'))['project']['dependencies'] if not any(n in d for n in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
@@ -107,7 +119,27 @@ jobs:
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab
     - name: Test with pytest
-      run: pytest -v --tb=long
+      run: |
+        # Keep the core dump of a crashed test process, for the backtrace step below
+        sudo mkdir -p /tmp/cores && sudo chmod 1777 /tmp/cores || true
+        sudo sysctl -q -w kernel.core_pattern=/tmp/cores/core.%p || true
+        ulimit -c unlimited || true
+        pytest -v --tb=long
+    - name: Native backtrace of crashed test process
+      if: failure()
+      run: |
+        shopt -s nullglob
+        cores=(/tmp/cores/core.*)
+        if [ ${#cores[@]} -eq 0 ]; then
+          echo "No core dump found"
+          exit 0
+        fi
+        sudo apt-get install -y gdb
+        python_exe="$(python -c 'import sys; print(sys.executable)')"
+        for core in "${cores[@]}"; do
+          echo "===== Backtrace of $core"
+          gdb -batch -ex "thread apply all bt 50" "$python_exe" "$core"
+        done
 
   build_latest:
     if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && (github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'build_latest')) }}
@@ -116,10 +148,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Set up Python 3.14
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: "3.14"
 
@@ -143,6 +175,7 @@ jobs:
         cd ..
         git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git
         git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 https://github.com/DataLab-Platform/SigimaX.git
+        git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/DataLab-Platform/DataLab-Capsule.git || git clone --depth 1 https://github.com/DataLab-Platform/DataLab-Capsule.git
         cd DataLab
 
         # Install DataLab itself, but do NOT install its pinned deps
@@ -153,10 +186,12 @@ jobs:
         # overwriting the editable clone installed just above.
         python -m pip install -e ../sigima
         python -m pip install -e ../SigimaX --no-deps
+        python -m pip install -e ../DataLab-Capsule
 
-        # Extract dependency names from pyproject.toml (excluding Sigima and
-        # SigimaX, installed from local clones above) and install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if not any(p in d for p in ['Sigima', 'SigimaX'])))")
+        # Extract dependency names from the pyproject.toml of DataLab and SigimaX
+        # (excluding Sigima and SigimaX, installed from local clones above) and
+        # install latest versions
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(sorted({re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomllib.loads(open(p, 'rb').read().decode())['project']['dependencies'] if not any(n in d for n in ['Sigima', 'SigimaX', 'datalab-capsule'])})))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab

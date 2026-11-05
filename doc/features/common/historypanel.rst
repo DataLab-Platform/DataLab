@@ -113,12 +113,12 @@ The toolbar at the top of the panel exposes the following actions:
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |open_history| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
+.. |open_history| image:: ../../images/icons/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |save_history| image:: ../../../datalab/data/icons/io/filesave_h5.svg
+.. |save_history| image:: ../../images/icons/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -154,6 +154,11 @@ The toolbar at the top of the panel exposes the following actions:
     :class: dark-light no-scaled-link
 
 .. |remove_incompatible| image:: ../../../datalab/data/icons/edit/delete_all.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |history| image:: ../../../datalab/data/icons/history.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -205,6 +210,10 @@ The toolbar at the top of the panel exposes the following actions:
   as well. Cancelling a dialog stops the replay, restores the parameter
   edits made during that run, and silently recomputes any actions left
   outdated so the chain stays up to date.
+- |history| **Show execution provenance**: show the recorded provenance of the
+  last successful execution of the selected computation action (one tab per
+  result), see :ref:`provenance`. If the parameters of the action were edited
+  without executing it again, the dialog says so.
 - |duplicate| **Duplicate**: duplicate the processing chain containing each
   selected action, or the processing chains in each selected session. DataLab
   clones the required objects and creates independent history sessions. The
@@ -327,6 +336,15 @@ The history can be persisted in two complementary ways:
    tooltip, and never replayed — while all other sessions and actions load
    normally. Such entries can be cleaned up with **Remove incompatible**.
 
+.. note::
+
+   Each action keeps, in the optional ``provenance_activity_ids`` field (History
+   action schema version 3), the identifiers of the provenance activities
+   recorded by its last successful execution. This field is never copied with an
+   action (duplicated chains and imported sessions have none), and actions saved
+   by earlier versions simply have none. Deleting a session does not change the
+   provenance record of the workspace.
+
 .. warning::
 
    Replaying a session that depends on external files (e.g. opening a
@@ -345,9 +363,13 @@ chain:
   the source of the deleted step as their new input.
 - For ``2_to_1`` operations (e.g. *difference*), the first source is used
   for reconnection.
-- If no valid source can be determined (e.g. the source itself was already
-  deleted), a warning is displayed listing the unreconnectable operations,
-  but the deletion is allowed to proceed.
+- If the source of the deleted step no longer exists (e.g. it was already
+  deleted, or is deleted at the same time), the deletion proceeds and the
+  dependent results are left unchanged: a single warning lists the processing
+  steps concerned, each of them once.
+- Deleting an object that was not produced by a recorded processing step
+  (e.g. a created or loaded object, or any object when recording was off)
+  leaves the results depending on it unchanged, without any warning.
 
 This behaviour mirrors removing a link from a chain: the adjacent links
 reconnect to preserve the processing flow.
