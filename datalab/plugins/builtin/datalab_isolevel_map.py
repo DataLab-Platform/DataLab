@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
 Contour plot plugin for DataLab.
@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from sigima.objects import ImageObj
 
 
-class _ContourAnnotatedPolygon(AnnotatedPolygon):
+class _ContourAnnotatedPolygon(AnnotatedPolygon):  # pylint: disable=abstract-method
     """AnnotatedPolygon with label placed on the contour perimeter."""
 
     LABEL_ANCHOR = "C"
@@ -87,7 +87,7 @@ class ContourPlotPlugin(PluginBase):
     """DataLab plugin exposing PlotPy contour plots for images."""
 
     PLUGIN_INFO = PluginInfo(
-        id="org.datalab.examples.contour-plot",
+        id="org.datalab.isolevel-map",
         name=_("Contour isoline plot"),
         version="1.1.0",
         description=_(
@@ -183,7 +183,7 @@ class ContourPlotPlugin(PluginBase):
             self._dialogs.remove(dialog)
         dialog.deleteLater()
 
-    def show_contour_plot(self) -> None:
+    def show_contour_plot(self) -> None:  # pylint: disable=too-many-return-statements
         """Open a separate contour-plot view for the selected image."""
         obj = self._get_selected_image()
         if obj is None:

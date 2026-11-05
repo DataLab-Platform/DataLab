@@ -934,7 +934,6 @@ SHIPPED_EXAMPLES = {
     "datalab_example_imageformat": None,
     "datalab_example_imageproc": "org.datalab.examples.extract-blobs",
     "datalab_example_nested_menus": "org.datalab.examples.nested-menus",
-    "datalab_exemple_contour_plot": "org.datalab.examples.contour-plot",
 }
 
 
@@ -989,6 +988,7 @@ def test_shipped_plugin_examples_load_in_datalab() -> None:
                     if failed.name.split(".")[0] in SHIPPED_EXAMPLES
                 ]
                 assert not failed, f"Example plugins failed to load: {failed}"
+                assert PluginRegistry.get_plugin("org.datalab.isolevel-map") is not None
                 for plugin_id in filter(None, SHIPPED_EXAMPLES.values()):
                     assert PluginRegistry.get_plugin(plugin_id) is not None, plugin_id
                 assert np.allclose(_run_custom_filter(win), expected)

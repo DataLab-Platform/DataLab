@@ -353,6 +353,9 @@ msgstr "La documentation *Ajustement* explique comment déduire la longueur d'on
 msgid "**Remote control and plugins:**"
 msgstr "**Contrôle à distance et plugins :**"
 
+msgid "The **Contour isoline plot** plugin (`org.datalab.isolevel-map`, version 1.1.0), formerly provided as a plugin example, is now a built-in plugin available directly from **Plugins > Contour isoline plot > Show contour plot...**"
+msgstr "Le plugin **Tracé de contours d'isoniveau** (`org.datalab.isolevel-map`, version 1.1.0), auparavant fourni comme exemple de plugin, est désormais un plugin intégré disponible directement depuis **Plugins > Tracé de contours d'isoniveau > Afficher le tracé de contours...**"
+
 msgid "`add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title"
 msgstr "`add_group` renvoie désormais l'UUID du groupe créé, de sorte qu'un client distant, une macro ou un plugin peut y ajouter des objets avec `add_object(obj, group_id=...)` (ou `add_signal`/`add_image`) au lieu de rechercher le groupe par son titre"
 
