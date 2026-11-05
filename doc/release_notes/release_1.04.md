@@ -4,9 +4,18 @@
 
 ### Requirements ###
 
-* The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter.
-* The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases.
-* guidata 3.17.2 or later is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492)).
+* **DataLab-Platform**:
+  * Sigima 1.4.0 or later is required: it provides operation contracts and replay qualification, RAW image import, format-aware image export, portable annotations, experimental-source metadata, NPZ object serialization and pixel-center ROI rules.
+  * SigimaX 1.1.0 or later is required: it provides portable PlotPy annotation adapters, high-contrast curve styles, high-DPI splash screen and watermark rendering, and NeXus / multidimensional HDF5 browsing.
+  * DataLab-Capsule 0.2.x (`>= 0.2.0, < 0.3`) is required for workspace provenance recording, verification and `.dlcapsule` exchange.
+* **PlotPyStack**:
+  * guidata 3.17.2 or later is required: it provides histogram-backed range items, module-qualified icon precedence, high-DPI pixmap helpers, and gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492)).
+  * PlotPy 2.12.1 or later is required: it provides sharp SVG icons on high-DPI displays, min/max signal auto-downsampling and faster image overlay interactions.
+* **Third-party**:
+  * The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter.
+  * The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases.
+  * pip 22.2 or later is required to resolve and install additional plugin wheel dependencies.
+  * NumPy up to 2.5 (`>= 1.22, < 2.6`) and SciPy up to 1.18 (`>= 1.10.1, < 1.19`) are now supported.
 
 ### ✨ New Features ###
 
@@ -210,7 +219,6 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
 * Rectangles and segments drawn on signals are now the same labeled shapes as on images; unlike on images, segments drawn on signals do not show their length and angle, which would mix X and Y units
-* DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.2.x; HDF5 imports use Sigima's experimental-source API
 
 **Regions of interest:**
 

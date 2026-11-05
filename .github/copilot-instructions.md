@@ -21,8 +21,8 @@ This document provides comprehensive guidance for AI coding agents working on th
 
 - **Python**: 3.10+ (using `from __future__ import annotations`)
 - **Core Libraries**: NumPy (>=1.22), SciPy (>=1.10.1), scikit-image (>=0.19.2), OpenCV (optional)
-- **GUI**: Qt via PlotPy (>=2.8.2) and guidata (>=3.13.4)
-- **Computation**: Sigima (>=1.1.2) - separate package
+- **GUI (PlotPyStack)**: Qt via PlotPy (>=2.12.1) and guidata (>=3.17.2)
+- **DataLab-Platform**: Sigima (>=1.4.0), SigimaX (>=1.1.0), datalab-capsule (>=0.2.0, <0.3)
 - **Web API**: FastAPI (>=0.110.0), uvicorn (>=0.27.0), pydantic (>=2.0)
 - **Other**: pandas (>=1.4), PyWavelets (>=1.2), psutil (>=5.8), packaging (>=21.3)
 - **Testing**: pytest with coverage
@@ -722,6 +722,33 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 
 * Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
 * Fixed corrupted Unicode characters in macro console output on Windows - special characters like ?, ??, and ? now display correctly instead of showing garbled text
+```
+
+### Dependency Version Tracking (`Requirements` section)
+
+Every new release entry in the release notes must include a dedicated **`### Requirements ###`** section tracking minimum version updates from `pyproject.toml` (`requires-python`, `[project.dependencies]`, and relevant `[project.optional-dependencies]`).
+
+Distinguish three categories of dependencies:
+
+1. **DataLab-Platform** (`datalab-platform` ecosystem packages): `Sigima` (≥ 1.4.0), `SigimaX` (≥ 1.1.0), `datalab-capsule` (≥ 0.2.0, < 0.3)
+2. **PlotPyStack**: `guidata` (≥ 3.17.2), `PlotPy` (≥ 2.12.1), `PythonQwt`
+3. **Third-party** (and Python runtime): `Python` (`requires-python`), `NumPy`, `SciPy`, `scikit-image`, `pandas`, `PyWavelets`, `psutil`, `packaging`, `pip`, `jedi`, `fastapi`, `uvicorn`, `pydantic`, `opencv-python-headless`, `PyQt5`, `pyinstaller`, etc.
+
+**Rules**:
+- Whenever a minimum required version is bumped or a dependency is added/updated in `pyproject.toml`, document it in the release's `### Requirements ###` section (rather than scattering requirement updates across feature bullets), grouped/distinguished according to these three categories, and briefly state the user-visible reason for the update.
+- Keep `requirements.txt` and `doc/requirements.rst` synchronized with `pyproject.toml` (via `python -m guidata.utils.genreqs all`), along with the French documentation `.po` catalogs.
+
+**Example**:
+```markdown
+### Requirements ###
+
+* **DataLab-Platform**:
+  * Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule ≥ 0.2.0 (< 0.3) are required.
+* **PlotPyStack**:
+  * guidata ≥ 3.17.2 is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins.
+  * PlotPy ≥ 2.12.1 is required: it provides SVG icons and faster image interactions.
+* **Third-party**:
+  * Python ≥ 3.10 is now required for the Python package and newly generated plugin projects.
 ```
 
 ## Key Files Reference
