@@ -20,14 +20,41 @@ msgstr "DataLab Version 1.4.0"
 msgid "Requirements"
 msgstr "Prérequis"
 
+msgid "**DataLab-Platform**:"
+msgstr "**DataLab-Platform** :"
+
+msgid "Sigima 1.4.0 or later is required: it provides operation contracts and replay qualification, RAW image import, format-aware image export, portable annotations, experimental-source metadata, NPZ object serialization and pixel-center ROI rules."
+msgstr "Sigima 1.4.0 ou ultérieur est requis : il fournit les contrats d'opération et la qualification de rejeu, l'import d'images RAW, l'export d'images adapté au format, les annotations portables, les métadonnées d'origine expérimentale, la sérialisation d'objets au format NPZ et les règles de sélection par centre de pixel des ROI."
+
+msgid "SigimaX 1.1.0 or later is required: it provides portable PlotPy annotation adapters, high-contrast curve styles, high-DPI splash screen and watermark rendering, and NeXus / multidimensional HDF5 browsing."
+msgstr "SigimaX 1.1.0 ou ultérieur est requis : il fournit les adaptateurs d'annotations PlotPy portables, les styles de courbes à contraste élevé, le rendu haute résolution de l'écran de démarrage et du filigrane, ainsi que l'exploration HDF5 NeXus et multidimensionnelle."
+
+msgid "DataLab-Capsule 0.2.x (`>= 0.2.0, < 0.3`) is required for workspace provenance recording, verification and `.dlcapsule` exchange."
+msgstr "DataLab-Capsule 0.2.x (`>= 0.2.0, < 0.3`) est requis pour l'enregistrement et la vérification de la provenance des espaces de travail ainsi que l'échange de fichiers `.dlcapsule`."
+
+msgid "**PlotPyStack**:"
+msgstr "**PlotPyStack** :"
+
+msgid "guidata 3.17.2 or later is required: it provides histogram-backed range items, module-qualified icon precedence, high-DPI pixmap helpers, and gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
+msgstr "guidata 3.17.2 ou ultérieur est requis : il fournit les éléments de plage à histogramme, la priorité des icônes qualifiées par module, les fonctions d'images haute résolution, et donne à chaque fenêtre une barre de titre suivant le thème de couleurs sous Windows, y compris aux fenêtres des plugins (corrige [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
+
+msgid "PlotPy 2.12.1 or later is required: it provides sharp SVG icons on high-DPI displays, min/max signal auto-downsampling and faster image overlay interactions."
+msgstr "PlotPy 2.12.1 ou ultérieur est requis : il fournit des icônes SVG nettes sur les écrans haute résolution, le sous-échantillonnage automatique min/max des signaux et des interactions plus fluides sur les superpositions d'images."
+
+msgid "**Third-party**:"
+msgstr "**Bibliothèques tierces** :"
+
 msgid "The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter."
 msgstr "Le package Python et les nouveaux projets de plugins générés exigent désormais Python 3.10 ou ultérieur. Les utilisateurs de Python 3.9 doivent conserver une version antérieure compatible. L'application autonome continue d'inclure son propre interpréteur Python."
 
 msgid "The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases."
 msgstr "Le lanceur de tests Windows exclut Python 3.9 des matrices courantes, tout en conservant les tests explicites de versions historiques précisément sélectionnées."
 
-msgid "guidata 3.17.2 or later is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
-msgstr "guidata 3.17.2 ou ultérieur est requis : il donne à chaque fenêtre une barre de titre suivant le thème de couleurs sous Windows, y compris aux fenêtres des plugins (corrige [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
+msgid "pip 22.2 or later is required to resolve and install additional plugin wheel dependencies."
+msgstr "pip 22.2 ou ultérieur est requis pour résoudre et installer les dépendances additionnelles des plugins sous forme de wheels."
+
+msgid "NumPy up to 2.5 (`>= 1.22, < 2.6`) and SciPy up to 1.18 (`>= 1.10.1, < 1.19`) are now supported."
+msgstr "NumPy jusqu'à la version 2.5 (`>= 1.22, < 2.6`) et SciPy jusqu'à la version 1.18 (`>= 1.10.1, < 1.19`) sont désormais pris en charge."
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
@@ -484,9 +511,6 @@ msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnée
 
 msgid "Rectangles and segments drawn on signals are now the same labeled shapes as on images; unlike on images, segments drawn on signals do not show their length and angle, which would mix X and Y units"
 msgstr "Les rectangles et segments tracés sur les signaux sont désormais les mêmes formes avec étiquette que sur les images ; contrairement aux images, les segments tracés sur les signaux n'affichent pas leur longueur et leur angle, qui mélangeraient les unités de X et de Y"
-
-msgid "DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.2.x; HDF5 imports use Sigima's experimental-source API"
-msgstr "DataLab nécessite désormais Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.2.x ; les imports HDF5 utilisent l'API d'origine expérimentale de Sigima"
 
 msgid "**Regions of interest:**"
 msgstr "**Régions d'intérêt :**"
