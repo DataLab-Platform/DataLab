@@ -262,7 +262,7 @@ msgstr "Composants d'interface graphique réutilisables et utilitaires applicati
 msgid "datalab-capsule"
 msgstr ""
 
-msgid ">= 0.1.0, < 0.2"
+msgid ">= 0.2.0, < 0.3"
 msgstr ""
 
 msgid "Exchange and verify scientific workspace provenance as open RO-Crate capsules (library and CLI, no DataLab required)"
@@ -501,4 +501,3 @@ msgstr "Client HTTP de nouvelle génération."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-
