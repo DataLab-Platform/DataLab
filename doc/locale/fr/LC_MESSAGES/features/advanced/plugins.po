@@ -869,9 +869,6 @@ msgstr "Écrire les données dans un fichier"
 msgid "Write classic image data with validated format-specific options."
 msgstr "Écrire des données d'image classiques avec des options propres au format validées."
 
-msgid "Write classic image data with validated format-specific options."
-msgstr ""
-
 msgid "Information about a plugin that failed to load or instantiate."
 msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
 
@@ -890,9 +887,6 @@ msgstr "Cette classe définit l'interface des formats d'entrée/sortie des image
 msgid "Reject read parameters for formats that do not support them."
 msgstr "Refuser les paramètres de lecture pour les formats qui ne les prennent pas en charge."
 
-msgid "Reject read parameters for formats that do not support them."
-msgstr ""
-
 msgid "Read list of image objects from file"
 msgstr "Lire une liste d'objets image dans un fichier"
 
@@ -901,9 +895,6 @@ msgstr "Objet de traitement des rappels"
 
 msgid "Optional format-specific read parameters"
 msgstr "Paramètres de lecture facultatifs propres au format"
-
-msgid "Optional format-specific read parameters"
-msgstr ""
 
 msgid "List of image objects"
 msgstr "Liste d'objets image"
@@ -931,19 +922,6 @@ msgstr "Options d'écriture propres au format"
 
 msgid "If this format does not support writer options"
 msgstr "Si ce format ne prend pas en charge les options d'écriture"
-
-msgid "Write an image with format-specific options."
-msgstr ""
-
-#, fuzzy
-msgid "Image object"
-msgstr "objets sélectionnés"
-
-msgid "Format-specific writer options"
-msgstr ""
-
-msgid "If this format does not support writer options"
-msgstr ""
 
 msgid "Plugin base class"
 msgstr "Classe de base du plugin"
@@ -1665,4 +1643,3 @@ msgstr "Valide, exécute et valide de manière transactionnelle une recette sur 
 
 msgid "Validate, execute, and atomically commit one recipe invocation."
 msgstr "Valide, exécute et valide de manière atomique un appel de recette."
-

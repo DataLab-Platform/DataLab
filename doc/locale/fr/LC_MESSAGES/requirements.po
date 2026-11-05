@@ -34,7 +34,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.17.0"
+msgid ">= 3.17.2"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -43,7 +43,7 @@ msgstr "Génération automatique d'interface graphique pour l'édition et l'affi
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.12.0"
+msgid ">= 2.12.1"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"

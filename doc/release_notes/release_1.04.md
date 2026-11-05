@@ -21,6 +21,18 @@
 * A new **Processing > Exposure > Brightness and contrast** operation provides a histogram with synchronized minimum, maximum, brightness and contrast controls, deterministic Auto and Reset actions, ROI-aware remapping, and live preview. One input window is initialized from the first selected image and applied to the full selection, with each result preserving its source image and data type.
 * Intensity windows may extend beyond the observed data range. Exact floating-point bounds survive editing and reapplication, while declared parameter constraints remain enforced and Cancel preserves the original parameters.
 
+**RAW image import:**
+
+* Headerless RAW image files (`*.raw`) can now be opened from **File > Open...**, **File > Open from directory...**, drag-and-drop, the AI Assistant (`load_file` tool) and remote control (`load_from_files` and `load_from_directory` with an optional `RawImageImportParam` argument) (implements [Issue #237](https://github.com/DataLab-Platform/DataLab/issues/237))
+* The **RAW image import** dialog defines the pixel data type, image width and height, byte offset to the first image, number of images, byte gap between consecutive images, byte order, and the **White is zero** option (which displays the imported image with an inverted gray colormap without modifying pixel values). Multi-image RAW files create one image per frame
+* When several RAW files are imported at once, DataLab asks whether to apply the same import parameters to all of them or to set the parameters of each file (each dialog starting from the values confirmed for the previous file); recorded History actions store the import parameters so that replaying them does not reopen the dialog
+
+**Format-aware image export:**
+
+* Saving an image with **File > Save...** now opens an **Export image** dialog adapted to the selected file format, with a live preview showing the image in gray levels as it will be read back from the exported file (including quantization and lossy compression for BMP, PNG, JPEG, JPEG 2000 and TIFF files) (implements [Issue #256](https://github.com/DataLab-Platform/DataLab/issues/256))
+* Data preparation covers normalization (none, min-max, percentile or manual bounds), out-of-range behavior (clip or rescale), non-finite value policy (error, clip or replace), gamma correction, inversion and conversion to a data type supported by the destination format; when exporting a floating-point or unsupported image to an integer-only format (such as PNG, JPEG or BMP), min-max rescaling is selected by default, and complex images are rejected when the format cannot store complex values
+* Format-specific options are exposed and validated for each format (PNG compression level, JPEG quality/subsampling/progressive/optimization/smoothing, JPEG 2000 quality mode/layers/irreversible/progression/resolutions/tiling/PLT markers, TIFF compression/level/predictor/rows per strip/tiling/resolution/photometric interpretation, text and CSV delimiter and precision, MAT-File compression), and recorded History actions preserve the export parameters and target object UUIDs
+
 **Live processing preview:**
 
 * Parameter dialogs for compatible 1-to-1 processing now offer an optional live preview for signals and images, including image-to-signal operations. Preview is off by default; Cancel leaves the workspace unchanged, while OK reuses a completed current preview for a single source and otherwise performs the normal processing on the original selection.
@@ -137,6 +149,7 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 **Remote control and plugins:**
 
 * `add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title
+* `load_from_files` and `load_from_directory` now accept an optional `param` argument with format-specific import parameters (e.g. `RawImageImportParam` for RAW images), applied without showing any dialog
 
 **NeXus files:**
 

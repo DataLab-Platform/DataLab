@@ -226,7 +226,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.17.0"
+msgid ">= 3.17.2"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -235,7 +235,7 @@ msgstr "Génération automatique d'interfaces graphiques pour l'édition et l'af
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.12.0"
+msgid ">= 2.12.1"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -501,3 +501,4 @@ msgstr "Client HTTP de nouvelle génération."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+
