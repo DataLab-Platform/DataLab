@@ -1095,11 +1095,11 @@ msgstr "Exemple simple de macro"
 msgid "# ==> Unable to run '%s' macro"
 msgstr "# ==> Impossible d'exécuter la macro '%s'"
 
-msgid "Macro Python interpreter failed to start!"
-msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
-
 msgid "Error"
 msgstr "Erreur"
+
+msgid "Macro Python interpreter failed to start!"
+msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
 #, python-format
 msgid "# ==> Running '%s' macro..."
@@ -4619,6 +4619,54 @@ msgstr "Ouvrir l'exemple"
 msgid "Question"
 msgstr "Question"
 
+msgid "Minimum value"
+msgstr "Valeur minimum"
+
+msgid "Maximum value"
+msgstr "Valeur maximum"
+
+msgid "Step between levels"
+msgstr "Pas entre les niveaux"
+
+msgid "Overlay image"
+msgstr "Image de fond"
+
+msgid "Show level labels"
+msgstr "Afficher les étiquettes de niveaux"
+
+msgid "Contour isoline plot"
+msgstr "Tracé de lignes de contour"
+
+msgid "Display isolines (contour lines) overlaid on the selected image, with configurable level range, step, and optional value labels"
+msgstr "Afficher les isolignes (lignes de contour) superposées à l'image sélectionnée, avec une plage de niveaux configurable, un pas entre les niveaux, et des étiquettes de valeurs optionnelles"
+
+msgid "Annotation"
+msgstr "Annotation"
+
+msgid "Contour"
+msgstr "Contour"
+
+msgid "Select a single image first."
+msgstr "Sélectionnez d'abord une seule image."
+
+msgid "Selected image does not contain finite data."
+msgstr "L'image sélectionnée ne contient pas de données finies."
+
+msgid "Selected image is constant: no contour can be drawn."
+msgstr "L'image sélectionnée est constante : aucun contour ne peut être tracé."
+
+msgid "Contour plot parameters"
+msgstr "Paramètres du tracé de contours"
+
+msgid "Maximum value must be strictly greater than minimum."
+msgstr "La valeur maximale doit être strictement supérieure à la valeur minimale."
+
+msgid "No contour was found for the selected level range."
+msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée."
+
+msgid "Show contour plot..."
+msgstr "Afficher le tracé de contours..."
+
 msgid "Test data"
 msgstr "Données de test"
 
@@ -4725,12 +4773,12 @@ msgstr "Nom du package"
 msgid "Plugin ID"
 msgstr "ID du plugin"
 
+msgid "Description"
+msgstr "Description"
+
 #, python-format
 msgid "%s plugin for DataLab"
 msgstr "Plugin %s pour DataLab"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Destination"
 msgstr "Destination"
@@ -4986,11 +5034,11 @@ msgstr ""
 "\n"
 "Cela permettra aux applications externes de se connecter à DataLab et de le contrôler à distance via HTTP/JSON."
 
-msgid "DataLab capsules"
-msgstr "Capsules DataLab"
-
 msgid "All files"
 msgstr "Tous les fichiers"
+
+msgid "DataLab capsules"
+msgstr "Capsules DataLab"
 
 msgid "JSON files"
 msgstr "Fichiers JSON"
@@ -5012,17 +5060,17 @@ msgstr "Pièces jointes"
 msgid "Files added by the author, outside the processing. They are checked against the manifest and saved only when you ask; they are never opened."
 msgstr "Fichiers ajoutés par l'auteur, hors des traitements. Ils sont vérifiés par rapport au manifeste et enregistrés seulement à votre demande ; ils ne sont jamais ouverts."
 
-msgid "Type"
-msgstr "Type"
-
-msgid "SHA-256"
-msgstr "SHA-256"
-
 msgid "Name"
 msgstr "Nom"
 
 msgid "Size"
 msgstr "Taille"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "SHA-256"
+msgstr "SHA-256"
 
 msgid "Save..."
 msgstr "Enregistrer..."
@@ -5132,11 +5180,11 @@ msgstr "L'espace de travail actuel (signaux et images) sera remplacé par l'espa
 msgid "Fingerprint"
 msgstr "Empreinte"
 
-msgid "Revision of"
-msgstr "Révision de"
-
 msgid "none"
 msgstr "aucune"
+
+msgid "Revision of"
+msgstr "Révision de"
 
 #, python-format
 msgid "referenced at %s"
@@ -5148,14 +5196,14 @@ msgstr "inclus"
 msgid "Licence"
 msgstr "Licence"
 
-msgid "Origin"
-msgstr "Origine"
-
 msgid "Activity"
 msgstr "Activité"
 
 msgid "Operation"
 msgstr "Opération"
+
+msgid "Origin"
+msgstr "Origine"
 
 msgid "replayable"
 msgstr "rejouable"
@@ -5377,11 +5425,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Date and time"
-msgstr "Date et heure"
-
 msgid "Title"
 msgstr "Titre"
+
+msgid "Date and time"
+msgstr "Date et heure"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -5737,11 +5785,11 @@ msgstr "Serveur API Web démarré"
 msgid "Click to view connection info"
 msgstr "Cliquer pour voir les infos de connexion"
 
-msgid "Clipboard"
-msgstr "Presse-papiers"
-
 msgid "File"
 msgstr "Fichier"
+
+msgid "Clipboard"
+msgstr "Presse-papiers"
 
 msgid "Source of the data"
 msgstr "Source des données"
@@ -5918,52 +5966,4 @@ msgstr "Forme"
 
 msgid "Dimensions"
 msgstr "Dimensions"
-
-msgid "Minimum value"
-msgstr "Valeur minimum"
-
-msgid "Maximum value"
-msgstr "Valeur maximum"
-
-msgid "Step between levels"
-msgstr "Pas entre les niveaux"
-
-msgid "Overlay image"
-msgstr "Image de fond"
-
-msgid "Show level labels"
-msgstr "Afficher les étiquettes de niveaux"
-
-msgid "Contour isoline plot"
-msgstr "Tracé de lignes de contour"
-
-msgid "Display isolines (contour lines) overlaid on the selected image, with configurable level range, step, and optional value labels"
-msgstr "Afficher les isolignes (lignes de contour) superposées à l'image sélectionnée, avec une plage de niveaux configurable, un pas entre les niveaux, et des étiquettes de valeurs optionnelles"
-
-msgid "Annotation"
-msgstr "Annotation"
-
-msgid "Contour"
-msgstr "Contour"
-
-msgid "Select a single image first."
-msgstr "Sélectionnez d'abord une seule image."
-
-msgid "Selected image does not contain finite data."
-msgstr "L'image sélectionnée ne contient pas de données finies."
-
-msgid "Selected image is constant: no contour can be drawn."
-msgstr "L'image sélectionnée est constante : aucun contour ne peut être tracé."
-
-msgid "Contour plot parameters"
-msgstr "Paramètres du tracé de contours"
-
-msgid "Maximum value must be strictly greater than minimum."
-msgstr "La valeur maximale doit être strictement supérieure à la valeur minimale."
-
-msgid "No contour was found for the selected level range."
-msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée."
-
-msgid "Show contour plot..."
-msgstr "Afficher le tracé de contours..."
 

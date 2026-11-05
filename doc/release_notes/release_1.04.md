@@ -148,6 +148,7 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 
 **Remote control and plugins:**
 
+* The **Contour isoline plot** plugin (`org.datalab.isolevel-map`, version 1.1.0), formerly provided as a plugin example, is now a built-in plugin available directly from **Plugins > Contour isoline plot > Show contour plot...**
 * `add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title
 * `load_from_files` and `load_from_directory` now accept an optional `param` argument with format-specific import parameters (e.g. `RawImageImportParam` for RAW images), applied without showing any dialog
 
