@@ -220,7 +220,10 @@ Computation (Auth Required)
 Data Format
 -----------
 
-Objects are transferred using NumPy's NPZ format for efficiency.
+Objects are transferred using NumPy's NPZ format for efficiency. The format is
+implemented by Sigima (``sigima.io.serialize_object_to_npz`` and
+``sigima.io.deserialize_object_from_npz``), so that Python clients can read and
+write these archives with the same code as DataLab.
 
 SignalObj NPZ Structure
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -241,7 +244,10 @@ ImageObj NPZ Structure
 
     my_image.npz
     ├── data.npy       # 2D image array (preserves dtype)
-    └── metadata.json  # Labels, units, coordinates (x0, y0, dx, dy)
+    ├── xcoords.npy    # X pixel centers (only for non-uniform coordinates)
+    ├── ycoords.npy    # Y pixel centers (only for non-uniform coordinates)
+    └── metadata.json  # Labels, units, coordinates
+                       # (x0, y0, dx, dy, is_uniform_coords)
 
 Authentication
 --------------

@@ -8,17 +8,27 @@
 #   compile-translations  - UI + docs .mo files                  (ubuntu)
 #   build-pdf-docs        - DataLab_fr.pdf + DataLab_en.pdf      (ubuntu)
 #   build-python-dists    - sdist + wheel (PDFs embedded)        (ubuntu)
-#   build-msi             - PyInstaller EXE + WiX MSI            (windows)
+#   build-msi             - PyInstaller EXE + WiX MSI, smoke test (windows)
 #
 # Each job uploads its own artifact (see "Artifacts produced" below) so
 # they can be downloaded individually from the workflow run page even when
 # the workflow as a whole fails.
+#
+# Sigima, SigimaX and DataLab-Capsule are installed from PyPI, unless the
+# `dependencies` input is "development" (dry runs before they are published):
+# they are then built from the branch named like the built ref, else develop.
+#
+# The MSI is smoke-tested before being uploaded (scripts/frozen_smoke_test.py):
+# installed in a disposable folder, started with screenshots, checked with
+# `DataLab.exe --smoke-test` and uninstalled. A failure fails the job, so
+# nothing is published.
 #
 # Artifacts produced:
 #   translations-mo   compiled .mo files (datalab/locale/**)
 #   pdf-docs          DataLab_fr.pdf, DataLab_en.pdf
 #   python-dists      *.whl, *.tar.gz
 #   msi-installer     DataLab-X.Y.Z.msi
+#   msi-smoke-test    screenshots, reports and logs of the MSI smoke test
 #   pyinstaller-exe   DataLab-vX.Y.Z_exe.zip   (debug only)
 # ============================================================================
 name: _build (reusable)
@@ -46,6 +56,13 @@ on:
         type: boolean
         required: false
         default: true
+      dependencies:
+        description: >-
+          Source of Sigima, SigimaX and DataLab-Capsule: "published" (PyPI) or
+          "development" (git branch named like the built ref, else develop)
+        type: string
+        required: false
+        default: "published"
       artifact-retention-days:
         description: "Retention period for uploaded artifacts (days)"
         type: number
@@ -84,15 +101,22 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
+
+      - name: Check the dependencies input
+        run: |
+          case "${{ inputs.dependencies }}" in
+            published|development) echo "Dependencies: ${{ inputs.dependencies }}" ;;
+            *) echo "::error::Invalid dependencies input: '${{ inputs.dependencies }}'"; exit 1 ;;
+          esac
 
       - name: Verify tag is on main branch
         if: ${{ !inputs.skip-tag-branch-check && startsWith(github.ref, 'refs/tags/') }}
@@ -126,12 +150,12 @@ jobs:
       DISPLAY: ":99.0"
       QT_QPA_PLATFORM: offscreen
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
@@ -152,6 +176,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima SigimaX
+          if [ "${{ inputs.dependencies }}" = "development" ]; then
+            python scripts/ci_release_helpers.py install-dev-deps --branch "${{ github.ref_name }}"
+          fi
           python -m pip install .[doc,qt]
 
       # Some .rst files use ``.. literalinclude:: ../../../../Sigima/...`` to
@@ -174,7 +201,7 @@ jobs:
         run: find datalab/locale doc/locale -name '*.mo' | sort
 
       - name: Upload compiled translations
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: translations-mo
           path: |
@@ -194,12 +221,12 @@ jobs:
       RELEASE: "1"
       UNATTENDED: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
@@ -223,6 +250,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima SigimaX
+          if [ "${{ inputs.dependencies }}" = "development" ]; then
+            python scripts/ci_release_helpers.py install-dev-deps --branch "${{ github.ref_name }}"
+          fi
           python -m pip install .[doc,qt]
           # sigima.proc.validation imports `_pytest` at module level (tech
           # debt); doc/update_validation_status.py needs it to be importable.
@@ -234,7 +264,7 @@ jobs:
           ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
 
       - name: Download compiled translations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: translations-mo
           path: .
@@ -286,14 +316,14 @@ jobs:
           ls -lh datalab/data/doc/
 
       - name: Upload PDF documentation
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: pdf-docs
           path: datalab/data/doc/DataLab_*.pdf
           retention-days: ${{ inputs.artifact-retention-days }}
 
       - name: Upload doc assets (genreqs + validation status)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: doc-assets
           path: |
@@ -312,12 +342,12 @@ jobs:
     needs: [preflight, compile-translations, build-pdf-docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
@@ -326,13 +356,13 @@ jobs:
         run: python -m pip install --upgrade pip build
 
       - name: Download compiled translations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: translations-mo
           path: .
 
       - name: Download PDF documentation
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: pdf-docs
           path: datalab/data/doc
@@ -352,7 +382,7 @@ jobs:
             || { echo "::error::PDF docs missing from wheel"; exit 1; }
 
       - name: Upload Python distributions
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: python-dists
           path: dist/*
@@ -373,24 +403,24 @@ jobs:
       UNATTENDED: "1"
       VERSION: ${{ needs.preflight.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
 
       - name: Download PDF documentation
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: pdf-docs
           path: datalab/data/doc
 
       - name: Download compiled translations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: translations-mo
           path: .
@@ -406,6 +436,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima SigimaX
+          if ("${{ inputs.dependencies }}" -eq "development") {
+            python scripts/ci_release_helpers.py install-dev-deps --branch "${{ github.ref_name }}"
+            if ($LASTEXITCODE -ne 0) { throw "Cannot install development dependencies" }
+          }
           python -m pip install .[exe]
 
       - name: Generate build manifest
@@ -421,6 +455,28 @@ jobs:
           # CPython 3.11 needs this Wine-built DLL to run on Windows 7.
           Copy-Item resources/api-ms-win-core-path-l1-1-0.dll dist/DataLab/_internal/ -Force
 
+      - name: Check that the executable loads a plugin installed from a file
+        shell: pwsh
+        run: |
+          # Isolated profile: DataLab reads its configuration from USERPROFILE
+          $env:USERPROFILE = Join-Path $env:RUNNER_TEMP "datalab-profile"
+          New-Item -ItemType Directory -Force $env:USERPROFILE | Out-Null
+          $env:DATALAB_PLUGIN_PROBE_MARKER = Join-Path $env:RUNNER_TEMP "plugin-probe.json"
+          if (Test-Path -LiteralPath $env:DATALAB_PLUGIN_PROBE_MARKER) { Remove-Item -LiteralPath $env:DATALAB_PLUGIN_PROBE_MARKER }
+          $env:DATALAB_PLUGIN_PROBE_WHEELHOUSE = Join-Path $env:RUNNER_TEMP "plugin-probe-catalog\dependencies"
+          python scripts/frozen_plugin_probe.py prepare
+          if ($LASTEXITCODE -ne 0) { throw "Cannot prepare the dependency wheelhouse" }
+          $probe = (Resolve-Path scripts/frozen_plugin_probe.py).Path
+          $log = Join-Path $env:RUNNER_TEMP "plugin-install.log"
+          $code = "import runpy,sys; sys.stdout = sys.stderr = open(r'$log', 'w', encoding='utf-8'); sys.argv = [r'$probe', 'install']; runpy.run_path(r'$probe', run_name='__main__')"
+          $installer = Start-Process dist\DataLab\DataLab.exe -ArgumentList "-c", ('"' + $code + '"') -PassThru
+          if (-not $installer.WaitForExit(300000)) { Stop-Process -Id $installer.Id; throw "Plugin installation did not finish" }
+          if ($installer.ExitCode -ne 0) { Get-Content $log; throw "Offline plugin installation failed" }
+          $process = Start-Process dist/DataLab/DataLab.exe -ArgumentList "--unattended", "--delay", "5000" -PassThru
+          if (-not $process.WaitForExit(300000)) { $process.Kill(); throw "DataLab did not quit" }
+          if ($process.ExitCode -ne 0) { throw "Frozen DataLab exited with code $($process.ExitCode)" }
+          python scripts/frozen_plugin_probe.py verify
+
       - name: Package executable as zip (internal, required by MSI workflow)
         shell: pwsh
         run: |
@@ -435,15 +491,36 @@ jobs:
         shell: pwsh
         run: wix build "wix/DataLab-$env:VERSION.wxs" -ext WixToolset.UI.wixext
 
+      # Release gate: install the MSI in a disposable folder, start the
+      # installed application, run `DataLab.exe --smoke-test` and uninstall.
+      - name: Smoke-test the installed MSI
+        shell: pwsh
+        run: |
+          python scripts/frozen_smoke_test.py all `
+            --msi "wix/DataLab-$env:VERSION.msi" `
+            --dist dist/DataLab `
+            --artifact "dist/DataLab-v$($env:VERSION)_exe.zip" `
+            --workdir (Join-Path $env:RUNNER_TEMP "msi-smoke-test")
+          if ($LASTEXITCODE -ne 0) { throw "MSI smoke test failed" }
+
+      - name: Upload MSI smoke-test evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: msi-smoke-test
+          path: ${{ runner.temp }}/msi-smoke-test/evidence
+          if-no-files-found: ignore
+          retention-days: ${{ inputs.artifact-retention-days }}
+
       - name: Upload MSI installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: msi-installer
           path: wix/DataLab-*.msi
           retention-days: ${{ inputs.artifact-retention-days }}
 
       - name: Upload PyInstaller zip (debug only, not for public release)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: pyinstaller-exe
           path: dist/DataLab-v*_exe.zip

@@ -27,9 +27,54 @@ self-explanatory. The main window is divided into two main areas:
 
     DataLab main window, at startup.
 
+In the list of data sets, the signal, image or group under the mouse cursor is
+highlighted, and a |delete| delete button appears at its right. Clicking this
+button deletes the item, or the whole selection if the item is part of it, after
+confirmation. Deleting an item which is not selected keeps the current selection
+unchanged. Like the "Remove" action of the "Edit" menu, the deletion is recorded
+in the :ref:`historypanel`. The button may be hidden in the :ref:`settings`
+("Visualization" tab, "Common" sub-tab).
+
+.. |delete| image:: ../../../datalab/data/icons/edit/delete.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 Additional panels are available as dockable widgets, and may be shown or hidden
-from the "View" menu: the :ref:`historypanel`, the Macro panel (see
-:ref:`about_macros`) and the :ref:`ai_assistant`.
+from the "View" menu: the :ref:`welcome_page`, the :ref:`applications_panel`, the
+:ref:`historypanel`, the Macro panel (see :ref:`about_macros`) and the
+:ref:`ai_assistant`.
+
+.. _welcome_page:
+
+Welcome page
+^^^^^^^^^^^^
+
+A **Welcome** page is shown next to the signal and image views when DataLab starts, and whenever the current signal or image panel is empty (for example after switching to an empty panel or deleting its last object). It gathers the main actions to get started:
+
+- create a signal or an image from a template, open signal or image files,
+  browse an HDF5 file, open a previously saved HDF5 workspace, or import text
+  data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose
+  between signals and images;
+- ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
+  online documentation, or browse the release notes of the running version.
+
+When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application shows its page in the :ref:`applications_panel`, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and shows the Applications panel. The "Browse all applications..." button also shows this panel, where the "…" menu of each application offers the same "Show on welcome page" and "Pin to the welcome page" options (see :ref:`about_plugins`).
+
+The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or from the "View" menu; it is also reopened automatically when the current panel becomes empty. The "Show welcome page when the current panel is empty" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`).
+
+.. _applications_panel:
+
+Applications panel
+^^^^^^^^^^^^^^^^^^
+
+The **Applications** panel presents the methods of the installed application plugins. It is shown by the **Applications** entry of the menu bar, by the application tiles of the :ref:`welcome_page`, or from the "View" menu. The first time, it floats beside the main window, as high as this window, so that you keep your data and their views in sight while using it. You may then dock it like any other panel, for example on the left of the main window, next to the list of data sets whose selection it analyzes, tabify it with another panel, or leave it floating: DataLab shows it again where you left it, with the same size. When the panel is requested while already shown, without switching to another application, it flashes briefly to show where it is.
+
+When several application plugins are installed, their number is given at the top of the panel, above a list which selects the application: click it to show all the applications, with the version and the description of each one. With only one application, its name is shown instead. The "…" button next to it opens a menu with the documentation of the application and its welcome page options: "Show on welcome page" and "Pin to the welcome page".
+
+The methods of the application are listed one below the other, followed by its tools and datasets, if any: clicking the title of one of these sections hides its content, or shows it again, and DataLab remembers this choice for all applications. Each method takes one row. Its colored dot and the text below its title tell whether the current selection can be analyzed; the tooltip gives the reasons. When metadata are missing, the status points to "Edit > Metadata > Add metadata...", and it is updated as soon as objects are modified. "Run..." starts the method on the current selection, and asks you to assign the selected objects to its inputs only when needed; the number of created objects and the diagnostics of the run are then shown below the row.
+
+Below the list, in the "Details" area, the panel gives the details of the selected method: click a row, or use the :kbd:`Up` and :kbd:`Down` keys, to select another method. The details give the version and the description of the method, whether the current selection can be analyzed and why not, the inputs it expects (with their description, and the description and the key of the metadata they require), and the examples designed for it: "Try with this example" opens an example and runs the method with suitable parameters. The splitter between the list and the details sets their heights; DataLab remembers it, as well as the method selected for each application.
 
 .. _command_palette:
 
@@ -133,6 +178,44 @@ This is particularly useful for:
 Interactive 1-to-1 processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Live preview before applying a processing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox,
+unchecked each time the dialog opens. Enable it to display a temporary result
+while adjusting the parameters. With several signals, images or groups selected,
+choose one source in the preview selector; **OK** still processes the whole
+original selection with the common parameters.
+
+The preview uses the complete source data, including its regions of interest,
+without adding objects or history entries. Invalid entries suspend updates.
+Warnings and errors appear inside the dialog. Typing is debounced and slider
+drags are throttled; large data and expensive algorithms may take longer to
+update. The preview shows only the result, with its own axes and units, including
+when an image processing returns a signal.
+
+Starting the first preview creates a dedicated process. After a preview has
+finished, DataLab keeps this process ready for later preview dialogs, including
+when switching between signal and image processing. Closing a dialog while a
+preview is still running stops that process; the next preview then performs a
+fresh startup. Reloading plugins also discards the cached preview process.
+
+**Cancel** discards the draft parameters and stops the preview. With one source,
+**OK** reuses a completed, up-to-date preview once and publishes it through the
+normal processing path, including history. If the preview is still running or
+stale, or if several objects or groups are selected, DataLab runs the normal
+processing instead. Analysis, multi-input operations, operations without
+parameters and unknown custom parameter dialogs retain their existing workflow.
+
+Bounded numeric fields automatically offer sliders in compatible processing
+forms and in the **Processing** tab. The exact text field remains authoritative;
+moving its slider does not limit the precision of values entered by keyboard.
+Fields without two usable bounds remain text-only. Sliders alone never enable
+preview or automatic re-processing.
+
+Re-processing an existing result
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 When applying a 1-to-1 processing operation that has configurable parameters (e.g.,
 Gaussian filter, threshold, morphological operations), DataLab stores the processing
 metadata, enabling parameter adjustment and re-processing:
@@ -144,7 +227,11 @@ metadata, enabling parameter adjustment and re-processing:
 5. Modify processing parameters (e.g., filter sigma value)
 6. Click **Apply** to re-process with updated parameters
 
-The processed object is updated in place with the new results. This workflow is ideal for:
+Normally, **Apply** creates a new result and history entry. In the History panel's
+edit mode it updates the existing result and recomputes dependent actions. The
+optional **Auto-recompute on edit** checkbox follows the same rules, waits for
+slider release and valid input, and does not apply edits from a previously
+selected object. This workflow is ideal for:
 
 - Iteratively tuning filter parameters while observing results in real time
 - Adjusting threshold values without creating multiple intermediate objects
@@ -155,20 +242,20 @@ The processed object is updated in place with the new results. This workflow is 
 
     **Processing metadata requirements:**
 
-    - Only works for 1-to-1 processing functions with parameter classes
-    - Processing functions without parameters (e.g., absolute value, inverse) work as before
-    - Source object must still exist for re-processing (error shown if deleted)
+    - Processing functions with parameters can be edited; processing functions
+      without parameters (e.g., absolute value, average) offer a **Reapply** button
+    - Every input object must still exist for re-processing (the Processing tab
+      says why it cannot be applied otherwise)
 
-    **Not supported for:**
-
-    - 2-to-1 processing (operations combining two objects)
-    - n-to-1 processing (operations aggregating multiple objects)
-    - These patterns don't benefit significantly from interactive parameter adjustment
+    When the workspace holds a provenance record for the object, the Processing tab
+    restores the recorded call, including 2-to-1 processing (source and operand)
+    and n-to-1 processing (every aggregated object, in order). See
+    :ref:`provenance`.
 
 Example workflow
 ^^^^^^^^^^^^^^^^
 
-Here's a typical workflow using interactive processing:
+Here's a typical workflow using interactive processing, with History edit mode enabled:
 
 1. **Create a test signal**: Create > Gaussian signal
 

@@ -14,7 +14,9 @@ import inspect
 import multiprocessing
 import os.path as osp
 import time
+import uuid
 import warnings
+from contextlib import ExitStack
 from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
 from multiprocessing.pool import Pool
@@ -36,7 +38,18 @@ from sigima.objects import (
     TypeROIParam,
     concat_geometries,
 )
+from sigima.proc.contracts import (
+    SMALLEST_GRID_LINEAR_HOLD,
+    SOURCE_GRID_LINEAR_HOLD,
+    OperationContract,
+    PreparedExecution,
+    XAlignmentError,
+    contract_for_function,
+    prepare_execution,
+)
 from sigima.proc.decorator import is_computation_function
+from sigima.proc.image import Wrap1to1Func as ImageWrap1to1Func
+from sigima.proc.signal import Wrap1to1Func as SignalWrap1to1Func
 from sigima.tools.signal.interpolation import interpolate
 from sigimax.adapters_plotpy import coordutils
 from sigimax.widgets.warningerror import show_warning_error
@@ -51,8 +64,10 @@ from datalab.adapters_metadata import (
 )
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
+from datalab.gui.processor.execution import CANCELLED, ExecutionService
 from datalab.history.effects import capture_effects
-from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
+from datalab.objectmodel import get_title_reference, get_uuid, patch_title_with_ids
+from datalab.utils.datasetjson import decode_dataset_json
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 
 if TYPE_CHECKING:
@@ -62,6 +77,7 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.processingcall import ProcessingCall
 
 
 @dataclass
@@ -69,7 +85,7 @@ class ProcessingParameters:
     """Processing parameters stored in object metadata.
 
     Attributes:
-        func_name: Processing function name
+        func_name: Stable feature ID or legacy processing function name
         pattern: Processing pattern ("1-to-1", "n-to-1", or "2-to-1")
         param: Processing parameter dataset (optional, for 1-to-1 only)
         source_uuid: Source object UUID (for 1-to-1 pattern)
@@ -93,10 +109,10 @@ class ProcessingParameters:
         try:
             if isinstance(param_json, list):
                 # Handle list of JSON strings
-                self.param = [gds.json_to_dataset(p) for p in param_json]
+                self.param = [decode_dataset_json(p) for p in param_json]
             else:
                 # Handle single JSON string
-                self.param = gds.json_to_dataset(param_json)
+                self.param = decode_dataset_json(param_json)
         except Exception:  # pylint: disable=broad-except
             warnings.warn(_("Failed to deserialize processing parameters from JSON."))
             self.param = None
@@ -151,6 +167,26 @@ class ProcessingReport:
     cancelled: bool = False
 
 
+@dataclass
+class ProcessingCandidate:
+    """Result of one processing call computed without being inserted.
+
+    Args:
+        result: Computed object, or None.
+        pending: Pending provenance activity (input states recorded), or None.
+        transaction: Source preparation transaction to commit once the result
+         is adopted, if any.
+        error_msg: Error message when no result was produced.
+        cancelled: True if the user cancelled the computation.
+    """
+
+    result: SignalObj | ImageObj | None = None
+    pending: Any = None
+    transaction: SourcePreparationTransaction | None = None
+    error_msg: str | None = None
+    cancelled: bool = False
+
+
 # Metadata options for storing processing parameters (DataLab-specific)
 PROCESSING_PARAMETERS_OPTION = "processing_parameters"  # Transformation history
 ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0)
@@ -158,6 +194,7 @@ ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0
 
 def extract_processing_parameters(
     obj: SignalObj | ImageObj,
+    parse_param: bool = True,
 ) -> ProcessingParameters | None:
     """Extract processing parameters from object metadata.
 
@@ -166,6 +203,9 @@ def extract_processing_parameters(
 
     Args:
         obj: Signal or Image object
+        parse_param: If False, the processing parameters are not deserialized
+         (``param`` is None): faster when only the function name, the pattern
+         or the sources are needed.
 
     Returns:
         ProcessingParameters instance if processing metadata exists, None otherwise.
@@ -174,6 +214,8 @@ def extract_processing_parameters(
         pp_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
     except ValueError:
         return None
+    if not parse_param:
+        pp_dict = {key: val for key, val in pp_dict.items() if key != "param_json"}
     return ProcessingParameters.from_dict(pp_dict)
 
 
@@ -218,6 +260,71 @@ def insert_processing_parameters(
     else:
         # Store transformation history
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
+
+
+def apply_processing_result(
+    obj: SignalObj | ImageObj,
+    result: SignalObj | ImageObj,
+    parameters: ProcessingParameters,
+) -> None:
+    """Copy scientific output in place, preserving identity and user properties.
+
+    Args:
+        obj: Existing destination object.
+        result: Fresh output with data, coordinates, labels and units.
+        parameters: Updated processing provenance.
+
+    Raises:
+        TypeError: If the result type differs from the destination type.
+        ValueError: If output data or coordinates are invalid.
+    """
+    if type(result) is not type(obj):
+        raise TypeError("Processing result must have the destination object's type")
+    data = result.data if isinstance(result, ImageObj) else result.xydata
+    if (
+        not isinstance(data, np.ndarray)
+        or data.ndim != 2
+        or data.size == 0
+        or (isinstance(result, SignalObj) and data.shape[0] not in (2, 3, 4))
+    ):
+        raise ValueError("Invalid processing result data dimensions")
+    prepared = result.copy()
+    prepared.check_data()
+    stored_parameters = parameters.to_dict()
+    attributes = ["title", "xlabel", "ylabel", "xunit", "yunit"]
+    if isinstance(prepared, ImageObj):
+        attributes += ["data", "zlabel", "zunit"]
+        if prepared.is_uniform_coords:
+            if (
+                not np.all(
+                    np.isfinite([prepared.dx, prepared.dy, prepared.x0, prepared.y0])
+                )
+                or prepared.dx == 0
+                or prepared.dy == 0
+            ):
+                raise ValueError("Invalid uniform image coordinates")
+        else:
+            if (
+                prepared.xcoords.ndim != 1
+                or prepared.ycoords.ndim != 1
+                or prepared.xcoords.size != prepared.data.shape[1]
+                or prepared.ycoords.size != prepared.data.shape[0]
+                or not np.all(np.isfinite(prepared.xcoords))
+                or not np.all(np.isfinite(prepared.ycoords))
+            ):
+                raise ValueError("Image coordinates must match the data dimensions")
+    else:
+        attributes.append("xydata")
+    values = {name: getattr(prepared, name) for name in attributes}
+    for name, value in values.items():
+        setattr(obj, name, value)
+    if isinstance(obj, ImageObj):
+        if prepared.is_uniform_coords:
+            obj.set_uniform_coords(prepared.dx, prepared.dy, prepared.x0, prepared.y0)
+        else:
+            obj.set_coords(prepared.xcoords, prepared.ycoords)
+    obj.invalidate_maskdata_cache()
+    obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, stored_parameters)
 
 
 def build_processing_parameters(
@@ -578,6 +685,34 @@ def is_pairwise_mode() -> bool:
     return state
 
 
+def _x_interpolated(
+    originals: list[SignalObj | ImageObj], actuals: list[SignalObj | ImageObj]
+) -> list[str]:
+    """Return the provenance limit of inputs interpolated by the legacy X check."""
+    changed = any(
+        isinstance(orig, SignalObj) and not np.array_equal(orig.x, actual.x)
+        for orig, actual in zip(originals, actuals)
+    )
+    return ["x_interpolated"] if changed else []
+
+
+#: X-alignment policies that ask the user before interpolating, as before.
+_CONSENT_POLICIES = frozenset({SOURCE_GRID_LINEAR_HOLD, SMALLEST_GRID_LINEAR_HOLD})
+
+
+class InterpolationRefused(Exception):
+    """Raised when the user refuses to interpolate signals on a common X array."""
+
+
+def _grids_differ(signals: list[SignalObj]) -> bool:
+    """Return True if the X arrays of *signals* are not all equal."""
+    first = signals[0].x
+    return any(
+        sig.x.shape != first.shape or not np.array_equal(sig.x, first)
+        for sig in signals[1:]
+    )
+
+
 class FeatureNotFoundError(ValueError):
     """Raised when a computing feature cannot be resolved by name or callable.
 
@@ -590,6 +725,13 @@ class FeatureNotFoundError(ValueError):
          time. See :func:`_detect_plugin_origin` for the dict shape.
         paramclass_name: Optional name of the required parameter class (for
          diagnostic display).
+
+    Args:
+        func_name: Name (or repr) of the missing feature.
+        plugin_origin: Optional plugin origin descriptor.
+        paramclass_name: Optional name of the required parameter class.
+        message: Exception message. Defaults to None (message built from the
+         other arguments).
     """
 
     def __init__(
@@ -597,11 +739,12 @@ class FeatureNotFoundError(ValueError):
         func_name: str,
         plugin_origin: dict[str, Any] | None = None,
         paramclass_name: str | None = None,
+        message: str | None = None,
     ) -> None:
         self.func_name = func_name
         self.plugin_origin = plugin_origin
         self.paramclass_name = paramclass_name
-        super().__init__(self._build_message())
+        super().__init__(message or self._build_message())
 
     def _build_message(self) -> str:
         """Build the default exception message."""
@@ -695,23 +838,7 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
             if module_name == plugin_module or module_name.startswith(
                 plugin_module + "."
             ):
-                directory: str | None = None
-                try:
-                    directory = osp.basename(
-                        osp.dirname(inspect.getfile(plugin.__class__))
-                    )
-                except (TypeError, OSError):
-                    pass
-                version: str | None = None
-                info = getattr(plugin, "info", None)
-                if info is not None:
-                    version = getattr(info, "version", None)
-                return {
-                    "plugin_class": plugin.__class__.__name__,
-                    "module": module_name,
-                    "directory": directory,
-                    "version": version,
-                }
+                return _plugin_origin_from_instance(plugin, module_name)
 
     # Heuristic fallback: anything not from a known built-in prefix is
     # treated as an anonymous plugin origin (e.g. user macros, third-party
@@ -732,6 +859,46 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
     return None
 
 
+def _plugin_origin_from_instance(plugin: Any, module_name: str) -> dict[str, Any]:
+    """Return the origin descriptor of a registered plugin instance.
+
+    Args:
+        plugin: Registered plugin instance.
+        module_name: Module recorded as the origin of the computation.
+
+    Returns:
+        A dict ``{"plugin_class", "module", "directory", "version"}``.
+    """
+    directory: str | None = None
+    try:
+        directory = osp.basename(osp.dirname(inspect.getfile(plugin.__class__)))
+    except (TypeError, OSError):
+        pass
+    version: str | None = None
+    info = getattr(plugin, "info", None)
+    if info is not None:
+        version = getattr(info, "version", None)
+    return {
+        "plugin_class": plugin.__class__.__name__,
+        "module": module_name,
+        "directory": directory,
+        "version": version,
+    }
+
+
+def _owner_plugin_origin(owner_plugin_id: str) -> dict[str, Any] | None:
+    """Return the origin descriptor of the registered plugin owning a feature."""
+    # Local import to avoid a circular dependency at module load time.
+    from datalab.plugins import (  # pylint: disable=import-outside-toplevel
+        PluginRegistry,
+    )
+
+    plugin = PluginRegistry.get_plugin(owner_plugin_id)
+    if plugin is None:
+        return None
+    return _plugin_origin_from_instance(plugin, plugin.__class__.__module__)
+
+
 @dataclass
 class SourcePreparationTransaction(Generic[TypeObj]):
     """Prepare effective sources and commit changes after successful results."""
@@ -745,13 +912,51 @@ SourcePreparationHook = Callable[
 ]
 
 
+#: Sigima wrappers turning a NumPy function into a 1-to-1 computation function
+_WRAPPED_1_TO_1_TYPES = (SignalWrap1to1Func, ImageWrap1to1Func)
+
+
+def _check_feature_function(function: Callable, pattern: str) -> None:
+    """Check that a function may be registered as a computing feature.
+
+    A feature runs either a Sigima computation function, decorated with
+    :func:`sigima.proc.decorator.computation_function`, or, for a 1-to-1 feature,
+    a NumPy function wrapped with ``Wrap1to1Func`` of :mod:`sigima.proc.signal`
+    or :mod:`sigima.proc.image`. Other callables are refused when they are
+    registered, rather than when processing objects in a separate process.
+
+    Args:
+        function: Function of the feature
+        pattern: Pattern of the feature
+
+    Raises:
+        ValueError: The function cannot run this feature
+    """
+    if is_computation_function(function):
+        return
+    name = getattr(function, "__name__", repr(function))
+    if isinstance(function, _WRAPPED_1_TO_1_TYPES):
+        if pattern == "1_to_1":
+            return
+        raise ValueError(
+            f"'{name}' is wrapped with Wrap1to1Func, which only applies to "
+            f"1-to-1 features, not to {pattern} features."
+        )
+    raise ValueError(
+        f"'{name}' is not a valid computation function: decorate it with "
+        "sigima.proc.decorator.computation_function(), or, for a 1-to-1 feature, "
+        "wrap a NumPy function with Wrap1to1Func."
+    )
+
+
 @dataclass
 class ComputingFeature(Generic[TypeObj]):
     """Computing feature dataclass.
 
     Args:
         pattern: pattern
-        function: function
+        function: Sigima computation function or, for a 1-to-1 feature, NumPy
+         function wrapped with ``Wrap1to1Func`` (see :func:`_check_feature_function`)
         paramclass: parameter class
         title: title
         icon_name: icon name
@@ -763,6 +968,13 @@ class ComputingFeature(Generic[TypeObj]):
          :meth:`BaseProcessor.add_feature` time). ``None`` for built-in
          (Sigima/DataLab) features.
         pre_execute_hook: optional transactional source preparation hook
+        preview_enabled: allow speculative execution in standard 1-to-1 dialogs
+        feature_id: stable feature identifier persisted in processing metadata and
+         History. Defaults to the function name for built-in features and to
+         ``<namespace>:<function name>`` for plugin features, where the namespace
+         is the owning plugin ID (or the plugin module for unowned features).
+         Features owned by a plugin must use ``<owner_plugin_id>:<local_id>``.
+        owner_plugin_id: stable identifier of the owning plugin, if any
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -776,13 +988,35 @@ class ComputingFeature(Generic[TypeObj]):
     skip_xarray_compat: Optional[bool] = None
     plugin_origin: Optional[dict[str, Any]] = field(default=None)
     pre_execute_hook: Optional[SourcePreparationHook[TypeObj]] = None
+    preview_enabled: bool = True
+    feature_id: Optional[str] = None
+    owner_plugin_id: Optional[str] = None
+    _implicit_id: bool = field(default=False, init=False, repr=False, compare=False)
 
     def __post_init__(self):
-        """Validate the function after initialization."""
-        if self.function is not None and not is_computation_function(self.function):
-            raise ValueError(
-                f"'{self.function.__name__}' is not a valid computation function."
-            )
+        """Validate the function and resolve the stable feature identifier."""
+        if self.function is not None:
+            _check_feature_function(self.function, self.pattern)
+        if self.owner_plugin_id is not None and not self.owner_plugin_id.strip():
+            raise ValueError("ComputingFeature owner_plugin_id must not be empty.")
+        if self.feature_id is None:
+            if self.function is None:
+                raise ValueError(
+                    "ComputingFeature must have a 'feature_id' or a 'function'."
+                )
+            self._implicit_id = True
+            self.update_implicit_id()
+        elif not self.feature_id.strip():
+            raise ValueError("ComputingFeature feature_id must not be empty.")
+
+    def update_implicit_id(self) -> None:
+        """Refresh a derived identifier after ownership or origin is known."""
+        if not self._implicit_id:
+            return
+        namespace = self.owner_plugin_id
+        if namespace is None and self.plugin_origin is not None:
+            namespace = self.plugin_origin.get("module")
+        self.feature_id = self.name if namespace is None else f"{namespace}:{self.name}"
 
     @property
     def name(self) -> str:
@@ -823,6 +1057,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.process_isolation_enabled.get())
         self.computing_registry: dict[str, ComputingFeature] = {}
+        self.execution = ExecutionService(self, self.__exec_func)
         self.register_computations()
 
     def close(self):
@@ -854,6 +1089,132 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         """
         return self.panel.PARAMCLASS == SignalObj
 
+    def _x_alignment_contract(self, func: Callable) -> OperationContract | None:
+        """Return the contract of *func* if it declares its own X-alignment rule.
+
+        Such operations never go through :meth:`_check_signal_xarray_compatibility`:
+        the rule is applied, and recorded, for each source/operand pair.
+        """
+        if not self._is_signal_panel():
+            return None
+        contract = contract_for_function(func)
+        if contract is None or contract.x_alignment is None:
+            return None
+        return contract
+
+    def _ask_x_interpolation(
+        self, progress: QW.QProgressDialog | None = None
+    ) -> bool | None:
+        """Ask whether signals with different X arrays may be interpolated.
+
+        The answer follows the ``xarray_compat_behavior`` setting; History replay
+        and unattended runs never ask (automatic interpolation).
+
+        Returns:
+            None if the user refused, True for "Yes to All", False for "Yes".
+        """
+        behavior = Conf.xarray_compat_behavior.get("ask")
+        hpanel = self.mainwindow.historypanel
+        if behavior != "ask" or env.execenv.unattended or hpanel.is_replaying():
+            return False
+        initial_duration = 0
+        if progress is not None:
+            initial_duration = progress.minimumDuration()
+            # Hide the progress dialog while the question is shown
+            progress.setMinimumDuration(2000000)
+            QW.QApplication.processEvents()
+        msg_box = QW.QMessageBox(self.mainwindow)
+        msg_box.setWindowTitle(_("X-array incompatibility"))
+        msg_box.setText(
+            _(
+                "The selected signals have different X arrays.\n\n"
+                "To perform the computation, signals need to be interpolated "
+                "to match a common X array.\n\n"
+                "Do you want to continue with automatic interpolation?"
+            )
+        )
+        msg_box.setIcon(QW.QMessageBox.Icon.Question)
+        msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
+        yes_all_button = msg_box.addButton(
+            _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
+        )
+        no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
+        msg_box.setDefaultButton(no_button)
+        msg_box.exec()
+        clicked_button = msg_box.clickedButton()
+        if initial_duration > 0:
+            progress.setMinimumDuration(initial_duration)
+        if clicked_button == no_button:
+            return None
+        return clicked_button == yes_all_button
+
+    def _prepare_with_contract(
+        self,
+        contract: OperationContract,
+        inputs: list[SignalObj],
+        param: gds.DataSet | None,
+        title: str,
+        progress: QW.QProgressDialog,
+        consent: dict[str, bool],
+    ) -> PreparedExecution | None:
+        """Prepare one execution of a contract that declares an X-alignment policy.
+
+        Sigima applies the policy and records it with the global options read by
+        the computation. Historical policies (constant extension at the ends)
+        first ask the user, as before, when the grids differ.
+
+        Args:
+            contract: Operation contract.
+            inputs: Input signals, in role order.
+            param: Parameter argument, or None.
+            title: Progress title.
+            progress: Progress dialog.
+            consent: State shared by the executions of one command
+             (``yes_to_all``).
+
+        Returns:
+            The prepared execution, or None if the policy refuses the inputs
+            (the reason is shown as a computation error).
+
+        Raises:
+            InterpolationRefused: If the user refused the interpolation.
+        """
+        if (
+            contract.x_alignment in _CONSENT_POLICIES
+            and not consent.get("yes_to_all")
+            and _grids_differ(inputs)
+        ):
+            answer = self._ask_x_interpolation(progress)
+            if answer is None:
+                raise InterpolationRefused
+            consent["yes_to_all"] = answer
+        try:
+            return prepare_execution(contract, inputs, param=param)
+        except XAlignmentError as exc:
+            reasons = {
+                "incompatible_units": _(
+                    "The signals have different units: no conversion is applied."
+                ),
+                "invalid_grid": _(
+                    "To interpolate the operand, the X values of both signals "
+                    "must be finite and strictly increasing."
+                ),
+                "insufficient_coverage": _(
+                    "The X range of the operand does not cover the X range of the "
+                    "source: extrapolation is not allowed."
+                ),
+                "uncertainty": _(
+                    "The operand has uncertainties, which cannot be interpolated."
+                ),
+            }
+            reason = reasons.get(exc.code, _("The signals cannot be aligned."))
+            self.handle_output(
+                CompOut(error_msg=f"{reason}\n\n{exc}"),
+                _("Calculating: %s") % title,
+                progress,
+            )
+            return None
+
     def _check_signal_xarray_compatibility(
         self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
     ) -> tuple[list[SignalObj], bool] | None:
@@ -884,23 +1245,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Get X arrays for comparison
         x_arrays = [sig.x for sig in signals]
 
-        # Check if all X arrays are identical
-        x_arrays_identical = True
-        if len(x_arrays) > 1:
-            # Compare sizes first
-            sizes = [len(x) for x in x_arrays]
-            if len(set(sizes)) > 1:
-                x_arrays_identical = False
-            else:
-                # Same sizes - check if xmin and xmax are also the same
-                xmins = [x.min() for x in x_arrays]
-                xmaxs = [x.max() for x in x_arrays]
-                # Use relative tolerance for floating point comparison
-                if not (
-                    np.allclose(xmins, xmins[0], rtol=1e-12)
-                    and np.allclose(xmaxs, xmaxs[0], rtol=1e-12)
-                ):
-                    x_arrays_identical = False
+        # Identical only if every coordinate is equal: same size and same ends
+        # do not make the same grid (e.g. [0, 1, 2] and [0, 0.5, 2]).
+        x_arrays_identical = all(
+            x.shape == x_arrays[0].shape and np.array_equal(x, x_arrays[0])
+            for x in x_arrays[1:]
+        )
 
         # If X arrays are identical, proceed normally
         if x_arrays_identical:
@@ -909,44 +1259,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 progress.setMinimumDuration(initial_duration)
             return signals, False
 
-        # X arrays differ - handle based on configuration
-        behavior = Conf.xarray_compat_behavior.get("ask")
-        yes_to_all_selected = False
-
-        # History replay must be non-interactive and deterministic: treat
-        # "ask" as automatic interpolation while replaying.
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        replaying = hpanel is not None and hpanel.is_replaying()
-        if behavior == "ask" and not env.execenv.unattended and not replaying:
-            # Create custom message box with "Yes to All" option
-            msg_box = QW.QMessageBox(self.mainwindow)
-            msg_box.setWindowTitle(_("X-array incompatibility"))
-            msg_box.setText(
-                _(
-                    "The selected signals have different X arrays.\n\n"
-                    "To perform the computation, signals need to be interpolated "
-                    "to match a common X array.\n\n"
-                    "Do you want to continue with automatic interpolation?"
-                )
-            )
-            msg_box.setIcon(QW.QMessageBox.Icon.Question)
-
-            # Add custom buttons
-            msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
-            yes_all_button = msg_box.addButton(
-                _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
-            )
-            no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
-            msg_box.setDefaultButton(no_button)
-
-            # Execute dialog and get user choice
-            msg_box.exec()
-            clicked_button = msg_box.clickedButton()
-
-            if clicked_button == no_button:
-                return None
-            if clicked_button == yes_all_button:
-                yes_to_all_selected = True
+        # X arrays differ: ask for interpolation, according to configuration
+        if initial_duration > 0:
+            progress.setMinimumDuration(initial_duration)
+            initial_duration = 0
+        answer = self._ask_x_interpolation(progress)
+        if answer is None:
+            return None
+        yes_to_all_selected = answer
 
         # Perform interpolation to the smallest X array
         sizes = [len(x) for x in x_arrays]
@@ -1004,8 +1324,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              If False, non-native objects are added to default group. Set to False when
              group_id is from the source panel and object goes to a different panel.
         """
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is not None and hpanel.is_output_suppressed():
+        hpanel = self.mainwindow.historypanel
+        if hpanel.is_output_suppressed():
             return
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
@@ -1038,8 +1358,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         Returns:
             UUID of the created group.
         """
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is not None and hpanel.is_output_suppressed():
+        hpanel = self.mainwindow.historypanel
+        if hpanel.is_output_suppressed():
             return None
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
@@ -1311,122 +1631,102 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         param: gds.DataSet | None = None,
         interactive: bool = True,
         refresh_plot: bool = True,
+        call: ProcessingCall | None = None,
     ) -> ProcessingReport:
         # pylint: disable=too-many-return-statements
-        """Recompute a stored 1-to-1 processing operation on demand.
+        """Apply again, in place, the processing that produced an object.
 
-        This is the processing counterpart of :meth:`recompute_analysis`. It
-        resolves the stored 1-to-1 processing metadata from ``obj``, recomputes
-        the result from its source object, then updates ``obj`` in-place.
+        This is the processing counterpart of :meth:`recompute_analysis`. The
+        call that produced ``obj`` is restored (see
+        :func:`datalab.processingcall.resolve_processing_call`): 1-to-1, 2-to-1
+        and n-to-1 calls, conversions between signals and images included, with
+        every input in order. The result is computed from the current inputs by
+        the processor of the inputs, with the same preparation as the menus,
+        then copied into ``obj`` (whose identity is kept) and recorded as a new
+        activity; the previous ones are left unchanged.
 
         Args:
             obj: The processed object to recompute in-place.
-            param: Optional parameter override. When None, use the parameters
-             stored in the object's processing metadata.
+            param: Optional parameter override. When None, use the restored
+             parameters.
             interactive: If True, show UI error messages.
             refresh_plot: Whether to refresh the plot after recomputation.
+            call: Restored call, if already resolved.
 
         Returns:
             ProcessingReport describing the result.
         """
+        # pylint: disable=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
         if env.execenv.unattended:
             interactive = False
 
         report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
 
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None or proc_params.pattern != "1-to-1":
-            report.message = _("Processing metadata is incomplete.")
+        def fail(message: str, critical: bool = False) -> ProcessingReport:
+            report.message = message
             if interactive:
-                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
+                if critical:
+                    QW.QMessageBox.critical(self.panel, _("Error"), message)
+                else:
+                    QW.QMessageBox.warning(self.panel, _("Error"), message)
             return report
 
-        # Check if source object still exists
-        if proc_params.source_uuid is None:
-            report.message = _(
-                "Processing metadata is incomplete (missing source UUID)."
-            )
-            if interactive:
-                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
-            return report
-
-        # Find source object
-        source_obj = self.mainwindow.find_object_by_uuid(proc_params.source_uuid)
-        if source_obj is None:
-            report.message = _("Source object no longer exists.")
-            if interactive:
-                QW.QMessageBox.critical(
-                    self.panel,
-                    _("Error"),
-                    report.message
-                    + "\n\n"
-                    + _(
-                        "The object that was used to create this processed object "
-                        "has been deleted and cannot be used for reprocessing."
-                    ),
+        if call is None:
+            call = resolve_processing_call(self.mainwindow, obj)
+        if call is None:
+            return fail(_("Processing metadata is incomplete."), critical=True)
+        if call.reason is not None:
+            message = call.reason
+            if call.missing_inputs and call.unavailable_reason is None:
+                message += "\n\n" + _(
+                    "The object that was used to create this processed object "
+                    "has been deleted and cannot be used for reprocessing."
                 )
-            return report
+                report.message = call.reason
+                if interactive:
+                    QW.QMessageBox.critical(self.panel, _("Error"), message)
+                return report
+            return fail(message, critical=True)
 
-        # Get updated parameters from caller/editor override, fallback to metadata
-        param = proc_params.param if param is None else param
-
-        # For cross-panel computations, we need to use the processor from the panel
-        # that owns the source object (e.g., radial_profile is in ImageProcessor)
-        if isinstance(source_obj, SignalObj):
-            source_processor = self.mainwindow.signalpanel.processor
-        else:
-            source_processor = self.mainwindow.imagepanel.processor
-
-        # Recompute using the dedicated method (with multiprocessing support)
+        param = call.param if param is None else param
         try:
-            compout = source_processor.recompute_1_to_1(
-                proc_params.func_name,
-                source_obj,
-                param,
-                plugin_origin=proc_params.plugin_origin,
+            candidate = call.processor.compute_processing_candidate(
+                call.feature, call.objects, param, call.roles, call.plugin_origin
             )
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
-            return report
+            return fail(_("Failed to reprocess object:\n%s") % str(exc))
 
-        # User cancelled the operation
-        if compout.cancelled:
+        if candidate.cancelled:
             report.message = _("Processing was cancelled.")
             report.cancelled = True
             return report
-
-        new_obj = compout.result
+        new_obj = candidate.result
         if new_obj is None:
-            report.message = compout.error_msg or _("Failed to reprocess object.")
+            report.message = candidate.error_msg or _("Failed to reprocess object.")
             return report
 
-        # Update the current object in-place with data from new object
-        obj.title = new_obj.title
-        if isinstance(obj, SignalObj):
-            obj.xydata = new_obj.xydata
-        else:
-            obj.data = new_obj.data
-            # Invalidate ROI mask cache when image dimensions may have changed
-            # (the mask is computed based on image shape, so it must be recomputed)
-            obj.invalidate_maskdata_cache()
-
-        # Update metadata with new processing parameters
-        updated_proc_params = ProcessingParameters(
-            func_name=proc_params.func_name,
-            pattern=proc_params.pattern,
-            param=param,
-            source_uuid=proc_params.source_uuid,
-            plugin_origin=proc_params.plugin_origin,
-        )
-        insert_processing_parameters(obj, updated_proc_params)
+        try:
+            if (
+                not self.panel.objmodel.has_uuid(report.obj_uuid)
+                or self.panel.objmodel[report.obj_uuid] is not obj
+            ):
+                raise ValueError("Processing destination no longer exists")
+            apply_processing_result(obj, new_obj, call.processing_parameters(param))
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            return fail(_("Failed to reprocess object:\n%s") % str(exc))
+        if candidate.transaction is not None:
+            candidate.transaction.commit(call.objects[0])
+        self.mainwindow.provenance.complete(candidate.pending, obj)
+        self.panel.SIG_OBJECT_MODIFIED.emit()
 
         # Update the tree view item and refresh plot
         self.panel.objview.update_item(report.obj_uuid)
         if refresh_plot:
-            self.panel.refresh_plot(report.obj_uuid, update_items=True, force=True)
+            if self.panel.plothandler.get(report.obj_uuid) is not None:
+                self.panel.plothandler.update_item_on_plot(report.obj_uuid)
+            self.panel.refresh_plot("selected", update_items=True, force=True)
 
         report.success = True
         if isinstance(obj, SignalObj):
@@ -1435,6 +1735,153 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             report.message = _("Image was reprocessed.")
         self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
         return report
+
+    def compute_processing_candidate(  # pylint: disable=too-many-return-statements
+        self,
+        feature: ComputingFeature,
+        inputs: list[SignalObj | ImageObj],
+        param: Any,
+        roles: list[str] | None = None,
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> ProcessingCandidate:
+        # pylint: disable=too-many-locals
+        """Compute the result of one processing call without inserting it.
+
+        The inputs are prepared as by the menus (X-alignment policy of the
+        contract, or X-array compatibility check, source preparation hook of the
+        feature), the computation runs with process isolation and cancellation,
+        and the input states are recorded (``recompute_in_place`` origin) before
+        it runs. The caller adopts the result, records it with
+        ``provenance.complete(candidate.pending, output)`` and commits
+        ``candidate.transaction`` if any.
+
+        Args:
+            feature: Computing feature of this processor (1-to-1, 1-to-n,
+             2-to-1 or n-to-1).
+            inputs: Input objects, in call order (repetitions allowed).
+            param: Parameter argument, or None.
+            roles: Input roles; by default, those of the feature pattern.
+            plugin_origin: Plugin origin recorded with the result, if any
+             (default: the one of the feature).
+
+        Returns:
+            The candidate (result, error message or cancellation).
+        """
+        func = feature.function
+        title = feature.title or func.__name__
+        provenance = self.mainwindow.provenance
+        origin = "recompute_in_place"
+        inputs = list(inputs)
+        pattern = feature.pattern
+        transaction = None
+        if pattern in ("1_to_1", "1_to_n"):
+            # Same execution path as the historical 1-to-1 re-processing
+            (source,) = inputs
+            pending = provenance.begin(func, param, source, origin=origin)
+            comp_out = self.recompute_1_to_1(
+                feature.feature_id,
+                source,
+                param,
+                plugin_origin=plugin_origin or feature.plugin_origin,
+            )
+            if comp_out.cancelled:
+                return ProcessingCandidate(cancelled=True)
+            if comp_out.result is None:
+                return ProcessingCandidate(
+                    error_msg=comp_out.error_msg or _("Failed to reprocess object.")
+                )
+            return ProcessingCandidate(result=comp_out.result, pending=pending)
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+            if pattern == "2_to_1":
+                source, operand = inputs
+                aligned = self._x_alignment_contract(func)
+                preparation = self.prepare_2_to_1_pairs(
+                    [(source, operand)],
+                    feature.skip_xarray_compat or aligned is not None,
+                    feature.pre_execute_hook,
+                )
+                if preparation is None:
+                    return ProcessingCandidate(cancelled=True)
+                ((actual1, actual2),), transaction = preparation
+                args = (
+                    (actual1, actual2) if param is None else (actual1, actual2, param)
+                )
+                context = None
+                if aligned is not None:
+                    try:
+                        prepared = self._prepare_with_contract(
+                            aligned, [actual1, actual2], param, title, progress, {}
+                        )
+                    except InterpolationRefused:
+                        return ProcessingCandidate(cancelled=True)
+                    if prepared is None:
+                        return ProcessingCandidate(
+                            error_msg=_("The signals cannot be aligned.")
+                        )
+                    args, context = tuple(prepared.args), prepared.context
+                pending = provenance.begin(
+                    func,
+                    param,
+                    [source, operand],
+                    context=context,
+                    limits=_x_interpolated([source, operand], [actual1, actual2]),
+                    executed=[actual1, actual2],
+                    origin=origin,
+                )
+                executed = [actual1, actual2]
+            elif pattern == "n_to_1":
+                executed = list(inputs)
+                aligned = self._x_alignment_contract(func)
+                context = None
+                if aligned is not None:
+                    try:
+                        prepared = self._prepare_with_contract(
+                            aligned, executed, param, title, progress, {}
+                        )
+                    except InterpolationRefused:
+                        return ProcessingCandidate(cancelled=True)
+                    if prepared is None:
+                        return ProcessingCandidate(
+                            error_msg=_("The signals cannot be aligned.")
+                        )
+                    context = prepared.context
+                    args = prepared.args
+                else:
+                    checked = self._check_signal_xarray_compatibility(
+                        executed, progress=progress
+                    )
+                    if checked is None:
+                        return ProcessingCandidate(cancelled=True)
+                    executed = checked[0]
+                    args = (executed,) if param is None else (executed, param)
+                pending = provenance.begin(
+                    func,
+                    param,
+                    inputs,
+                    roles=roles or ["sources"] * len(inputs),
+                    limits=_x_interpolated(inputs, executed),
+                    context=context,
+                    origin=origin,
+                )
+            else:
+                raise ValueError(f"Unsupported processing pattern: {pattern!r}")
+            comp_out = self.__exec_func(func, tuple(args), progress)
+            if comp_out is None:
+                return ProcessingCandidate(cancelled=True)
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+            if not isinstance(new_obj, (SignalObj, ImageObj)):
+                return ProcessingCandidate(
+                    error_msg=comp_out.error_msg or _("Failed to reprocess object.")
+                )
+            self._handle_keep_results(new_obj)
+            if pattern == "n_to_1":
+                self._merge_geometry_results_for_n_to_1(new_obj, executed)
+            patch_title_with_ids(new_obj, inputs)
+        return ProcessingCandidate(
+            result=new_obj, pending=pending, transaction=transaction
+        )
 
     def __exec_func(
         self,
@@ -1530,7 +1977,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if isinstance(new_obj, (SignalObj, ImageObj)):
                 self._handle_keep_results(new_obj)
 
-            patch_title_with_ids(new_obj, [obj], get_short_id)
+            patch_title_with_ids(new_obj, [obj])
             comp_out.result = new_obj
             return comp_out
 
@@ -1644,12 +2091,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         historypanel = self.mainwindow.historypanel
         with historypanel.replaying(), Conf.show_result_dialog.context(False):
             result = self.compute_1_to_0(
-                feature.function, param, edit=False, target_objs=[obj]
+                feature.function,
+                param,
+                edit=False,
+                target_objs=[obj],
+                feature_id=feature.feature_id,
+                origin="recompute_in_place",
             )
         return result is not None and result.execution_success
 
     def _compute_1_to_1_subroutine(
-        self, funcs: list[Callable], params: list, title: str
+        self,
+        funcs: list[Callable],
+        params: list,
+        title: str,
+        preview_result: tuple[SignalObj | ImageObj, CompOut] | None = None,
+        feature_ids: list[str] | None = None,
     ) -> None:
         """Generic subroutine for 1-to-1 processing.
 
@@ -1657,66 +2114,62 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             funcs: list of functions to execute
             params: list of parameters
             title: title of progress bar
+            preview_result: completed preview to publish instead of recomputing
+            feature_ids: stable identifiers stored in processing metadata
         """
         assert len(funcs) == len(params)
+        if feature_ids is None:
+            feature_ids = [self.get_feature_id(func) for func in funcs]
+        assert len(funcs) == len(feature_ids)
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         grps = self.panel.objview.get_sel_groups()
         n_glob = len(objs) * len(params)
         new_gids = {}
+        command_id = str(uuid.uuid4())
         with create_progress_bar(self.panel, title, max_=n_glob) as progress:
             for i_row, obj in enumerate(objs):
-                for i_param, (param, func) in enumerate(zip(params, funcs)):
+                for i_param, (param, func, feature_id) in enumerate(
+                    zip(params, funcs, feature_ids)
+                ):
                     name = func.__name__
                     pvalue = (i_row + 1) * (i_param + 1)
                     pvalue = 0 if pvalue == 1 else pvalue
                     i_title = f"{title} ({pvalue}/{n_glob})"
                     progress.setLabelText(i_title)
                     progress.setValue(pvalue)
-                    args = (obj,) if param is None else (obj, param)
-                    result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    new_obj = self.handle_output(
-                        result, _("Computing: %s") % i_title, progress
-                    )
-                    if new_obj is None:
-                        continue
-                    assert isinstance(new_obj, (SignalObj, ImageObj))
+                    preview = None
+                    if preview_result is not None and preview_result[0] is obj:
+                        preview = preview_result[1]
+                        preview_result = None
 
-                    patch_title_with_ids(new_obj, [obj], get_short_id)
-
-                    # Handle keep_results logic for 1_to_1 operations
-                    self._handle_keep_results(new_obj)
-
-                    # Store processing metadata for interactive re-processing
-                    pp = ProcessingParameters(
-                        func_name=name,
-                        pattern="1-to-1",
-                        param=param,
-                        source_uuid=get_uuid(obj),
-                        plugin_origin=self._get_plugin_origin_for(func),
-                    )
-                    insert_processing_parameters(new_obj, pp)
-
-                    # Mark object as freshly processed to show Processing tab
-                    self.panel.objprop.mark_as_freshly_processed(new_obj)
-
-                    new_gid = None
-                    if grps:
-                        # If groups are selected, then it means that there is no
-                        # individual object selected: we work on groups only
+                    def place(new_obj, obj=obj, name=name) -> str | None:
+                        if not grps:
+                            return None
+                        # Groups selected: no individual object is selected, so
+                        # each source group gets its own result group
                         old_gid = self.panel.objmodel.get_object_group_id(obj)
                         new_gid = new_gids.get(old_gid)
                         if new_gid is None:
-                            # Create a new group for each selected group
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_gid = self._create_group_for_result(
-                                new_obj, f"{name}({get_short_id(old_g)})"
+                                new_obj, f"{name}({get_title_reference(old_g)})"
                             )
                             new_gids[old_gid] = new_gid
-                    self._add_object_to_appropriate_panel(
-                        new_obj, group_id=new_gid, use_group_for_non_native=True
+                        return new_gid
+
+                    outcome = self.execution.run_1_to_1(
+                        obj,
+                        func,
+                        param,
+                        progress,
+                        i_title,
+                        command_id,
+                        place,
+                        preview=preview,
+                        feature_id=feature_id,
                     )
+                    if outcome == CANCELLED:
+                        break
         # Select newly created groups, if any
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)
@@ -1792,6 +2245,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        preview_enabled: bool = True,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: 1 object in â†’ 1 object out.
 
@@ -1808,6 +2263,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            preview_enabled: Allow an optional live preview in the parameter dialog.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With k selected objects, the method produces k outputs (one per input).
@@ -1815,26 +2272,83 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         .. note::
             This method does not support pairwise mode.
         """
-        if (edit is None or param is None) and paramclass is not None:
-            old_edit = edit
-            edit, param = self.init_param(param, paramclass, title, comment)
-            if old_edit is not None:
-                edit = old_edit
-        if param is not None:
-            if edit and not param.edit(parent=self.mainwindow):
+        sources = self.panel.objview.get_sel_objects(include_groups=True)
+        groups = self.panel.objview.get_sel_groups()
+        if not sources:
+            return
+        feature_id = self.get_feature_id(func, feature_id)
+        remember_defaults = param is None and paramclass is not None
+        if remember_defaults:
+            param = paramclass(title, comment)
+            defaults = self.PARAM_DEFAULTS.get(paramclass.__name__)
+            if defaults is not None:
+                gds.update_dataset(param, copy.deepcopy(defaults))
+            if hasattr(param, "update_from_obj"):
+                param.update_from_obj(copy.deepcopy(sources[0]))
+            if edit is None:
+                edit = True
+        if param is not None and edit:
+            from datalab.widgets.processingpreview import edit_processing_parameters
+
+            draft = copy.deepcopy(param)
+            preview_results = []
+            feature = self._find_feature(func, feature_id)
+            allowed = preview_enabled and (feature is None or feature.preview_enabled)
+            if not edit_processing_parameters(
+                draft,
+                func,
+                sources,
+                self.mainwindow,
+                allowed,
+                preview_results,
+                executor_cache=self.mainwindow.preview_executor_cache,
+            ):
                 return
-        plugin_origin = self._get_plugin_origin_for(func)
+            if any(
+                get_uuid(source) not in self.panel.objmodel.get_object_ids()
+                for source in sources
+            ):
+                QW.QMessageBox.warning(
+                    self.mainwindow,
+                    _("Warning"),
+                    _("A preview source was removed. The processing was cancelled."),
+                )
+                return
+            gds.update_dataset(param, draft)
+            for index, selected in enumerate(groups or sources):
+                self.panel.objview.set_current_item_id(
+                    get_uuid(selected), extend=index > 0
+                )
+        else:
+            preview_results = []
+        if remember_defaults:
+            self.PARAM_DEFAULTS[type(param).__name__] = copy.deepcopy(param)
+        title = func.__name__ if title is None else title
+        plugin_origin = self._get_plugin_origin_for(func, feature_id)
         pp = build_processing_parameters(
-            func.__name__, "1-to-1", param=param, plugin_origin=plugin_origin
+            feature_id,
+            "1-to-1",
+            param=param,
+            plugin_origin=plugin_origin,
         )
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or func.__name__,
+            title,
             pp,
             panel_str=self.panel.PANEL_STR_ID,
             plugin_origin=plugin_origin,
         )
         with self.mainwindow.historypanel.capture_outputs(action):
-            self._compute_1_to_1_subroutine([func], [param], title)
+            self._compute_1_to_1_subroutine(
+                [func],
+                [param],
+                title,
+                preview_result=(
+                    preview_results[0]
+                    if len(sources) == 1 and not groups and preview_results
+                    else None
+                ),
+                feature_ids=[feature_id],
+            )
 
     def compute_multiple_1_to_1(
         self,
@@ -1842,6 +2356,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         params: list[gds.DataSet] | None = None,
         title: str | None = None,
         edit: bool | None = None,
+        feature_ids: list[str] | None = None,
     ) -> None:
         """Generic processing method: 1 object in â†’ n objects out.
 
@@ -1856,6 +2371,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             params: List of parameter instances corresponding to each function.
             title: Optional progress bar title.
             edit: Whether to open the parameter editor before execution.
+            feature_ids: Stable feature identifiers stored in processing metadata,
+             one per function.
 
         .. note::
             With k selected objects and n outputs per function,
@@ -1872,19 +2389,30 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
+        if feature_ids is None:
+            feature_ids = [None] * len(funcs)
+        func_names = [
+            self.get_feature_id(func, feature_id)
+            for func, feature_id in zip(funcs, feature_ids)
+        ]
         pp = build_processing_parameters(
-            funcs[0].__name__ if funcs else "", "multiple-1-to-1"
+            func_names[0] if func_names else "", "multiple-1-to-1"
         )
+        title = "compute_multiple_1_to_1" if title is None else title
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or "compute_multiple_1_to_1",
+            title,
             pp,
             panel_str=self.panel.PANEL_STR_ID,
-            func_names=[f.__name__ for f in funcs],
+            func_names=func_names,
             params=params if any(p is not None for p in params) else None,
-            plugin_origin=(self._get_plugin_origin_for(funcs[0]) if funcs else None),
+            plugin_origin=(
+                self._get_plugin_origin_for(funcs[0], func_names[0]) if funcs else None
+            ),
         )
         with self.mainwindow.historypanel.capture_outputs(action):
-            self._compute_1_to_1_subroutine(funcs, params, title)
+            self._compute_1_to_1_subroutine(
+                funcs, params, title, feature_ids=func_names
+            )
 
     def compute_1_to_n(
         self,
@@ -1892,6 +2420,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         params: list[gds.DataSet],
         title: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: 1 object in â†’ n objects out.
 
@@ -1907,6 +2436,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             params: List of parameter instances.
             title: Optional progress bar title.
             edit: Whether to open the parameter editor before execution.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With k selected objects and n parameter sets,
@@ -1920,16 +2450,23 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
-        pp = build_processing_parameters(func.__name__, "1-to-n")
+        feature_id = self.get_feature_id(func, feature_id)
+        pp = build_processing_parameters(feature_id, "1-to-n")
+        title = func.__name__ if title is None else title
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or func.__name__,
+            title,
             pp,
             panel_str=self.panel.PANEL_STR_ID,
             params=params,
-            plugin_origin=self._get_plugin_origin_for(func),
+            plugin_origin=self._get_plugin_origin_for(func, feature_id),
         )
         with self.mainwindow.historypanel.capture_outputs(action):
-            self._compute_1_to_1_subroutine([func] * len(params), params, title)
+            self._compute_1_to_1_subroutine(
+                [func] * len(params),
+                params,
+                title,
+                feature_ids=[feature_id] * len(params),
+            )
 
     def compute_1_to_0(
         self,
@@ -1940,6 +2477,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         target_objs: list[SignalObj | ImageObj] | None = None,
+        feature_id: str | None = None,
+        origin: str = "ordinary",
     ) -> ResultData | None:
         """Generic processing method: 1 object in â†’ no object out.
 
@@ -1961,6 +2500,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
             target_objs: Optional list of specific objects to process. If None,
              processes all currently selected objects.
+            feature_id: Stable feature identifier stored in analysis metadata.
+            origin: Origin of the recorded activities (e.g. ``recompute_in_place``
+             when an analysis is refreshed on demand).
 
         Returns:
             ResultData instance containing the results for all processed objects,
@@ -1987,25 +2529,35 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return None
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
-        pp_history = build_processing_parameters(func.__name__, "1-to-0", param=param)
+        feature_id = self.get_feature_id(func, feature_id)
+        pp_history = build_processing_parameters(feature_id, "1-to-0", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
             title,
             pp_history,
             panel_str=self.panel.PANEL_STR_ID,
-            plugin_origin=self._get_plugin_origin_for(func),
+            plugin_origin=self._get_plugin_origin_for(func, feature_id),
         )
         # 1-to-0: no data object is produced. Register an empty output list so
         # the bijective mapping records the action even with zero outputs.
         if action is not None:
             self.mainwindow.historypanel.register_action_outputs(action, [])
         refresh_needed = False
-        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
+        # The activities recorded by this execution link the action to its
+        # provenance (one per analysed object, absences of result included).
+        with ExitStack() as stack:
+            activity_ids = stack.enter_context(provenance.collecting())
+            progress = stack.enter_context(
+                create_progress_bar(self.panel, title, max_=len(objs))
+            )
             rdata = ResultData()
             for idx, obj in enumerate(objs):
                 pvalue = idx + 1
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
+                pending = provenance.begin(func, param, obj, command_id, origin=origin)
 
                 # Execute function
                 compout = self.__exec_func(func, args, progress)
@@ -2016,6 +2568,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     compout, _("Computing: %s") % title, progress
                 )
                 if result is None:
+                    if not compout.error_msg:
+                        # A normal absence of result (e.g. nothing detected)
+                        provenance.complete_without_result(pending)
                     rdata.execution_success = False
                     continue
 
@@ -2028,11 +2583,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     adapter = create_adapter(result)
                     adapter.add_to(obj, param)
                     pp = ProcessingParameters(
-                        func_name=func.__name__,
+                        func_name=feature_id,
                         pattern="1-to-0",
                         param=param,
                         source_uuid=get_uuid(obj),
-                        plugin_origin=self._get_plugin_origin_for(func),
+                        plugin_origin=self._get_plugin_origin_for(func, feature_id),
                     )
                     insert_processing_parameters(obj, pp)
                     result_modified = self.postprocess_1_to_0_result(obj, result)
@@ -2056,6 +2611,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     rdata.execution_success = False
                     continue
                 refresh_needed |= result_modified
+                kind = "geometry" if isinstance(result, GeometryResult) else "table"
+                provenance.complete_analysis(
+                    pending, obj, kind, create_adapter(result).metadata_key
+                )
                 if action is not None:
                     if action.effects is None:
                         action.effects = {}
@@ -2067,6 +2626,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
+        if action is not None and activity_ids:
+            action.provenance_activity_ids = list(activity_ids)
 
         # Refresh plot if post-processing modified any objects (e.g., ROI creation)
         if refresh_needed:
@@ -2085,6 +2646,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         pairwise: bool | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: n objects in â†’ 1 object out.
 
@@ -2102,6 +2664,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With n selected objects:
@@ -2119,14 +2682,20 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+        title = name if title is None else title
+        feature_id = self.get_feature_id(func, feature_id)
+        aligned_contract = self._x_alignment_contract(func)
+        consent: dict[str, bool] = {}
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
 
-        pp_history = build_processing_parameters(name, "n-to-1", param=param)
+        pp_history = build_processing_parameters(feature_id, "n-to-1", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or name,
+            title,
             pp_history,
             panel_str=self.panel.PANEL_STR_ID,
             pairwise=pairwise,
-            plugin_origin=self._get_plugin_origin_for(func),
+            plugin_origin=self._get_plugin_origin_for(func, feature_id),
         )
 
         with self.mainwindow.historypanel.capture_outputs(action):
@@ -2136,10 +2705,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
                 if not valid:
                     return
-                dst_gname = (
-                    f"{name}({','.join([get_short_id(grp) for grp in src_grps])})"
-                    "|pairwise"
-                )
+                src_refs = ",".join(get_title_reference(grp) for grp in src_grps)
+                dst_gname = f"{name}({src_refs})|pairwise"
                 group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
                 if not group_exclusive:
                     # This is not a group exclusive selection
@@ -2164,9 +2731,25 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         for src_gid in src_gids[1:]:
                             src_obj = src_objs[src_gid][i_pair]
                             src_objs_pair.append(src_obj)
-
+                        orig_objs_pair = list(src_objs_pair)
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    src_objs_pair,
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            context = prepared.context
                         # Check signal x-array compatibility for n-to-1 operations
-                        if auto_interpolate_for_operation:
+                        elif auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
                             # by temporarily changing the configuration
                             with Conf.xarray_compat_behavior.context("interpolate"):
@@ -2179,16 +2762,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 src_objs_pair, progress=progress
                             )
 
-                        if result is None:
-                            # User canceled or compatibility check failed
-                            return
-
-                        checked_objs, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        src_objs_pair = checked_objs
-                        if param is None:
+                        if context is None:
+                            if result is None:
+                                # User canceled or compatibility check failed
+                                return
+                            checked_objs, yes_to_all_selected = result
+                            if yes_to_all_selected:
+                                auto_interpolate_for_operation = True
+                            src_objs_pair = checked_objs
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            orig_objs_pair,
+                            command_id,
+                            roles=["sources"] * len(orig_objs_pair),
+                            limits=_x_interpolated(orig_objs_pair, src_objs_pair),
+                            context=context,
+                        )
+                        if context is not None:
+                            args = prepared.args
+                        elif param is None:
                             args = (src_objs_pair,)
                         else:
                             args = (src_objs_pair, param)
@@ -2202,7 +2795,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             break
                         assert isinstance(new_obj, (SignalObj, ImageObj))
 
-                        patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
+                        patch_title_with_ids(new_obj, src_objs_pair)
 
                         # Handle keep_results and geometry result merging
                         self._handle_keep_results(new_obj)
@@ -2210,11 +2803,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id,
                             pattern="n-to-1",
                             param=param,
                             source_uuids=[get_uuid(obj) for obj in src_objs_pair],
-                            plugin_origin=self._get_plugin_origin_for(func),
+                            plugin_origin=self._get_plugin_origin_for(func, feature_id),
                         )
                         insert_processing_parameters(new_obj, proc_params)
 
@@ -2223,6 +2816,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             dst_gid = self._create_group_for_result(new_obj, dst_gname)
 
                         self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
+                        provenance.complete(pending, new_obj)
 
             else:
                 # In single operand mode, we create a single object
@@ -2236,7 +2830,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if grps:
                     # (Group exclusive selection)
                     # At least one group is selected: create a new group
-                    dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
+                    grp_refs = ",".join(get_title_reference(grp) for grp in grps)
+                    dst_gname = f"{name}({grp_refs})"
                     # Delay group creation until after first result
                     dst_gid = None
                     dst_group_name = dst_gname  # Store name for later use
@@ -2256,8 +2851,25 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     progress.setValue(0)
                     progress.setLabelText(title)
                     for src_gid, src_obj_list in src_objs.items():
+                        orig_obj_list = list(src_obj_list)
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    src_obj_list,
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            context = prepared.context
                         # Check signal x-array compatibility for n-to-1 operations
-                        if auto_interpolate_for_operation:
+                        elif auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
                             with Conf.xarray_compat_behavior.context("interpolate"):
                                 result = self._check_signal_xarray_compatibility(
@@ -2269,17 +2881,27 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 src_obj_list, progress=progress
                             )
 
-                        if result is None:
-                            # User canceled or compatibility check failed
-                            return
+                        if context is None:
+                            if result is None:
+                                # User canceled or compatibility check failed
+                                return
+                            checked_objs, yes_to_all_selected = result
+                            if yes_to_all_selected:
+                                auto_interpolate_for_operation = True
+                            src_obj_list = checked_objs
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            orig_obj_list,
+                            command_id,
+                            roles=["sources"] * len(orig_obj_list),
+                            limits=_x_interpolated(orig_obj_list, src_obj_list),
+                            context=context,
+                        )
 
-                        checked_objs, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        src_obj_list = checked_objs
-
-                        if param is None:
+                        if context is not None:
+                            args = prepared.args
+                        elif param is None:
                             args = (src_obj_list,)
                         else:
                             args = (src_obj_list, param)
@@ -2294,7 +2916,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         assert isinstance(new_obj, (SignalObj, ImageObj))
 
                         group_id = dst_gid if dst_gid is not None else src_gid
-                        patch_title_with_ids(new_obj, src_obj_list, get_short_id)
+                        patch_title_with_ids(new_obj, src_obj_list)
 
                         # Handle keep_results and geometry result merging
                         self._handle_keep_results(new_obj)
@@ -2302,11 +2924,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id,
                             pattern="n-to-1",
                             param=param,
                             source_uuids=[get_uuid(obj) for obj in src_obj_list],
-                            plugin_origin=self._get_plugin_origin_for(func),
+                            plugin_origin=self._get_plugin_origin_for(func, feature_id),
                         )
                         insert_processing_parameters(new_obj, proc_params)
 
@@ -2324,6 +2946,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             group_id=group_id,
                             use_group_for_non_native=use_group_for_non_native,
                         )
+                        provenance.complete(pending, new_obj)
 
             # Select newly created group, if any
             if dst_gid is not None:
@@ -2339,6 +2962,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         | None,
         obj2_name: str,
         func: Callable,
+        *,
         param: gds.DataSet | None = None,
         paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
@@ -2347,6 +2971,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         skip_xarray_compat: bool | None = None,
         pairwise: bool | None = None,
         pre_execute_hook: SourcePreparationHook[TypeObj] | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 â†’ 1.
 
@@ -2371,6 +2996,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              (only for signal panels).
             pre_execute_hook: Optional hook preparing source copies after all dialogs
              and compatibility checks. Returning None cancels the operation.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With k selected objects:
@@ -2389,6 +3015,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+        title = name if title is None else title
+        feature_id = self.get_feature_id(func, feature_id)
+        aligned_contract = self._x_alignment_contract(func)
+        consent: dict[str, bool] = {}
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
 
         if obj2 is None:
             objs2 = []
@@ -2424,9 +3056,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
 
-            pp_history = build_processing_parameters(
-                func.__name__, "2-to-1", param=param
-            )
+            pp_history = build_processing_parameters(feature_id, "2-to-1", param=param)
             action = self.mainwindow.historypanel.add_compute_entry_from_pp(
                 title or func.__name__,
                 pp_history,
@@ -2434,7 +3064,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 obj2_uuids=[get_uuid(obj) for obj in objs2],
                 obj2_name=obj2_name,
                 pairwise=True,
-                plugin_origin=self._get_plugin_origin_for(func),
+                plugin_origin=self._get_plugin_origin_for(func, feature_id),
             )
 
             with self.mainwindow.historypanel.capture_outputs(action):
@@ -2455,7 +3085,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for src_gid, i_pair in pair_keys
                 ]
                 preparation = self.prepare_2_to_1_pairs(
-                    original_pairs, skip_xarray_compat, pre_execute_hook
+                    original_pairs,
+                    skip_xarray_compat or aligned_contract is not None,
+                    pre_execute_hook,
                 )
                 if preparation is None:
                     return
@@ -2471,8 +3103,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if group_exclusive:
                             # This is a group exclusive selection
                             src_grp = objmodel.get_group(src_gid)
-                            grp_short_ids = [get_uuid(grp) for grp in (src_grp, grp2)]
-                            dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
+                            group_refs = [
+                                get_title_reference(grp) for grp in (src_grp, grp2)
+                            ]
+                            dst_gname = f"{name}({','.join(group_refs)})|pairwise"
                         else:
                             dst_gname = f"{name}[...]"
                         # Delay group creation until after first result
@@ -2485,6 +3119,35 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             args = [actual_obj1, actual_obj2]
                             if param is not None:
                                 args.append(param)
+                            context = None
+                            if aligned_contract is not None:
+                                try:
+                                    prepared = self._prepare_with_contract(
+                                        aligned_contract,
+                                        [actual_obj1, actual_obj2],
+                                        param,
+                                        title,
+                                        progress,
+                                        consent,
+                                    )
+                                except InterpolationRefused:
+                                    return
+                                if prepared is None:
+                                    continue
+                                args, context = list(prepared.args), prepared.context
+                            pending = provenance.begin(
+                                func,
+                                param,
+                                [orig_obj1, orig_obj2],
+                                command_id,
+                                context=context,
+                                limits=_x_interpolated(
+                                    [orig_obj1, orig_obj2], [actual_obj1, actual_obj2]
+                                ),
+                                # Metadata read are those of the computed objects
+                                # (e.g. fit parameters converted by a hook).
+                                executed=[actual_obj1, actual_obj2],
+                            )
                             result = self.__exec_func(func, tuple(args), progress)
                             if result is None:
                                 break
@@ -2496,23 +3159,23 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             assert isinstance(new_obj, (SignalObj, ImageObj))
 
                             # Use original objects for title generation
-                            patch_title_with_ids(
-                                new_obj, [orig_obj1, orig_obj2], get_short_id
-                            )
+                            patch_title_with_ids(new_obj, [orig_obj1, orig_obj2])
 
                             # Handle keep_results logic for 2_to_1 operations
                             self._handle_keep_results(new_obj)
 
                             # Store lightweight processing metadata (non-interactive)
                             proc_params = ProcessingParameters(
-                                func_name=name,
+                                func_name=feature_id,
                                 pattern="2-to-1",
                                 param=param,
                                 source_uuids=[
                                     get_uuid(orig_obj1),
                                     get_uuid(orig_obj2),
                                 ],
-                                plugin_origin=self._get_plugin_origin_for(func),
+                                plugin_origin=self._get_plugin_origin_for(
+                                    func, feature_id
+                                ),
                             )
                             insert_processing_parameters(new_obj, proc_params)
 
@@ -2525,6 +3188,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             self._add_object_to_appropriate_panel(
                                 new_obj, group_id=dst_gid
                             )
+                            provenance.complete(pending, new_obj)
                             if source_transaction is not None:
                                 source_transaction.commit(orig_obj1)
 
@@ -2541,9 +3205,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     return
             obj2 = objs2[0]
 
-            pp_history = build_processing_parameters(
-                func.__name__, "2-to-1", param=param
-            )
+            pp_history = build_processing_parameters(feature_id, "2-to-1", param=param)
             action = self.mainwindow.historypanel.add_compute_entry_from_pp(
                 title or func.__name__,
                 pp_history,
@@ -2551,7 +3213,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 obj2_uuids=[get_uuid(obj2)],
                 obj2_name=obj2_name,
                 pairwise=False,
-                plugin_origin=self._get_plugin_origin_for(func),
+                plugin_origin=self._get_plugin_origin_for(func, feature_id),
             )
 
             with self.mainwindow.historypanel.capture_outputs(action):
@@ -2565,6 +3227,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self._is_signal_panel()
                     and isinstance(obj2, SignalObj)
                     and not skip_xarray_compat
+                    and aligned_contract is None
                 ):
                     signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                     if signal_objs:
@@ -2617,6 +3280,35 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             if param is None
                             else (actual_obj, obj2, param)
                         )
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    [actual_obj, obj2],
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            args, context = prepared.args, prepared.context
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            [obj, orig_obj2],
+                            command_id,
+                            context=context,
+                            limits=_x_interpolated(
+                                [obj, orig_obj2], [actual_obj, obj2]
+                            ),
+                            # Metadata read are those of the computed objects
+                            # (e.g. fit parameters converted by a hook).
+                            executed=[actual_obj, obj2],
+                        )
                         result = self.__exec_func(func, args, progress)
                         if result is None:
                             break
@@ -2629,21 +3321,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         group_id = objmodel.get_object_group_id(obj)
                         # Use original objects for title generation
-                        patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
+                        patch_title_with_ids(new_obj, [obj, orig_obj2])
 
                         # Handle keep_results logic for 2_to_1 operations
                         self._handle_keep_results(new_obj)
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id,
                             pattern="2-to-1",
                             param=param,
                             source_uuids=[
                                 get_uuid(obj),
                                 get_uuid(orig_obj2),
                             ],
-                            plugin_origin=self._get_plugin_origin_for(func),
+                            plugin_origin=self._get_plugin_origin_for(func, feature_id),
                         )
                         insert_processing_parameters(new_obj, proc_params)
 
@@ -2652,6 +3344,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._add_object_to_appropriate_panel(
                             new_obj, group_id=group_id, use_group_for_non_native=False
                         )
+                        provenance.complete(pending, new_obj)
                         if source_transaction is not None:
                             source_transaction.commit(obj)
 
@@ -2663,6 +3356,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        preview_enabled: bool = True,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
@@ -2672,12 +3368,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         function is returned.
 
         Args:
-            function: function to register
+            function: Sigima computation function, or NumPy function wrapped with
+             ``Wrap1to1Func`` (:mod:`sigima.proc.signal` or :mod:`sigima.proc.image`)
             title: title of the function
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            preview_enabled: allow speculative execution before accepting parameters.
+            feature_id: stable feature identifier (see :class:`ComputingFeature`).
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2690,6 +3390,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            preview_enabled=preview_enabled,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
@@ -2702,6 +3405,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-0 processing function.
 
@@ -2716,6 +3421,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            feature_id: stable feature identifier (see :class:`ComputingFeature`).
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2728,12 +3435,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
 
     def register_1_to_n(
-        self, function: Callable, title: str, icon_name: str | None = None
+        self,
+        function: Callable,
+        title: str,
+        icon_name: str | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-n processing function.
 
@@ -2745,6 +3459,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             function: function to register
             title: title of the function
             icon_name: icon name. Defaults to None.
+            feature_id: stable feature identifier (see :class:`ComputingFeature`).
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2754,6 +3470,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             function=function,
             title=title,
             icon_name=icon_name,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
@@ -2766,6 +3484,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a n-to-1 processing function.
 
@@ -2780,6 +3500,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            feature_id: stable feature identifier (see :class:`ComputingFeature`).
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2792,6 +3514,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
@@ -2807,6 +3531,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         obj2_name: str | None = None,
         skip_xarray_compat: bool | None = None,
         pre_execute_hook: SourcePreparationHook[TypeObj] | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
@@ -2826,6 +3552,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              Defaults to None. Set to True for operations like interpolation where
              different X-arrays are expected and desired.
             pre_execute_hook: optional transactional source preparation hook
+            feature_id: stable feature identifier (see :class:`ComputingFeature`).
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2841,11 +3569,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             obj2_name=obj2_name,
             skip_xarray_compat=skip_xarray_compat,
             pre_execute_hook=pre_execute_hook,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
 
-    def add_feature(self, feature: ComputingFeature) -> None:
+    def add_feature(self, feature: ComputingFeature, owner: str | None = None) -> None:
         """Add a computing feature to the registry.
 
         Auto-detects the plugin origin from ``feature.function.__module__`` and
@@ -2853,26 +3583,121 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         Args:
             feature: ComputingFeature instance to add.
+            owner: Stable ID of the owning plugin, if any.
+
+        Raises:
+            ValueError: If ownership conflicts, if an owned feature ID is not of
+             the form ``<plugin_id>:<local_id>``, or if the feature ID already
+             exists.
         """
+        if owner is not None:
+            if not owner.strip():
+                raise ValueError("Computing feature owner must not be empty.")
+            if feature.owner_plugin_id not in (None, owner):
+                raise ValueError(
+                    f"Computing feature {feature.feature_id!r} already belongs to "
+                    f"plugin {feature.owner_plugin_id!r}."
+                )
+            feature.owner_plugin_id = owner
         if feature.function is not None and feature.plugin_origin is None:
             feature.plugin_origin = _detect_plugin_origin(feature.function)
-        self.computing_registry[feature.function] = feature
+        if feature.plugin_origin is None and feature.owner_plugin_id is not None:
+            feature.plugin_origin = _owner_plugin_origin(feature.owner_plugin_id)
+        feature.update_implicit_id()
 
-    def _get_plugin_origin_for(self, func: Callable) -> dict[str, Any] | None:
+        feature_id = feature.feature_id
+        assert feature_id is not None
+        if feature.owner_plugin_id is not None:
+            prefix = f"{feature.owner_plugin_id}:"
+            if not feature_id.startswith(prefix) or feature_id == prefix:
+                raise ValueError(
+                    f"Plugin feature ID {feature_id!r} must have the form "
+                    f"'{prefix}<local_id>'."
+                )
+        if feature_id in self.computing_registry:
+            raise ValueError(f"Computing feature ID {feature_id!r} already registered")
+        self.computing_registry[feature_id] = feature
+
+    def remove_feature(self, feature_id: str) -> ComputingFeature:
+        """Remove and return a computing feature by stable ID.
+
+        Args:
+            feature_id: Stable identifier of the feature to remove.
+
+        Returns:
+            Removed computing feature.
+
+        Raises:
+            ValueError: If the feature ID is unknown.
+        """
+        try:
+            return self.computing_registry.pop(feature_id)
+        except KeyError as exc:
+            raise ValueError(f"Unknown computing feature ID: {feature_id}") from exc
+
+    def remove_features_by_owner(self, owner_plugin_id: str) -> list[ComputingFeature]:
+        """Remove and return every feature owned by a plugin.
+
+        Args:
+            owner_plugin_id: Stable identifier of the owning plugin.
+
+        Returns:
+            Removed computing features, in registration order.
+        """
+        feature_ids = [
+            feature_id
+            for feature_id, feature in self.computing_registry.items()
+            if feature.owner_plugin_id == owner_plugin_id
+        ]
+        return [self.computing_registry.pop(feature_id) for feature_id in feature_ids]
+
+    def _find_feature(
+        self, func: Callable, feature_id: str | None = None
+    ) -> ComputingFeature | None:
+        """Return the registered feature for ``feature_id`` or ``func``, if any."""
+        if feature_id is not None:
+            feature = self.computing_registry.get(feature_id)
+            if feature is not None:
+                return feature
+        try:
+            return self.get_feature(func)
+        except ValueError:
+            return None
+
+    def _get_plugin_origin_for(
+        self, func: Callable, feature_id: str | None = None
+    ) -> dict[str, Any] | None:
         """Return the plugin origin descriptor for ``func`` if known.
 
         Falls back to a fresh detection if ``func`` is not in the registry.
 
         Args:
             func: Computation function.
+            feature_id: Stable identifier of the feature, when known.
 
         Returns:
             Plugin origin dict, or ``None`` for built-in functions.
         """
-        feature = self.computing_registry.get(func)
+        feature = self._find_feature(func, feature_id)
         if feature is not None:
             return feature.plugin_origin
         return _detect_plugin_origin(func)
+
+    def get_feature_id(self, func: Callable, feature_id: str | None = None) -> str:
+        """Return the identifier persisted for ``func``.
+
+        Args:
+            func: Computation function.
+            feature_id: Stable identifier of the feature, when known.
+
+        Returns:
+            Identifier of the registered feature, or the function name if ``func``
+            is not registered.
+        """
+        feature = self._find_feature(func, feature_id)
+        if feature is not None:
+            return feature.feature_id
+        return feature_id or func.__name__
 
     def get_feature(
         self,
@@ -2880,12 +3705,18 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         plugin_origin: dict[str, Any] | None = None,
         paramclass_name: str | None = None,
     ) -> ComputingFeature:
-        """Get a computing feature by name or function.
+        """Get a computing feature by stable ID, function or legacy name.
+
+        Built-in features are identified by their function name, so an exact ID
+        match wins. When several features match a function or a legacy name,
+        features from the plugin module given by ``plugin_origin`` are preferred,
+        then built-in features; remaining ambiguities raise :class:`ValueError`.
 
         Args:
-            function_or_name: Name of the feature or the function itself.
-            plugin_origin: Optional plugin origin descriptor used to enrich the
-             :class:`FeatureNotFoundError` raised when the feature is unknown.
+            function_or_name: Identifier of the feature or the function itself.
+            plugin_origin: Optional plugin origin descriptor used to select the
+             plugin feature and to enrich the :class:`FeatureNotFoundError` raised
+             when the feature is unknown.
             paramclass_name: Optional name of the required parameter class, also
              used to enrich the error message.
 
@@ -2896,13 +3727,46 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             FeatureNotFoundError: If no matching feature is registered. The
              exception subclasses :class:`ValueError` to preserve backward
              compatibility with existing callers.
+            ValueError: If several features match and none is preferred.
         """
-        try:
-            return self.computing_registry[function_or_name]
-        except KeyError:
-            for _func, feature in self.computing_registry.items():
-                if feature.name == function_or_name:
-                    return feature
+        exact = None
+        if isinstance(function_or_name, str):
+            exact = self.computing_registry.get(function_or_name)
+            matches = [
+                feature
+                for feature in self.computing_registry.values()
+                if feature is exact
+                or (feature.function is not None and feature.name == function_or_name)
+            ]
+        else:
+            matches = [
+                feature
+                for feature in self.computing_registry.values()
+                if feature.function is function_or_name
+            ]
+        if plugin_origin is not None:
+            module = plugin_origin.get("module")
+            same_module = [
+                feature
+                for feature in matches
+                if feature.plugin_origin is not None
+                and feature.plugin_origin.get("module") == module
+            ]
+            if len(same_module) == 1:
+                return same_module[0]
+        if exact is not None:
+            return exact
+        if len(matches) > 1:
+            built_ins = [
+                feature
+                for feature in matches
+                if feature.owner_plugin_id is None and feature.plugin_origin is None
+            ]
+            if len(built_ins) == 1:
+                return built_ins[0]
+            raise ValueError(f"Ambiguous computing feature alias: {function_or_name}")
+        if matches:
+            return matches[0]
         raise FeatureNotFoundError(
             str(function_or_name),
             plugin_origin=plugin_origin,
@@ -2975,6 +3839,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 f"For pattern '{pattern}', 'param' must be a DataSet or None"
             )
             compute_kwargs = {}
+            if pattern == "1_to_1":
+                compute_kwargs["preview_enabled"] = kwargs.pop(
+                    "preview_enabled", feature.preview_enabled
+                )
             if pattern == "n_to_1":
                 compute_kwargs["pairwise"] = kwargs.pop("pairwise", None)
             return compute_method(
@@ -2984,6 +3852,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 title=title,
                 comment=comment,
                 edit=edit,
+                feature_id=feature.feature_id,
                 **compute_kwargs,
             )
         if pattern == "2_to_1":
@@ -3009,6 +3878,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 skip_xarray_compat=feature.skip_xarray_compat,
                 pairwise=pairwise,
                 pre_execute_hook=feature.pre_execute_hook,
+                feature_id=feature.feature_id,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])
@@ -3024,6 +3894,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 params=params,
                 title=title,
                 edit=edit,
+                feature_id=feature.feature_id,
             )
         raise ValueError(f"Unsupported compute pattern: {pattern}")
 
@@ -3071,10 +3942,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self, title: str, objs: list[TypeObj], roi: TypeROI | None
     ) -> None:
         """Record a ROI mutation history entry for ``objs`` (payload may be None)."""
-        # Some tests build processors without a history panel: stay defensive.
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is None:
-            return
+        hpanel = self.mainwindow.historypanel
         hpanel.add_mutation_entry(
             title,
             panel_str=self.panel.PANEL_STR_ID,
@@ -3184,6 +4052,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 only_visible=False,
                 only_existing=True,
             )
+            # The object changed (e.g. its provenance view is out of date)
+            self.panel.SIG_OBJECT_MODIFIED.emit()
             return edited_roi
         return obj.roi
 

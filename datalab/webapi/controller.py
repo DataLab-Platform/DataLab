@@ -106,6 +106,18 @@ class WebApiController(QObject):
         """
         self._main_window = main_window
 
+    def release_main_window(self, main_window: DLMainWindow) -> None:
+        """Release the main window reference, if it is the given one.
+
+        The controller being shared by all main windows, a closed main window
+        must not be kept alive by its reference.
+
+        Args:
+            main_window: The DataLab main window being closed.
+        """
+        if self._main_window is main_window:
+            self._main_window = None
+
     @property
     def is_running(self) -> bool:
         """Check if the server is running."""
@@ -337,6 +349,11 @@ class WebApiController(QObject):
 
         self._uvicorn_server = None
         self._adapter = None
+        # pylint: disable=import-outside-toplevel
+        from datalab.webapi.routes import set_adapter
+
+        # The adapter references the main window
+        set_adapter(None)
         self._url = None
         self._token = None
 

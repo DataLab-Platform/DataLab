@@ -134,6 +134,26 @@ class HistoryReplayFacadeMixin:
         """Return the action that produced an output UUID."""
         return hchain.find_action_for_output(self, output_uuid, func_name)
 
+    def find_action_for_activity(self, activity_id: str) -> HistoryAction | None:
+        """Return the action whose last execution recorded an activity."""
+        return hchain.find_action_for_activity(self, activity_id)
+
+    def show_execution_provenance(self, action: HistoryAction | None = None) -> None:
+        """Show the provenance of the last successful execution of an action.
+
+        Args:
+            action: History action (default: the selected one).
+        """
+        # pylint: disable=import-outside-toplevel
+        from guidata.qthelpers import exec_dialog
+
+        from datalab.widgets.provenance import ExecutionProvenanceDialog
+
+        action = action or self.navigation.current_action()
+        if action is None:
+            return
+        exec_dialog(ExecutionProvenanceDialog(self.mainwindow, action, self))
+
     def find_creation_action_for_output(self, output_uuid: str) -> HistoryAction | None:
         """Return the creation action that produced an output UUID."""
         return hchain.find_creation_action_for_output(self, output_uuid)

@@ -13,18 +13,18 @@ from typing import TYPE_CHECKING, Type
 import guidata.dataset as gds
 from guidata.config import ValidationMode, temporary_validation_mode
 from plotpy.tools import (
+    AnnotatedRectangleTool,
+    AnnotatedSegmentTool,
     HCursorTool,
     HRangeTool,
     LabelTool,
-    RectangleTool,
-    SegmentTool,
     VCursorTool,
     XCursorTool,
 )
 from sigima.io.signal import SignalIORegistry
 from sigima.objects import SignalObj, SignalROI
 
-from datalab.adapters_plotpy import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES, LINE_STYLE_KEYS, LINE_WIDTH_KEY
 from datalab.config import Conf, _
 from datalab.gui import roieditor
 from datalab.gui.actionhandler import SignalActionHandler
@@ -35,9 +35,33 @@ from datalab.gui.processor.signal import SignalProcessor
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
+    from plotpy.items import AnnotatedSegment
     from qtpy import QtWidgets as QW
 
     from datalab.gui.docks import DockablePlotWidget
+    from datalab.h5.native import NativeH5Reader
+
+#: Line width stored by DataLab 1.3 or earlier for curves drawn with the default
+#: line width, or with a line width clamped for curves with many points
+LEGACY_AUTOMATIC_LINE_WIDTH = 1.0
+
+
+class SignalAnnotatedSegmentTool(AnnotatedSegmentTool):
+    """Annotated segment tool for signals
+
+    The length and the angle of a segment combine its X and Y extents, whose units
+    generally differ on a signal: unlike on images, they are not displayed.
+    """
+
+    def create_shape(self) -> tuple[AnnotatedSegment, int, int]:
+        """Create an annotated segment without computations
+
+        Returns:
+            Annotated segment and the indices of its handles
+        """
+        annotation, handle0, handle1 = super().create_shape()
+        annotation.area_computations_visible = False
+        return annotation, handle0, handle1
 
 
 class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]):
@@ -51,13 +75,16 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
     # The following tools are used to create annotations on signals. The annotation
     # items are created using PlotPy's default settings. Those appearance settings
     # may be modified in the configuration (see `datalab.config`).
+    # Each tool must create items that can be stored as portable annotations (hence
+    # the annotated variants of the rectangle and segment tools), otherwise they are
+    # discarded when the annotation editor is validated.
     ANNOTATION_TOOLS = (
         LabelTool,
         VCursorTool,
         HCursorTool,
         XCursorTool,
-        SegmentTool,
-        RectangleTool,
+        SignalAnnotatedSegmentTool,
+        AnnotatedRectangleTool,
         HRangeTool,
     )
 
@@ -87,6 +114,39 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         self.processor = SignalProcessor(self, dockableplotwidget.plotwidget)
         view_toolbar = dockableplotwidget.toolbar
         self.acthandler = SignalActionHandler(self, panel_toolbar, view_toolbar)
+
+    def deserialize_object_from_hdf5(
+        self, reader: NativeH5Reader, name: str, reset_all: bool = False
+    ) -> SignalObj:
+        """Deserialize object from a HDF5 file
+
+        DataLab 1.3 and earlier stored automatic curve styles in signal metadata:
+        when loading a file saved by these versions, the colors and line styles of
+        their automatic style cycle are removed, so that curves are given the
+        current automatic styles. Other stored styles are kept. These versions
+        also stored the line width of every curve: a line width of 1.0 (the
+        default width, also used for curves with many points) is removed, so that
+        curves are given the configured line width; other widths were chosen by
+        the user and are kept.
+
+        Args:
+            reader: HDF5 reader
+            name: Object name in HDF5 file
+            reset_all: If True, preserve original UUIDs (workspace reload).
+             If False, regenerate only UUIDs that conflict with existing
+             objects (object import).
+        """
+        obj = super().deserialize_object_from_hdf5(reader, name, reset_all)
+        metadata = obj.metadata
+        if reader.has_legacy_curve_styles:
+            if CURVESTYLES.is_legacy_automatic(
+                *(metadata.get(key) for key in LINE_STYLE_KEYS)
+            ):
+                for key in LINE_STYLE_KEYS:
+                    metadata.pop(key, None)
+            if metadata.get(LINE_WIDTH_KEY) == LEGACY_AUTOMATIC_LINE_WIDTH:
+                metadata.pop(LINE_WIDTH_KEY)
+        return obj
 
     # ------Creating, adding, removing objects------------------------------------------
     def get_newparam_from_current(
@@ -173,5 +233,22 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         self.plothandler.toggle_anti_aliasing(state)
 
     def reset_curve_styles(self) -> None:
-        """Reset curve styles"""
+        """Reset the curve styles of the selected signals
+
+        Colors and line styles chosen by the user are removed from the metadata of
+        the selected signals, whose curves are given automatic styles again.
+        """
         CURVESTYLES.reset_styles()
+        modified = False
+        for obj in self.objview.get_sel_objects(include_groups=True):
+            for key in LINE_STYLE_KEYS:
+                if obj.metadata.pop(key, None) is not None:
+                    modified = True
+            item = self.plothandler.get(get_uuid(obj))
+            if item is not None and not CURVESTYLES.has_automatic_style(item):
+                CURVESTYLES.restore_automatic_style(item)
+                item.param.update_item(item)
+                modified = True
+        self.refresh_plot("selected", update_items=False)
+        if modified:
+            self.SIG_OBJECT_MODIFIED.emit()

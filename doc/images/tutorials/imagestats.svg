@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+<title>imagestats</title>
+<desc>Hand-authored vector reconstruction. Explicit geometric primitives and curves; no raster tracing.</desc>
+
+<rect x="0.5" y="0.5" width="15" height="15" fill="#daf2ff" stroke="#ed24ef" stroke-width="1"/>
+<circle cx="8" cy="8" r="6" fill="#2383bb" stroke="#075d9b" stroke-width="0.7"/>
+<circle cx="8" cy="4.5" r="1" fill="#fff"/>
+<path d="M6 7 H9 V11 H10 V12 H6 V11 H7 V8 H6 Z" fill="#fff"/>
+</svg>

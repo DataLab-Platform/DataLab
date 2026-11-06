@@ -26,6 +26,8 @@ import numpy as np
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima.io import RawImageImportParam
+from sigima.io.image.raw import RAW_DTYPES
 
 from datalab.aiassistant.providers.base import ChatMessage
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
@@ -157,6 +159,8 @@ def _tool_list_available_operations(
                 param_fields = [{"name": "?", "info": "introspection failed"}]
         ops.append(
             {
+                "feature_id": feature.feature_id,
+                "owner_plugin_id": feature.owner_plugin_id,
                 "name": feature.name,
                 "title": feature.title,
                 "pattern": feature.pattern,
@@ -406,10 +410,15 @@ def _tool_load_file(
     mainwindow: DLMainWindow,
     filename: str,
     panel: str | None = None,
+    import_parameters: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     panel_widget = _resolve_panel(mainwindow, panel)
     proxy.set_current_panel(panel_widget.PANEL_STR_ID)
-    objs = panel_widget.load_from_files([filename])
+    param = None
+    if import_parameters:
+        # ``create`` rejects unknown parameter names
+        param = RawImageImportParam.create(**import_parameters)
+    objs = panel_widget.load_from_files([filename], param=param)
     return {
         "filename": filename,
         "panel": panel_widget.PANEL_STR_ID,
@@ -449,8 +458,12 @@ def _tool_apply_operation(
                     f"Cannot set parameter {key!r} on "
                     f"{feature.paramclass.__name__}: {exc}"
                 ) from exc
-    proxy.calc(name, param_obj)
-    return {"operation": name, "panel": proxy.get_current_panel()}
+    proxy.calc(feature.feature_id, param_obj)
+    return {
+        "operation": name,
+        "feature_id": feature.feature_id,
+        "panel": proxy.get_current_panel(),
+    }
 
 
 # =============================================================================
@@ -583,6 +596,10 @@ def _tool_create_and_run_macro(
     }
     if not autorun:
         result["autorun"] = False
+        result["note"] = (
+            "Macro not executed. The user can save it to the Macro panel "
+            "with the 'Save to Macros' link."
+        )
         return result
 
     console = macropanel.console
@@ -988,13 +1005,45 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
             name="load_file",
             description=(
                 "Load a signal or image file into DataLab. The file format is "
-                "auto-detected based on the filename extension."
+                "auto-detected based on the filename extension. Headerless RAW "
+                "image files (*.raw) require 'import_parameters' describing their "
+                "binary layout; otherwise, the user is asked for them."
             ),
             parameters={
                 "type": "object",
                 "properties": {
                     "filename": {"type": "string"},
                     "panel": _PANEL_PARAM,
+                    "import_parameters": {
+                        "type": "object",
+                        "description": (
+                            "RAW image import parameters (image panel only). "
+                            "Omitted fields keep their default value."
+                        ),
+                        "properties": {
+                            "dtype": {"type": "string", "enum": list(RAW_DTYPES)},
+                            "width": {"type": "integer", "minimum": 1},
+                            "height": {"type": "integer", "minimum": 1},
+                            "offset": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "description": "Bytes before the first image.",
+                            },
+                            "count": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "description": "Number of images in the file.",
+                            },
+                            "gap": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "description": "Bytes between consecutive images.",
+                            },
+                            "little_endian": {"type": "boolean"},
+                            "white_is_zero": {"type": "boolean"},
+                        },
+                        "additionalProperties": False,
+                    },
                 },
                 "required": ["filename"],
                 "additionalProperties": False,
@@ -1056,9 +1105,12 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
                     "the Macro panel; the user can opt in via a "
                     "'Save to Macros' link surfaced on the result, so always "
                     "pick a short, descriptive title (e.g. 'Generate "
-                    "super-Gaussian'). Use this for complex multi-step "
-                    "scripts; prefer 'apply_operation' for atomic actions. "
-                    "If 'ok' is False, read 'console_output' or "
+                    "super-Gaussian'). Set 'autorun' to false when the user "
+                    "asks you to write (not run) a macro: the code is then "
+                    "only validated and offered through the 'Save to Macros' "
+                    "link, without being executed. Use this for complex "
+                    "multi-step scripts; prefer 'apply_operation' for atomic "
+                    "actions. If 'ok' is False, read 'console_output' or "
                     "'validation_errors' and try again."
                 ),
                 parameters={
@@ -1069,7 +1121,16 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
                             "type": "string",
                             "description": "Full Python source code of the macro.",
                         },
-                        "autorun": {"type": "boolean", "default": True},
+                        "autorun": {
+                            "type": "boolean",
+                            "default": True,
+                            "description": (
+                                "Run the macro (default true). Set to false "
+                                "to only validate the code and offer it to "
+                                "the user for saving to the Macro panel, "
+                                "without executing it."
+                            ),
+                        },
                         "timeout": {
                             "type": "number",
                             "default": 30.0,

@@ -50,10 +50,10 @@ def test_multiobject_recompute_parameter_independence():
             # First profile (selection A: horizontal band)
             coords_a = {
                 "direction": "horizontal",
-                "row1": 10,
-                "col1": 10,
-                "row2": 40,
-                "col2": 60,
+                "y1": 10,
+                "x1": 10,
+                "y2": 40,
+                "x2": 60,
             }
             proc.compute_average_profile(
                 sigima.params.AverageProfileParam.create(**coords_a)
@@ -65,10 +65,10 @@ def test_multiobject_recompute_parameter_independence():
             # Second profile (selection B: vertical band, different shape)
             coords_b = {
                 "direction": "vertical",
-                "row1": 200,
-                "col1": 150,
-                "row2": 400,
-                "col2": 350,
+                "y1": 200,
+                "x1": 150,
+                "y2": 400,
+                "x2": 350,
             }
             proc.compute_average_profile(
                 sigima.params.AverageProfileParam.create(**coords_b)
@@ -105,14 +105,14 @@ def test_multiobject_recompute_parameter_independence():
             assert pp_a is not None and pp_a.param is not None
             assert pp_b is not None and pp_b.param is not None
             assert pp_a.param.direction == coords_a["direction"]
-            assert (pp_a.param.col1, pp_a.param.row1) == (
-                coords_a["col1"],
-                coords_a["row1"],
+            assert (pp_a.param.x1, pp_a.param.y1) == (
+                coords_a["x1"],
+                coords_a["y1"],
             )
             assert pp_b.param.direction == coords_b["direction"]
-            assert (pp_b.param.col1, pp_b.param.row1) == (
-                coords_b["col1"],
-                coords_b["row1"],
+            assert (pp_b.param.x1, pp_b.param.y1) == (
+                coords_b["x1"],
+                coords_b["y1"],
             )
 
             # And the two profiles must remain distinct objects.

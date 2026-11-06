@@ -13,6 +13,7 @@ from pathlib import Path
 
 import guidata.dataset as gds
 import pytest
+from guidata import configtools
 from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
@@ -21,6 +22,7 @@ from datalab.config.options import DataLabOptions
 from datalab.config.persistence import (
     CONF_VERSION,
     DataLabUserConfig,
+    IniOptionStore,
     atomic_save_configuration,
     get_ini_location,
     get_uncategorized_fields,
@@ -43,6 +45,14 @@ def _make_conf() -> AppUserConfig:
     """Return an isolated in-memory UserConfig backend for tests."""
     conf = AppUserConfig({})
     conf.set_application("DataLab_pytest", "1.0.0", load=False)
+    return conf
+
+
+def _make_file_conf(tmp_path, monkeypatch) -> DataLabUserConfig:
+    """Return a DataLab INI backend whose file is written in ``tmp_path``."""
+    conf = DataLabUserConfig({})
+    monkeypatch.setattr(conf, "get_path", lambda basename: str(tmp_path / basename))
+    conf.set_application("DataLab_pytest", CONF_VERSION, load=False)
     return conf
 
 
@@ -142,6 +152,33 @@ def test_uncategorized_option_has_no_persisted_location() -> None:
     assert not remove_persisted_option(options, "app_name", conf)
 
 
+def test_watermark_path_is_not_persisted(tmp_path, monkeypatch) -> None:
+    """The watermark of the running installation is always used.
+
+    DataLab 1.3 persisted the absolute path of its own watermark image: other
+    installations sharing the user configuration displayed this image, and none
+    once this installation was removed.
+    """
+    conf = _make_file_conf(tmp_path, monkeypatch)
+    stale_path = str(tmp_path / "removed_install" / "DataLab-watermark.png")
+    conf.set("view", "watermark_image_path", stale_path)
+    options = DataLabOptions()
+    assert get_ini_location(options, "watermark_image_path") is None
+
+    load_options_from_ini(options, conf)
+
+    expected = configtools.get_image_file_path("DataLab-watermark.png")
+    assert options.watermark_image_path.get() == expected
+    assert not conf.has_option("view", "watermark_image_path")
+    ini_text = Path(conf.filename()).read_text(encoding="utf-8")
+    assert "watermark_image_path" not in ini_text
+
+    options.attach_store(IniOptionStore(options, conf))
+    options.watermark_image_path.set(stale_path)
+    save_options_to_ini(options, conf)
+    assert not conf.has_option("view", "watermark_image_path")
+
+
 def test_round_trip_across_types() -> None:
     """Values of various types round-trip through the INI backend."""
     conf = _make_conf()
@@ -155,6 +192,7 @@ def test_round_trip_across_types() -> None:
     src.window_size.set((1234, 567))
     src.plugins_path_list.set(["/tmp/plugins_a", "/tmp/plugins_b"])
     src.plugins_enabled_list.set(["Test Plugin 1"])
+    src.instrument_new_group.set({"org.example/tool": False})
     src.macro_console_max_lines.set(4242)
     src.ai_temperature.set(0.9)
 
@@ -173,6 +211,7 @@ def test_round_trip_across_types() -> None:
     assert dst.window_size.get() == (1234, 567)
     assert dst.plugins_path_list.get() == ["/tmp/plugins_a", "/tmp/plugins_b"]
     assert dst.plugins_enabled_list.get() == ["Test Plugin 1"]
+    assert dst.instrument_new_group.get() == {"org.example/tool": False}
     assert dst.macro_console_max_lines.get() == 4242
     assert abs(dst.ai_temperature.get() - 0.9) < 1e-9
     assert dst.traceback_log_path.to_storage() == ".DataLab_custom.log"

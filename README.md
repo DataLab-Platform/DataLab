@@ -59,7 +59,7 @@ feature (this requires to install DataLab as a Python package)
 
 ## Installation
 
-DataLab requires **Python 3.9+**.
+DataLab requires **Python 3.10+**.
 
 From [PyPI](https://pypi.org/project/datalab-platform/):
 

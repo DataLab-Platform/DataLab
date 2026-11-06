@@ -11,6 +11,7 @@ from . import core
 from .appinfo import (
     APP_DESC,
     APP_NAME,
+    DATALAB_PLUGINS_CATALOG_ENV_VAR,
     DATALAB_PLUGINS_ENV_PATHS,
     DATALAB_PLUGINS_ENV_VAR,
     DATAPATH,
@@ -24,6 +25,7 @@ from .appinfo import (
     _,
     get_config_filename,
     get_config_path,
+    get_env_plugin_catalog_paths,
     normalize_plugin_paths,
 )
 from .core import (
@@ -31,10 +33,12 @@ from .core import (
     Conf,
     DataLabShapeParam,
     ensure_initialized,
+    get_plugin_catalog_paths,
     get_user_plugin_paths,
     initialize,
     reset,
     reset_to_defaults,
+    set_plugin_catalog_paths,
     set_user_plugin_paths,
 )
 from .persistence import save_runtime_option
@@ -42,6 +46,7 @@ from .persistence import save_runtime_option
 __all__ = [
     "APP_DESC",
     "APP_NAME",
+    "DATALAB_PLUGINS_CATALOG_ENV_VAR",
     "DATALAB_PLUGINS_ENV_PATHS",
     "DATALAB_PLUGINS_ENV_VAR",
     "DATAPATH",
@@ -60,11 +65,14 @@ __all__ = [
     "ensure_initialized",
     "get_config_filename",
     "get_config_path",
+    "get_env_plugin_catalog_paths",
+    "get_plugin_catalog_paths",
     "get_user_plugin_paths",
     "initialize",
     "normalize_plugin_paths",
     "reset",
     "reset_to_defaults",
     "save_runtime_option",
+    "set_plugin_catalog_paths",
     "set_user_plugin_paths",
 ]

@@ -37,14 +37,18 @@ from plotpy.constants import PlotType
 from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedXYImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
-from qwt import QwtScaleDraw
+from qwt import QwtDateTimeScaleDraw, QwtScaleDraw
 from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-from datalab.adapters_plotpy import TypePlotItem, create_adapter_from_object
+from datalab.adapters_plotpy import (
+    CURVESTYLES,
+    CurveStyles,
+    TypePlotItem,
+    create_adapter_from_object,
+)
 from datalab.adapters_plotpy.objects.scalar import MergedResultPlotPyAdapter
 from datalab.config import Conf, _
-from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:
@@ -84,6 +88,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
 
         # Plot items: key = object uuid, value = plot item
         self.__plotitems: dict[str, TypePlotItem] = {}
+        self.__plotitem_oids: dict[int, str] = {}
 
         self.__shapeitems = []
         self.__cached_hashes: WeakKeyDictionary[TypeObj, list[int]] = (
@@ -128,14 +133,21 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         Returns:
             Object associated to plot item
         """
-        for obj in self.panel.objmodel:
-            if self.get(get_uuid(obj)) is item:
-                return obj
-        return None
+        oid = self.__plotitem_oids.get(id(item))
+        if oid is None:
+            return None
+        try:
+            return self.panel.objmodel[oid]
+        except KeyError:
+            return None
 
     def __setitem__(self, oid: str, item: TypePlotItem) -> None:
         """Set item associated to object uuid"""
+        previous_item = self.__plotitems.get(oid)
+        if previous_item is not None:
+            self.__plotitem_oids.pop(id(previous_item), None)
         self.__plotitems[oid] = item
+        self.__plotitem_oids[id(item)] = oid
 
     def __iter__(self) -> Iterator[TypePlotItem]:
         """Return an iterator over plothandler values (plot items)"""
@@ -154,11 +166,13 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             # only for the first object in group, and this exception would be raised
             # for the second one (which does not have a plot item yet).
             return
+        self.__plotitem_oids.pop(id(item), None)
         self.plot.del_item(item)
 
     def clear(self) -> None:
         """Clear plot items"""
         self.__plotitems = {}
+        self.__plotitem_oids = {}
         self.__merged_result_adapters = {}
         self.cleanup_dataview()
         self.remove_all_shape_items()
@@ -236,7 +250,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
 
     def remove_all_shape_items(self) -> None:
         """Remove all geometric shapes associated to result items"""
-        if set(self.__shapeitems).issubset(set(self.plot.items)):
+        if self.__shapeitems and set(self.__shapeitems).issubset(set(self.plot.items)):
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
         # Clear cached labels in merged result adapters since they were removed
@@ -288,13 +302,18 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         """
         obj = self.panel.objmodel[oid]
         self.__cached_hashes[obj] = calc_data_hash(obj)
-        item: TypePlotItem = create_adapter_from_object(obj).make_item()
+        # Automatic curve styles are given by `update_automatic_styles`, according
+        # to the position of the curves on the plot: the style cycle is not used
+        with CURVESTYLES.suspend():
+            item: TypePlotItem = create_adapter_from_object(obj).make_item()
+        item.param.label = self.panel.mainwindow.render_object_title(obj.title)
+        item.param.update_item(item)
         item.set_readonly(True)
         self[oid] = item
         self.plot.add_item(item)
         return item
 
-    def __update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
+    def update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
         """Update plot item.
 
         Args:
@@ -310,6 +329,27 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             self.__cached_hashes[obj] = new_hash
             adapter = create_adapter_from_object(obj)
             adapter.update_item(self[oid], data_changed=data_changed)
+            item = self[oid]
+            item.param.label = self.panel.mainwindow.render_object_title(obj.title)
+            item.param.update_item(item)
+
+    def update_existing_items(self) -> None:
+        """Update all existing plot items from their objects and current settings
+
+        Unlike :py:meth:`refresh_plot`, the visibility of the plot items and the
+        shape items are left unchanged. This applies a change of display settings
+        (e.g. signal auto downsampling or line width) to the plot items of all
+        objects, and not only to those of the selected objects.
+        """
+        auto_replot = self.plot.autoReplot()
+        self.plot.setAutoReplot(False)
+        try:
+            with block_signals(self.plot):
+                for oid in self.get_existing_oids():
+                    self.update_item_on_plot(oid)
+        finally:
+            self.plot.setAutoReplot(auto_replot)
+            self.plot.replot()
 
     def set_auto_refresh(self, auto_refresh: bool) -> None:
         """Set auto refresh mode.
@@ -389,18 +429,52 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         """
         if not self.__auto_refresh and not force:
             return
+        auto_replot = self.plot.autoReplot()
+        self.plot.setAutoReplot(False)
+        try:
+            self.__refresh_plot(
+                what,
+                update_items=update_items,
+                only_visible=only_visible,
+                only_existing=only_existing,
+            )
+            self.update_automatic_styles()
+        finally:
+            self.plot.setAutoReplot(auto_replot)
+            self.plot.replot()
+
+    def update_automatic_styles(self) -> None:
+        """Update the automatic styles of the visible plot items
+
+        This base implementation does nothing.
+        """
+
+    def __refresh_plot(
+        self,
+        what: str,
+        update_items: bool,
+        only_visible: bool,
+        only_existing: bool,
+    ) -> None:
+        """Refresh plot items while automatic replots are suspended.
+
+        Raises:
+            ValueError: if `what` is not a valid value
+        """
         if what == "selected":
             # Refresh selected objects
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
-            if len(oids) <= 1:
-                # Cleanup data view when there is 0 or 1 selected object.
-                # This removes stray plot items (like XRangeSelection, DataInfoLabel)
-                # that were created by PlotPy tools but are not managed by DataLab.
-                self.cleanup_dataview()
-            self.remove_all_shape_items()
-            for item in self:
-                if item is not None:
-                    item.hide()
+            with block_signals(self.plot):
+                if len(oids) <= 1:
+                    # Cleanup data view when there is 0 or 1 selected object.
+                    # This removes stray plot items (like XRangeSelection,
+                    # DataInfoLabel) that were created by PlotPy tools but are not
+                    # managed by DataLab.
+                    self.cleanup_dataview()
+                self.remove_all_shape_items()
+                for item in self:
+                    if item is not None:
+                        item.hide()
         elif what == "existing":
             # Refresh existing objects
             oids = self.get_existing_oids()
@@ -434,50 +508,64 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             if what != "existing" and only_visible:
                 # Remove hidden items from the list of objects to refresh
                 oids = self.reduce_shown_oids(oids)
-            with create_progress_bar(
-                self.panel, _("Creating plot items"), max_=len(oids)
-            ) as progress:
-                # Iterate over objects
-                for i_obj, oid in enumerate(oids):
-                    progress.setValue(i_obj + 1)
-                    if progress.wasCanceled():
-                        break
-                    obj = self.panel.objmodel[oid]
+            active_item = None
+            plot_signals_blocked = self.plot.blockSignals(True)
+            try:
+                with create_progress_bar(
+                    self.panel, _("Creating plot items"), max_=len(oids)
+                ) as progress:
+                    # Iterate over objects
+                    for i_obj, oid in enumerate(oids):
+                        progress_step = i_obj + 1
+                        if progress_step % 10 == 0 or progress_step == len(oids):
+                            progress.setValue(progress_step)
+                            if progress.wasCanceled():
+                                break
+                        obj = self.panel.objmodel[oid]
 
-                    # Collecting titles information
-                    for key in title_keys:
-                        title = getattr(obj, key, "")
-                        value = titles_dict.get(key)
-                        if value is None:
-                            titles_dict[key] = title
-                        elif value != title:
-                            titles_dict[key] = ""
+                        # Collecting titles information
+                        for key in title_keys:
+                            title = getattr(obj, key, "")
+                            if key == "title":
+                                title = self.panel.mainwindow.render_object_title(title)
+                            value = titles_dict.get(key)
+                            if value is None:
+                                titles_dict[key] = title
+                            elif value != title:
+                                titles_dict[key] = ""
 
-                    # Collecting scales information
-                    autoscale = autoscale or obj.autoscale
-                    for key in scale_keys:
-                        scale = getattr(obj, key, None)
-                        if scale is not None:
-                            cmp = min if "min" in key else max
-                            scales_dict[key] = cmp(scales_dict.get(key, scale), scale)
+                        # Collecting scales information
+                        autoscale = autoscale or obj.autoscale
+                        for key in scale_keys:
+                            scale = getattr(obj, key, None)
+                            if scale is not None:
+                                cmp = min if "min" in key else max
+                                scales_dict[key] = cmp(
+                                    scales_dict.get(key, scale), scale
+                                )
 
-                    # Update or add item to plot
-                    item = self.get(oid)
-                    if item is None:
-                        if only_existing:
-                            continue
-                        item = self.__add_item_to_plot(oid)
-                    else:
-                        self.__update_item_on_plot(oid, just_show=not update_items)
-                    if what != "existing" or item.isVisible():
-                        self.plot.set_item_visible(item, True, replot=False)
-                        self.plot.set_active_item(item)
-                        item.unselect()
+                        # Update or add item to plot
+                        item = self.get(oid)
+                        if item is None:
+                            if only_existing:
+                                continue
+                            item = self.__add_item_to_plot(oid)
+                        else:
+                            self.update_item_on_plot(oid, just_show=not update_items)
+                        if what != "existing" or item.isVisible():
+                            self.plot.set_item_visible(item, True, replot=False)
+                            active_item = item
 
-                    # Add geometric shapes
-                    self.add_shapes(oid, do_autoscale=autoscale)
+                        # Add geometric shapes
+                        self.add_shapes(oid, do_autoscale=autoscale)
+                        self.plot.blockSignals(True)
+            finally:
+                self.plot.blockSignals(plot_signals_blocked)
 
-            self.plot.replot()
+            self.plot.SIG_ITEMS_CHANGED.emit(self.plot)
+            if active_item is not None:
+                self.plot.set_active_item(active_item)
+                active_item.unselect()
 
         else:
             # No object to refresh: clean up titles
@@ -491,16 +579,14 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.plot.set_titles(**titles_dict)
 
         # Set scales
-        replot = False
         for axis_name, axis in (("bottom", "x"), ("left", "y")):
             axis_id = self.plot.get_axis_id(axis_name)
             scalelog = scales_dict.get(f"{axis}scalelog")
             if scalelog is not None:
                 new_scale = "log" if scalelog else "lin"
                 self.plot.set_axis_scale(axis_id, new_scale, autoscale=False)
-                replot = True
         if autoscale:
-            self.plot.do_autoscale()
+            self.plot.do_autoscale(replot=False)
         else:
             for axis_name, axis in (("bottom", "x"), ("left", "y")):
                 axis_id = self.plot.get_axis_id(axis_name)
@@ -512,21 +598,19 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                     new_vmin = new_vmin if new_vmin is not None else vmin
                     new_vmax = new_vmax if new_vmax is not None else vmax
                     self.plot.set_axis_limits(axis_id, new_vmin, new_vmax)
-                    replot = True
-            if replot:
-                self.plot.replot()
 
     def cleanup_dataview(self) -> None:
         """Clean up data view"""
         # Find items to remove (items that are not in the handler and not special items)
-        # Skip shape items since they're managed separately and checking membership
-        # for many items is expensive
+        # Skip shape items since they're managed separately; membership is checked
+        # in sets, since a plot may hold an item for each of many objects
         shape_items_set = set(self.__shapeitems)
+        handled_items = set(self)
         items_to_remove = [
             item
             for item in self.plot.items[:]
             if item not in shape_items_set
-            and item not in self
+            and item not in handled_items
             and not isinstance(item, (LegendBoxItem, GridItem))
         ]
         # Delete items one by one with error handling for items already removed
@@ -568,6 +652,30 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
         options = super().get_plot_options()
         options.curve_antialiasing = self.plot.antialiased
         return options
+
+    def update_automatic_styles(self) -> None:
+        """Give the visible curves the automatic style of their position
+
+        Visible curves are numbered in the order of their signals in the panel.
+        Each curve whose color and line style were not chosen by the user is given
+        the automatic style of its position (see :py:meth:`CurveStyles.style_at`),
+        so that the first curves shown are always given the first styles.
+        """
+        index = 0
+        for oid in self.panel.objmodel.get_object_ids():
+            item = self.get(oid)
+            if item is None or not item.isVisible():
+                continue
+            style = CurveStyles.style_at(index)
+            index += 1
+            if (
+                CURVESTYLES.has_automatic_style(item)
+                and CURVESTYLES.get_automatic_style(item) != style
+            ):
+                CURVESTYLES.set_automatic_style(item, *style)
+                item.param.update_item(item)
+                if item.selected:
+                    item.select()
 
     def refresh_plot(
         self,
@@ -617,8 +725,12 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
         if has_datetime and datetime_format is not None:
             self.plot.set_axis_datetime("bottom", format=datetime_format)
         else:
-            # Restore default scale draw (remove datetime formatting)
-            self.plot.setAxisScaleDraw(self.plot.get_axis_id("bottom"), QwtScaleDraw())
+            # Restore default scale draw only when leaving the datetime mode:
+            # replacing it on every refresh could misalign the axis ticks with
+            # the grid and the curves (see Issue #457)
+            axis_id = self.plot.get_axis_id("bottom")
+            if isinstance(self.plot.axisScaleDraw(axis_id), QwtDateTimeScaleDraw):
+                self.plot.setAxisScaleDraw(axis_id, QwtScaleDraw())
 
 
 class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):

@@ -74,6 +74,14 @@ When the assistant proposes a macro, the generated code is **transient**: it is
 executed without cluttering the Macro panel. A **Save to Macros** link is offered
 after the run if you want to keep it.
 
+When you ask the assistant to *write* a macro rather than to run it, the code is
+only proposed: the confirmation dialog states that the macro will not be
+executed, and the same **Save to Macros** link is offered. Such a link is also
+offered under each Python code block of the assistant's replies (unless macro
+creation is disabled), and all these links are available again when a
+conversation is reopened from **History...**. Once a macro is saved, a **Show in
+Macro panel** link brings that panel to the front.
+
 Tools available to the assistant
 --------------------------------
 
@@ -132,7 +140,7 @@ explicit confirmation.
       - Run any registered processing feature
     * - ``create_and_run_macro``
       - ..
-      - Create and execute a Python macro
+      - Create and execute a Python macro, or only propose it for saving
 
 .. note::
 

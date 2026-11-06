@@ -333,7 +333,7 @@ msgid ""
 "    z_{0} & \\text{otherwise}\n"
 "\\end{cases}`\n"
 "\n"
-msgstr ""
+msgstr "z_{1} =\n\\begin{cases}\n    \\dfrac{z_{0}}{z_{f}}.\\overline{z_{f}} & \\text{si } z_{0} > z_{threshold} \\\\\n    z_{0} & \\text{sinon}\n\\end{cases}`\n\n"
 
 msgid "where :math:`z_{0}` is the raw image, :math:`z_{f}` is the flat field image, :math:`z_{threshold}` is an adjustable threshold and :math:`\\overline{z_{f}}` is the flat field image average value:"
 msgstr "où :math:`z_{0}` est l'image brute, :math:`z_{f}` est l'image d'homogénéité, :math:`z_{threshold}` est un seuil ajustable et :math:`\\overline{z_{f}}` est la valeur moyenne de l'image d'homogénéité :"

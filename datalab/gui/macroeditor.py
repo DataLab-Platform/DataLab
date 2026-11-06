@@ -155,15 +155,17 @@ print("All done!")
             self.title = reader.read_any()
         with reader.group("contents"):
             self.set_code(reader.read_any())
-        # Backward-compat: ``uid`` was added in v1.4; fall back to a fresh
-        # UUID when reading older workspaces.
+        # Backward-compat: ``uid`` was added in v1.4 (DataLab-Web writes none);
+        # fall back to a fresh UUID. The section is closed even when missing.
+        reader.begin("uid")
         try:
-            with reader.group("uid"):
-                stored_uid = reader.read_any()
-            if stored_uid:
-                self.uid = stored_uid
+            stored_uid = reader.read_any()
         except Exception:  # pylint: disable=broad-except
-            pass
+            stored_uid = None
+        finally:
+            reader.end("uid")
+        if stored_uid:
+            self.uid = stored_uid
 
     def to_file(self, filename: str) -> None:
         """Save macro to file

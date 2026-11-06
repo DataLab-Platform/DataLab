@@ -33,6 +33,7 @@ from sigima.objects.signal import (
 )
 
 from datalab.config import _
+from datalab.utils.datasetjson import decode_dataset_json
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
@@ -117,7 +118,7 @@ def extract_creation_parameters(obj: SignalObj | ImageObj) -> gds.DataSet | None
             raise ValueError(
                 "Peak parameterization set on non-peak creation parameters"
             )
-        return gds.json_to_dataset(dataset_json)
+        return decode_dataset_json(dataset_json)
 
     dataset_json = options[LEGACY_CREATION_PARAMETERS_OPTION]
     if not isinstance(dataset_json, str):
@@ -125,7 +126,7 @@ def extract_creation_parameters(obj: SignalObj | ImageObj) -> gds.DataSet | None
     raw_params = _decode_dataset_json(dataset_json)
     if raw_params.get("class_name") in {"GaussParam", "LorentzParam", "VoigtParam"}:
         validate_peak_creation_params(raw_params)
-    return gds.json_to_dataset(dataset_json)
+    return decode_dataset_json(dataset_json)
 
 
 def convert_legacy_creation_parameters(
@@ -150,7 +151,7 @@ def convert_legacy_creation_parameters(
         raise ValueError("Object has no legacy creation parameters")
     raw_params = _decode_dataset_json(dataset_json)
     converted = convert_legacy_peak_creation_params(raw_params)
-    param = gds.json_to_dataset(json.dumps(converted))
+    param = decode_dataset_json(json.dumps(converted))
     insert_creation_parameters(obj, param)
     return param
 

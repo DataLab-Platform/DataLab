@@ -23,14 +23,14 @@ def test_profile_unit():
             for initial_param in (True, False):
                 if initial_param:
                     if mode == "line":
-                        param = sigima.params.LineProfileParam.create(row=100, col=200)
+                        param = sigima.params.LineProfileParam.create(y=100, x=200)
                     elif mode == "segment":
                         param = sigima.params.SegmentProfileParam.create(
-                            row1=10, col1=20, row2=200, col2=300
+                            x1=20, y1=10, x2=300, y2=200
                         )
                     else:
                         param = sigima.params.AverageProfileParam.create(
-                            row1=10, col1=20, row2=200, col2=300
+                            x1=20, y1=10, x2=300, y2=200
                         )
                 else:
                     if mode == "line":

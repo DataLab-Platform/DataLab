@@ -374,44 +374,64 @@ Fitting
 ^^^^^^^
 
 Fit a model to each selected signal.
-This can be done automatically or through an interactive curve fitting dialog.
+This can be done automatically or through an interactive curve fitting dialog,
+which shows the formula of the model below the fit parameters.
+
+The fitted signal stores the model parameters in its metadata
+(``metadata["fit_params"]``), under the names given in the last column of the
+table below:
 
 .. list-table::
     :header-rows: 1
-    :widths: 20, 80
+    :widths: 15, 55, 30
 
     * - Model
       - Equation
+      - Stored parameters
     * - Linear
-      - :math:`y = c_{0} + c_{1} \cdot x`
+      - :math:`y = a \cdot x + b`
+      - ``a``, ``b``
     * - Polynomial
-      - :math:`y = c_{0} + c_{1} \cdot x + c_{2} \cdot x^2 + ... + c_{n} \cdot x^n`
+      - :math:`y = a \cdot x^n + b \cdot x^{n-1} + c \cdot x^{n-2} + \ldots`
+      - ``a``, ``b``, ``c``, ...
     * - Gaussian
       - :math:`y = y_{0} + A \exp\left(-\dfrac{1}{2} \left(\dfrac{x - x_{0}}{\sigma}\right)^2\right)`
+      - :math:`A`: ``amplitude``, :math:`\sigma`: ``sigma``, :math:`x_0`: ``x0``, :math:`y_0`: ``y0``
     * - Lorentzian
       - :math:`y = y_{0} + \dfrac{A}{1+\left(\dfrac{x-x_{0}}{\sigma}\right)^2}`
+      - :math:`A`: ``amplitude``, :math:`\sigma`: ``sigma``, :math:`x_0`: ``x0``, :math:`y_0`: ``y0``
     * - Voigt
       - :math:`y = y_{0} + A \cdot \dfrac{\Re\left(w(z)\right)}{\Re\left(w(j/\sqrt{2})\right)}` with :math:`w(z) = \exp(-z^2) \operatorname{erfc}(-jz)` and :math:`z = \dfrac{x - x_{0} + j \sigma}{\sqrt{2} \sigma}`
+      - :math:`A`: ``amplitude``, :math:`\sigma`: ``sigma``, :math:`x_0`: ``x0``, :math:`y_0`: ``y0``
     * - Multi-Gaussian
       - :math:`y = y_{0} + \sum_{i=1}^{N} A_{i} \exp\left(-\dfrac{1}{2} \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2\right)`
+      - :math:`A_i`: ``amplitude_i``, :math:`\sigma_i`: ``sigma_i``, :math:`x_{0,i}`: ``x0_i``, :math:`y_0`: ``y0``
     * - Multi-Lorentzian
       - :math:`y = y_{0} + \sum_{i=1}^{N} \dfrac{A_{i}}{1 + \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2}`
+      - :math:`A_i`: ``amplitude_i``, :math:`\sigma_i`: ``sigma_i``, :math:`x_{0,i}`: ``x0_i``, :math:`y_0`: ``y0``
     * - Planck
-      - :math:`y = y_{0} + A \cdot \left(\dfrac{x}{x_{0}}\right)^{-5} \cdot \left(\exp\left(\dfrac{5 x_{0}}{\sigma \cdot x}\right)-1\right)^{-1}` where :math:`x_{0}` and :math:`\sigma` are scale and width factors (see the note below)
+      - :math:`y = y_{0} + A \cdot \left(\dfrac{x}{x_{0}}\right)^{-5} \cdot \left(\exp\left(\dfrac{5 x_{0}}{\sigma \cdot x}\right)-1\right)^{-1}` where :math:`x_{0}` and :math:`\sigma` are scale and temperature factors (see the note below)
+      - :math:`A`: ``amp``, :math:`x_0`: ``x0``, :math:`\sigma`: ``sigma``, :math:`y_0`: ``y0``
     * - Two half Gaussians
-      - | :math:`y = y_{L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
-        | :math:`y = y_{R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
+      - | :math:`y = y_{0,L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
+        | :math:`y = y_{0,R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
+      - :math:`A_L`: ``amp_left``, :math:`A_R`: ``amp_right``, :math:`\sigma_L`: ``sigma_left``, :math:`\sigma_R`: ``sigma_right``, :math:`x_0`: ``x0``, :math:`y_{0,L}`: ``y0_left``, :math:`y_{0,R}`: ``y0_right``
     * - Two back-to-back exponentials
-      - | :math:`y = y_{0} + A_{L} \cdot \exp\left(B_{L} \cdot x\right)` if :math:`x < x_{c}`
-        | :math:`y = y_{0} + A_{R} \cdot \exp\left(B_{R} \cdot x\right)` otherwise
+      - | :math:`y = y_{0} + a_{L} \cdot \exp\left(b_{L} \cdot x\right)` if :math:`x < x_{c}`
+        | :math:`y = y_{0} + a_{R} \cdot \exp\left(b_{R} \cdot x\right)` otherwise
+      - :math:`x_c`: ``x_center``, :math:`a_L`: ``a_left``, :math:`b_L`: ``b_left``, :math:`a_R`: ``a_right``, :math:`b_R`: ``b_right``, :math:`y_0`: ``y0``
     * - Exponential
-      - :math:`y = y_{0} + A \exp\left(B \cdot x\right)`
+      - :math:`y = y_{0} + a \exp\left(b \cdot x\right)`
+      - ``a``, ``b``, :math:`y_0`: ``y0``
     * - Sinusoidal
       - :math:`y = y_{0} + A \sin\left(2 \pi f \cdot x + \phi\right)`
+      - :math:`A`: ``amplitude``, :math:`f`: ``frequency``, :math:`\phi`: ``phase`` (in radians), :math:`y_0`: ``offset``
     * - Cumulative Distribution Function (CDF)
-      - :math:`y = y_{0} + A \erf\left(\dfrac{x - x_{0}}{\sqrt{2} \sigma}\right)`
+      - :math:`y = y_{0} + A \erf\left(\dfrac{x - \mu}{\sqrt{2} \sigma}\right)`
+      - :math:`A`: ``amplitude``, :math:`\mu`: ``mu``, :math:`\sigma`: ``sigma``, :math:`y_0`: ``baseline``
     * - Sigmoid
       - :math:`y = y_{0} + \dfrac{A}{1 + \exp\left(-k \left(x - x_{0}\right)\right)}`
+      - :math:`A`: ``amplitude``, ``k``, :math:`x_0`: ``x0``, :math:`y_0`: ``offset``
 
 For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
 above the baseline :math:`y_0`, expressed in the signal's Y unit.
@@ -425,6 +445,18 @@ above the baseline :math:`y_0`, expressed in the signal's Y unit.
     individual fitted values must not be interpreted on their own. In
     particular the emission peak is located at approximately
     :math:`1.007 \, x_{0}/\sigma`, not at :math:`x_{0}`.
+
+    The physical quantities are derived from these combinations. With
+    wavelengths in meters, the model matches Planck's law (spectral radiance
+    per unit wavelength) for:
+
+    * a temperature :math:`T = \dfrac{h c \, \sigma}{5 k_B \, x_{0}} \approx 2.878 \times 10^{-3} \, \dfrac{\sigma}{x_{0}}` K,
+    * an emissivity (or any other scale factor of the measurement)
+      :math:`\varepsilon = \dfrac{A \, x_{0}^5}{2 h c^2}`, when the signal is a
+      spectral radiance in W·sr⁻¹·m⁻³.
+
+    For example, fitting the blackbody signal created at 293 K gives back
+    :math:`T = 293` K and :math:`\varepsilon = 1`.
 
 Multi-peak fit parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~

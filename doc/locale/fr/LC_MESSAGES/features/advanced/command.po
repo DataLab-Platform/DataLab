@@ -40,6 +40,18 @@ msgstr "Ouvrir l'explorateur de fichiers HDF5 au démarrage"
 msgid "To open the HDF5 browser at startup, use one of the following commands::"
 msgstr "Pour ouvrir l'explorateur de fichiers HDF5 au démarrage, utiliser l'une des commandes suivantes::"
 
+msgid "Check an installation"
+msgstr "Vérifier une installation"
+
+msgid "To check that DataLab is correctly installed, without opening its main window, use one of the following commands (``DataLab.exe`` is the executable of the standalone version for Windows, in its installation folder)::"
+msgstr "Pour vérifier que DataLab est correctement installé, sans ouvrir sa fenêtre principale, utiliser l'une des commandes suivantes (``DataLab.exe`` est l'exécutable de la version autonome pour Windows, dans son dossier d'installation)::"
+
+msgid "DataLab checks the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process, writes the results in the JSON report and exits. Without a path, the report is written as ``datalab_smoke_test.json`` in the current folder, which must be writable. The exit code is 0 if every check passed, 1 otherwise: the report gives the cause of each failure."
+msgstr "DataLab vérifie les packages dont il dépend, les ressources fournies avec lui (modèles de macros, documentation PDF, traductions françaises et icônes) et le traitement dans un processus séparé, écrit les résultats dans le rapport JSON, puis s'arrête. Sans chemin, le rapport est écrit sous le nom ``datalab_smoke_test.json`` dans le dossier courant, qui doit être accessible en écriture. Le code de sortie vaut 0 si toutes les vérifications ont réussi, 1 sinon : le rapport donne la cause de chaque échec."
+
+msgid "The standalone version shows no console output: read the report. If it cannot start at all, it exits with code 1 and writes the cause in ``datalab_error.log``, in the current folder."
+msgstr "La version autonome n'affiche rien dans une console : consulter le rapport. Si elle ne peut pas démarrer du tout, elle s'arrête avec le code 1 et écrit la cause dans ``datalab_error.log``, dans le dossier courant."
+
 msgid "Run DataLab demo"
 msgstr "Mode démonstration de DataLab"
 

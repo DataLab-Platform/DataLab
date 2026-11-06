@@ -10,8 +10,11 @@ that the release pipeline does not need any external rasteriser:
     * ``wix/dialog.bmp``                - 493x312 background of the WiX UI dialog
     * ``wix/banner.bmp``                - 493x58 banner used by the WiX UI
     * ``datalab/data/logo/DataLab.svg`` - copy of the master logo (used at runtime)
-    * PNG renderings under ``doc/`` and ``datalab/data/logo/`` (splash,
-      watermark, banners, frontpage, overview, screenshots, ...)
+    * PNG renderings under ``doc/`` and ``datalab/data/logo/`` (frontpage,
+      overview, screenshots, ...)
+    * Images displayed by the application under ``datalab/data/logo/`` (splash,
+      watermark, banners), with their ``@2x`` high-resolution variants used on
+      high-DPI displays (display scaling greater than 100%)
 
 Run this script only when the corresponding SVG sources change.
 
@@ -70,8 +73,6 @@ ICO_TARGETS: tuple[tuple[Path, Path], ...] = (
 PNG_TARGETS: tuple[tuple[Path, Path, int], ...] = (
     (RESOURCES / "DataLab-Title.svg", DOC_STATIC / "DataLab-Title.png", 190),
     (RESOURCES / "DataLab-Frontpage.svg", DOC_STATIC / "DataLab-Frontpage.png", 1300),
-    (RESOURCES / "DataLab-Splash.svg", LOGO / "DataLab-Splash.png", 350),
-    (RESOURCES / "DataLab-watermark.svg", LOGO / "DataLab-watermark.png", 225),
     (RESOURCES / "DataLab-Banner.svg", DOC_IMAGES / "DataLab-banner.png", 364),
     (RESOURCES / "DataLab-Banner.svg", LOGO / "DataLab-Banner-150.png", 150),
     (
@@ -86,6 +87,17 @@ PNG_TARGETS: tuple[tuple[Path, Path, int], ...] = (
         900,
     ),
 )
+
+# Images displayed by the application: (source SVG, destination PNG, width).
+# Each image is also rendered at twice its size as an ``@2x`` variant (Qt naming
+# convention), used by ``guidata.configtools.get_pixmap`` on high-DPI displays.
+LOGO_TARGETS: tuple[tuple[Path, Path, int], ...] = (
+    (RESOURCES / "DataLab-Splash.svg", LOGO / "DataLab-Splash.png", 350),
+    (RESOURCES / "DataLab-watermark.svg", LOGO / "DataLab-watermark.png", 225),
+    (RESOURCES / "DataLab-Banner.svg", LOGO / "DataLab-Banner-200.png", 200),
+    (RESOURCES / "DataLab-Banner2.svg", LOGO / "DataLab-Banner2-100.png", 100),
+)
+LOGO_HIDPI_FACTOR = 2
 
 # Plain SVG copies (source -> destination).
 SVG_COPIES: tuple[tuple[Path, Path], ...] = (
@@ -299,27 +311,42 @@ def _inline_nested_svgs(svg_path: Path) -> str:
     return _NESTED_SVG_HREF_RE.sub(_replace, text)
 
 
-def build_pngs() -> None:
-    """Rasterise every PNG declared in :data:`PNG_TARGETS` via CairoSVG.
+def _svg_to_png(src: Path, dst: Path, width: int, height: int) -> None:
+    """Rasterise ``src`` (SVG) at the requested size and save it as a PNG.
 
     CairoSVG (pure Python, libcairo-based) is used here instead of Qt's
     ``QSvgRenderer`` because Qt5 mis-renders the Inkscape-authored logos
     (content scaled by an unexpected ~4/3 factor, cropping the text).
     """
+    if not src.is_file():
+        raise FileNotFoundError(src)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    svg_source = _inline_nested_svgs(src)
+    cairosvg.svg2png(
+        bytestring=svg_source.encode("utf-8"),
+        url=str(src),  # base URL for any remaining relative refs
+        write_to=str(dst),
+        output_width=width,
+        output_height=height,
+    )
+    print(f"Wrote {dst.relative_to(REPO_ROOT)} ({width}x{height})")
+
+
+def build_pngs() -> None:
+    """Rasterise every PNG declared in :data:`PNG_TARGETS` via CairoSVG."""
     for src, dst, width in PNG_TARGETS:
-        if not src.is_file():
-            raise FileNotFoundError(src)
+        _svg_to_png(src, dst, width, _svg_height_for_width(src, width))
+
+
+def build_logos() -> None:
+    """Rasterise every image declared in :data:`LOGO_TARGETS` via CairoSVG,
+    together with its ``@2x`` high-resolution variant."""
+    for src, dst, width in LOGO_TARGETS:
         height = _svg_height_for_width(src, width)
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        svg_source = _inline_nested_svgs(src)
-        cairosvg.svg2png(
-            bytestring=svg_source.encode("utf-8"),
-            url=str(src),  # base URL for any remaining relative refs
-            write_to=str(dst),
-            output_width=width,
-            output_height=height,
-        )
-        print(f"Wrote {dst.relative_to(REPO_ROOT)} ({width}x{height})")
+        _svg_to_png(src, dst, width, height)
+        factor = LOGO_HIDPI_FACTOR
+        hidpi_dst = dst.with_name(f"{dst.stem}@{factor}x{dst.suffix}")
+        _svg_to_png(src, hidpi_dst, width * factor, height * factor)
 
 
 def copy_svgs() -> None:
@@ -335,12 +362,12 @@ def copy_svgs() -> None:
 def main(argv: list[str] | None = None) -> int:
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
-    valid = {"ico", "wix", "png", "copy", "all"}
+    valid = {"ico", "wix", "png", "logo", "copy", "all"}
     parser.add_argument(
         "targets",
         nargs="*",
         help=(
-            "Subset of resources to regenerate: ico, wix, png, copy, all "
+            "Subset of resources to regenerate: ico, wix, png, logo, copy, all "
             "(default: all)."
         ),
     )
@@ -352,7 +379,7 @@ def main(argv: list[str] | None = None) -> int:
             f"invalid target(s): {sorted(unknown)} (choose from {sorted(valid)})"
         )
     if "all" in targets:
-        targets = {"ico", "wix", "png", "copy"}
+        targets = {"ico", "wix", "png", "logo", "copy"}
 
     # A real QApplication is required so QSvgRenderer can access system fonts
     # (Century Gothic, etc.). Do NOT use the "offscreen" platform plugin: it
@@ -368,6 +395,8 @@ def main(argv: list[str] | None = None) -> int:
         build_wix_bitmaps()
     if "png" in targets:
         build_pngs()
+    if "logo" in targets:
+        build_logos()
     if "copy" in targets:
         copy_svgs()
 

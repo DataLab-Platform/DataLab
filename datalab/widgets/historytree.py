@@ -44,6 +44,8 @@ class HistoryTree(QW.QTreeWidget):
         self.setContextMenuPolicy(QC.Qt.CustomContextMenu)
         self.setSelectionMode(QW.QAbstractItemView.ContiguousSelection)
         self.setUniformRowHeights(False)
+        # Scroll per pixel: a tall (expanded) row is never jumped over at once
+        self.setVerticalScrollMode(QW.QAbstractItemView.ScrollPerPixel)
         header = self.header()
         header.setSectionResizeMode(self.DESCRIPTION_COLUMN, QW.QHeaderView.Stretch)
         # Per-action expanded state, preserved across repopulate (delete/replay).
@@ -116,6 +118,7 @@ class HistoryTree(QW.QTreeWidget):
         widget.toggled.connect(
             lambda checked, uuid=action.uuid: self.on_description_toggled(uuid, checked)
         )
+        widget.size_hint_changed.connect(self.scheduleDelayedItemsLayout)
         # Clear any text the item may carry for that column to avoid double
         # rendering behind the widget.
         item.setText(self.DESCRIPTION_COLUMN, "")
@@ -172,7 +175,11 @@ class HistoryTree(QW.QTreeWidget):
                 compatible = action.is_current_state_compatible(mainwindow)
                 item.setData(0, self.COMPATIBILITY_ROLE, compatible)
                 brush = default_brush if compatible else disabled_brush
-                icon = get_icon("apply.svg") if compatible else get_icon("delete.svg")
+                icon = (
+                    get_icon("sigimax:apply.svg")
+                    if compatible
+                    else get_icon("datalab:delete.svg")
+                )
                 item.setIcon(0, icon)
                 for col in range(self.columnCount()):
                     item.setForeground(col, brush)

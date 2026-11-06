@@ -56,7 +56,7 @@ from datalab.gui.processor.base import (
     extract_processing_parameters,
 )
 from datalab.gui.processor.catcher import CompOut
-from datalab.objectmodel import get_short_id, get_uuid
+from datalab.objectmodel import get_short_uuid, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -200,7 +200,10 @@ def test_recompute():
             assert PROCESSING_PARAMETERS_OPTION in filtered_sig.get_metadata_options()
             option_dict = filtered_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert option_dict["source_uuid"] == signal_uuid
-            assert option_dict["func_name"] == "gaussian_filter"
+            assert (
+                option_dict["func_name"]
+                == processor.get_feature("gaussian_filter").feature_id
+            )
 
 
 def test_recompute_selected_skips_analysis_when_1_to_1_cancelled():
@@ -272,7 +275,12 @@ def test_plugin_analysis_origin_is_stored_and_reused():
             }
 
             stats_func = processor.get_feature("stats").function
-            feature = processor.register_1_to_0(stats_func, "Plugin statistics")
+            feature = processor.register_1_to_0(
+                stats_func,
+                "Plugin statistics",
+                feature_id="test_plugin:stats",
+                owner_plugin_id="test_plugin",
+            )
             feature.plugin_origin = plugin_origin
 
             panel.new_object(edit=False)
@@ -386,10 +394,12 @@ def test_analysis_persistence_failure_is_isolated_per_object() -> None:
             assert extract_analysis_parameters(first) is None
             assert extract_analysis_parameters(second) is not None
             second_adapter = appended[1][0]
-            second_short_id = get_short_id(second)
+            second_short_uuid = get_short_uuid(second)
             assert result.results == [second_adapter]
-            assert result.ylabels == [f"{second_adapter.func_name}({second_short_id})"]
-            assert result.short_ids == [second_short_id]
+            assert result.ylabels == [
+                f"{second_adapter.func_name}({second_short_uuid})"
+            ]
+            assert result.short_ids == [second_short_uuid]
             error_calls = [
                 call for call in show_error.call_args_list if call.args[1] == "error"
             ]
@@ -1081,9 +1091,7 @@ def test_apply_processing_parameters_signal():
             # Change constant from 5.0 to 15.0
             editor.dataset.value = v1 = 15.0
 
-            # In-place update requires History panel edit mode (otherwise a new
-            # object is created instead of mutating the existing one).
-            win.historypanel.toggle_edit_mode(True)
+            assert not win.historypanel.is_edit_mode()
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -1096,12 +1104,17 @@ def test_apply_processing_parameters_signal():
             assert get_uuid(processed_sig) == processed_uuid
 
             # Verify the new constant was applied: data should now be original + 15.0
+            assert len(panel.objmodel) == 2
+            assert panel.objmodel[processed_uuid] is processed_sig
             assert np.allclose(processed_sig.y, original_signal_data + v1)
 
             # Verify metadata still points to the same source
             pp_dict = processed_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert pp_dict["source_uuid"] == signal_uuid
-            assert pp_dict["func_name"] == "addition_constant"
+            assert (
+                pp_dict["func_name"]
+                == processor.get_feature("addition_constant").feature_id
+            )
 
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
@@ -1146,9 +1159,7 @@ def test_apply_processing_parameters_image():
             # Change constant from 7.0 to 20.0
             editor.dataset.value = v1 = 20.0
 
-            # In-place update requires History panel edit mode (otherwise a new
-            # object is created instead of mutating the existing one).
-            win.historypanel.toggle_edit_mode(True)
+            assert not win.historypanel.is_edit_mode()
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -1161,12 +1172,17 @@ def test_apply_processing_parameters_image():
             assert get_uuid(processed_ima) == processed_uuid
 
             # Verify the new constant was applied: data should now be original + 20.0
+            assert len(panel.objmodel) == 2
+            assert panel.objmodel[processed_uuid] is processed_ima
             assert np.allclose(processed_ima.data, original_image_data + v1)
 
             # Verify metadata still points to the same source
             pp_dict = processed_ima.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert pp_dict["source_uuid"] == image_uuid
-            assert pp_dict["func_name"] == "addition_constant"
+            assert (
+                pp_dict["func_name"]
+                == processor.get_feature("addition_constant").feature_id
+            )
 
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
@@ -1259,6 +1275,9 @@ def test_apply_processing_parameters_explicit_param():
                     processed_sig, interactive=False
                 )
                 assert report.success, f"Reprocessing failed: {report.message}"
+                assert report.obj_uuid == processed_uuid
+                assert len(panel.objmodel) == 2
+                assert panel.objmodel[processed_uuid] is processed_sig
             finally:
                 processor.recompute_1_to_1 = original_recompute_1_to_1
 
@@ -1410,7 +1429,7 @@ def test_cross_panel_image_to_signal():
             image_uuid = get_uuid(image)
 
             # Apply radial_profile (Image → Signal cross-panel computation)
-            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            profile_param = RadialProfileParam.create(xc=50, yc=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
             # Verify the result is now in the signal panel
@@ -1423,13 +1442,16 @@ def test_cross_panel_image_to_signal():
 
             # Verify metadata content
             assert option_dict["source_uuid"] == image_uuid
-            assert option_dict["func_name"] == "radial_profile"
+            assert (
+                option_dict["func_name"]
+                == image_processor.get_feature("radial_profile").feature_id
+            )
             assert option_dict["pattern"] == "1-to-1"
 
             # Verify the parameter can be deserialized
             stored_param = json_to_dataset(option_dict["param_json"])
-            assert stored_param.x0 == 50
-            assert stored_param.y0 == 50
+            assert stored_param.xc == 50
+            assert stored_param.yc == 50
 
             # Test that the Processing tab is set up correctly
             # (even though source is in a different panel)
@@ -1439,8 +1461,8 @@ def test_cross_panel_image_to_signal():
             # Test modifying processing parameters
             editor = signal_panel.objprop.processing_param_editor
             # Change the center position
-            editor.dataset.x0 = 40
-            editor.dataset.y0 = 40
+            editor.dataset.xc = 40
+            editor.dataset.yc = 40
 
             # In-place update + in-place recompute require History panel edit
             # mode (otherwise new objects are created instead of mutating).
@@ -1455,8 +1477,8 @@ def test_cross_panel_image_to_signal():
             # Verify the parameter was updated in metadata
             updated_dict = signal.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             updated_param = json_to_dataset(updated_dict["param_json"])
-            assert updated_param.x0 == 40
-            assert updated_param.y0 == 40
+            assert updated_param.xc == 40
+            assert updated_param.yc == 40
 
             # Test recompute feature with modified source image
             image.data *= 2.0  # Double the image intensity
@@ -1503,7 +1525,7 @@ def test_cross_panel_image_to_signal_group():
             signal_groups_before = len(signal_panel.objmodel.get_groups())
 
             # Apply radial_profile to the entire group (Image → Signal cross-panel)
-            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            profile_param = RadialProfileParam.create(xc=50, yc=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
             # Verify a NEW group was created in the signal panel
@@ -1569,7 +1591,10 @@ def test_cross_panel_signal_to_image():
             option_dict = image.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
 
             # Verify metadata content for n-to-1 pattern
-            assert option_dict["func_name"] == "signals_to_image"
+            assert (
+                option_dict["func_name"]
+                == signal_processor.get_feature("signals_to_image").feature_id
+            )
             assert option_dict["pattern"] == "n-to-1"
             assert len(option_dict["source_uuids"]) == n_signals
             assert all(uuid in signal_uuids for uuid in option_dict["source_uuids"])
@@ -1579,10 +1604,14 @@ def test_cross_panel_signal_to_image():
             assert stored_param.orientation == "columns"
             assert stored_param.normalize is True
 
-            # Test that the Processing tab is NOT set up for n-to-1 pattern
-            # (interactive processing only works for 1-to-1 pattern)
+            # The Processing tab restores the n-to-1 conversion too, with its
+            # parameters, so that it can be applied again to every source.
             image_panel.objview.set_current_object(image)
-            assert image_panel.objprop.processing_param_editor is None
+            editor = image_panel.objprop.processing_param_editor
+            assert editor is not None
+            assert editor.dataset.orientation == "columns"
+            call = image_panel.objprop.current_processing_call
+            assert [item.object_uuid for item in call.inputs] == signal_uuids
 
 
 def test_select_source_objects_same_panel():
@@ -1637,7 +1666,7 @@ def test_select_source_objects_cross_panel():
             image_uuid = get_uuid(image)
 
             # Apply radial_profile (Image → Signal)
-            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            profile_param = RadialProfileParam.create(xc=50, yc=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
             # Verify we're now in the signal panel
@@ -1738,6 +1767,50 @@ def test_select_source_objects_deleted_source():
             selected_uuids = panel.objview.get_sel_object_uuids()
             # The filtered signal should still be selected
             assert get_uuid(filtered_signal) in selected_uuids
+
+
+def _difference_without_metadata(win):
+    """Return ``(source, operand, result)`` of a difference recorded only in the
+    provenance ledger, as in a workspace saved by DataLab-Web."""
+    panel = win.signalpanel
+    x = np.linspace(0.0, 1.0, 11)
+    source = create_signal("source", x, x**2)
+    operand = create_signal("operand", x, x)
+    panel.add_object(source)
+    panel.add_object(operand)
+    panel.objview.set_current_item_id(get_uuid(source))
+    panel.processor.run_feature("difference", operand)
+    result = panel.objview.get_current_object()
+    result.metadata.pop("__processing_parameters", None)
+    return source, operand, result
+
+
+def test_select_source_objects_from_the_ledger():
+    """Sources are found in the provenance ledger, operand included."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            source, operand, result = _difference_without_metadata(win)
+            panel.objview.clearSelection()
+            panel.objview.set_current_item_id(get_uuid(result), extend=False)
+            panel.select_source_objects()
+            assert set(panel.objview.get_sel_object_uuids()) == {
+                get_uuid(source),
+                get_uuid(operand),
+            }
+
+
+def test_recompute_selected_two_to_one_from_the_ledger():
+    """A two-signal result recorded only in the ledger is recomputed in place."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            source, operand, result = _difference_without_metadata(win)
+            operand.set_xydata(operand.x, operand.y * 2.0)
+            panel.objview.set_current_item_id(get_uuid(result), extend=False)
+            panel.recompute_selected()
+            assert np.allclose(result.y, source.y - operand.y)
+            assert panel.objmodel[get_uuid(result)] is result
 
 
 def test_roi_mask_invalidation_on_size_change():

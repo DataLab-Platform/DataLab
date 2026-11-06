@@ -14,16 +14,22 @@ import importlib
 import importlib.util
 import os
 import os.path as osp
+import shutil
 from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
+import pytest
 from qtpy import QtWidgets as QW
+from sigima.objects import create_image
+from sigima.tests.data import create_paracetamol_signal
 
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.main import DLMainWindow
+from datalab.gui.processor.base import extract_processing_parameters
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import (
@@ -108,9 +114,13 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             # Trigger reload
             processor = win.imagepanel.processor
             assert processor.worker is not None
-            with patch.object(processor.worker, "restart_pool") as restart_pool:
+            with (
+                patch.object(processor.worker, "restart_pool") as restart_pool,
+                patch.object(win.preview_executor_cache, "reset") as reset_cache,
+            ):
                 win.reload_plugins()
             restart_pool.assert_called_once_with()
+            reset_cache.assert_called_once_with()
             QW.QApplication.processEvents()
 
             # Verify both plugins are present
@@ -339,6 +349,14 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             execenv.print(f"Plugins after broken tests: {plugin_names}")
             assert "Test Plugin 2" in plugin_names
             assert "Broken Plugin" not in plugin_names
+            failed_plugin = next(
+                failed
+                for failed in PluginRegistry.get_failed_plugins()
+                if failed.name == "BrokenPlugin"
+            )
+            assert failed_plugin.source == (
+                "module convention 'datalab_test_plugin_init_error'"
+            )
 
             # Verify that the healthy plugin is still functional
             # Reset flag
@@ -382,6 +400,10 @@ def test_plugin_config_disabled():
                         "disabled" in args[0][2].lower()
                         or "désactivés" in args[0][2].lower()
                     )
+
+                with patch.object(win.preview_executor_cache, "reset") as reset_cache:
+                    win.set_plugins_enabled(False)
+                reset_cache.assert_called_once_with()
 
 
 @enabled_plugins_context()
@@ -478,7 +500,7 @@ def test_plugin_error_handling():
 
 
 def test_plugin_duplicate_name():
-    """Test that duplicate plugin names are detected and handled"""
+    """Test that duplicate display names remain distinct by plugin ID."""
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
@@ -502,7 +524,7 @@ def test_plugin_duplicate_name():
             "action_dup_2",
         )
 
-        # Start application - should handle duplicate gracefully
+        # Start application - both plugins have distinct legacy fallback IDs
         with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
@@ -517,10 +539,219 @@ def test_plugin_duplicate_name():
                 duplicate_count = plugin_names.count("Duplicate Name Plugin")
                 execenv.print(f"Duplicate name count: {duplicate_count}")
 
-                # Should be 1 or 0 (second should fail to register)
-                assert duplicate_count <= 1, (
-                    f"Duplicate plugin name should be rejected, found {duplicate_count}"
+                assert duplicate_count == 2
+                assert PluginRegistry.get_plugin("Duplicate Name Plugin") is None
+                assert (
+                    PluginRegistry.get_plugin("datalab_test_plugin_dup1.TestPluginDup1")
+                    is not None
                 )
+                assert (
+                    PluginRegistry.get_plugin("datalab_test_plugin_dup2.TestPluginDup2")
+                    is not None
+                )
+
+
+@enabled_plugins_context()
+def test_plugin_owned_feature_lifecycle():
+    """Owned processing survives reload once and disappears on plugin removal."""
+    plugin_id = "org.example.owned-processing"
+    feature_id = f"{plugin_id}:derivative"
+    plugin_filename = "datalab_test_plugin_owned_processing.py"
+
+    with temporary_plugin_dir() as plugin_dir:
+        create_plugin_from_template(
+            plugin_dir,
+            plugin_filename,
+            "plugin_owned_processing.py.template",
+            {
+                "{class_name}": "OwnedProcessingPlugin",
+                "{plugin_id}": plugin_id,
+                "{plugin_name}": "Owned Processing Plugin",
+                "{feature_id}": feature_id,
+            },
+        )
+
+        with datalab_test_app_context(console=False) as win:
+            processor = win.signalpanel.processor
+            assert list(processor.computing_registry).count(feature_id) == 1
+            assert processor.get_feature(feature_id).owner_plugin_id == plugin_id
+
+            win.signalpanel.add_object(create_paracetamol_signal(50))
+            object_count = len(win.signalpanel)
+            processor.run_feature(feature_id)
+            assert len(win.signalpanel) == object_count + 1
+            proc_params = extract_processing_parameters(
+                win.signalpanel[len(win.signalpanel)]
+            )
+            assert proc_params is not None
+            assert proc_params.func_name == feature_id
+            assert proc_params.plugin_origin["plugin_class"] == "OwnedProcessingPlugin"
+
+            win.reload_plugins()
+            QW.QApplication.processEvents()
+
+            assert list(processor.computing_registry).count(feature_id) == 1
+            assert processor.get_feature(feature_id).owner_plugin_id == plugin_id
+            object_count = len(win.signalpanel)
+            processor.run_feature(feature_id)
+            assert len(win.signalpanel) == object_count + 1
+            processed_signal = win.signalpanel[len(win.signalpanel)]
+
+            os.remove(osp.join(plugin_dir, plugin_filename))
+            win.reload_plugins()
+            QW.QApplication.processEvents()
+
+            assert feature_id not in processor.computing_registry
+            with pytest.raises(ValueError, match=feature_id):
+                processor.get_feature(feature_id)
+            report = processor.recompute_processing(processed_signal, interactive=False)
+            assert not report.success
+            assert feature_id in report.message
+
+
+@enabled_plugins_context()
+def test_plugin_computation_registration_rollback():
+    """A failing computation hook leaves no partially registered feature."""
+    plugin_id = "org.example.failing-processing"
+    feature_id = f"{plugin_id}:derivative"
+    plugin_filename = "datalab_test_plugin_failing_processing.py"
+
+    with temporary_plugin_dir() as plugin_dir:
+        with open(
+            osp.join(plugin_dir, plugin_filename), "w", encoding="utf-8"
+        ) as plugin_file:
+            plugin_file.write(
+                "import sigima.proc.signal as sips\n"
+                "from datalab.plugins import PluginBase, PluginInfo\n\n"
+                "class FailingProcessingPlugin(PluginBase):\n"
+                "    PLUGIN_INFO = PluginInfo(\n"
+                f'        id="{plugin_id}",\n'
+                '        name="Failing Processing Plugin",\n'
+                "    )\n\n"
+                "    def register_computations(self):\n"
+                "        self.signalpanel.processor.register_1_to_1(\n"
+                "            sips.derivative,\n"
+                '            "Partial derivative",\n'
+                f'            feature_id="{feature_id}",\n'
+                "            owner_plugin_id=self.plugin_id,\n"
+                "        )\n"
+                '        raise RuntimeError("Planned computation failure")\n\n'
+                "    def create_actions(self):\n"
+                "        pass\n"
+            )
+
+        with patch("sigimax.utils.qthelpers.is_running_tests", return_value=False):
+            with datalab_test_app_context(console=False) as win:
+                assert PluginRegistry.get_plugin(plugin_id) is not None
+                assert feature_id not in win.signalpanel.processor.computing_registry
+
+
+APPLICATION_PLUGIN_SOURCE = """\
+from datalab.plugins import PluginBase, PluginCapability, PluginInfo
+from datalab.plugins.recipes import (
+    RecipeDescriptor,
+    RecipeInputSlot,
+    RecipeMetadataRequirement,
+    RecipeOutcome,
+)
+
+
+class {class_name}(PluginBase):
+    PLUGIN_INFO = PluginInfo(
+        id="{plugin_id}",
+        name="{class_name}",
+        version="1.1.0",
+        capabilities=frozenset({{PluginCapability.APPLICATION}}),
+    )
+    RECIPES = (
+        RecipeDescriptor(
+            recipe_id="{plugin_id}:check",
+            plugin_version="{recipe_plugin_version}",
+            title="Check",
+            version="1.0",
+            run=lambda *_args: RecipeOutcome(),
+            inputs=(
+                RecipeInputSlot(
+                    "frames",
+                    "image",
+                    "many",
+                    metadata=(RecipeMetadataRequirement("{metadata_key}", "Key"),),
+                ),
+            ),
+        ),
+    )
+
+    def create_actions(self):
+        pass
+"""
+
+
+@enabled_plugins_context()
+def test_invalid_application_plugin_does_not_prevent_startup():
+    """An application plugin with invalid declarations is not loaded (Issue #484).
+
+    It is reported as a failed plugin, while DataLab starts and reloads its
+    plugins normally: the Applications panel and the metadata keys expected by
+    application methods only come from the valid plugins.
+    """
+    valid_id = "org.example.valid-application"
+    invalid_id = "org.example.invalid-application"
+    with temporary_plugin_dir() as plugin_dir:
+        for filename, class_name, plugin_id, recipe_plugin_version, key in (
+            (
+                "datalab_test_plugin_valid_application.py",
+                "ValidApplicationPlugin",
+                valid_id,
+                "1.1.0",
+                "valid_key",
+            ),
+            (
+                "datalab_test_plugin_invalid_application.py",
+                "InvalidApplicationPlugin",
+                invalid_id,
+                # Plugin version bumped, recipe forgotten
+                "1.0.0",
+                "invalid_key",
+            ),
+        ):
+            with open(
+                osp.join(plugin_dir, filename), "w", encoding="utf-8"
+            ) as plugin_file:
+                plugin_file.write(
+                    APPLICATION_PLUGIN_SOURCE.format(
+                        class_name=class_name,
+                        plugin_id=plugin_id,
+                        recipe_plugin_version=recipe_plugin_version,
+                        metadata_key=key,
+                    )
+                )
+
+        def check_plugins(win: DLMainWindow) -> None:
+            """Check that only the valid application plugin is loaded."""
+            assert PluginRegistry.get_plugin(valid_id) is not None
+            assert PluginRegistry.get_plugin(invalid_id) is None
+            failed_plugin = next(
+                failed
+                for failed in PluginRegistry.get_failed_plugins()
+                if failed.name == "InvalidApplicationPlugin"
+            )
+            assert "plugin version does not match" in failed_plugin.traceback
+            shown_ids = [
+                page.plugin.plugin_id
+                for page in win.applicationspanel.application_pages
+            ]
+            assert valid_id in shown_ids and invalid_id not in shown_ids
+            keys = [key for key, _desc in win.imagepanel.get_known_metadata_keys([])]
+            assert "valid_key" in keys and "invalid_key" not in keys
+
+        # Outside tests, plugin errors are reported instead of raised
+        with patch("sigimax.utils.qthelpers.is_running_tests", return_value=False):
+            with datalab_test_app_context(console=False) as win:
+                QW.QApplication.processEvents()
+                check_plugins(win)
+                win.reload_plugins()
+                QW.QApplication.processEvents()
+                check_plugins(win)
 
 
 @enabled_plugins_context()
@@ -658,10 +889,10 @@ def test_plugin_with_dialogs():
 
             # Mock dialog methods to avoid blocking
             with (
-                patch("datalab.plugins.QW.QMessageBox.warning") as mock_warning,
-                patch("datalab.plugins.QW.QMessageBox.critical") as mock_error,
-                patch("datalab.plugins.QW.QMessageBox.information") as mock_info,
-                patch("datalab.plugins.QW.QMessageBox.question") as mock_question,
+                patch("datalab.plugins.base.QW.QMessageBox.warning") as mock_warning,
+                patch("datalab.plugins.base.QW.QMessageBox.critical") as mock_error,
+                patch("datalab.plugins.base.QW.QMessageBox.information") as mock_info,
+                patch("datalab.plugins.base.QW.QMessageBox.question") as mock_question,
             ):
                 mock_question.return_value = QW.QMessageBox.Yes
 
@@ -692,6 +923,77 @@ def test_plugin_examples_import() -> None:
         assert spec.loader is not None
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+
+
+#: Shipped example plugins, by module, with the stable ID of their plugin class
+#: (the image format example only declares a file format)
+SHIPPED_EXAMPLES = {
+    "datalab_custom_func": "org.datalab.examples.custom-filters",
+    "datalab_example_dialogs": "org.datalab.examples.dialog-methods",
+    "datalab_example_empty": "org.datalab.examples.empty",
+    "datalab_example_imageformat": None,
+    "datalab_example_imageproc": "org.datalab.examples.extract-blobs",
+    "datalab_example_nested_menus": "org.datalab.examples.nested-menus",
+}
+
+
+def _run_custom_filter(win: DLMainWindow) -> np.ndarray:
+    """Run the processing of the custom function example on a new image.
+
+    Returns:
+        Data of the processed image
+    """
+    menus = [
+        item
+        for item in win.imagepanel.get_category_actions(ActionCategory.PLUGINS)
+        if isinstance(item, QW.QMenu) and item.title() == "My custom filters"
+    ]
+    assert len(menus) == 1, "'My custom filters' menu not found"
+    menus[0].aboutToShow.emit()
+    assert [action.text() for action in menus[0].actions()] == [
+        "Weighted average denoise"
+    ]
+    data = np.arange(64, dtype=float).reshape(8, 8)
+    win.imagepanel.add_object(create_image("Ramp", data))
+    count = len(win.imagepanel)
+    win.imagepanel.processor.run_feature(
+        "org.datalab.examples.custom-filters:weighted-average-denoise"
+    )
+    assert len(win.imagepanel) == count + 1
+    return win.imagepanel[len(win.imagepanel)].data
+
+
+@enabled_plugins_context()
+def test_shipped_plugin_examples_load_in_datalab() -> None:
+    """All shipped examples load in DataLab, and their processing runs."""
+    examples_dir = Path(__file__).parents[4] / "plugins" / "examples"
+    assert {path.stem for path in examples_dir.glob("*.py")} == set(SHIPPED_EXAMPLES)
+    with temporary_plugin_dir(module_prefixes=tuple(SHIPPED_EXAMPLES)) as plugin_dir:
+        for module_name in SHIPPED_EXAMPLES:
+            shutil.copy(examples_dir / f"{module_name}.py", plugin_dir)
+        spec = importlib.util.spec_from_file_location(
+            "custom_func_reference", examples_dir / "datalab_custom_func.py"
+        )
+        reference = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(reference)
+        expected = reference.weighted_average_denoise(
+            np.arange(64, dtype=float).reshape(8, 8)
+        )
+
+        with datalab_test_app_context(console=False) as win:
+            for _reload in range(2):
+                failed = [
+                    failed.name
+                    for failed in PluginRegistry.get_failed_plugins()
+                    if failed.name.split(".")[0] in SHIPPED_EXAMPLES
+                ]
+                assert not failed, f"Example plugins failed to load: {failed}"
+                assert PluginRegistry.get_plugin("org.datalab.isolevel-map") is not None
+                for plugin_id in filter(None, SHIPPED_EXAMPLES.values()):
+                    assert PluginRegistry.get_plugin(plugin_id) is not None, plugin_id
+                assert np.allclose(_run_custom_filter(win), expected)
+                win.reload_plugins()
+                QW.QApplication.processEvents()
 
 
 if __name__ == "__main__":

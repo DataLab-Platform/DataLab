@@ -25,6 +25,8 @@ import os.path as osp
 import sys
 import time
 import traceback
+from concurrent.futures import Future
+from contextlib import ExitStack, contextmanager
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -33,14 +35,16 @@ import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action
+from guidata.qthelpers import add_actions, create_action, exec_dialog
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
+from sigimax.h5.utils import split_h5_file_selector
 from sigimax.mainwindow import SGMXMainWindow
 from sigimax.utils import qthelpers as sgmx_qth
 
@@ -58,27 +62,58 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.capsuleio import CapsuleInputOutput
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
     collect_commands,
 )
 from datalab.gui.docks import DockablePlotWidget
-from datalab.gui.h5io import H5InputOutput
+from datalab.gui.h5io import (
+    H5InputOutput,
+    append_provenance_notice,
+    workspace_has_provenance,
+)
 from datalab.gui.panel import base, history, image, macro, signal
-from datalab.gui.pluginconfig import PluginConfigDialog
+from datalab.gui.plugins.applications import ApplicationsPanel, get_plugin_icon
+from datalab.gui.plugins.config import PluginConfigDialog
+from datalab.gui.plugins.instrument import (
+    InstrumentWindow,
+    SerialWorker,
+    wait_instruments_closed,
+)
+from datalab.gui.processor.base import FeatureNotFoundError
+from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
-from datalab.objectmodel import ObjectGroup, get_uuid
-from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
+from datalab.gui.welcome import WelcomePanel
+from datalab.objectmodel import (
+    UUID_REGEX,
+    ObjectGroup,
+    get_uuid,
+    resolve_title_references,
+)
+from datalab.plugins import (
+    PluginRegistry,
+    discover_plugins,
+    discover_v020_plugins,
+    migrate_enabled_plugin_ids,
+)
+from datalab.plugins.tools import tool_accepts_selection
+from datalab.provenance import ProvenanceService
 from datalab.utils import qthelpers as qth
-from datalab.utils.qthelpers import configure_menu_about_to_show
+from datalab.utils.qthelpers import (
+    configure_menu_about_to_show,
+    qt_handle_error_message,
+)
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
 from datalab.widgets import status as dl_status
+from datalab.widgets.expandabletext import refresh_subdued_colors
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from collections.abc import Callable, Iterator
+    from typing import Any, Literal
 
     from datalab.gui.historysession_ops import SessionBehavior
     from datalab.gui.panel.base import AbstractPanel, BaseDataPanel
@@ -86,6 +121,7 @@ if TYPE_CHECKING:
     from datalab.gui.panel.macro import MacroPanel
     from datalab.gui.panel.signal import SignalPanel
     from datalab.plugins import PluginBase
+    from datalab.plugins.tools import PluginTool
 
 
 def remote_controlled(func):
@@ -125,6 +161,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Initialize main window"""
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
+        self.preview_executor_cache = PreviewExecutorCache()
+        self.provenance = ProvenanceService(
+            self.find_object_by_uuid,
+            self.__iter_data_objects,
+            self.__is_known_feature,
+        )
+        self.__provenance_timer: QC.QTimer | None = None
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -133,6 +176,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.macropanel: MacroPanel | None = None
         self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
+        self.applicationspanel: ApplicationsPanel | None = None
+        self.__instrument_windows: dict[tuple[str, str], InstrumentWindow] = {}
+        #: Worker of each plugin instrument, shared by its successive windows
+        self.__instrument_workers: dict[tuple[str, str], SerialWorker] = {}
+        #: Title and closing call of the last closed window of each instrument
+        self.__instrument_closings: dict[tuple[str, str], tuple[str, Future]] = {}
+        self.welcomepanel: WelcomePanel | None = None
 
         self.signalpanel_toolbar: QW.QToolBar | None = None
         self.imagepanel_toolbar: QW.QToolBar | None = None
@@ -141,15 +191,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.signalview: DockablePlotWidget | None = None
         self.imageview: DockablePlotWidget | None = None
         self.h5inputoutput: H5InputOutput | None = None
+        self.capsuleio: CapsuleInputOutput | None = None
+        # True while opening HDF5 files of which one holds provenance
+        self.__h5_provenance_files = False
+        #: The question about clearing the workspace told that appending ignores
+        #: provenance, for the answer not yet known (see ``import_dataset_from_file``)
+        self.__h5_append_notice_shown = False
+        #: History entry of the HDF5 files being opened, recorded once opened
+        self.__h5_open_entry: tuple | None = None
         self.webapi_actions: WebApiActions | None = None
 
         self.openh5_action: QW.QAction | None = None
         self.saveh5_action: QW.QAction | None = None
+        self.command_palette_action: QW.QAction | None = None
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
+        self.capsule_action: QW.QAction | None = None
         self.command_palette_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
+        self.applications_action: QW.QAction | None = None
         self.reload_plugins_action: QW.QAction | None = None
         self.configure_plugins_action: QW.QAction | None = None
 
@@ -168,8 +229,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Initialize DataLab-specific services before setting up the UI."""
         super()._before_setup(console)
         self.h5inputoutput = H5InputOutput(self)
+        self.capsuleio = CapsuleInputOutput(self)
 
-        # Starting XML-RPC server thread
+        # Starting XML-RPC server thread: requests are processed once the main
+        # window is fully set up (see `_after_setup`)
         self.remote_server = RemoteServer(self)
         if Conf.rpc_server_enabled.get():
             self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
@@ -177,6 +240,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         self.__register_plugins()
         self.webapi_actions = WebApiActions(self)
+
+    def _after_setup(self, console: bool) -> None:
+        """Process remote requests, the main window being fully set up."""
+        super()._after_setup(console)
+        self.remote_server.notify_window_ready()
 
     # ------API related to XML-RPC remote control
     @staticmethod
@@ -276,8 +344,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         Raises:
             KeyError: if object not found
+            ValueError: if multiple objects have the same title
             TypeError: if index_id_title type is invalid
         """
+        if (
+            isinstance(nb_id_title, str)
+            and panel is None
+            and UUID_REGEX.fullmatch(nb_id_title)
+        ):
+            obj = self.find_object_by_uuid(nb_id_title)
+            if obj is None or isinstance(obj, ObjectGroup):
+                raise KeyError(f"Invalid object index, id or title: {nb_id_title}")
+            return obj
         panelw = self.__get_datapanel(panel)
         if nb_id_title is None:
             return panelw.objview.get_current_object()
@@ -317,10 +395,66 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in (self.signalpanel, self.imagepanel):
             if panel is not None:
                 try:
-                    return panel.objmodel[uuid]
+                    return panel.objmodel.get_object_or_group(uuid)
                 except KeyError:
                     continue
         return None
+
+    def __iter_data_objects(self) -> Iterator[SignalObj | ImageObj]:
+        """Yield every signal and image of the workspace, in panel order."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                yield from panel.objmodel
+
+    def __is_known_feature(self, name: str, plugin_origin: Any) -> bool:
+        """Return True if a signal or image processing feature has this name."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is None:
+                continue
+            try:
+                panel.processor.get_feature(name, plugin_origin)
+            except FeatureNotFoundError:
+                continue
+            except ValueError:  # several features match: the name is known
+                return True
+            return True
+        return False
+
+    def resolve_title_reference(
+        self, reference: str
+    ) -> tuple[str, SignalObj | ImageObj | ObjectGroup] | None:
+        """Resolve a title reference to ``(panel_str, object or group)``.
+
+        Args:
+            reference: ``<UUID8>`` (object) or ``g<UUID8>`` (group) reference
+
+        Returns:
+            The unique match across signal and image panels, or None if the
+            reference matches nothing or is ambiguous.
+        """
+        matches = [
+            (panel.PANEL_STR_ID, obj)
+            for panel in (self.signalpanel, self.imagepanel)
+            for obj in panel.objmodel.find_by_title_reference(reference)
+        ]
+        return matches[0] if len(matches) == 1 else None
+
+    def render_object_title(self, title: str) -> str:
+        """Render an object title according to user settings."""
+        if Conf.result_title_mode.get() != "title":
+            return title
+
+        def resolve_source_title(reference: str) -> str | None:
+            resolved = self.resolve_title_reference(reference)
+            return None if resolved is None else resolved[1].title
+
+        return resolve_title_references(title, resolve_source_title)
+
+    def refresh_object_title_displays(self) -> None:
+        """Refresh object titles in trees and shown plot items."""
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.objview.update_tree()
+            panel.refresh_plot("selected", update_items=True, force=True)
 
     @remote_controlled
     def get_object_uuids(
@@ -385,15 +519,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         title: str,
         panel: Literal["signal", "image"] | None = None,
         select: bool = False,
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name. Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
-        self.__get_datapanel(panel).add_group(title, select)
+        return get_uuid(self.__get_datapanel(panel).add_group(title, select))
 
     @remote_controlled
     def select_objects(
@@ -519,6 +656,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             f"Method '{method_name}' does not exist on main window or current panel"
         )
 
+    @contextmanager
+    def remote_request_context(self) -> Iterator[None]:
+        """Context in which a request of a remote client runs (XML-RPC, Web API).
+
+        Errors are propagated to the caller, which reports them to the client,
+        instead of being shown in a message box: no user waits for it, and showing
+        a message box crashes DataLab when it runs without display. The error is
+        also shown in the status bar.
+        """
+        try:
+            with qth.errors_propagated_to_caller():
+                yield
+        except Exception as exc:
+            lines = str(exc).strip().splitlines()
+            summary = lines[0] if lines else type(exc).__name__
+            self.statusBar().showMessage(
+                "❌ " + _("Remote request failed: %s") % summary, 10000
+            )
+            raise
+
     @remote_controlled
     def call_method_slot(
         self,
@@ -540,13 +697,38 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         # Call the method and store result in RemoteServer
         try:
-            result = self.call_method(method_name, *args, panel=panel, **kwargs)
+            with self.remote_request_context():
+                result = self.call_method(method_name, *args, panel=panel, **kwargs)
             # Store result in RemoteServer for retrieval by XML-RPC thread
             self.remote_server.result = result
             self.remote_server.exception = None  # Clear any previous exception
         except Exception as exc:  # pylint: disable=broad-except
             # Store exception for re-raising in XML-RPC thread
             self.remote_server.result = None
+            self.remote_server.exception = exc
+
+    @remote_controlled
+    def run_remote_command(
+        self, command: Callable[..., object], *args, return_result: bool = False
+    ) -> None:
+        """Slot to run a command requested by a remote client in GUI thread.
+
+        The exception raised by the command, if any, is stored in RemoteServer to
+        be re-raised to the client. Being remote controlled, this slot signals that
+        DataLab is ready only once the command is done and its exception stored.
+
+        Args:
+            command: Main window method running the command
+            args: Command arguments
+            return_result: If True, store the command result in RemoteServer, to be
+             returned to the client (it must be XML-RPC serializable)
+        """
+        try:
+            with self.remote_request_context():
+                result = command(*args)
+            if return_result:
+                self.remote_server.result = result
+        except Exception as exc:  # pylint: disable=broad-except
             self.remote_server.exception = exc
 
     @remote_controlled
@@ -763,9 +945,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Execute post-show actions"""
         super().execute_post_show_actions()
         self.check_for_v020_plugins()
-        if not execenv.unattended and Conf.tour_enabled.get():
-            Conf.tour_enabled.set(False)
-            self.show_tour()
+        if not execenv.unattended:
+            if not Conf.welcome_on_startup.get():
+                self.docks[self.welcomepanel].hide()
+            self.__raise_view_dock(self.tabwidget.currentWidget())
         # Auto-start WebAPI server if environment variable is set
         if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
             try:
@@ -806,14 +989,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     # ------GUI setup
     def _setup_docks(self) -> None:
-        """Add the macro, history and AI assistant docks"""
+        """Add the macro, history, AI assistant, welcome page and applications docks"""
         self.__add_macro_panel()
         self.__add_history_panel()
         self.__add_aiassistant_panel()
+        self.__add_welcome_panel()
+        self.__add_applications_panel()
 
     def _post_setup(self, console: bool) -> None:
         """Create plugin actions and wire panels, once the whole UI exists"""
         self.__create_plugins_actions()
+        self.welcomepanel.refresh_application_tiles()
         self.__update_actions(update_other_data_panel=True)
         self.__configure_panels()
 
@@ -843,7 +1029,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         with sgmx_qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
-            plugin_nb = len(discover_plugins())
+            discover_plugins()
+            plugin_nb = len(PluginRegistry.get_plugin_classes())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
 
         # Buffer any import errors that occurred during discovery
@@ -851,7 +1038,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         # Get enabled plugins list from configuration
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
-        enabled_list = Conf.plugins_enabled_list.get(None)
+        configured_enabled_list = Conf.plugins_enabled_list.get(None)
+        enabled_list = migrate_enabled_plugin_ids(configured_enabled_list)
+        if enabled_list != configured_enabled_list:
+            Conf.plugins_enabled_list.set(enabled_list)
 
         if not Conf.plugins_enabled.get():
             self.plugins_last_load_at = datetime.now().astimezone()
@@ -863,10 +1053,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # None means all plugins are enabled
                 if enabled_list is not None:
                     plugin_name = plugin_class.PLUGIN_INFO.name
-                    if plugin_name not in enabled_list:
+                    plugin_id = plugin_class.get_plugin_id()
+                    if plugin_id not in enabled_list:
                         execenv.log(
                             self,
-                            f"Plugin {plugin_name} is disabled, skipping registration",
+                            f"Plugin {plugin_name} ({plugin_id}) is disabled, "
+                            "skipping registration",
                         )
                         continue
 
@@ -895,7 +1087,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 mod = sys.modules.get(plugin_class.__module__)
                 filepath = getattr(mod, "__file__", "") if mod else ""
                 PluginRegistry.add_failed_plugin(
-                    plugin_class.__name__, filepath or "", tb_text
+                    plugin_class.__name__,
+                    filepath or "",
+                    tb_text,
+                    ", ".join(
+                        getattr(plugin_class, "__plugin_discovery_sources__", ())
+                    ),
                 )
 
         self.plugins_last_load_at = datetime.now().astimezone()
@@ -926,16 +1123,137 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     with sgmx_qth.try_or_log_error(
                         f"Create actions for {plugin.info.name}"
                     ):
-                        plugin.create_actions()
+                        with ExitStack() as rollback_stack:
+                            rollback_stack.callback(plugin.remove_owned_features)
+                            plugin.register_computations()
+                            plugin.create_actions()
+                            rollback_stack.pop_all()
+                    with sgmx_qth.try_or_log_error(
+                        f"Create tool actions for {plugin.info.name}"
+                    ):
+                        self.__create_plugin_tool_actions(plugin)
+
+    def __create_plugin_tool_actions(self, plugin: PluginBase) -> None:
+        """Add the plugin's tools to its submenu of the *Plugins* menu
+
+        Each tool is listed in the panel of its object type (both panels when
+        it has none), after the plugin's own actions.
+        """
+        title = plugin.info.name.replace("&", "&&")
+        for panel in (self.signalpanel, self.imagepanel):
+            tools = [
+                tool
+                for tool in plugin.get_tools()
+                if tool.object_type is None
+                or tool.object_type.value == panel.PANEL_STR_ID
+            ]
+            if not tools:
+                continue
+            handler = panel.acthandler
+            with handler.new_menu(title):
+                for index, tool in enumerate(tools):
+                    action = handler.new_action(
+                        tool.title,
+                        separator=index == 0,
+                        triggered=functools.partial(
+                            self.__launch_plugin_tool, plugin, tool.id
+                        ),
+                        tip=tool.description or None,
+                        select_condition=functools.partial(
+                            self.__tool_selection_condition, tool
+                        ),
+                    )
+                    action.setIcon(get_plugin_icon(tool.icon))
 
     @staticmethod
-    def __unregister_plugins() -> None:
+    def __tool_selection_condition(
+        tool: PluginTool,
+        _selected_groups: list[ObjectGroup],
+        selected_objects: list,
+    ) -> bool:
+        """Return True if a tool's menu action is enabled on the selection."""
+        return tool_accepts_selection(tool, selected_objects)
+
+    def __launch_plugin_tool(self, plugin: PluginBase, tool_id: str) -> None:
+        """Open a plugin tool from the menu, reporting its failures."""
+        try:
+            plugin.launch_tool(tool_id)
+        except Exception as exc:  # pylint: disable=broad-except
+            # Plugin-owned tools are third-party code: never crash the app
+            qt_handle_error_message(self, exc, _("Opening tool '%s'") % tool_id)
+
+    def open_plugin_instrument(
+        self, plugin: PluginBase, tool: PluginTool
+    ) -> InstrumentWindow:
+        """Show the instrument window of a plugin tool, creating it if needed.
+
+        The successive windows of an instrument share its worker: a window
+        opened again calls the instrument once the closed one has closed it.
+        """
+        key = (plugin.plugin_id, tool.id)
+        window = self.__instrument_windows.get(key)
+        if window is not None and window.close_future is not None:
+            # Closed while hidden: Qt did not emit `finished`, release it now
+            self.__forget_instrument_window(key)
+            window = None
+        if window is None:
+            worker = self.__instrument_workers.get(key)
+            if worker is None:
+                worker = self.__instrument_workers[key] = SerialWorker()
+            window = InstrumentWindow(
+                self,
+                plugin.get_instrument(tool.id),
+                tool.title,
+                worker,
+                option_key=f"{plugin.plugin_id}/{tool.id}",
+            )
+            window.finished.connect(
+                functools.partial(self.__forget_instrument_window, key)
+            )
+            self.__instrument_windows[key] = window
+        window.show()
+        window.raise_()
+        window.activateWindow()
+        return window
+
+    def __forget_instrument_window(self, key: tuple[str, str], *_args) -> None:
+        """Release a closed instrument window, keeping track of its instrument
+        until it is closed."""
+        window = self.__instrument_windows.pop(key, None)
+        if window is not None:
+            window.stop()
+            closing = (window.windowTitle(), window.close_future)
+            self.__instrument_closings[key] = closing
+            window.deleteLater()
+
+    def close_plugin_instruments(self) -> None:
+        """Close all plugin instrument windows, and wait for their instruments,
+        including those of windows closed before, within a common time limit."""
+        for window in list(self.__instrument_windows.values()):
+            window.close()
+        # Windows that were not visible do not emit `finished` when closed
+        for key in list(self.__instrument_windows):
+            self.__forget_instrument_window(key)
+        timeout = InstrumentWindow.CLOSE_TIMEOUT
+        closings = self.__instrument_closings.values()
+        for title in wait_instruments_closed(closings, timeout):
+            logging.getLogger(__name__).warning(
+                "Instrument '%s' did not close within %g s", title, timeout
+            )
+        for worker in self.__instrument_workers.values():
+            worker.shutdown()
+        self.__instrument_workers.clear()
+        self.__instrument_closings.clear()
+
+    def __unregister_plugins(self) -> None:
         """Unregister all plugins and let them cleanup their hooks"""
+        self.close_plugin_instruments()
         with sgmx_qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
 
     def __restart_processor_pool(self) -> None:
         """Restart the shared pool after plugin paths change at runtime."""
+        self.preview_executor_cache.reset()
         for processor in (self.imagepanel.processor, self.signalpanel.processor):
             if processor.worker is not None:
                 processor.worker.restart_pool()
@@ -945,6 +1263,35 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Open plugin configuration dialog"""
         dialog = PluginConfigDialog(self)
         dialog.exec()
+
+    def show_applications(self, plugin_id: str | None = None) -> None:
+        """Show the Applications panel
+
+        The first time, the panel floats beside the main window; afterwards, it
+        is shown where the user left it (docked, tabified or floating). When it
+        is already shown with the requested application, it flashes to draw
+        attention to it; switching to another application needs no flashing.
+
+        Args:
+            plugin_id: ID of the application plugin to show (default: the one
+             already shown)
+        """
+        panel = self.applicationspanel
+        panel.refresh()
+        switched = plugin_id is not None and plugin_id != panel.current_plugin_id()
+        if plugin_id is not None:
+            panel.select_plugin(plugin_id)
+        dock = self.docks[panel]
+        already_shown = dock.isVisible()
+        # The first time, the panel places itself beside the window when shown
+        dock.show()
+        panel.ensure_on_screen(self)
+        dock.raise_()
+        if dock.isFloating():
+            dock.activateWindow()
+        if already_shown and not switched:
+            # Otherwise, nothing would seem to happen
+            panel.flash()
 
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""
@@ -985,13 +1332,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # that code changes are picked up.
             PluginRegistry.clear_plugin_classes()
             with sgmx_qth.try_or_log_error("Discovering plugins (reload)"):
-                plugin_nb = len(discover_plugins())
+                discover_plugins()
+                plugin_nb = len(PluginRegistry.get_plugin_classes())
                 execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
             self.__restart_processor_pool()
 
             # Get enabled plugins list from configuration
             # None = all enabled (default), [] = none, list = specific plugins
-            enabled_list = Conf.plugins_enabled_list.get(None)
+            configured_enabled_list = Conf.plugins_enabled_list.get(None)
+            enabled_list = migrate_enabled_plugin_ids(configured_enabled_list)
+            if enabled_list != configured_enabled_list:
+                Conf.plugins_enabled_list.set(enabled_list)
 
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
@@ -1000,10 +1351,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     # None means all plugins are enabled
                     if enabled_list is not None:
                         plugin_name = plugin_class.PLUGIN_INFO.name
-                        if plugin_name not in enabled_list:
+                        plugin_id = plugin_class.get_plugin_id()
+                        if plugin_id not in enabled_list:
                             execenv.log(
                                 self,
-                                f"Plugin {plugin_name} is disabled, "
+                                f"Plugin {plugin_name} ({plugin_id}) is disabled, "
                                 "skipping registration (reload)",
                             )
                             continue
@@ -1032,11 +1384,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     mod = sys.modules.get(plugin_class.__module__)
                     filepath = getattr(mod, "__file__", "") if mod else ""
                     PluginRegistry.add_failed_plugin(
-                        plugin_class.__name__, filepath or "", tb_text
+                        plugin_class.__name__,
+                        filepath or "",
+                        tb_text,
+                        ", ".join(
+                            getattr(plugin_class, "__plugin_discovery_sources__", ())
+                        ),
                     )
 
             # Recreate plugin actions for the new plugin set
             self.__create_plugins_actions()
+            self.welcomepanel.refresh_application_tiles()
+            self.applicationspanel.refresh()
 
             # Update actions and menus to reflect new plugin set
             self.__update_actions(update_other_data_panel=True)
@@ -1058,6 +1417,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def _get_extra_status_widgets(self) -> list[QW.QWidget]:
         """Return the plugin, XML-RPC server and Web API server status widgets"""
         self.pluginstatus = dl_status.PluginStatus()
+        self.pluginstatus.SIG_CONFIGURE_PLUGINS.connect(self.__configure_plugins)
         xmlrpcstatus = dl_status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
         self.webapistatus = dl_status.WebAPIStatus()
@@ -1086,9 +1446,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.reload_plugins()
             return
 
+        self.preview_executor_cache.reset()
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
+        self.welcomepanel.refresh_application_tiles()
+        self.applicationspanel.refresh()
 
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
@@ -1102,6 +1465,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             icon=get_icon("libre-gui-settings.svg"),
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
+        )
+        self.capsule_action = create_action(
+            self,
+            _("Workspace capsule..."),
+            icon=get_icon("capsule.svg"),
+            tip=_(
+                "Export, inspect, replay and compare workspace capsules "
+                "(workspace and provenance of its processing)"
+            ),
+            triggered=self.show_capsule_dialog,
         )
         self.command_palette_action = create_action(
             self,
@@ -1136,6 +1509,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
         # Plugins menu actions
+        self.applications_action = create_action(
+            self,
+            "",
+            icon=get_icon("libre-gui-plugin.svg"),
+            tip=_("Browse application plugins, recipes and examples"),
+            # The lambda drops the "checked" argument, which is not a plugin ID
+            triggered=lambda: self.show_applications(),  # pylint: disable=unnecessary-lambda
+        )
         self.reload_plugins_action = create_action(
             self,
             _("Reload plugins"),
@@ -1238,6 +1619,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.objview.SIG_SELECTION_CHANGED.connect(
                 functools.partial(self.__raise_view_dock, panel)
             )
+            panel.SIG_OBJECT_REMOVED.connect(
+                functools.partial(self.__raise_view_dock, panel)
+            )
             panel.setup_panel()
 
     def _setup_central_widget(self) -> None:
@@ -1246,10 +1630,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         self.tabwidget.setMaximumWidth(600)
         s_idx = self.tabwidget.addTab(
-            self.signalpanel, get_icon("signal.svg"), _("Signal Panel")
+            self.signalpanel, get_icon("sigimax:signal.svg"), _("Signal Panel")
         )
         i_idx = self.tabwidget.addTab(
-            self.imagepanel, get_icon("image.svg"), _("Image Panel")
+            self.imagepanel, get_icon("sigimax:image.svg"), _("Image Panel")
         )
         self.tabwidget.setTabToolTip(
             s_idx, _("1D Signals: Manage and process one-dimensional data")
@@ -1277,22 +1661,34 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
     def _get_help_doc_actions(self) -> list[QW.QAction | None]:
-        """Append the tour and demo entries to the standard documentation actions."""
-        return super()._get_help_doc_actions() + [
-            create_action(
-                self,
-                _("Tour") + "...",
-                icon=get_icon("tour.svg"),
-                triggered=self.show_tour,
-            ),
-            create_action(
-                self,
-                _("Demo") + "...",
-                icon=get_icon("play_demo.svg"),
-                triggered=self.play_demo,
-            ),
-            None,
-        ]
+        """Add the welcome page, tour and demo entries to the documentation actions"""
+        return (
+            [
+                create_action(
+                    self,
+                    _("Welcome page"),
+                    icon=get_icon("DataLab.svg"),
+                    triggered=self.show_welcome_page,
+                ),
+                None,
+            ]
+            + super()._get_help_doc_actions()
+            + [
+                create_action(
+                    self,
+                    _("Tour") + "...",
+                    icon=get_icon("tour.svg"),
+                    triggered=self.show_tour,
+                ),
+                create_action(
+                    self,
+                    _("Demo") + "...",
+                    icon=get_icon("play_demo.svg"),
+                    triggered=self.play_demo,
+                ),
+                None,
+            ]
+        )
 
     def _get_help_support_actions(self) -> list[QW.QAction | None]:
         """Append the installation and configuration viewer."""
@@ -1314,6 +1710,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def _add_menus(self) -> None:
         """Adding menus"""
         super()._add_menus()
+        self.menuBar().insertAction(
+            self.plugins_menu.menuAction(), self.applications_action
+        )
         # Make plugins menu scrollable to handle many plugins without overflow
         self.plugins_menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
         for menu in (
@@ -1428,13 +1827,56 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             tabify_with=self.macropanel,
         )
 
+    def __add_welcome_panel(self) -> None:
+        """Add welcome page panel"""
+        self.welcomepanel = WelcomePanel(self)
+        self._add_dockwidget(
+            self.welcomepanel,
+            _("Welcome"),
+            name="welcome_page",
+            tabify_with=self.signalpanel,
+        )
+
+    def __add_applications_panel(self) -> None:
+        """Add the Applications panel, hidden until it is shown"""
+        panel = self.applicationspanel = ApplicationsPanel(self)
+        dock = self._add_dockwidget(panel, _("Applications"), name="applications_panel")
+        dock.hide()
+        if not Conf.applications_panel_shown.get():
+            # The panel floats the first time, even when shown from the View menu
+            panel.place_beside(self)
+        panel.SIG_WELCOME_PREFERENCES_CHANGED.connect(
+            self.welcomepanel.update_application_tiles
+        )
+        for datapanel in (self.signalpanel, self.imagepanel):
+            datapanel.objview.SIG_SELECTION_CHANGED.connect(
+                panel.schedule_readiness_update
+            )
+            # Metadata edits change readiness without changing the selection
+            datapanel.SIG_OBJECT_MODIFIED.connect(panel.schedule_readiness_update)
+        self.tabwidget.currentChanged.connect(panel.schedule_readiness_update)
+
     def __configure_panels(self) -> None:
         """Configure panels"""
         # Connectings signals
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
-        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+            panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+        # Provenance views follow the workspace and the recorded activities.
+        # The timer coalesces refreshes; owned by the window, it never fires
+        # once the window is closed.
+        self.__provenance_timer = QC.QTimer(self)
+        self.__provenance_timer.setSingleShot(True)
+        self.__provenance_timer.timeout.connect(self.__refresh_provenance_views)
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.SIG_OBJECT_ADDED.connect(self.__invalidate_provenance_views)
+            panel.SIG_OBJECT_REMOVED.connect(self.__invalidate_provenance_views)
+            panel.SIG_OBJECT_MODIFIED.connect(self.__invalidate_provenance_views)
+        self.provenance.on_recorded = self.__invalidate_provenance_views
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.SIG_OBJECT_MODIFIED.connect(self.refresh_object_title_displays)
+            panel.SIG_OBJECT_REMOVED.connect(self.refresh_object_title_displays)
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
         self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))
@@ -1532,7 +1974,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
              Set to False when calling from remote/API to avoid blocking dialogs.
 
         Raises:
-            ValueError: unknown function
+            FeatureNotFoundError: unknown function (a :class:`ValueError`)
         """
         panels = [self.tabwidget.currentWidget()]
         panels.extend(self.panels)
@@ -1553,11 +1995,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # registered feature:
                 try:
                     feature = panel.processor.get_feature(name)
-                    panel.processor.run_feature(feature, param, edit=edit)
-                    return
-                except ValueError:
+                except FeatureNotFoundError:
                     continue
-        raise ValueError(f"Unknown computation function {name}")
+                panel.processor.run_feature(feature, param, edit=edit)
+                return
+        # A dedicated exception, so that clients may tell it from computation errors
+        raise FeatureNotFoundError(name, message=f"Unknown computation function {name}")
 
     # ------GUI refresh
     def has_objects(self) -> bool:
@@ -1593,12 +2036,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
-        dock = self.docks[self.tabwidget.widget(index)]
-        dock.raise_()
+        self.__raise_view_dock(self.tabwidget.widget(index))
         self.__update_actions()
 
     def __raise_view_dock(self, panel: BaseDataPanel) -> None:
         """Bring the panel view dock to the front, if the panel is the current tab
+
+        An empty panel shows the welcome page instead, unless it is disabled.
 
         Args:
             panel: signal or image panel
@@ -1606,7 +2050,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # The guard matters because selection changes are also emitted for the
         # panel that is not currently shown (see __update_actions).
         if self.tabwidget.currentWidget() is panel:
-            self.docks[panel].raise_()
+            if len(panel) == 0 and Conf.welcome_on_startup.get():
+                self.show_welcome_page()
+            else:
+                self.docks[panel].raise_()
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
@@ -1639,7 +2086,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _get_file_menu_actions(self) -> list[QW.QAction | None]:
         """Append the settings action to the standard HDF5 actions."""
-        return super()._get_file_menu_actions() + [None, self.settings_action]
+        return super()._get_file_menu_actions() + [
+            self.capsule_action,
+            None,
+            self.settings_action,
+        ]
 
     def _update_file_menu(self) -> None:
         """Update file menu before showing up"""
@@ -1742,8 +2193,132 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in self.panels:
             if panel is not None and panel is not self.historypanel:
                 panel.remove_all_objects()
+        self.provenance.reset()
         if self.historypanel is not None:
             self.historypanel.start_new_session_after_workspace_reset()
+
+    def verify_provenance_activity(self, activity_id: str) -> dict:
+        """Recompute a recorded activity as a separate candidate and compare it.
+
+        Nothing is inserted in the workspace and the ledger is not modified.
+
+        Args:
+            activity_id: Identifier of the recorded activity.
+
+        Returns:
+            Verification report (JSON-compatible).
+        """
+        execution = self.signalpanel.processor.execution
+        return self.provenance.verify(activity_id, execution.execute_candidate)
+
+    def show_capsule_dialog(self) -> None:
+        """Show the workspace capsule dialog (export, inspect, replay, compare)."""
+        # pylint: disable=import-outside-toplevel
+        from datalab.widgets.capsule import CapsuleDialog
+
+        dialog = CapsuleDialog(self)
+        exec_dialog(dialog)
+
+    @remote_controlled
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it,
+             and the workspace is saved apart, to *workspace_filename*.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files (protocol, notes, small tables, 16 MiB at
+             most each) declared in the capsule, never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+        fingerprint = self.capsuleio.export(
+            filename,
+            name=name,
+            description=description,
+            as_revision=as_revision,
+            workspace_ref=workspace_ref,
+            workspace_filename=workspace_filename,
+            attachments=attachments or (),
+        )
+        self.historypanel.add_ui_entry(
+            _("Export capsule"),
+            target="mainwindow",
+            method_name="export_capsule",
+            save_state=False,
+            filename=filename,
+            name=name,
+            description=description,
+            as_revision=as_revision,
+            workspace_ref=workspace_ref,
+            workspace_filename=workspace_filename,
+            attachments=list(attachments or []),
+        )
+        return fingerprint
+
+    @remote_controlled
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        The capsule is checked first (archive, manifest, workspace SHA-256 and
+        size): the workspace is left unchanged if it is invalid. A revision
+        exported later names this capsule as its parent.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+        if not self.confirm_memory_state():
+            return
+        self.capsuleio.open(filename, workspace)
+        # Recorded once opened, so that it begins the session started by the
+        # workspace reset (and nothing is recorded if the capsule is refused).
+        self.historypanel.add_ui_entry(
+            _("Open capsule"),
+            target="mainwindow",
+            method_name="open_capsule",
+            save_state=False,
+            filename=filename,
+            workspace=workspace,
+        )
+
+    def __invalidate_provenance_views(self) -> None:
+        """Refresh the provenance views once control returns to the event loop.
+
+        The workspace changed or activities were recorded: the views read the
+        ledger again and drop the results of data checks and verifications.
+        Requests are coalesced, so that a batch of computations refreshes once.
+        """
+        if (
+            self.__provenance_timer is not None
+            and not self.__provenance_timer.isActive()
+        ):
+            self.__provenance_timer.start(0)
+
+    def __refresh_provenance_views(self) -> None:
+        """Refresh the provenance views of the current objects."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                panel.objprop.refresh_history()
 
     @remote_controlled
     def remove_object(self, force: bool = False) -> None:
@@ -1776,12 +2351,86 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
+        When the question about clearing the workspace will be asked, the files
+        are chosen first: if a workspace file holds provenance, the question
+        says that appending it ignores that provenance (no further warning).
+
         Args:
             h5files: HDF5 filenames (optionally with dataset name, separated by ",")
             import_all: Import all datasets from HDF5 files
             reset_all: Reset all application data before importing
         """
-        super().open_h5_files(h5files, import_all, reset_all)
+        if (
+            h5files is None
+            and reset_all is None
+            and not self._is_workspace_empty()
+            and Conf.h5_clear_workspace_ask.get()
+        ):
+            with qth.save_restore_stds():
+                h5files, _fl = getopenfilenames(
+                    self,
+                    _("Open"),
+                    Conf.base_dir.get(),
+                    _(
+                        "HDF5 files (*.h5 *.hdf5 *.hdf *.he5 *.nxs *.nx5);;"
+                        "All files (*)"
+                    ),
+                )
+            if not h5files:
+                return
+        self.__h5_provenance_files = (
+            import_all is not None
+            and h5files is not None
+            and any(
+                split_h5_file_selector(fname)[1] is None
+                and workspace_has_provenance(fname)
+                for fname in h5files
+            )
+        )
+        self.h5inputoutput.cancelled_files = []
+        try:
+            super().open_h5_files(h5files, import_all, reset_all)
+        finally:
+            self.__h5_provenance_files = False
+            self.__h5_append_notice_shown = False
+            self.h5inputoutput.append_informed = False
+            self.__record_h5_open_entry()
+
+    def __record_h5_open_entry(self) -> None:
+        """Record the HDF5 open/import in the history session, once done.
+
+        Files whose appending the user cancelled are not recorded (nothing was
+        opened), so that replaying the session does not open them.
+        """
+        entry, self.__h5_open_entry = self.__h5_open_entry, None
+        if entry is None:
+            return
+        h5files, import_all, reset_all = entry
+        cancelled = {
+            osp.normcase(osp.abspath(fname))
+            for fname in self.h5inputoutput.cancelled_files
+        }
+        h5files = [
+            fname
+            for fname in h5files
+            if osp.normcase(osp.abspath(split_h5_file_selector(fname)[0]))
+            not in cancelled
+        ]
+        if not h5files:
+            return
+        if len(h5files) > 1:
+            entry_title = _("Open %d HDF5 files") % len(h5files)
+        else:
+            entry_title = _("Open HDF5 file")
+        self.historypanel.add_ui_entry(
+            entry_title,
+            target="mainwindow",
+            method_name="open_h5_files",
+            save_state=False,
+            h5files=h5files,
+            import_all=import_all,
+            reset_all=reset_all,
+        )
 
     def _on_h5_save_requested(self, filename: str) -> None:
         """Record the workspace save in the history session"""
@@ -1799,20 +2448,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         import_all: bool | None,
         reset_all: bool | None,
     ) -> None:
-        """Record the HDF5 open/import in the history session"""
-        if len(h5files) > 1:
-            entry_title = _("Open %d HDF5 files") % len(h5files)
-        else:
-            entry_title = _("Open HDF5 file")
-        self.historypanel.add_ui_entry(
-            entry_title,
-            target="mainwindow",
-            method_name="open_h5_files",
-            save_state=False,
-            h5files=h5files,
-            import_all=import_all,
-            reset_all=reset_all,
-        )
+        """Record the HDF5 open/import in the history session, once opened"""
+        self.__h5_open_entry = (list(h5files), import_all, reset_all)
 
     def _is_workspace_empty(self) -> bool:
         """Return whether the signal and image panels hold no object"""
@@ -1843,6 +2480,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             "from being displayed again, and will use the "
             "current setting (%s)."
         ) % (_("Yes") if reset_all else _("No"))
+        if self.__h5_provenance_files:
+            msg += "<br><br><u>" + _("Provenance:") + "</u> "
+            msg += _("If you choose <i>No</i>: ") + append_provenance_notice()
+            # Said here for the answer "No" (see import_dataset_from_file)
+            self.__h5_append_notice_shown = True
         return msg
 
     def import_dataset_from_file(
@@ -1860,6 +2502,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             import_all: If ``True``, import all datasets without browsing
             reset_all: If ``True``, clear workspace before importing
         """
+        if self.__h5_append_notice_shown:
+            # First file: its reset_all is the answer to the question about
+            # clearing the workspace. Only "No" was told that appending ignores
+            # provenance: with "Yes", appending the next files asks again.
+            self.h5inputoutput.append_informed = not reset_all
+            self.__h5_append_notice_shown = False
         if dsetname is None:
             self.h5inputoutput.open_file(filename, import_all, reset_all)
         else:
@@ -1896,6 +2544,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         This method does not create file-selection widgets or progress bars. When
         history recording is active and the new-session policy is ``"ask"``, a
         history-session question may still be shown before loading.
+
+        When a file holding provenance is appended (``reset_all=False``), its
+        provenance is not imported: no question is asked, and the notice
+        ``datalab_capsule.recorder.APPEND_NOTICE`` is added to
+        ``provenance.notices`` (and logged).
 
         .. warning::
 
@@ -1992,12 +2645,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel_str = "image"
         else:
             raise TypeError(f"Unsupported object type {type(obj)}")
-        # A remote call can reach the main window before the History panel dock
-        # exists, since the XML-RPC server is started before the UI is built.
         historypanel = self.historypanel
-        if historypanel is None:
-            panel.add_object(obj, group_id, set_current)
-            return True
         historypanel.maybe_start_session_for_input(behavior=new_session_behavior)
         panel.add_object(obj, group_id, set_current)
         # Record a creation entry so objects added programmatically (plugins,
@@ -2037,24 +2685,30 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             raise TypeError(f"Unsupported object type {type(obj)}")
 
     @remote_controlled
-    def load_from_files(self, filenames: list[str]) -> None:
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images)
 
         Args:
             filenames: list of filenames
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog. Defaults to None.
         """
         panel = self.__get_current_basedatapanel()
-        panel.load_from_files(filenames)
+        panel.load_from_files(filenames, param=param)
 
     @remote_controlled
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog. Defaults to None.
         """
         panel = self.__get_current_basedatapanel()
-        panel.load_from_directory(path)
+        panel.load_from_directory(path, param=param)
 
     # ------Other methods related to AbstractDLControl interface
     def get_version(self) -> str:
@@ -2108,9 +2762,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
         return self.add_object(obj, group_id, set_current, new_session_behavior)
 
-    # This API mirrors the image metadata accepted by create_image, so the
-    # argument count is part of the stable public interface rather than noise.
-    def add_image(  # pylint: disable=too-many-arguments
+    def add_image(
         self,
         title: str,
         data: np.ndarray,
@@ -2122,6 +2774,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        *,
         new_session_behavior: SessionBehavior | None = None,
     ) -> bool:
         """Add image data to DataLab.
@@ -2185,9 +2838,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
     def _update_extra_color_mode(self) -> None:
-        """Update the macro panel color mode"""
+        """Update the macro panel color mode and the subdued text colors"""
         if self.macropanel is not None:
             self.macropanel.update_color_mode()
+        refresh_subdued_colors()
 
     # Settings changes are intentionally dispatched in one place because each
     # option may trigger a specific live UI update or panel refresh.
@@ -2197,6 +2851,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
         refresh_signal_panel = refresh_image_panel = False
+        update_signal_items = False
 
         # Handling changes to shape/marker parameters
         s_view_result_param = (
@@ -2234,6 +2889,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 "max_cols_in_label",
             ):
                 refresh_signal_panel = refresh_image_panel = True
+            if option == "result_title_mode":
+                self.refresh_object_title_displays()
             if option == "show_result_label":
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.acthandler.show_label_action.setChecked(
@@ -2243,13 +2900,22 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self._update_color_mode()
             if option == "show_console_on_error":
                 self._update_console_show_mode()
+            if option == "welcome_application_rows":
+                self.welcomepanel.update_application_tiles()
+            if option == "show_delete_button_on_hover":
+                for panel in (self.signalpanel, self.imagepanel):
+                    panel.objview.set_delete_button_enabled(
+                        Conf.show_delete_button_on_hover.get()
+                    )
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
             if option.startswith(("sig_autodownsampling", "sig_linewidth")):
-                refresh_signal_panel = True
+                # Signal display settings apply to the curves of all signals, not
+                # only to those of the selected signals
+                update_signal_items = True
             if option == "sig_autoscale_margin_percent":
                 # Update signal plot widget autoscale margin
                 sig_margin = Conf.sig_autoscale_margin_percent.get()
@@ -2289,6 +2955,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     self.imagepanel.update_metadata_view_settings()
             if option == "ima_aspect_ratio_1_1":
                 refresh_image_panel = True
+        if update_signal_items:
+            self.signalpanel.plothandler.update_existing_items()
         if refresh_signal_panel:
             self.signalpanel.manual_refresh()
         if refresh_image_panel:
@@ -2305,7 +2973,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Play demo"""
         # pylint: disable=import-outside-toplevel
         # pylint: disable=cyclic-import
-        from datalab.tests.scenarios import demo
+        from datalab.gui import demo
 
         demo.play_demo(self)
 
@@ -2317,6 +2985,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         tour.start(self)
 
+    def show_welcome_page(self) -> None:
+        """Show the welcome page and bring it to the front"""
+        dock = self.docks[self.welcomepanel]
+        dock.show()
+        dock.raise_()
+
     # ------Close window
     def _get_save_before_quit_message(self) -> str:
         """Return the DataLab workspace save confirmation message."""
@@ -2327,6 +3001,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _close_managed_widgets(self) -> None:
         """Close DataLab panels and generic shell widgets."""
+        self.preview_executor_cache.close()
         for panel in self.panels:
             if panel is not None:
                 panel.close()

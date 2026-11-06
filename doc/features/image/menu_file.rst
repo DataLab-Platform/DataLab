@@ -22,6 +22,9 @@ The "File" menu allows you to:
 
 - Save and restore the current workspace or browse HDF5 files (see :ref:`overview`).
 
+- Export, inspect, replay and compare workspace capsules, i.e. a workspace with the
+  provenance of its processing (see :ref:`capsules`).
+
 - Edit DataLab preferences (see :ref:`settings`).
 
 .. _open_image:
@@ -66,6 +69,16 @@ Create a new image from the following supported filetypes:
       - .bmp
     * - FT-Lab files
       - .ima
+    * - Headerless RAW files
+      - .raw
+
+When opening a headerless RAW file (``.raw``), DataLab displays a **RAW image import**
+dialog to describe its binary layout: pixel data type, image width and height, offset to
+the first image, number of images, gap between consecutive images, byte order, and the
+**White is zero** option (which displays the imported image with an inverted gray
+colormap without altering pixel values). Multi-image files create one image per frame.
+When several RAW files are opened at once, DataLab asks whether to apply the same import
+parameters to all of them or to set the parameters of each file individually.
 
 .. note::
 
@@ -86,7 +99,21 @@ Open multiple images from a specified directory.
 Save image
 ^^^^^^^^^^
 
-Save current image (see "Open image" supported filetypes).
+Save current image (see "Open image" supported filetypes; writing ``.raw`` files is not
+supported).
+
+After choosing the destination file, DataLab opens an **Export image** dialog tailored to
+the selected file format, with a live preview of the exported image (displayed in gray
+levels as it will be read back from the file):
+
+- **Data preparation**: normalization mode (none, min-max, percentile or manual bounds),
+  out-of-range behavior (clip or rescale), non-finite value policy (error, clip or
+  replace), gamma correction, inversion and target data type among those supported by the
+  destination format. When a format only supports integer pixels (e.g. PNG, JPEG or BMP)
+  and the source image uses another data type, min-max rescaling is selected by default.
+- **Format-specific options**: compression, quality, predictor, tiling, resolution,
+  photometric interpretation, text delimiter and precision, or MAT compression, depending
+  on the chosen format.
 
 Save images to directory
 ^^^^^^^^^^^^^^^^^^^^^^^^

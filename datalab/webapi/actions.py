@@ -279,9 +279,21 @@ class WebApiActions:
         self._on_server_stopped()
 
     def cleanup(self) -> None:
-        """Clean up resources on shutdown."""
-        if self._controller is not None and self._controller.is_running:
-            self._controller.stop()
+        """Clean up resources on shutdown.
+
+        The Web API controller is shared by all main windows: once this one is
+        closed, the controller must neither keep it alive nor notify its actions.
+        """
+        controller = self._controller
+        if controller is None:
+            return
+        if controller.is_running:
+            controller.stop()
+        controller.server_started.disconnect(self._on_server_started)
+        controller.server_stopped.disconnect(self._on_server_stopped)
+        controller.server_error.disconnect(self._on_server_error)
+        controller.release_main_window(self._main_window)
+        self._controller = None
 
     def show_connection_info(self) -> None:
         """Show connection info dialog or copy to clipboard.

@@ -31,6 +31,25 @@ class MainSettings(gds.DataSet):
         zip(Conf.color_mode.choices, Conf.color_mode.choices),
         help=_("Color mode for the application"),
     )
+    welcome_on_startup = gds.BoolItem(
+        "",
+        _("Show welcome page when the current panel is empty"),
+        help=_(
+            "The welcome page gathers the main actions to get started "
+            "(create or open data, guided tour, documentation...). It is shown "
+            "at startup and whenever the current signal or image panel is empty."
+        ),
+    )
+    welcome_application_rows = gds.IntItem(
+        _("Welcome page application rows"),
+        default=2,
+        min=1,
+        max=10,
+        help=_(
+            "Maximum number of application tile rows on the welcome page. Other "
+            "applications remain available from the Applications panel."
+        ),
+    )
     process_isolation_enabled = gds.BoolItem(
         "",
         _("Process isolation"),
@@ -143,6 +162,18 @@ class ProcSettings(gds.DataSet):
             "<li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
         )
         % ("→", "→"),
+    )
+    result_title_mode = gds.ChoiceItem(
+        _("References in result titles"),
+        zip(
+            Conf.result_title_mode.choices,
+            [_("Source UUID"), _("Source title")],
+        ),
+        help=_(
+            "Display source references in generated titles as short UUIDs or "
+            "as the current source titles. This setting does not change the "
+            "stored UUID references."
+        ),
     )
     use_signal_bounds = gds.BoolItem(
         _("Use current signal bounds"),
@@ -350,9 +381,18 @@ class ViewSettings(gds.DataSet):
         ),
         default=False,
     )
+    show_delete_button_on_hover = gds.BoolItem(
+        "",
+        _("Show delete button when hovering list items"),
+        help=_(
+            "Show a delete button at the right of the signal, image or group under "
+            "the mouse cursor in the signal and image lists"
+        ),
+        default=True,
+    )
     _g0 = gds.EndGroup("")
 
-    g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="signal.svg")
+    g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="sigimax:signal.svg")
     _prop_ads = gds.ValueProp(False)
     sig_linewidth = gds.FloatItem(
         _("Default line width"),
@@ -379,9 +419,12 @@ class ViewSettings(gds.DataSet):
     ).set_prop("display", store=_prop_ads)
     sig_autodownsampling_maxpoints = gds.IntItem(
         _("Downsampling max points"),
-        default=10000,
+        default=100000,
         min=1000,
-        help=_("Maximum number of points for downsampling"),
+        help=_(
+            "Maximum number of points displayed for a signal: signals with more "
+            "points are downsampled for display only (data are not modified)"
+        ),
     ).set_prop("display", active=_prop_ads)
     sig_autoscale_margin_percent = gds.FloatItem(
         _("Autoscale margin"),
@@ -421,7 +464,7 @@ class ViewSettings(gds.DataSet):
     )
     _g1 = gds.EndGroup("")
 
-    g2 = gds.BeginGroup(_("Images")).set_prop("display", icon="image.svg")
+    g2 = gds.BeginGroup(_("Images")).set_prop("display", icon="sigimax:image.svg")
     ima_aspect_ratio_1_1 = gds.BoolItem(
         "",
         _("Lock aspect ratio to 1:1"),
@@ -457,7 +500,7 @@ class ViewSettings(gds.DataSet):
     ima_defaults = gds.ButtonItem(
         _("Default image visualization settings"),
         edit_default_image_settings,
-        icon="image.svg",
+        icon="sigimax:image.svg",
         default=False,
     )
     ima_shape_param = gds.ButtonItem(

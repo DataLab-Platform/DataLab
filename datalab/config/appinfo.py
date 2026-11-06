@@ -103,7 +103,9 @@ DATAPATH = configtools.get_module_data_path(MOD_NAME, "data")
 SHOTPATH = osp.join(
     configtools.get_module_data_path(MOD_NAME), os.pardir, "doc", "images", "shots"
 )
-OTHER_PLUGINS_PATHLIST = [configtools.get_module_data_path(MOD_NAME, "plugins")]
+OTHER_PLUGINS_PATHLIST = [
+    configtools.get_module_data_path(MOD_NAME, osp.join("plugins", "builtin"))
+]
 
 IS_FROZEN = is_frozen(MOD_NAME)
 if IS_FROZEN:
@@ -185,6 +187,22 @@ def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[st
         seen.add(path)
         normalized.append(path)
     return normalized
+
+
+# Local plugin catalog folders provided via the `DATALAB_PLUGINS_CATALOG`
+# environment variable, separated by `os.pathsep` as for `DATALAB_PLUGINS`.
+DATALAB_PLUGINS_CATALOG_ENV_VAR = "DATALAB_PLUGINS_CATALOG"
+
+
+def get_env_plugin_catalog_paths() -> list[str]:
+    """Return the local plugin catalog folders of ``DATALAB_PLUGINS_CATALOG``.
+
+    Unlike plugin directories, missing folders are kept: a network share may be
+    unavailable when DataLab starts, and the plugin dialog reports the folders
+    it cannot read.
+    """
+    value = os.environ.get(DATALAB_PLUGINS_CATALOG_ENV_VAR, "")
+    return normalize_plugin_paths([path.strip() for path in value.split(os.pathsep)])
 
 
 def migrate_legacy_plugin_paths(

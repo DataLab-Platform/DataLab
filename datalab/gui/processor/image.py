@@ -8,6 +8,9 @@
 
 from __future__ import annotations
 
+import copy
+
+import guidata.dataset as gds
 import numpy as np
 import sigima.params
 import sigima.proc.base as sipb
@@ -269,11 +272,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 "  • z' = a0 + a1*z + a2*z^2 + ..."
             ),
         )
-        self.register_1_to_1(
-            sipi.transpose,
-            _("Swap X/Y axes"),
-            icon_name="swap_x_y.svg",
-        )
         # Level adjustment
         self.register_1_to_1(
             sipi.normalize,
@@ -416,6 +414,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sipi.threshold_yen, _("Yen thresholding"))
         # Exposure
         self.register_1_to_1(
+            sipi.adjust_brightness_contrast,
+            _("Brightness and contrast"),
+            sipi.BrightnessContrastParam,
+        )
+        self.register_1_to_1(
             sipi.adjust_gamma,
             _("Gamma correction"),
             sipi.AdjustGammaParam,
@@ -516,11 +519,16 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
         # Other processing
         self.register_1_to_n(sipi.extract_roi, "ROI", icon_name="roi.svg")
+        # Without menu entry: results of these features (several ROIs extracted
+        # into one image, or saved by DataLab-Web) are applied again from the
+        # Processing tab and History
+        self.register_1_to_1(sipi.extract_rois, _("Extract ROI"), icon_name="roi.svg")
+        self.register_1_to_1(sipi.translate, _("Translate"), sipi.TranslateParam)
         self.register_1_to_1(
             sipi.resize,
             _("Resize"),
             sipi.ResizeParam,
-            icon_name="resize.svg",
+            icon_name="datalab:resize.svg",
         )
         self.register_1_to_1(
             sipi.binning,
@@ -561,7 +569,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sipi.histogram,
             _("Histogram"),
             paramclass=sipb.HistogramParam,
-            icon_name="histogram.svg",
+            icon_name="datalab:histogram.svg",
         )
         self.register_1_to_0(
             sipi.centroid,
@@ -702,6 +710,37 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             param.dtype_str = input_dtype_str
         self.run_feature("binning", param, title=title, edit=edit)
 
+    def __init_profile_param(
+        self,
+        param: sigima.params.LineProfileParam
+        | sigima.params.SegmentProfileParam
+        | sigima.params.AverageProfileParam
+        | None,
+        paramclass: type[sigima.params.LineProfileParam]
+        | type[sigima.params.SegmentProfileParam]
+        | type[sigima.params.AverageProfileParam],
+        title: str,
+    ) -> tuple[bool, gds.DataSet, bool]:
+        """Initialize profile parameters, keeping the last profile position
+
+        Args:
+            param: parameters (None: edit new parameters)
+            paramclass: parameter class
+            title: title
+
+        Returns:
+            Tuple (edit, param, add_initial_shape) where add_initial_shape is True
+            if a previous profile position is reused as initial shape
+        """
+        previous = self.PARAM_DEFAULTS.get(paramclass.__name__)
+        previous = None if previous is None else copy.deepcopy(previous)
+        edit, param = self.init_param(param, paramclass, title)
+        if edit and previous is not None:
+            # `init_param` centers the profile on the image (`update_from_obj`):
+            # the last profile position is restored instead
+            gds.update_dataset(param, previous)
+        return edit, param, previous is not None
+
     @qt_try_except()
     def compute_line_profile(
         self, param: sigima.params.LineProfileParam | None = None
@@ -709,8 +748,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute profile along a vertical or horizontal line
         with :py:func:`sigima.proc.image.line_profile`"""
         title = _("Profile")
-        add_initial_shape = self.has_param_defaults(sigima.params.LineProfileParam)
-        edit, param = self.init_param(param, sipi.LineProfileParam, title)
+        edit, param, add_initial_shape = self.__init_profile_param(
+            param, sipi.LineProfileParam, title
+        )
         if edit:
             options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
@@ -729,8 +769,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute profile along a segment
         with :py:func:`sigima.proc.image.segment_profile`"""
         title = _("Profile")
-        add_initial_shape = self.has_param_defaults(sigima.params.SegmentProfileParam)
-        edit, param = self.init_param(param, sipi.SegmentProfileParam, title)
+        edit, param, add_initial_shape = self.__init_profile_param(
+            param, sipi.SegmentProfileParam, title
+        )
         if edit:
             options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
@@ -749,8 +790,9 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         """Compute average profile
         with :py:func:`sigima.proc.image.average_profile`"""
         title = _("Average profile")
-        add_initial_shape = self.has_param_defaults(sigima.params.AverageProfileParam)
-        edit, param = self.init_param(param, sipi.AverageProfileParam, title)
+        edit, param, add_initial_shape = self.__init_profile_param(
+            param, sipi.AverageProfileParam, title
+        )
         if edit:
             options = self.panel.plothandler.get_plot_options()
             dlg = ProfileExtractionDialog(
@@ -878,11 +920,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             if exec_dialog(dlg):
                 x0, y0, x1, y1 = dlg.get_rect_coords()
                 param = ROI2DParam.create(
-                    geometry="rectangle",
-                    x0=int(x0),
-                    y0=int(y0),
-                    dx=int(x1 - x0),
-                    dy=int(y1 - y0),
+                    geometry="rectangle", x0=x0, y0=y0, dx=x1 - x0, dy=y1 - y0
                 )
             else:
                 return

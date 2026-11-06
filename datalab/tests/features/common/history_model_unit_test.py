@@ -250,8 +250,10 @@ def test_compute_n_to_1_uses_provided_history_title() -> None:
             ),
             objmodel=object(),
         ),
-        mainwindow=SimpleNamespace(historypanel=history_panel),
+        mainwindow=SimpleNamespace(historypanel=history_panel, provenance=Mock()),
         _get_plugin_origin_for=Mock(return_value=None),
+        _x_alignment_contract=Mock(return_value=None),
+        get_feature_id=lambda func, feature_id=None: feature_id or func.__name__,
     )
 
     def average(_objects: list[object]) -> None:
@@ -782,6 +784,8 @@ def test_recompute_in_place_skips_decode_failed_action() -> None:
 def test_action_copy_remaps_all_uuid_references() -> None:
     """Copy an action independently and rewrite every captured UUID field."""
     action = build_history_action()
+    action.kwargs["source_uuid"] = "source-uuid"
+    action.kwargs["output_uuid"] = "output-uuid"
     action.plugin_origin = {
         "module": "example.plugin",
         "metadata": {"entry_points": ["difference"]},
@@ -801,12 +805,63 @@ def test_action_copy_remaps_all_uuid_references() -> None:
         "signal": {"new-source": {"shape": [10], "ndim": 1, "title": "Source"}}
     }
     assert copied.kwargs["obj2_uuids"] == "new-second"
+    assert copied.kwargs["source_uuid"] == "new-source"
+    assert copied.kwargs["output_uuid"] == "new-output"
     assert copied.output_uuids == ["new-output"]
     assert copied.plugin_origin == action.plugin_origin
     copied.state.object_metadata["signal"]["new-source"]["shape"] = [20]
     copied.plugin_origin["metadata"]["entry_points"].append("average")
     assert action.state.object_metadata["signal"]["source-uuid"]["shape"] == [10]
     assert action.plugin_origin["metadata"]["entry_points"] == ["difference"]
+
+
+def test_action_copy_remaps_cross_panel_outputs() -> None:
+    """Remap image processing outputs from their owning signal panel."""
+    state = WorkspaceState()
+    state.selection = {"image": ["image-source"]}
+    action = HistoryAction(
+        title="Line profile",
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="image",
+        func_name="line_profile",
+        pattern="1_to_1",
+        state=state,
+    )
+    action.output_uuids = ["signal-output"]
+
+    copied = action.copy_with_uuid_remap(
+        {
+            "image": {"image-source": "new-image-source"},
+            "signal": {"signal-output": "new-signal-output"},
+        }
+    )
+
+    assert copied.state.selection == {"image": ["new-image-source"]}
+    assert copied.output_uuids == ["new-signal-output"]
+
+
+def test_action_copy_remaps_exported_object_uuids() -> None:
+    """Remap objects exported by ``save_to_files`` in the action panel."""
+    action = HistoryAction(
+        title="Save to 2 different files",
+        target="imagepanel",
+        method_name="save_to_files",
+        kwargs={
+            "filenames": ["first.png", "second.png"],
+            "object_uuids": ["first-uuid", "unmapped-uuid"],
+        },
+    )
+
+    copied = action.copy_with_uuid_remap(
+        {
+            "image": {"first-uuid": "new-first"},
+            "signal": {"unmapped-uuid": "other-panel-uuid"},
+        }
+    )
+
+    assert copied.kwargs["object_uuids"] == ["new-first", "unmapped-uuid"]
+    assert copied.kwargs["filenames"] == ["first.png", "second.png"]
+    assert action.kwargs["object_uuids"] == ["first-uuid", "unmapped-uuid"]
 
 
 def _make_analysis_action(obj_uuid: str) -> HistoryAction:
@@ -1084,6 +1139,34 @@ def test_analysis_effects_round_trip_merge_and_persistence() -> None:
         assert legacy.effects is None
 
 
+def test_provenance_links_round_trip_and_are_never_copied() -> None:
+    """Links to executions are persisted (schema v3) and dropped by copies."""
+    action = build_history_action()
+    action.provenance_activity_ids = ["activity-1", "activity-2"]
+    session = HistorySession(number=1)
+    session.add_action(action)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "history.dlhist")
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+        loaded = read_history_sessions(path)[0].actions[0]
+        assert loaded.provenance_activity_ids == ["activity-1", "activity-2"]
+        assert loaded.schema_version == HISTORY_ACTION_SCHEMA_VERSION == 3
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+            delete_hdf5_items_by_name(writer.h5, "provenance_activity_ids")
+        legacy = read_history_sessions(path)[0].actions[0]
+        assert legacy.provenance_activity_ids == []
+    # A copied recipe has not been executed: no link is copied.
+    assert action.copy().provenance_activity_ids == []
+    assert action.copy_with_uuid_remap({}).provenance_activity_ids == []
+    assert all(
+        not copied.provenance_activity_ids
+        for copied in session.copy_with_uuid_remap("Copy", {}).actions
+    )
+    assert all(not copied.provenance_activity_ids for copied in session.copy().actions)
+
+
 def test_update_obj_in_place_preserves_roi() -> None:
     """In-place recompute keeps the target's ROI when the new object has none."""
     target = create_paracetamol_signal()
@@ -1231,10 +1314,10 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
         )
         return panel, signal_panel
 
-    # Dead source: the plan carries a warning and applying it is a no-op
+    # Dead source: the plan reports the producer and applying it is a no-op
     panel, signal_panel = make_panel([consumer_obj])
     plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
-    assert plan.warning is not None and "Normalize" in plan.warning
+    assert plan.unreconnected_operation == "Normalize"
     assert [target.object_uuid for target in plan.targets] == [consumer_uuid]
     assert plan.targets[0].action is consumer_action
     roots: list[HistoryAction] = []
@@ -1246,13 +1329,13 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
         patch.object(hchain, "execenv", SimpleNamespace(unattended=True)),
         patch.object(hchain.QW, "QMessageBox") as message_box,
     ):
-        hchain.show_reconnection_warnings(panel, [plan.warning])
+        hchain.show_reconnection_warnings(panel, [plan.unreconnected_operation])
     message_box.warning.assert_not_called()
 
     # Alive source: reconnect the consumer and remove the outputless producer
     panel, signal_panel = make_panel([source, consumer_obj])
     plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
-    assert plan.warning is None
+    assert plan.unreconnected_operation is None
     assert plan.source_uuid == source_uuid
     assert plan.remove_producer is True
     roots = []
@@ -1262,6 +1345,84 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
     assert consumer_action.state.selection["signal"] == [source_uuid]
     assert producer not in session.actions
     panel.runtime.objects.remove_action_outputs.assert_called_once_with(producer)
+
+
+def test_plan_reconnection_ignores_objects_without_processing_source() -> None:
+    """Deleting a raw object reports nothing and reconnects nothing, even when
+    its creation action recorded a selection or history was not recording."""
+    unrelated = create_paracetamol_signal()
+    removed_uuid = "removed-raw"
+    consumer_obj = create_paracetamol_signal()
+    insert_processing_parameters(
+        consumer_obj,
+        ProcessingParameters(
+            func_name="normalize", pattern="1-to-1", source_uuid=removed_uuid
+        ),
+    )
+    creation = HistoryAction(
+        title="New signal",
+        kind=HistoryAction.KIND_UI,
+        panel_str="signal",
+        target="signalpanel",
+        method_name="new_object",
+        state=build_workspace_state([get_uuid(unrelated)]),
+    )
+    session = HistorySession(number=1)
+    session.add_action(creation)
+    signal_panel = SimpleNamespace(
+        PANEL_STR_ID="signal", objmodel=CascadeObjectModel([unrelated, consumer_obj])
+    )
+    # Not recorded (no producer), then recorded by a creation action
+    for output_to_action in ({}, {removed_uuid: creation.uuid}):
+        panel = SimpleNamespace(
+            history_sessions=[session],
+            runtime=SimpleNamespace(
+                objects=SimpleNamespace(
+                    output_to_action=output_to_action, action_output_uuids={}
+                )
+            ),
+            mainwindow=SimpleNamespace(
+                signalpanel=signal_panel,
+                imagepanel=SimpleNamespace(
+                    PANEL_STR_ID="image", objmodel=CascadeObjectModel([])
+                ),
+            ),
+        )
+        plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
+        assert len(plan.targets) == 1
+        assert plan.source_uuid is None
+        assert plan.unreconnected_operation is None
+        roots: list[HistoryAction] = []
+        hchain.apply_reconnection_plan(panel, signal_panel, plan, roots)
+        assert not roots
+        pp = extract_processing_parameters(consumer_obj)
+        assert pp.source_uuid == removed_uuid
+    assert creation in session.actions
+
+
+def test_show_reconnection_warnings_lists_each_operation_once() -> None:
+    """One message lists each operation once, up to a maximum number."""
+    panel = SimpleNamespace(mainwindow=None)
+    with (
+        patch.object(hchain, "execenv", SimpleNamespace(unattended=False)),
+        patch.object(hchain.QW, "QMessageBox") as message_box,
+    ):
+        hchain.show_reconnection_warnings(panel, [])
+        message_box.warning.assert_not_called()
+
+        hchain.show_reconnection_warnings(panel, ["Normalize"] * 5 + ["Derivative"])
+        message_box.warning.assert_called_once()
+        text = message_box.warning.call_args.args[2]
+        assert text.count("• ") == 2
+        assert text.count("Normalize") == text.count("Derivative") == 1
+
+        message_box.warning.reset_mock()
+        count = hchain.MAX_LISTED_UNRECONNECTED + 3
+        hchain.show_reconnection_warnings(panel, [f"Op {i}" for i in range(count)])
+        text = message_box.warning.call_args.args[2]
+        assert text.count("• ") == hchain.MAX_LISTED_UNRECONNECTED
+        assert f"Op {hchain.MAX_LISTED_UNRECONNECTED}" not in text
+        assert "3" in text.splitlines()[-1]
 
 
 def test_prepare_action_param_edit_skips_paramless_actions() -> None:
