@@ -529,6 +529,7 @@ def _render_test(project: PluginProject) -> str:
 
 from datalab.plugins import PluginCapability
 
+from {project.package} import __version__
 from {project.package}.adapters import desktop
 
 
@@ -536,7 +537,7 @@ def test_plugin_descriptor() -> None:
     """The generated entry point exposes stable SDK metadata."""
     plugin_class = desktop.{project.class_name}
     assert plugin_class.get_plugin_id() == "{project.plugin_id}"
-    assert plugin_class.PLUGIN_INFO.version == "0.1.0"
+    assert plugin_class.PLUGIN_INFO.version == __version__
     assert plugin_class.PLUGIN_INFO.capabilities == frozenset(
         {{
 {expected_capabilities}
@@ -660,57 +661,113 @@ architecture test preserves these dependency boundaries as the plugin grows.
 
 ## Publishing
 
-Set the new version in `pyproject.toml` and in the package `__init__.py`, then
-push a tag such as `v0.1.0`. The **Release** workflow builds the wheel and
-attaches it to a GitHub release: DataLab users install it with
+Set the new version in `pyproject.toml` and in the package `__init__.py`
+(`X.Y.Z`, or `X.Y.ZrcN` for a release candidate), then push a tag such as
+`v0.1.0` (or `v0.2.0-rc1`). The **Release** workflow checks that the tag matches
+both versions, runs the tests, builds the wheel and publishes it in a GitHub
+release with its SHA-256 checksum and build provenance attestation (a release
+candidate is published as a pre-release): DataLab users install it with
 **Plugins > Configure plugins... > From file**.
 
-To list the plugin in the DataLab plugin catalog, open a pull request on
+To list a release in the DataLab plugin catalog, open a pull request on
 <https://github.com/DataLab-Platform/plugins> with the entry printed in the
-summary of the **Release** workflow run.
+summary of the **Release** workflow run (release candidates are not listed).
 """
 
 
-_RELEASE_WORKFLOW = """name: Release
+_RELEASE_WORKFLOW = r"""name: Release
+
+# Pushing a tag vX.Y.Z (or vX.Y.Z-rcN for a release candidate) checks that it
+# matches the version of the project, runs the tests, builds the wheel and
+# publishes it in a GitHub release, with its SHA-256 checksum and its build
+# provenance attestation. The summary of the run gives the entry of the DataLab
+# plugin catalog.
 
 on:
   push:
-    tags: ["v*"]
+    tags:
+      - "v[0-9]*.[0-9]*.[0-9]*"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # publish the GitHub release
+      id-token: write  # attest the build provenance of the wheel
+      attestations: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
 
-      - run: python -m pip install build
+      - name: Check the tag and the version
+        run: |
+          python - <<'EOF'
+          import os
+          import re
+          import tomllib
 
-      - run: python -m build --wheel
+          tag = os.environ["GITHUB_REF_NAME"]
+          match = re.fullmatch(r"v(\d+\.\d+\.\d+)(?:-rc([1-9]\d*))?", tag)
+          if match is None:
+              raise SystemExit(f"Tag {tag} is not vX.Y.Z or vX.Y.Z-rcN")
+          version = match[1] + (f"rc{match[2]}" if match[2] else "")
+          with open("pyproject.toml", "rb") as file:
+              project_version = tomllib.load(file)["project"]["version"]
+          with open("src/__PACKAGE__/__init__.py", encoding="utf-8") as file:
+              init = file.read()
+          package_version = re.search(r'^__version__ = "(.+)"', init, re.M)[1]
+          if project_version != version or package_version != version:
+              raise SystemExit(
+                  f"Tag {tag} requires version {version} in pyproject.toml "
+                  f"({project_version}) and in __init__.py ({package_version})"
+              )
+          print(f"Tag {tag} matches version {version}")
+          EOF
 
-      - name: Attach the wheel to a GitHub release
+      - name: Run the tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgl1 libegl1 libxkbcommon-x11-0 \
+            libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 \
+            libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0
+          python -m pip install -e ".[test]" "datalab-platform[qt]" pytest-xvfb
+          python -m pytest
+
+      - name: Build the wheel
+        run: |
+          python -m pip install build
+          python -m build --wheel
+          cd dist && sha256sum -- *.whl > SHA256SUMS
+
+      - name: Attest the build provenance of the wheel
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: dist/*.whl
+
+      - name: Publish the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          wheel=$(ls dist/*-py3-none-any.whl)
-          case "$wheel" in
-            *-"${GITHUB_REF_NAME#v}"-py3-none-any.whl) ;;
-            *) echo "Tag $GITHUB_REF_NAME does not match $wheel" >&2; exit 1 ;;
-          esac
-          gh release create "$GITHUB_REF_NAME" "$wheel" --verify-tag --generate-notes
+          options=(--verify-tag --generate-notes)
+          if [[ "$GITHUB_REF_NAME" == *-rc* ]]; then
+            options+=(--prerelease)
+          fi
+          gh release create "$GITHUB_REF_NAME" dist/*.whl dist/SHA256SUMS \
+            "${options[@]}"
 
       - name: Print the plugin catalog entry
+        if: ${{ !contains(github.ref_name, '-rc') }}
         run: |
-          sha256=$(sha256sum dist/*-py3-none-any.whl | cut -d " " -f 1)
+          sha256=$(sha256sum dist/*.whl | cut -d " " -f 1)
           {
             echo "To list this release in the DataLab plugin catalog, add"
-            echo "\\`plugins/__PLUGIN_ID__.yaml\\` to"
+            echo "\`plugins/__PLUGIN_ID__.yaml\` to"
             echo "https://github.com/DataLab-Platform/plugins"
             echo "(or only the new release if the plugin is already listed):"
             echo
@@ -735,6 +792,7 @@ def _render_release_workflow(project: PluginProject) -> str:
         _RELEASE_WORKFLOW.replace("__PLUGIN_ID__", project.plugin_id)
         .replace("__PLUGIN_NAME__", _toml_string(project.name))
         .replace("__CAPABILITIES__", ", ".join(project.capabilities))
+        .replace("__PACKAGE__", project.package)
     )
 
 
