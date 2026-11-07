@@ -1,5 +1,15 @@
 # Version 1.4 #
 
+## DataLab Version 1.4.1 ##
+
+### Requirements ###
+
+* Requirements are unchanged since version 1.4.0.
+
+### 🔧 Improvements since version 1.4.0 ###
+
+* **Plugin generator**: the release workflow of a generated plugin project (`.github/workflows/release.yml`) now checks that the tag matches the version of both `pyproject.toml` and the package, runs the tests before building the wheel, and publishes the wheel with its SHA-256 checksum and its build provenance attestation, which users can check with `gh attestation verify`. A tag such as `v0.2.0-rc1` publishes a release candidate as a GitHub pre-release, without plugin catalog entry. The generated test no longer compares the plugin version with a fixed value, so it no longer fails when the version changes. Existing plugin projects are not affected.
+
 ## DataLab Version 1.4.0 ##
 
 ### Requirements ###

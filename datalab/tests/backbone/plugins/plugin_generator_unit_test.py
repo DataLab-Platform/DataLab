@@ -215,11 +215,24 @@ def test_create_layered_plugin_project(
     release = (destination / ".github/workflows/release.yml").read_text(
         encoding="utf-8"
     )
-    steps = yaml.safe_load(release)["jobs"]["release"]["steps"]
-    assert "gh release create" in steps[4]["run"]
-    assert "id: org.datalab.camera-characterization\n" in steps[5]["run"]
-    assert 'name: "Camera Characterization"\n' in steps[5]["run"]
-    assert "capabilities: [application, processing]" in steps[5]["run"]
+    workflow = yaml.safe_load(release)
+    # PyYAML (YAML 1.1) reads the "on" key as True
+    assert workflow[True]["push"]["tags"] == ["v[0-9]*.[0-9]*.[0-9]*"]
+    steps = {step.get("name"): step for step in workflow["jobs"]["release"]["steps"]}
+    check = steps["Check the tag and the version"]["run"]
+    assert "src/datalab_camera_characterization/__init__.py" in check
+    assert "python -m pytest" in steps["Run the tests"]["run"]
+    assert "SHA256SUMS" in steps["Build the wheel"]["run"]
+    attestation = steps["Attest the build provenance of the wheel"]
+    assert attestation["uses"].startswith("actions/attest-build-provenance@")
+    publication = steps["Publish the GitHub release"]["run"]
+    assert "gh release create" in publication
+    assert "--prerelease" in publication
+    catalog = steps["Print the plugin catalog entry"]
+    assert "-rc" in catalog["if"]
+    assert "id: org.datalab.camera-characterization\n" in catalog["run"]
+    assert 'name: "Camera Characterization"\n' in catalog["run"]
+    assert "capabilities: [application, processing]" in catalog["run"]
 
     web_adapter = (
         destination / "src/datalab_camera_characterization/adapters/web.py"
