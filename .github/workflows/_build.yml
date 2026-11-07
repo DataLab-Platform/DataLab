@@ -4,11 +4,13 @@
 # Decomposed into modular jobs so each artifact is uploaded independently
 # and any individual job can be re-run from the GitHub UI on failure:
 #
-#   preflight             - tag/version check, exports `version` output
+#   preflight             - input check, exports `version` output
 #   compile-translations  - UI + docs .mo files                  (ubuntu)
 #   build-pdf-docs        - DataLab_fr.pdf + DataLab_en.pdf      (ubuntu)
 #   build-python-dists    - sdist + wheel (PDFs embedded)        (ubuntu)
 #   build-msi             - PyInstaller EXE + WiX MSI, smoke test (windows)
+#
+# Release tags are checked beforehand by the `check-tag` job of `release.yml`.
 #
 # Each job uploads its own artifact (see "Artifacts produced" below) so
 # they can be downloaded individually from the workflow run page even when
@@ -41,16 +43,6 @@ on:
         type: string
         required: false
         default: ""
-      skip-tag-check:
-        description: "Skip the tag vs __version__ consistency check"
-        type: boolean
-        required: false
-        default: false
-      skip-tag-branch-check:
-        description: "Skip the 'tag is on main' check"
-        type: boolean
-        required: false
-        default: false
       build-msi:
         description: "Build the Windows MSI installer (costly)"
         type: boolean
@@ -86,7 +78,7 @@ on:
         default: "3.11"
     outputs:
       version:
-        description: "Version that was built (without leading v)"
+        description: "Version that was built (datalab.__version__)"
         value: ${{ jobs.preflight.outputs.version }}
 
 permissions:
@@ -94,7 +86,7 @@ permissions:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # 0. Preflight: derive version from tag or __version__, optional checks.
+  # 0. Preflight: check the inputs, export the version (datalab.__version__).
   # ---------------------------------------------------------------------------
   preflight:
     runs-on: ubuntu-latest
@@ -104,7 +96,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -118,26 +109,11 @@ jobs:
             *) echo "::error::Invalid dependencies input: '${{ inputs.dependencies }}'"; exit 1 ;;
           esac
 
-      - name: Verify tag is on main branch
-        if: ${{ !inputs.skip-tag-branch-check && startsWith(github.ref, 'refs/tags/') }}
-        run: |
-          git fetch origin main --depth=200
-          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
-            echo "::error::Tag ${GITHUB_REF_NAME} (commit $GITHUB_SHA) is not reachable from origin/main."
-            exit 1
-          fi
-          echo "Tag commit is on main branch ✔"
-
-      - name: Verify tag matches datalab.__version__ and export version
+      - name: Export datalab.__version__
         id: version
         run: |
-          if [ "${{ inputs.skip-tag-check }}" = "true" ] || [ "${GITHUB_REF_TYPE}" != "tag" ]; then
-            VERSION=$(python -c "import re,sys; t=open('datalab/__init__.py').read(); print(re.search(r'__version__\s*=\s*\"([^\"]+)\"', t).group(1))")
-            echo "Using datalab.__version__=$VERSION (no tag check)"
-          else
-            python scripts/ci_release_helpers.py check-tag "$GITHUB_REF_NAME"
-            VERSION="${GITHUB_REF_NAME#v}"
-          fi
+          VERSION=$(python -c "import re,sys; t=open('datalab/__init__.py').read(); print(re.search(r'__version__\s*=\s*\"([^\"]+)\"', t).group(1))")
+          echo "Building DataLab $VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
   # ---------------------------------------------------------------------------

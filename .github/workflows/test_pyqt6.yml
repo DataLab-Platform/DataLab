@@ -10,6 +10,8 @@ on:
     branches: [ "main", "develop", "release" ]
   pull_request:
     branches: [ "main", "develop", "release" ]
+  # Called by release.yml to test a release tag.
+  workflow_call:
   workflow_dispatch:
     inputs:
       job_to_run:
