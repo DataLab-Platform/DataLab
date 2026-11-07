@@ -193,6 +193,9 @@ msgstr "Fusionner ``release`` dans ``main`` :"
 msgid "Tag the release on ``main``:"
 msgstr "Taguer la version sur ``main`` :"
 
+msgid "Pushing the tag starts the **Release** workflow, which checks the tag, runs the tests and builds the release files, then creates a draft GitHub release. Review the draft release and publish it: this uploads the package to PyPI and deploys the documentation. Never create a GitHub release by hand (see ``RELEASING.md`` at the root of the repository)."
+msgstr "Le push du tag lance le workflow **Release**, qui vérifie le tag, exécute les tests et construit les fichiers de la version, puis crée un brouillon de release GitHub. Relire ce brouillon et le publier : cela envoie le paquet sur PyPI et déploie la documentation. Ne jamais créer une release GitHub à la main (voir ``RELEASING.md`` à la racine du dépôt)."
+
 msgid "Keep the ``release`` branch for additional patches in the same minor version series."
 msgstr "Conserver la branche ``release`` pour des correctifs supplémentaires dans la même série de versions mineures."
 
