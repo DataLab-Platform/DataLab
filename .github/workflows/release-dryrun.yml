@@ -64,10 +64,6 @@ jobs:
     with:
       build-msi: ${{ inputs.build-msi }}
       dependencies: ${{ inputs.dependencies }}
-      # On a dry-run we typically run on a branch (not a tag) so the
-      # tag-related checks must be relaxed.
-      skip-tag-check: true
-      skip-tag-branch-check: true
       # workflow_dispatch number inputs come through as strings; cast back.
       artifact-retention-days: ${{ fromJSON(inputs.artifact-retention-days) }}
 

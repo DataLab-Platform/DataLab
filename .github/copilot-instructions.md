@@ -751,6 +751,10 @@ Distinguish three categories of dependencies:
   * Python ≥ 3.10 is now required for the Python package and newly generated plugin projects.
 ```
 
+## Releasing
+
+Follow [RELEASING.md](../RELEASING.md). **Never create a GitHub release by hand** (with `gh release create` or from the GitHub web page): pushing a tag `vX.Y.Z` (on `main`) or `vX.Y.Z-rcN` makes `.github/workflows/release.yml` (based on the shared [release actions](https://github.com/DataLab-Platform/release-actions)) create a draft release, and only publishing that draft uploads to PyPI (or TestPyPI) and deploys the documentation. Each final version needs a `## DataLab Version X.Y.Z ##` section in `doc/release_notes/release_X.YY.md`: it becomes the description of the GitHub release.
+
 ## Key Files Reference
 
 | File | Purpose |

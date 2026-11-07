@@ -1,25 +1,46 @@
 # ============================================================================
-# Build and publish a DataLab release.
+# Prepare and publish a DataLab release (procedure: RELEASING.md).
 #
-# The build itself is delegated to the reusable `_build.yml` workflow
-# (modular, one artifact per stage). This file only adds the publication
-# jobs: PyPI Trusted Publishing + draft GitHub Release + Pages deployment.
+# Maintainers never create a GitHub release by hand. A release takes two
+# steps, each one running this workflow, which relies on the release actions
+# shared by the DataLab Platform projects
+# (https://github.com/DataLab-Platform/release-actions):
 #
-# Triggers:
-#   * push of a tag matching vX.Y.Z (no pre-release suffix) on `main`.
-#     RC tags `vX.Y.Z-rcN` are handled by `release-rc.yml`.
+# 1. "Prepare vX.Y.Z" - a maintainer pushes a release tag:
+#      vX.Y.Z      final release, on `main`, datalab.__version__ = "X.Y.Z"
+#      vX.Y.Z-rcN  release candidate, on any branch, __version__ = "X.Y.ZrcN"
+#    The tag is checked (format, version, release notes, release branch, no
+#    release already published), the tests run, the release files are built
+#    (`_build.yml`: wheel, sdist, PDF documentation, smoke-tested MSI), and a
+#    DRAFT GitHub release is created with them, SHA256SUMS and build
+#    provenance attestations. Nothing is published yet: on failure, delete the
+#    tag, fix and tag again.
+#
+# 2. "Publish vX.Y.Z" - a maintainer reviews the draft release and publishes
+#    it. The wheel and the sdist of the release are checked against
+#    SHA256SUMS and their attestations, then uploaded with Trusted Publishing
+#    to PyPI (final release) or TestPyPI (release candidate). For a final
+#    release, the documentation is then deployed (`pages.yml`). A release
+#    created by hand has no such files: nothing is published.
 #
 # Prerequisites (one-time, off-CI):
-#   - Configure PyPI Trusted Publishing for `datalab` -> environment `pypi`.
-#   - Configure GH_PAGES_TOKEN or GH_PAGES_DEPLOY_KEY (see `pages.yml`).
+#   - Trusted Publishing for `datalab-platform` with this workflow
+#     (`release.yml`), on PyPI with environment `pypi` and on TestPyPI with
+#     environment `testpypi`.
+#   - GH_PAGES_TOKEN or GH_PAGES_DEPLOY_KEY (see `pages.yml`).
 # ============================================================================
 name: Release
+
+run-name: >-
+  ${{ github.event_name == 'release' && 'Publish' || 'Prepare' }}
+  ${{ github.ref_name }}
 
 on:
   push:
     tags:
       - "v[0-9]*.[0-9]*.[0-9]*"
-      - "!v*-*"  # exclude pre-release tags (handled by release-rc.yml)
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -28,54 +49,53 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  NOTES_FILE: doc/release_notes/release_{major}.{minor:02d}.md
+  NOTES_HEADING: "## DataLab Version {version}"
+
 jobs:
   # ---------------------------------------------------------------------------
-  # Modular build (translations / PDFs / dists / MSI) via reusable workflow.
+  # Step 1 - Prepare: check the tag before spending time on tests and builds.
   # ---------------------------------------------------------------------------
+  check-tag:
+    name: Check the tag
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: DataLab-Platform/release-actions/check-tag@v1
+        with:
+          version-file: datalab/__init__.py
+          notes-file: ${{ env.NOTES_FILE }}
+          notes-heading: ${{ env.NOTES_HEADING }}
+
+  test_pyqt5:
+    needs: check-tag
+    uses: ./.github/workflows/test_pyqt5.yml
+
+  test_pyqt6:
+    needs: check-tag
+    uses: ./.github/workflows/test_pyqt6.yml
+
+  # Modular build (translations / PDFs / dists / MSI) via reusable workflow.
   build:
+    needs: [test_pyqt5, test_pyqt6]
     uses: ./.github/workflows/_build.yml
     with:
       build-msi: true
       artifact-retention-days: 30
 
-  # ---------------------------------------------------------------------------
-  # Publish sdist + wheel to PyPI via Trusted Publishing (OIDC).
-  # ---------------------------------------------------------------------------
-  publish-pypi:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/datalab
-    permissions:
-      id-token: write
-    steps:
-      - name: Download Python distributions
-        uses: actions/download-artifact@v7
-        with:
-          name: python-dists
-          path: dist
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-
-  # ---------------------------------------------------------------------------
-  # Create a draft GitHub Release with all public artifacts.
-  # ---------------------------------------------------------------------------
-  github-release:
+  draft-release:
+    name: Create the draft release
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      id-token: write       # required by attest-build-provenance (OIDC)
-      attestations: write   # required by attest-build-provenance
+      contents: write       # create the draft release
+      id-token: write       # required by the build provenance attestation
+      attestations: write   # required by the build provenance attestation
     steps:
       - uses: actions/checkout@v7
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: "3.11"
 
       - name: Download Python distributions
         uses: actions/download-artifact@v7
@@ -95,60 +115,57 @@ jobs:
           name: msi-installer
           path: assets/msi
 
-      - name: Generate SHA256SUMS
-        # Single checksums file covering every artifact published in the
-        # release. Users verify with: `sha256sum -c SHA256SUMS`.
-        run: |
-          cd assets
-          # Published release assets are flat, so SHA256SUMS must reference bare
-          # filenames. Run sha256sum from each file's own directory so the
-          # checksum line contains the basename (not dists/…, msi/…, pdfs/…).
-          find dists msi pdfs -type f \
-            \( -name '*.whl' -o -name '*.tar.gz' -o -name '*.msi' -o -name '*.pdf' \) \
-            -printf '%p\n' | sort | while read -r f; do
-              ( cd "$(dirname "$f")" && sha256sum "$(basename "$f")" )
-            done > SHA256SUMS
-          echo "--- SHA256SUMS ---"
-          cat SHA256SUMS
-
-      - name: Attest build provenance
-        # Produces a Sigstore-backed attestation linking each artifact to
-        # this exact workflow run. Verifiable with `gh attestation verify`.
-        uses: actions/attest-build-provenance@v4
+      - uses: DataLab-Platform/release-actions/create-draft@v1
         with:
-          subject-path: |
-            assets/dists/*.whl
-            assets/dists/*.tar.gz
-            assets/msi/*.msi
-
-      - name: Extract release notes
-        run: |
-          python scripts/ci_release_helpers.py release-notes \
-            "$GITHUB_REF_NAME" -o release-notes.md
-          echo "--- release notes preview ---"
-          head -n 20 release-notes.md
-
-      - name: Create draft GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: DataLab ${{ github.ref_name }}
-          body_path: release-notes.md
-          draft: true
-          fail_on_unmatched_files: true
+          name: DataLab
           files: |
             assets/dists/*.whl
             assets/dists/*.tar.gz
             assets/msi/*.msi
             assets/pdfs/DataLab_fr.pdf
             assets/pdfs/DataLab_en.pdf
-            assets/SHA256SUMS
+          attest: |
+            assets/dists/*.whl
+            assets/dists/*.tar.gz
+            assets/msi/*.msi
+          notes-file: ${{ env.NOTES_FILE }}
+          notes-heading: ${{ env.NOTES_HEADING }}
 
   # ---------------------------------------------------------------------------
-  # Build & deploy documentation (delegated to pages.yml). Non-blocking.
+  # Step 2 - Publish: upload the checked files of the published release.
   # ---------------------------------------------------------------------------
+  publish:
+    name: Publish to ${{ contains(github.ref_name, '-rc') && 'TestPyPI' || 'PyPI' }}
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ contains(github.ref_name, '-rc') && 'testpypi' || 'pypi' }}
+      url: ${{ contains(github.ref_name, '-rc') && 'https://test.pypi.org/p/datalab-platform' || 'https://pypi.org/p/datalab-platform' }}
+    permissions:
+      contents: read      # download the files of the release
+      attestations: read  # verify their build provenance
+      id-token: write     # Trusted Publishing
+    steps:
+      - id: release
+        uses: DataLab-Platform/release-actions/verify-release@v1
+        with:
+          files: |
+            datalab_platform-{version}-py3-none-any.whl
+            datalab_platform-{version}.tar.gz
+
+      - name: Upload to ${{ steps.release.outputs.prerelease == 'true' && 'TestPyPI' || 'PyPI' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: ${{ steps.release.outputs.prerelease == 'true' && 'https://test.pypi.org/legacy/' || 'https://upload.pypi.org/legacy/' }}
+          # Makes re-running this job safe after a partial upload: the files
+          # were checked above.
+          skip-existing: true
+
+  # Build & deploy the documentation of a final release (delegated to
+  # pages.yml), once the release is published.
   deploy-pages:
-    needs: build
+    needs: publish
+    if: ${{ !contains(github.ref_name, '-rc') }}
     uses: ./.github/workflows/pages.yml
     secrets: inherit
     with:
