@@ -12,6 +12,13 @@
 
 * **Plugin installation**: installing a plugin whose required packages are missing now names these packages and tells how to provide them, instead of reporting an unexplained "Dependency wheelhouse not found" error with a temporary folder.
 
+### 📖 Documentation since version 1.4.0 ###
+
+* The [DataLab plugin catalog](https://datalab-platform.com/plugins/) is now presented on the home page, in the navigation bar and in the pages describing the platform, its key features and how to contribute
+* The plugin documentation is reorganized into an overview page and dedicated pages for installing and managing plugins, deploying them in an organization, developing them, application plugins and the public API; the development page starts with a quick start, "Your first plugin in five minutes", and presents the plugins of the catalog as examples
+* New tutorial, "From an idea to the plugin catalog": create a plugin in a single Python file, try it, then publish it in the DataLab plugin catalog, without any PyPI account
+* The roadmap is updated: the plugin template is delivered, data acquisition has started, and the milestones of versions 1.1 to 1.4 are listed
+
 ### 🔧 Improvements since version 1.4.0 ###
 
 * **Plugin generator**: the release workflow of a generated plugin project (`.github/workflows/release.yml`) now checks that the tag matches the version of both `pyproject.toml` and the package, runs the tests before building the wheel, and publishes the wheel with its SHA-256 checksum and its build provenance attestation, which users can check with `gh attestation verify`. A tag such as `v0.2.0-rc1` publishes a release candidate as a GitHub pre-release, without plugin catalog entry. The generated test no longer compares the plugin version with a fixed value, so it no longer fails when the version changes. Existing plugin projects are not affected.

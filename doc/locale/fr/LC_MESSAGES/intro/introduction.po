@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -59,8 +58,8 @@ msgstr "Modes d'utilisation"
 msgid "Depending on the application, DataLab can be used in three different modes:"
 msgstr "Selon l'application, DataLab peut être utilisé selon trois modes différents :"
 
-msgid "|appmode| **Stand-alone mode**: DataLab is a full-fledged processing application that can be adapted to the client's needs through the addition of industry-specific plugins."
-msgstr "|appmode| **Mode autonome** : DataLab est une application de traitement à part entière qui peut être adaptée aux besoins du client par l'ajout de plugins spécifiques à son métier."
+msgid "|appmode| **Stand-alone mode**: DataLab is a full-fledged processing application that can be adapted to the client's needs through the addition of industry-specific plugins (see the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_)."
+msgstr "|appmode| **Mode autonome** : DataLab est une application de traitement à part entière qui peut être adaptée aux besoins du client par l'ajout de plugins spécifiques à son métier (voir le `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_)."
 
 msgid "appmode"
 msgstr ""
@@ -182,6 +181,9 @@ msgstr "Extensibilité"
 msgid "The DataLab plugin system makes it easy to code new features (specific processing, specific file formats, custom graphical interfaces). It can also be used as a customizable platform."
 msgstr "Le système de plugins de DataLab permet de coder facilement de nouvelles fonctionnalités (traitement spécifique, formats de fichiers spécifiques, interfaces graphiques personnalisées). Il peut également être utilisé comme une plateforme personnalisable."
 
+msgid ":octicon:`package;1em;sd-text-info` Browse the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, or create your own plugin (see :ref:`about_plugins` and the tutorial :ref:`tutorial_plugin_catalog`)."
+msgstr ":octicon:`package;1em;sd-text-info` Parcourez le `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, ou créez votre propre plugin (voir :ref:`about_plugins` et le tutoriel :ref:`tutorial_plugin_catalog`)."
+
 msgid "Interoperability"
 msgstr "Interopérabilité"
 
@@ -203,3 +205,4 @@ msgstr "DataLab est un logiciel de traitement scientifique et technique industri
 
 msgid "See section :ref:`validation` for more information on DataLab's validation strategy."
 msgstr "Voir la section :ref:`validation` pour plus d'informations sur la stratégie de validation de DataLab."
+

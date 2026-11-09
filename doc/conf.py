@@ -194,8 +194,10 @@ html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
     ann = "DataLab a été présenté à <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 et à <a href='https://www.youtube.com/watch?v=0D4ffBJIc5Q&list=PLJjbbmRgu6RoVze2tajiPe3zJB5muBcuC'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
+    catalog_link_name = "Catalogue de plugins"
 else:
     ann = "DataLab has been presented at <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 and at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
+    catalog_link_name = "Plugin catalog"
 html_theme_options = {
     "show_toc_level": 2,
     "navbar_persistent": ["search-button"],
@@ -204,6 +206,12 @@ html_theme_options = {
         "text": f"v{datalab.__version__}",
     },
     "icon_links": [
+        {
+            "name": catalog_link_name,
+            "url": "https://datalab-platform.com/plugins/",
+            "icon": "fa-solid fa-puzzle-piece",
+            "type": "fontawesome",
+        },
         {
             "name": "PyPI",
             "url": "https://pypi.org/project/datalab-platform",
