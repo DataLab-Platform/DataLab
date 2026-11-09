@@ -23,6 +23,9 @@ msgstr "Prérequis"
 msgid "Runtime requirements are unchanged since version 1.4.0."
 msgstr "Les prérequis d'exécution sont inchangés depuis la version 1.4.0."
 
+msgid "**Third-party**:"
+msgstr "**Bibliothèques tierces** :"
+
 msgid "PyYAML is now part of the `test` optional dependencies: the test suite needs it to check the projects created by the plugin generator."
 msgstr "PyYAML fait désormais partie des dépendances optionnelles `test` : la suite de tests en a besoin pour vérifier les projets créés par le générateur de plugins."
 
@@ -31,6 +34,21 @@ msgstr "🛠️ Corrections de bugs depuis la version 1.4.0"
 
 msgid "**Plugin installation**: installing a plugin whose required packages are missing now names these packages and tells how to provide them, instead of reporting an unexplained \"Dependency wheelhouse not found\" error with a temporary folder."
 msgstr "**Installation de plugins** : l'installation d'un plugin dont des paquets requis sont manquants nomme désormais ces paquets et indique comment les fournir, au lieu de signaler une erreur inexpliquée « Dependency wheelhouse not found » mentionnant un dossier temporaire."
+
+msgid "📖 Documentation since version 1.4.0"
+msgstr "📖 Documentation depuis la version 1.4.0"
+
+msgid "The [DataLab plugin catalog](https://datalab-platform.com/plugins/) is now presented on the home page, in the navigation bar and in the pages describing the platform, its key features and how to contribute"
+msgstr "Le [catalogue de plugins DataLab](https://datalab-platform.com/plugins/) est désormais présenté sur la page d'accueil, dans la barre de navigation et dans les pages décrivant la plateforme, ses principales fonctionnalités et la manière de contribuer"
+
+msgid "The plugin documentation is reorganized into an overview page and dedicated pages for installing and managing plugins, deploying them in an organization, developing them, application plugins and the public API; the development page starts with a quick start, \"Your first plugin in five minutes\", and presents the plugins of the catalog as examples"
+msgstr "La documentation des plugins est réorganisée en une page de présentation et des pages dédiées à l'installation et à la gestion des plugins, à leur déploiement dans une organisation, à leur développement, aux plugins d'application et à l'API publique ; la page de développement commence par un démarrage rapide, « Votre premier plugin en cinq minutes », et présente les plugins du catalogue comme exemples"
+
+msgid "New tutorial, \"From an idea to the plugin catalog\": create a plugin in a single Python file, try it, then publish it in the DataLab plugin catalog, without any PyPI account"
+msgstr "Nouveau tutoriel, « De l'idée au catalogue de plugins » : créer un plugin en un seul fichier Python, l'essayer, puis le publier dans le catalogue de plugins DataLab, sans aucun compte PyPI"
+
+msgid "The roadmap is updated: the plugin template is delivered, data acquisition has started, and the milestones of versions 1.1 to 1.4 are listed"
+msgstr "La feuille de route est mise à jour : le modèle de plugin est livré, l'acquisition de données est amorcée, et les jalons des versions 1.1 à 1.4 sont listés"
 
 msgid "🔧 Improvements since version 1.4.0"
 msgstr "🔧 Améliorations depuis la version 1.4.0"
@@ -64,9 +82,6 @@ msgstr "guidata 3.17.2 ou ultérieur est requis : il fournit les éléments de p
 
 msgid "PlotPy 2.12.1 or later is required: it provides sharp SVG icons on high-DPI displays, min/max signal auto-downsampling and faster image overlay interactions."
 msgstr "PlotPy 2.12.1 ou ultérieur est requis : il fournit des icônes SVG nettes sur les écrans haute résolution, le sous-échantillonnage automatique min/max des signaux et des interactions plus fluides sur les superpositions d'images."
-
-msgid "**Third-party**:"
-msgstr "**Bibliothèques tierces** :"
 
 msgid "The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter."
 msgstr "Le package Python et les nouveaux projets de plugins générés exigent désormais Python 3.10 ou ultérieur. Les utilisateurs de Python 3.9 doivent conserver une version antérieure compatible. L'application autonome continue d'inclure son propre interpréteur Python."

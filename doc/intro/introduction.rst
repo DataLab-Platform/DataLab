@@ -38,7 +38,8 @@ Depending on the application, DataLab can be used in three different modes:
 
 - |appmode| **Stand-alone mode**: DataLab is a full-fledged processing application that
   can be adapted to the client's needs through the addition of
-  industry-specific plugins.
+  industry-specific plugins (see the `DataLab plugin catalog
+  <https://datalab-platform.com/plugins/>`_).
 - |libmode| **Embedded mode**: DataLab is integrated into your application to provide
   the necessary processing and visualization features.
 - |remotemode| **Remote-controlled mode**: DataLab communicates with your application,
@@ -159,6 +160,10 @@ Extensibility
   The DataLab plugin system makes it easy to code new features (specific
   processing, specific file formats, custom graphical interfaces). It can also
   be used as a customizable platform.
+
+  :octicon:`package;1em;sd-text-info` Browse the `DataLab plugin catalog
+  <https://datalab-platform.com/plugins/>`_, or create your own plugin
+  (see :ref:`about_plugins` and the tutorial :ref:`tutorial_plugin_catalog`).
 
 Interoperability
   DataLab can also be embedded in your own application. For example, within data

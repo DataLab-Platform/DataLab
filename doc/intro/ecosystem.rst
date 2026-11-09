@@ -109,6 +109,14 @@ Members of the platform
             foundation of the desktop application, reusable for your own Qt application.
             See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_.
 
+        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  DataLab plugin catalog
+
+            The plugins of the DataLab team and of the community, checked automatically
+            and installable in one click from the desktop application, some of them also
+            available in DataLab-Web. Browse the
+            `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, or publish your
+            own plugin (see :ref:`tutorial_plugin_catalog`).
+
 .. only:: latex and not html
 
     - **DataLab (desktop)** — the reference application, with a native Qt graphical user
@@ -123,6 +131,9 @@ Members of the platform
     - **SigimaX** — the Qt application framework on which the desktop application is built,
       reusable to create other scientific Qt applications
       (`documentation <https://sigimax.readthedocs.io/>`_).
+    - **DataLab plugin catalog** — the plugins of the DataLab team and of the community,
+      checked automatically and installable in one click from the desktop application
+      (`datalab-platform.com/plugins <https://datalab-platform.com/plugins/>`_).
 
 Which one should I use?
 -----------------------
@@ -203,4 +214,4 @@ DataLab-Web, and vice versa.
 .. note::
 
     Plugins are largely portable between the desktop application and DataLab-Web, with a few
-    constraints related to the browser runtime. See :ref:`about_plugins` for details.
+    constraints related to the browser runtime. See :ref:`plugins_web` for details.

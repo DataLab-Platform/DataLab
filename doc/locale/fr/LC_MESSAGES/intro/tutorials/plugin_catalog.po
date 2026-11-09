@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Tutorial showing how to create a DataLab plugin in a single Python file and publish it in the DataLab plugin catalog"
+msgstr "Tutoriel montrant comment créer un plugin DataLab en un seul fichier Python et le publier dans le catalogue de plugins DataLab"
+
+msgid "DataLab, plugin, tutorial, datalab-plugin, plugin catalog, GitHub release, open-source, contribution"
+msgstr "DataLab, plugin, tutoriel, datalab-plugin, catalogue de plugins, release GitHub, open source, contribution"
+
+msgid ":octicon:`book;1em;sd-text-info` From an idea to the plugin catalog"
+msgstr ":octicon:`book;1em;sd-text-info` De l'idée au catalogue de plugins"
+
+msgid "This tutorial shows how to turn an idea into a plugin available to all DataLab users: we create a plugin in a single Python file, try it in DataLab, then publish it in the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, from which users install it in a few clicks. No packaging project and no PyPI account are needed."
+msgstr "Ce tutoriel montre comment transformer une idée en un plugin accessible à tous les utilisateurs de DataLab : nous créons un plugin en un seul fichier Python, l'essayons dans DataLab, puis le publions dans le `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, depuis lequel les utilisateurs l'installent en quelques clics. Ni projet de packaging ni compte PyPI ne sont nécessaires."
+
+msgid "As an example, we write a \"Spectrum Tools\" plugin, whose processing sets the negative values of a signal to zero. Replace it with your own idea: a processing specific to your field, a file format, an analysis..."
+msgstr "À titre d'exemple, nous écrivons un plugin « Spectrum Tools », dont le traitement met à zéro les valeurs négatives d'un signal. Remplacez-le par votre propre idée : un traitement propre à votre domaine, un format de fichier, une analyse..."
+
+msgid "What you need"
+msgstr "Prérequis"
+
+msgid "DataLab installed as a Python package, for example with ``pip install datalab-platform`` (see :ref:`installation`): the ``datalab-plugin`` command used below is not provided by the standalone version of DataLab;"
+msgstr "DataLab installé en tant que paquet Python, par exemple avec ``pip install datalab-platform`` (voir :ref:`installation`) : la commande ``datalab-plugin`` utilisée ci-dessous n'est pas fournie par la version autonome de DataLab ;"
+
+msgid "a `GitHub <https://github.com/>`_ account, to publish the source code of the plugin and to propose it to the catalog."
+msgstr "un compte `GitHub <https://github.com/>`_, pour publier le code source du plugin et le proposer au catalogue."
+
+msgid "Step 1: create the plugin"
+msgstr "Étape 1 : créer le plugin"
+
+msgid "Create the plugin with the ``datalab-plugin`` command. The ``--github-account`` option derives the plugin ID from your GitHub account, here ``alice``, as expected by the catalog:"
+msgstr "Créez le plugin avec la commande ``datalab-plugin``. L'option ``--github-account`` dérive l'identifiant du plugin de votre compte GitHub, ici ``alice``, comme l'attend le catalogue :"
+
+msgid "The command writes the ``datalab_spectrum_tools.py`` file to the user plugin directory (see :ref:`plugin_locations`) and prints its location. The beginning of the file declares the identity of the plugin:"
+msgstr "La commande écrit le fichier ``datalab_spectrum_tools.py`` dans le répertoire des plugins utilisateur (voir :ref:`plugin_locations`) et affiche son emplacement. Le début du fichier déclare l'identité du plugin :"
+
+msgid "Its version, ``0.1.0``, is given by the ``PLUGIN_INFO`` attribute of the plugin class. Keep the plugin ID unchanged once the plugin is published: DataLab and the catalog use it to identify the plugin."
+msgstr "Sa version, ``0.1.0``, est donnée par l'attribut ``PLUGIN_INFO`` de la classe du plugin. Ne modifiez plus l'identifiant du plugin une fois celui-ci publié : DataLab et le catalogue l'utilisent pour identifier le plugin."
+
+msgid "Step 2: try and develop the plugin"
+msgstr "Étape 2 : essayer et développer le plugin"
+
+msgid "Start DataLab, or select **Plugins > Reload plugins** if it is already running. In the signal panel, the **Plugins** menu now holds a **Spectrum Tools** submenu, with a **Sample processing** action. Create a signal with **Create > Sine**, keep it selected, and run this action: it adds a new signal, whose negative values are set to zero."
+msgstr "Démarrez DataLab, ou sélectionnez **Plugins > Recharger les plugins** s'il est déjà lancé. Dans le panneau des signaux, le menu **Plugins** contient alors un sous-menu **Spectrum Tools**, avec une action **Sample processing**. Créez un signal avec **Création > Sinus**, gardez-le sélectionné, et lancez cette action : elle ajoute un nouveau signal, dont les valeurs négatives sont mises à zéro."
+
+msgid "Open the file in your editor. The processing is the ``sample_processing`` function, which receives the Y values of the selected signal as a NumPy array and returns new ones:"
+msgstr "Ouvrez le fichier dans votre éditeur. Le traitement est la fonction ``sample_processing``, qui reçoit les valeurs Y du signal sélectionné sous forme de tableau NumPy et en renvoie de nouvelles :"
+
+msgid "Implement your own processing, give the action a meaningful title in the ``register_computations`` method, then select **Plugins > Reload plugins** to try your changes, without restarting DataLab. To go further (processing parameters, images, file formats...), see :ref:`plugins_developing`, and take the plugins of the catalog as examples (see :ref:`plugin_catalog_examples`)."
+msgstr "Implémentez votre propre traitement, donnez à l'action un titre explicite dans la méthode ``register_computations``, puis sélectionnez **Plugins > Recharger les plugins** pour essayer vos modifications, sans redémarrer DataLab. Pour aller plus loin (paramètres de traitement, images, formats de fichiers...), voir :ref:`plugins_developing`, et prenez exemple sur les plugins du catalogue (voir :ref:`plugin_catalog_examples`)."
+
+msgid "Step 3: share the file with your colleagues"
+msgstr "Étape 3 : partager le fichier avec vos collègues"
+
+msgid "The plugin can already be used by others: send them the file. They install it with **Plugins > Configure plugins... > From file** (see :ref:`plugin_install_from_file`), including in the standalone version of DataLab."
+msgstr "Le plugin peut déjà être utilisé par d'autres : envoyez-leur le fichier. Ils l'installent avec **Plugins > Configurer les plugins... > Depuis un fichier** (voir :ref:`plugin_install_from_file`), y compris dans la version autonome de DataLab."
+
+msgid "Step 4: publish the source code on GitHub"
+msgstr "Étape 4 : publier le code source sur GitHub"
+
+msgid "Create a public GitHub repository, for example ``datalab-spectrum-tools``, holding:"
+msgstr "Créez un dépôt GitHub public, par exemple ``datalab-spectrum-tools``, contenant :"
+
+msgid "the ``datalab_spectrum_tools.py`` file;"
+msgstr "le fichier ``datalab_spectrum_tools.py`` ;"
+
+msgid "a ``LICENSE`` file, with an OSI-approved open-source license, such as BSD-3-Clause or MIT (the `contribution guide <https://github.com/DataLab-Platform/plugins/blob/main/CONTRIBUTING.md>`_ of the catalog lists the accepted licenses);"
+msgstr "un fichier ``LICENSE``, avec une licence open source approuvée par l'OSI, comme BSD-3-Clause ou MIT (le `guide de contribution <https://github.com/DataLab-Platform/plugins/blob/main/CONTRIBUTING.md>`_ du catalogue liste les licences acceptées) ;"
+
+msgid "a ``README.md`` file, describing what the plugin does and how to use it."
+msgstr "un fichier ``README.md``, décrivant ce que fait le plugin et comment l'utiliser."
+
+msgid "Then create a release of the repository, tagged ``v0.1.0`` after the version of the plugin, and attach the unchanged ``datalab_spectrum_tools.py`` file to it. With the `GitHub CLI <https://cli.github.com/>`_, from the folder of the repository:"
+msgstr "Créez ensuite une release du dépôt, avec le tag ``v0.1.0`` correspondant à la version du plugin, et joignez-y le fichier ``datalab_spectrum_tools.py`` inchangé. Avec la `GitHub CLI <https://cli.github.com/>`_, depuis le dossier du dépôt :"
+
+msgid "Keep the same file name for all versions: do not add the version number to it."
+msgstr "Conservez le même nom de fichier pour toutes les versions : n'y ajoutez pas le numéro de version."
+
+msgid "Step 5: propose the plugin to the catalog"
+msgstr "Étape 5 : proposer le plugin au catalogue"
+
+msgid "Fork the `catalog repository <https://github.com/DataLab-Platform/plugins>`_ and add a ``plugins/io.github.alice.spectrum-tools.yaml`` file, named after the plugin ID:"
+msgstr "Créez un fork du `dépôt du catalogue <https://github.com/DataLab-Platform/plugins>`_ et ajoutez un fichier ``plugins/io.github.alice.spectrum-tools.yaml``, nommé d'après l'identifiant du plugin :"
+
+msgid "``kind: module`` means that the plugin is a single Python file: the catalog offers such plugins to DataLab Desktop. The ID, name and version must agree with those of the file. The ``sha256`` field gives the digest of the file attached to the release; you may compute it with ``sha256sum datalab_spectrum_tools.py`` on Linux and macOS, or with ``Get-FileHash datalab_spectrum_tools.py`` in Windows PowerShell (in lowercase). If you leave it out, the first run of the automatic checks fails and prints the line to add."
+msgstr "``kind: module`` indique que le plugin est un simple fichier Python : le catalogue propose de tels plugins à DataLab Desktop. L'identifiant, le nom et la version doivent concorder avec ceux du fichier. Le champ ``sha256`` donne l'empreinte du fichier joint à la release ; vous pouvez la calculer avec ``sha256sum datalab_spectrum_tools.py`` sous Linux et macOS, ou avec ``Get-FileHash datalab_spectrum_tools.py`` dans Windows PowerShell (en minuscules). Si vous l'omettez, la première exécution des vérifications automatiques échoue et affiche la ligne à ajouter."
+
+msgid "Then open a pull request. Its automatic checks download the file from the release, verify its digest and inspect it without running it: file name, Python syntax, plugin identity and version, license. The maintainers of the catalog then check that the plugin matches its description; this review is not a security audit."
+msgstr "Ouvrez ensuite une pull request. Ses vérifications automatiques téléchargent le fichier depuis la release, vérifient son empreinte et l'inspectent sans l'exécuter : nom du fichier, syntaxe Python, identité et version du plugin, licence. Les mainteneurs du catalogue vérifient ensuite que le plugin correspond à sa description ; cette revue n'est pas un audit de sécurité."
+
+msgid "Step 6: your plugin is in the catalog"
+msgstr "Étape 6 : votre plugin est dans le catalogue"
+
+msgid "Once the pull request is merged, the catalog is published again: the plugin appears on the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ page, marked **Community**, and in the **Catalog** tab of the **Plugins > Configure plugins...** dialog, from which DataLab users install it with one click (see :ref:`plugin_catalog`)."
+msgstr "Une fois la pull request fusionnée, le catalogue est publié à nouveau : le plugin apparaît sur la page du `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, avec la mention **Community**, et dans l'onglet **Catalogue** de la boîte de dialogue **Plugins > Configurer les plugins...**, depuis lequel les utilisateurs de DataLab l'installent en un clic (voir :ref:`plugin_catalog`)."
+
+msgid "To publish a new version, increase the version in the file, create a new release (for example ``v0.2.0``) holding the file under the same name, then add this version, with its digest, at the end of the ``releases`` list of the YAML file, in a new pull request. The **Catalog** tab then offers users to update the plugin."
+msgstr "Pour publier une nouvelle version, augmentez la version dans le fichier, créez une nouvelle release (par exemple ``v0.2.0``) contenant le fichier sous le même nom, puis ajoutez cette version, avec son empreinte, à la fin de la liste ``releases`` du fichier YAML, dans une nouvelle pull request. L'onglet **Catalogue** propose alors aux utilisateurs de mettre à jour le plugin."
+
+msgid "Larger plugins"
+msgstr "Plugins plus importants"
+
+msgid "For a plugin made of several modules, with resources, tests or dependencies, create a layered project with ``datalab-plugin create --project`` (see :ref:`plugin_project`). Its release workflow builds the wheel of the plugin when you push a version tag, attaches it to a GitHub release with its SHA-256 digest, and prints the entry to submit to the catalog. A wheel may also declare a DataLab-Web plugin, so that the plugin is offered to the users of both editions (see :ref:`plugins_web`)."
+msgstr "Pour un plugin composé de plusieurs modules, avec des ressources, des tests ou des dépendances, créez un projet structuré en couches avec ``datalab-plugin create --project`` (voir :ref:`plugin_project`). Son workflow de release construit le wheel du plugin lorsque vous poussez un tag de version, le joint à une release GitHub avec son empreinte SHA-256, et affiche l'entrée à soumettre au catalogue. Un wheel peut aussi déclarer un plugin DataLab-Web, afin que le plugin soit proposé aux utilisateurs des deux éditions (voir :ref:`plugins_web`)."
+

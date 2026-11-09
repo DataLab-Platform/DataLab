@@ -87,6 +87,32 @@ Even if you are not a developer, you can contribute to the project by:
 - Writing and submitting new Plugins
 - Writing and submitting macro-commands
 
+Writing a plugin is the easiest way to add a feature to DataLab: a plugin may be a single
+Python file, and publishing it in the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_
+makes it available to all DataLab users, without any change to DataLab itself.
+
+.. only:: html and not latex
+
+   .. grid:: 2
+       :gutter: 1 2 3 4
+
+       .. grid-item-card:: :octicon:`rocket;1em;sd-text-info` Write a plugin
+           :link: tutorial_plugin_catalog
+           :link-type: ref
+
+           From an idea to the plugin catalog, step by step
+
+       .. grid-item-card:: :octicon:`package;1em;sd-text-info` Submit it to the catalog
+           :link: https://github.com/DataLab-Platform/plugins/blob/main/CONTRIBUTING.md
+
+           Contribution guide of the DataLab plugin catalog
+
+.. only:: latex and not html
+
+   See the tutorial :ref:`tutorial_plugin_catalog`, and the `contribution guide
+   <https://github.com/DataLab-Platform/plugins/blob/main/CONTRIBUTING.md>`_ of the
+   DataLab plugin catalog.
+
 Develop new features
 --------------------
 

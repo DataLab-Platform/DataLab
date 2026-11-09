@@ -46,6 +46,8 @@ See [DataLab website](https://datalab-platform.com/) for more details.
 (see [plugin examples](https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples))
 or macro (see [macro examples](https://github.com/DataLab-Platform/DataLab/tree/main/macros/examples))
 
+🧩 Browse the [DataLab plugin catalog](https://datalab-platform.com/plugins/) to install plugins from the DataLab team and the community, or publish your own
+
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
 

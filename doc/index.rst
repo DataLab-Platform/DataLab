@@ -74,6 +74,31 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
             Automated defect detection
 
+.. only:: html and not latex
+
+    **Extend DataLab with plugins:** add processing features, file formats or complete
+    applications, from the DataLab team, from the community... or your own.
+
+    .. grid:: 1 1 2 2
+        :gutter: 1 2 3 4
+
+        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  Plugin catalog
+            :link: https://datalab-platform.com/plugins/
+
+            Browse and install official and community plugins
+
+        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Create your own plugin
+            :link: tutorial_plugin_catalog
+            :link-type: ref
+
+            From an idea to the plugin catalog: a single Python file is enough
+
+.. only:: latex and not html
+
+    DataLab can be extended with plugins: browse the `DataLab plugin catalog
+    <https://datalab-platform.com/plugins/>`_, or create your own plugin (see
+    :ref:`tutorial_plugin_catalog`).
+
 
 .. only:: html and not latex
 
@@ -83,6 +108,7 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
         installation, tutorials and first use cases.
 
         **Explore the documentation:** :doc:`Features <features/index>` ·
+        :doc:`Plugins <features/advanced/plugins>` ·
         :doc:`Contributing <contributing/index>` ·
         :doc:`Talks & events <outreach/index>`
 

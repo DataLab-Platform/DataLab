@@ -88,3 +88,15 @@ Signal Image  Feature
 ..     ✓      Circle Hough transform
 ..     ✓      Blob detection (OpenCV, Laplacian of Gaussian...)
 ====== ====== ===================================================
+
+Extensibility
+^^^^^^^^^^^^^
+
+- Plugins adding processing features, file formats or complete applications, reloaded
+  without restarting DataLab (see :ref:`about_plugins`)
+- `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_: official and community
+  plugins, installed in one click from DataLab
+- Plugin generator: a working plugin in a single Python file, ready to publish in the
+  catalog (see :ref:`tutorial_plugin_catalog`)
+- Macro-commands, remote control and Web API to automate DataLab from Python, Jupyter
+  notebooks or any application

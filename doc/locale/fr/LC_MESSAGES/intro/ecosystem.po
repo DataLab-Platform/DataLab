@@ -110,6 +110,12 @@ msgstr ""
 msgid "The Qt application framework extracted from DataLab: main window skeleton, configuration system, plot docks, HDF5 workspace and scientific dialogs — the foundation of the desktop application, reusable for your own Qt application. See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_."
 msgstr "Le framework applicatif Qt extrait de DataLab : squelette de fenêtre principale, système de configuration, docks de tracé, espace de travail HDF5 et boîtes de dialogue scientifiques — la fondation de l'application de bureau, réutilisable pour votre propre application Qt. Voir la `documentation de SigimaX <https://sigimax.readthedocs.io/>`_."
 
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-package sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z\"></path></svg>  DataLab plugin catalog"
+msgstr "Catalogue de plugins DataLab"
+
+msgid "The plugins of the DataLab team and of the community, checked automatically and installable in one click from the desktop application, some of them also available in DataLab-Web. Browse the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, or publish your own plugin (see :ref:`tutorial_plugin_catalog`)."
+msgstr "Les plugins de l'équipe DataLab et de la communauté, vérifiés automatiquement et installables en un clic depuis l'application de bureau, certains étant aussi disponibles dans DataLab-Web. Parcourez le `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, ou publiez votre propre plugin (voir :ref:`tutorial_plugin_catalog`)."
+
 msgid "**DataLab (desktop)** — the reference application, with a native Qt graphical user interface and the full PlotPyStack interactive visualization."
 msgstr "**DataLab (bureau)** — l'application de référence, dotée d'une interface graphique Qt native et de la visualisation interactive complète de PlotPyStack."
 
@@ -124,6 +130,9 @@ msgstr "**Sigima** — le moteur de calcul open source qui propulse chaque édit
 
 msgid "**SigimaX** — the Qt application framework on which the desktop application is built, reusable to create other scientific Qt applications (`documentation <https://sigimax.readthedocs.io/>`_)."
 msgstr "**SigimaX** — le framework applicatif Qt sur lequel repose l'application de bureau, réutilisable pour créer d'autres applications scientifiques Qt (`documentation <https://sigimax.readthedocs.io/>`_)."
+
+msgid "**DataLab plugin catalog** — the plugins of the DataLab team and of the community, checked automatically and installable in one click from the desktop application (`datalab-platform.com/plugins <https://datalab-platform.com/plugins/>`_)."
+msgstr "**Catalogue de plugins DataLab** — les plugins de l'équipe DataLab et de la communauté, vérifiés automatiquement et installables en un clic depuis l'application de bureau (`datalab-platform.com/plugins <https://datalab-platform.com/plugins/>`_)."
 
 msgid "Which one should I use?"
 msgstr "Lequel choisir ?"
@@ -251,5 +260,6 @@ msgstr "Proxy intégré au navigateur et SDK ``postMessage`` optionnel"
 msgid "What is **not** different: the object model (``SignalObj``, ``ImageObj``, ROIs, groups), the processing catalog discovered from Sigima, the auto-generated parameter dialogs, and the HDF5 workspace format. A workspace saved in the desktop application can be opened in DataLab-Web, and vice versa."
 msgstr "Ce qui ne change **pas** : le modèle objet (``SignalObj``, ``ImageObj``, ROI, groupes), le catalogue de traitements découvert depuis Sigima, les boîtes de dialogue de paramètres générées automatiquement et le format d'espace de travail HDF5. Un espace de travail enregistré dans l'application de bureau peut être ouvert dans DataLab-Web, et inversement."
 
-msgid "Plugins are largely portable between the desktop application and DataLab-Web, with a few constraints related to the browser runtime. See :ref:`about_plugins` for details."
-msgstr "Les plugins sont en grande partie portables entre l'application de bureau et DataLab-Web, avec quelques contraintes liées à l'environnement d'exécution du navigateur. Voir :ref:`about_plugins` pour plus de détails."
+msgid "Plugins are largely portable between the desktop application and DataLab-Web, with a few constraints related to the browser runtime. See :ref:`plugins_web` for details."
+msgstr "Les plugins sont en grande partie portables entre l'application de bureau et DataLab-Web, avec quelques contraintes liées à l'environnement d'exécution du navigateur. Voir :ref:`plugins_web` pour plus de détails."
+

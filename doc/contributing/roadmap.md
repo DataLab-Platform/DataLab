@@ -29,11 +29,12 @@ The following table summarizes the future evolutions and maintenance plans for D
 
 | Milestone type       | Description                                  |
 |----------------------|----------------------------------------------|
-| 🔄 Future Evolutions | • Support for data acquisition<br>• Support for time series<br>• Database connectors<br>• Spyder plugin for interactive data analysis |
+| 🔄 Future Evolutions | • Support for data acquisition (started)<br>• Support for time series<br>• Database connectors<br>• Spyder plugin for interactive data analysis |
 | 🛠️ Maintenance      | • Transition to gRPC for remote control<br>• Drop Qt5 support and migrate to Qt6 |
-| 🧱 Other Tasks       | • Create a DataLab plugin template          |
 
-### 🔄 Support for Data Acquisition
+### 🔄 Support for Data Acquisition 🚧 Started
+
+> ℹ️ Data acquisition has started with DataLab 1.4: an application plugin may provide **instruments**, opened in a window with a live view, their settings and an **Acquire** button adding the acquired signals or images to the workspace (see {ref}`plugins_applications`). The [TANGO Instruments](https://github.com/DataLab-Platform/datalab-tango) demonstration plugin acquires the attributes of TANGO devices this way, and the camera and pulse characterization plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/) provide simulated instruments. The original exploration notes are kept below for context.
 
 Adding support for data acquisition would be a major step forward in making DataLab not only a platform for signal and image processing, but also a **versatile tool for real-time experimental workflows**. The idea would be to allow users to acquire data directly from various hardware devices (e.g., cameras, digitizers, spectrometers, etc.) **within DataLab itself**.
 
@@ -149,7 +150,9 @@ This change will ensure compatibility with future versions of Qt and modern Pyth
 
 ### 🧱 Other Tasks
 
-#### 🧩 Create a DataLab Plugin Template
+#### 🧩 Create a DataLab Plugin Template ✅ Delivered
+
+> ℹ️ Delivered with DataLab 1.4: the `datalab-plugin create` command creates a ready-to-use plugin in a single Python file or, with `--project`, a layered installable project with tests and a release workflow, ready to publish in the [DataLab plugin catalog](https://datalab-platform.com/plugins/) (see {ref}`plugins_developing` and the tutorial {ref}`tutorial_plugin_catalog`). The original notes are kept below for context.
 
 To encourage community contributions and facilitate the development of extensions, a **template for creating DataLab plugins** is planned.
 
@@ -177,6 +180,10 @@ The following table summarizes the major past milestones of DataLab, including t
 
 | Milestone | Description                                                                 |
 |-----------|-----------------------------------------------------------------------------|
+| [1.4](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.4.0)<br>2026/11 | • Welcome page with application tiles, and Applications panel<br>• Application plugins: headless recipes, packaged examples, tools and instruments<br>• [DataLab plugin catalog](https://datalab-platform.com/plugins/): official and community plugins installed from DataLab, local and offline catalogs<br>• Plugin generator: `datalab-plugin create`<br>• Workspace provenance and workspace capsules<br>• Live processing preview, brightness and contrast, RAW image import, NeXus files |
+| [1.3](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.3.0)<br>2026/09 | • History panel<br>• Built-in AI assistant and command palette<br>• Spectral analysis support<br>• Regions of interest from detection (auto mask)<br>• DataLab now builds on the SigimaX application framework |
+| [1.2](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.2.0)<br>2026/04 | • Plugin configuration dialog and plugin hot-reload<br>• Multi-instance detection<br>• Remote control API: push modified objects back to DataLab |
+| [1.1](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.1.0)<br>2026/02 | • Web API for HTTP/JSON integration, used by DataLab-Kernel<br>• PyQt6 compatibility<br>• Remote control API enhancements |
 | [1.0](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.0.0)<br>2025/11 | • Interactive object editing: modify creation/processing parameters and recompute objects<br>• New object creation: parametric signal/image generators, Poisson noise, complex-valued objects<br>• Enhanced processing: pulse features, ideal filters, 2D resampling, convolution, projections<br>• ROI & annotations: copy/paste, import/export, grid creation, inverse ROI logic<br>• Visualization: merged result labels, datetime support, performance optimizations<br>• File formats: FT-Lab (.sig, .ima), coordinated text files, improved HDF5 support<br>• Non-uniform coordinates and polynomial calibration<br>• Public API enhancements for programmability |
 | [0.20](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.20.0)<br>2025/04 | • ANDOR SIF images: add support for background images<br>• Array editor: new copy all, export, and paste features<br>• Fourier analysis: new zero padding feature for signals and images<br>• ROI editor: ROI selection tool now active by default<br>• Signal processing: X-Y mode, abscissa/ordinate find features, full width at y=...<br>• Public API: add `group_id` and `set_current` arguments to add methods |
 | [0.19](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.19.0)<br>2025/04 | • Open all signals or images from a folder (recursively)<br>• ROI editor: add options to create ROIs from coordinates |

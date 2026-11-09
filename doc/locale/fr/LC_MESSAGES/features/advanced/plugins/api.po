@@ -1,0 +1,843 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Public API of the DataLab plugin system"
+msgstr "API publique du système de plugins de DataLab"
+
+msgid "DataLab, plugin, API, PluginBase, PluginInfo, recipe, tool, instrument"
+msgstr "DataLab, plugin, API, PluginBase, PluginInfo, recette, outil, instrument"
+
+msgid "Public API"
+msgstr "API publique"
+
+msgid "This page is the reference of the classes and functions available to plugins. See :ref:`plugins_developing` for their use, and :ref:`plugins_applications` for the declarations of application plugins."
+msgstr "Cette page est la référence des classes et fonctions à la disposition des plugins. Voir :ref:`plugins_developing` pour leur utilisation, et :ref:`plugins_applications` pour les déclarations des plugins d'application."
+
+msgid "DataLab plugin system"
+msgstr "Système de plugins de DataLab"
+
+msgid "DataLab plugin system provides a way to extend the application with new functionalities."
+msgstr "Le système de plugins de DataLab fournit un moyen d'étendre l'application avec de nouvelles fonctionnalités."
+
+msgid "Plugins are Python modules that relies on two classes:"
+msgstr "Les plugins sont des modules Python qui reposent sur deux classes :"
+
+msgid ":class:`PluginInfo`, which stores information about the plugin"
+msgstr ":class:`PluginInfo`, qui stocke des informations sur le plugin"
+
+msgid ":class:`PluginBase`, which is the base class for all plugins"
+msgstr ":class:`PluginBase`, qui est la classe de base pour tous les plugins"
+
+msgid "Plugins may also extends DataLab I/O features by providing new image or signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format information is defined using the :class:`FormatInfo` class."
+msgstr "Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour ce faire, ils doivent fournir une sous-classe de :class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les informations de format sont définies à l'aide de la classe :class:`FormatInfo`."
+
+msgid "Object representing classic image file types"
+msgstr "Objet représentant les types de fichiers image classiques"
+
+msgid "Read data and return it"
+msgstr "Lire les données et les renvoyer"
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "File name"
+msgstr "Nom du fichier"
+
+msgid "Returns"
+msgstr "Retourne"
+
+msgid "Image array data"
+msgstr "Données du tableau de l'image"
+
+msgid "Write data to file"
+msgstr "Écrire les données dans un fichier"
+
+msgid "Write classic image data with validated format-specific options."
+msgstr "Écrire des données d'image classiques avec des options propres au format validées."
+
+msgid "Information about a plugin that failed to load or instantiate."
+msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
+
+msgid "Format info"
+msgstr "Informations sur le format"
+
+msgid "Return reStructuredText table row for format info (table `.. list-table::` format, with 5 columns)"
+msgstr "Renvoyer une ligne de tableau reStructuredText décrivant le format (tableau ``.. list-table::`` à 5 colonnes)"
+
+msgid "Base image format object."
+msgstr "Objet de base pour les formats d'image."
+
+msgid "This class is used to define the interface for image I/O formats. It is an abstract base class that defines the methods that must be implemented by any image format class."
+msgstr "Cette classe définit l'interface des formats d'entrée/sortie des images. C'est une classe de base abstraite qui définit les méthodes devant être implémentées par toute classe de format d'image."
+
+msgid "Reject read parameters for formats that do not support them."
+msgstr "Refuser les paramètres de lecture pour les formats qui ne les prennent pas en charge."
+
+msgid "Read list of image objects from file"
+msgstr "Lire une liste d'objets image dans un fichier"
+
+msgid "Callback worker object"
+msgstr "Objet de traitement des rappels"
+
+msgid "Optional format-specific read parameters"
+msgstr "Paramètres de lecture facultatifs propres au format"
+
+msgid "List of image objects"
+msgstr "Liste d'objets image"
+
+msgid "file name"
+msgstr "nom du fichier"
+
+msgid "native object (signal or image)"
+msgstr "objet natif (signal ou image)"
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "if format is not supported"
+msgstr "si le format n'est pas pris en charge"
+
+msgid "Write an image with format-specific options."
+msgstr "Écrire une image avec des options propres au format."
+
+msgid "Image object"
+msgstr "Objet image"
+
+msgid "Format-specific writer options"
+msgstr "Options d'écriture propres au format"
+
+msgid "If this format does not support writer options"
+msgstr "Si ce format ne prend pas en charge les options d'écriture"
+
+msgid "Plugin base class"
+msgstr "Classe de base du plugin"
+
+msgid "Data of the last opened generated example (``None`` for packaged ones)"
+msgstr "Données du dernier exemple généré ouvert (``None`` pour les exemples empaquetés)"
+
+msgid "Return the stable plugin ID or a deterministic legacy fallback."
+msgstr "Renvoie l'identifiant stable du plugin ou un identifiant de repli hérité déterministe."
+
+msgid "Return validated recipe descriptors exposed by this plugin."
+msgstr "Renvoie les descripteurs de recettes validés exposés par ce plugin."
+
+msgid "Return one recipe descriptor by its namespaced ID."
+msgstr "Renvoie un descripteur de recette à partir de son identifiant qualifié."
+
+msgid "Return validated recipe-to-method bindings overriding the Desktop UI."
+msgstr "Renvoie les associations validées entre recettes et méthodes remplaçant l'interface Desktop."
+
+msgid "Launch a recipe on the current selection."
+msgstr "Lance une recette sur la sélection courante."
+
+msgid "A plugin method declared in ``RECIPE_LAUNCHERS`` replaces the generic interaction of :meth:`start_recipe`."
+msgstr "Une méthode du plugin déclarée dans ``RECIPE_LAUNCHERS`` remplace l'interaction générique de :meth:`start_recipe`."
+
+msgid "Return the objects selected in the current signal or image panel."
+msgstr "Renvoie les objets sélectionnés dans le panneau Signal ou Image courant."
+
+msgid "Return the last example's parameter values for a recipe and objects."
+msgstr "Renvoie les valeurs de paramètres du dernier exemple pour une recette et des objets."
+
+msgid "Values are returned only when all objects come from the last opened generated example: they are suited to that data only."
+msgstr "Les valeurs ne sont renvoyées que si tous les objets proviennent du dernier exemple généré ouvert : elles ne conviennent qu'à ces données."
+
+msgid "Assess whether a recipe can run on objects (default: selection)."
+msgstr "Évalue si une recette peut s'exécuter sur des objets (par défaut : la sélection)."
+
+msgid "Run a recipe through the generic DataLab interaction."
+msgstr "Exécute une recette via l'interaction générique de DataLab."
+
+msgid "DataLab assigns the objects (default: selection) to the recipe inputs, asking the user when needed, checks them, edits the parameters, then runs the recipe."
+msgstr "DataLab affecte les objets (par défaut : la sélection) aux entrées de la recette, en interrogeant l'utilisateur si nécessaire, les vérifie, édite les paramètres, puis exécute la recette."
+
+msgid "namespaced recipe ID"
+msgstr "identifiant qualifié de la recette"
+
+msgid "candidate objects (default: current selection)"
+msgstr "objets candidats (par défaut : sélection courante)"
+
+msgid "initial parameter values (default: those of the last opened example, when the objects come from it)"
+msgstr "valeurs initiales des paramètres (par défaut : celles du dernier exemple ouvert, lorsque les objets en proviennent)"
+
+msgid "Recipe outcome, or None if cancelled or failed"
+msgstr "Résultat de la recette, ou None en cas d'annulation ou d'échec"
+
+msgid "Open an example, then start one of the recipes it was designed for."
+msgstr "Ouvre un exemple, puis lance l'une des recettes pour lesquelles il est conçu."
+
+msgid "Return validated tools listed in the Applications panel."
+msgstr "Renvoie les outils validés listés dans le panneau Applications."
+
+msgid "Return one tool by its plugin-local ID."
+msgstr "Renvoie un outil à partir de son identifiant local au plugin."
+
+msgid "Return why a tool cannot be opened on objects (default: selection)."
+msgstr "Renvoie la raison pour laquelle un outil ne peut pas être ouvert sur des objets (par défaut : la sélection)."
+
+msgid "Message telling which objects to select, or None if the tool can be opened"
+msgstr "Message indiquant quels objets sélectionner, ou None si l'outil peut être ouvert"
+
+msgid "Open a plugin tool: call its launcher, or show its instrument."
+msgstr "Ouvre un outil du plugin : appelle sa méthode de lancement, ou affiche son instrument."
+
+msgid "if the selection does not allow opening the tool"
+msgstr "si la sélection ne permet pas d'ouvrir l'outil"
+
+msgid "Return the instrument of a tool, created once per registration."
+msgstr "Renvoie l'instrument d'un outil, créé une seule fois par enregistrement."
+
+msgid "Return validated packaged examples exposed by this plugin."
+msgstr "Renvoie les exemples empaquetés validés exposés par ce plugin."
+
+msgid "Return one packaged example by its plugin-local ID."
+msgstr "Renvoie un exemple empaqueté à partir de son identifiant local au plugin."
+
+msgid "Generate one example in memory, or defer to its package resource."
+msgstr "Génère un exemple en mémoire, ou s'en remet à sa ressource de paquet."
+
+msgid "Confirm and open a generated or packaged example, then select it."
+msgstr "Demande confirmation, ouvre un exemple généré ou empaqueté, puis le sélectionne."
+
+msgid "Open a generated or packaged HDF5 example in the Desktop workspace."
+msgstr "Ouvre un exemple HDF5 généré ou empaqueté dans l'espace de travail Desktop."
+
+msgid "Generated examples (``materialize_example()`` returning data) are loaded directly into the signal/image panels; packaged examples are opened through their native HDF5 resource. The materialized data is kept in :attr:`last_example_data`, so that recipes started on these objects reuse the example's parameter values (see :meth:`example_parameter_values`)."
+msgstr "Les exemples générés (lorsque ``materialize_example()`` renvoie des données) sont chargés directement dans les panneaux Signal et Image ; les exemples empaquetés sont ouverts via leur ressource HDF5 native. Les données matérialisées sont conservées dans :attr:`last_example_data`, afin que les recettes lancées sur ces objets réutilisent les valeurs de paramètres de l'exemple (voir :meth:`example_parameter_values`)."
+
+msgid "Return validated welcome page tiles exposed by this application plugin."
+msgstr "Renvoie les tuiles validées de la page d'accueil exposées par ce plugin d'application."
+
+msgid "Without declared ``WELCOME_TILES``, an application plugin exposes one default tile built from its :class:`PluginInfo`. Declared tiles without icon inherit the plugin icon."
+msgstr "Sans ``WELCOME_TILES`` déclarées, un plugin d'application expose une tuile par défaut construite à partir de son :class:`PluginInfo`. Les tuiles déclarées sans icône héritent de l'icône du plugin."
+
+msgid "Launch a welcome page tile."
+msgstr "Lance une tuile de la page d'accueil."
+
+msgid "A tile without launcher shows the plugin page in the Applications panel; otherwise, its plugin method is called without arguments."
+msgstr "Une tuile sans méthode de lancement affiche la page du plugin dans le panneau Applications ; sinon, sa méthode de plugin est appelée sans argument."
+
+msgid "Value returned by the launcher method (None for the Applications panel)"
+msgstr "Valeur renvoyée par la méthode de lancement (None pour le panneau Applications)"
+
+msgid "Return signal panel"
+msgstr "Retourne le panneau de signal"
+
+msgid "Return image panel"
+msgstr "Retourne le panneau d'image"
+
+msgid "Show warning message"
+msgstr "Afficher un message d'avertissement"
+
+msgid "Show error message"
+msgstr "Afficher un message d'erreur"
+
+msgid "Show info message"
+msgstr "Afficher un message d'information"
+
+msgid "Ask yes/no question"
+msgstr "Poser une question oui/non"
+
+msgid "Create and edit new signal parameter dataset"
+msgstr "Créer et éditer un nouveau jeu de paramètres de signal"
+
+msgid "title of the new signal"
+msgstr "titre du nouveau signal"
+
+msgid "size of the new signal (default: None, get from current signal)"
+msgstr "taille du nouveau signal (par défaut : None, obtenue à partir du signal actuel)"
+
+msgid "New signal parameter dataset (or None if canceled)"
+msgstr "Nouveau jeu de paramètres de signal (ou None si annulé)"
+
+msgid "Create and edit new image parameter dataset"
+msgstr "Créer et éditer un nouveau jeu de paramètres d'image"
+
+msgid "title of the new image"
+msgstr "titre de la nouvelle image"
+
+msgid "shape of the new image (default: None, get from current image)"
+msgstr "dimensions de la nouvelle image (par défaut : None, obtenues à partir de l'image actuelle)"
+
+msgid "hide image heigth parameter (default: False)"
+msgstr "masquer le paramètre de la hauteur de l'image (par défaut : False)"
+
+msgid "hide image width parameter (default: False)"
+msgstr "masquer le paramètre de la largeur de l'image (par défaut : False)"
+
+msgid "hide image type parameter (default: True)"
+msgstr "masquer le paramètre de type d'image (par défaut : True)"
+
+msgid "hide image data type parameter (default: False)"
+msgstr "masquer le paramètre de type de données d'image (par défaut : False)"
+
+msgid "New image parameter dataset (or None if canceled)"
+msgstr "Nouveau jeu de paramètres d'image (ou None si annulé)"
+
+msgid "Return True if plugin is registered"
+msgstr "Retourne True si le plugin est enregistré"
+
+msgid "Register plugin"
+msgstr "Enregistrer le plugin"
+
+msgid "The declarations of the plugin (recipes, examples, tools, welcome tiles) are validated first: an invalid plugin is not registered, so that the Applications panel, the welcome page and the menus only get valid declarations."
+msgstr "Les déclarations du plugin (recettes, exemples, outils, tuiles de la page d'accueil) sont d'abord validées : un plugin invalide n'est pas enregistré, de sorte que le panneau Applications, la page d'accueil et les menus ne reçoivent que des déclarations valides."
+
+msgid "if a declaration has the wrong type"
+msgstr "si une déclaration n'est pas du bon type"
+
+msgid "if a declaration is invalid or the plugin ID is already used"
+msgstr "si une déclaration est invalide ou si l'ID du plugin est déjà utilisé"
+
+msgid "Unregister plugin"
+msgstr "Désenregistrer le plugin"
+
+msgid "Remove this plugin's computing features from available processors."
+msgstr "Supprime les fonctionnalités de calcul de ce plugin des processeurs disponibles."
+
+msgid "Register plugin hooks."
+msgstr "Enregistre les hooks du plugin."
+
+msgid "Called by :meth:`register` during application startup or plugin reload, before the panels' PLUGINS action category exists: use this for non-GUI side effects only (I/O format registration, listeners). ``self.main`` and ``self.proxy`` are already set. Raising here rolls back the whole registration (the plugin stays unregistered)."
+msgstr "Appelée par :meth:`register` au démarrage de l'application ou lors du rechargement des plugins, avant que la catégorie d'actions PLUGINS des panneaux n'existe : à utiliser uniquement pour des effets de bord sans interface graphique (enregistrement de formats d'E/S, écouteurs). ``self.main`` et ``self.proxy`` sont déjà définis. Une exception levée ici annule tout l'enregistrement (le plugin reste non enregistré)."
+
+msgid "Unregister plugin hooks."
+msgstr "Désenregistre les hooks du plugin."
+
+msgid "Called by :meth:`unregister`; must undo :meth:`register_hooks`. Owned computing features are removed automatically afterwards."
+msgstr "Appelée par :meth:`unregister` ; doit défaire :meth:`register_hooks`. Les fonctionnalités de calcul détenues par le plugin sont ensuite supprimées automatiquement."
+
+msgid "Register owned computations after signal and image panels exist."
+msgstr "Enregistrer les traitements possédés après la création des panneaux signal et image."
+
+msgid "Called once per registered plugin, right before :meth:`create_actions`; raising here removes the plugin's owned features but keeps the plugin registered."
+msgstr "Appelée une fois par plugin enregistré, juste avant :meth:`create_actions` ; une exception levée ici supprime les fonctionnalités détenues par le plugin mais le laisse enregistré."
+
+msgid "Create actions."
+msgstr "Crée les actions."
+
+msgid "Called immediately after :meth:`register_computations`, inside the panels' PLUGINS action category: actions created here populate the *Plugins* menu."
+msgstr "Appelée juste après :meth:`register_computations`, dans la catégorie d'actions PLUGINS des panneaux : les actions créées ici alimentent le menu *Plugins*."
+
+msgid "Mixed metaclass to avoid conflicts"
+msgstr "Métaclasse mixte pour éviter les conflits"
+
+msgid "Capability exposed by a plugin to DataLab consumers."
+msgstr "Capacité exposée par un plugin aux consommateurs de DataLab."
+
+msgid "Plugin info"
+msgstr "Informations sur le plugin"
+
+msgid "Metaclass for registering plugins"
+msgstr "Métaclasse pour l'enregistrement des plugins"
+
+msgid "Return plugin classes"
+msgstr "Retourne les classes de plugins"
+
+msgid "Return plugin instances"
+msgstr "Retourne les instances de plugins"
+
+msgid "Return a plugin by stable ID, legacy name, or class."
+msgstr "Renvoie un plugin à partir de son identifiant stable, de son ancien nom ou de sa classe."
+
+msgid "Legacy display names are accepted only when they identify a single plugin."
+msgstr "Les anciens noms d'affichage ne sont acceptés que s'ils désignent un seul plugin."
+
+msgid "Unregister all plugins"
+msgstr "Désenregistrer tous les plugins"
+
+msgid "Clear registered plugin classes."
+msgstr "Effacer les classes de plugins enregistrées"
+
+msgid "This is mainly useful when reloading plugin modules at runtime."
+msgstr "Ceci est principalement utile lors du rechargement des modules de plugins à l'exécution."
+
+msgid "Record an error traceback that occurred during plugin discovery."
+msgstr "Enregistrer une trace d'erreur survenue lors de la découverte des plugins."
+
+msgid "Formatted traceback string"
+msgstr "Chaîne de trace d'erreur formatée"
+
+msgid "Return error tracebacks collected during plugin discovery."
+msgstr "Retourner les traces d'erreur collectées lors de la découverte des plugins."
+
+msgid "List of formatted traceback strings (may be empty)"
+msgstr "Liste des chaînes de trace d'erreur formatées (peut être vide)"
+
+msgid "Clear recorded discovery errors."
+msgstr "Effacer les erreurs de découverte enregistrées."
+
+msgid "Record a plugin that failed to load or instantiate."
+msgstr "Enregistrer un plugin qui n'a pas pu être chargé ou instancié."
+
+msgid "Module or plugin class name"
+msgstr "Nom du module ou de la classe du plugin"
+
+msgid "File path of the plugin module"
+msgstr "Chemin d'accès du module du plugin"
+
+msgid "Discovery source description"
+msgstr "Description de la source de découverte"
+
+msgid "Return structured info about plugins that failed to load."
+msgstr "Renvoie des informations structurées sur les plugins qui n'ont pas pu être chargés."
+
+msgid "List of FailedPluginInfo objects (may be empty)"
+msgstr "Liste des objets FailedPluginInfo (peut être vide)"
+
+msgid "Clear recorded failed plugin info."
+msgstr "Effacer les informations sur les plugins ayant échoué."
+
+msgid "Return plugin information (names, versions, descriptions) in html format"
+msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
+
+msgid "return html formatted text (default: True)"
+msgstr "retourner du texte formaté en html (par défaut : True)"
+
+msgid "Class representing a signal file type"
+msgstr "Classe représentant un type de fichier de signal"
+
+msgid "Create empty object"
+msgstr "Créer un objet vide"
+
+msgid "Index of object in file"
+msgstr "Indice de l'objet dans le fichier"
+
+msgid "Signal object"
+msgstr "Objet signal"
+
+msgid "Create signal object from xydata and filename."
+msgstr "Créer un objet signal à partir de xydata et du nom de fichier."
+
+msgid "XY data"
+msgstr "Données XY"
+
+msgid "Create signal objects from xydata and filename"
+msgstr "Créer des objets signal à partir de xydata et du nom de fichier"
+
+msgid "List of signal objects"
+msgstr "Liste d'objets signal"
+
+msgid "Read list of signal objects from file"
+msgstr "Lire une liste d'objets signal dans un fichier"
+
+msgid "Read data and metadata from file, write metadata to object, return xydata"
+msgstr "Lire les données et métadonnées d'un fichier, écrire les métadonnées dans l'objet et renvoyer xydata"
+
+msgid "Discover plugins through package entry points and naming convention."
+msgstr "Découvrir les plugins via les points d'entrée de packages et la convention de nommage."
+
+#, python-brace-format
+msgid "Installed packages may expose a :class:`PluginBase` subclass through the ``datalab.plugins`` entry-point group. This function also reloads or imports modules and packages matching the historical ``\"{MOD_NAME}_*\"`` naming scheme, as well as the ``adapters.desktop`` module of such packages, which defines the plugin class of packages laid out by ``datalab-plugin create``."
+msgstr "Les packages installés peuvent exposer une sous-classe de :class:`PluginBase` via le groupe de points d'entrée ``datalab.plugins``. Cette fonction recharge ou importe également les modules et packages qui respectent la convention de nommage historique ``\"{MOD_NAME}_*\"``, ainsi que le module ``adapters.desktop`` de ces packages, qui définit la classe du plugin des packages organisés comme ceux créés par ``datalab-plugin create``."
+
+msgid "Import errors for individual plugins are captured and logged so that one broken plugin does not prevent the others from loading.  Error tracebacks are accumulated in :class:`PluginRegistry` class attributes so that callers (e.g. the main window) can replay them into the internal console once it is ready."
+msgstr "Les erreurs d'importation pour les plugins individuels sont capturées et enregistrées afin qu'un plugin défectueux n'empêche pas les autres de se charger. Les traces d'erreurs sont accumulées dans les attributs de classe :class:`PluginRegistry` afin que les appelants (par exemple, la fenêtre principale) puissent les rejouer dans la console interne une fois qu'elle est prête."
+
+msgid "This function mutates ``sys.modules`` and the plugin registry without synchronization: call it from the Qt main thread only."
+msgstr "Cette fonction modifie ``sys.modules`` et le registre des plugins sans synchronisation : ne l'appelez que depuis le thread principal Qt."
+
+msgid "Imported/reloaded modules containing discovered plugins"
+msgstr "Modules importés ou rechargés contenant les plugins découverts"
+
+msgid "Discover v0.20 plugins (with ``cdl_`` prefix) without importing them"
+msgstr "Découvrir les plugins v0.20 (avec le préfixe ``cdl_``) sans les importer"
+
+msgid "List of tuples (plugin_name, directory_path) for discovered v0.20 plugins"
+msgstr "Liste des tuples (nom_du_plugin, chemin_du_répertoire) pour les plugins v0.20 découverts"
+
+msgid "Return the message telling which objects to select to open a tool."
+msgstr "Renvoie le message indiquant quels objets sélectionner pour ouvrir un outil."
+
+msgid "Instantiate and get available plugins"
+msgstr "Instancier et obtenir les plugins disponibles"
+
+msgid "List of available plugins (as instances)"
+msgstr "Liste des plugins disponibles (en tant qu'instances)"
+
+msgid "Migrate enabled plugin display names to stable IDs."
+msgstr "Convertit les noms d'affichage des plugins activés en identifiants stables."
+
+msgid "Unknown entries are retained so temporarily unavailable plugins do not lose their activation state. A legacy name shared by multiple plugins enables all matching IDs because the old setting cannot distinguish between them."
+msgstr "Les entrées inconnues sont conservées afin que les plugins temporairement indisponibles ne perdent pas leur état d'activation. Un ancien nom partagé par plusieurs plugins active tous les identifiants correspondants, car l'ancien paramètre ne permet pas de les distinguer."
+
+msgid "Configured stable IDs or legacy display names"
+msgstr "Identifiants stables ou anciens noms d'affichage configurés"
+
+msgid "Classes available for migration (registry by default)"
+msgstr "Classes disponibles pour la conversion (registre par défaut)"
+
+msgid "Enabled stable IDs and retained unknown entries, or None for all plugins"
+msgstr "Identifiants stables activés et entrées inconnues conservées, ou None pour tous les plugins"
+
+msgid "Reload plugin modules and reset plugin classes."
+msgstr "Recharger les modules de plugins et réinitialiser les classes de plugins."
+
+msgid "This helper is intended for hot-reloading plugins at runtime. It:"
+msgstr "Cet assistant est destiné au rechargement à chaud des plugins à l'exécution. Il :"
+
+msgid "Updates the plugin search path"
+msgstr "Met à jour le chemin de recherche des plugins"
+
+msgid "Clears the plugin class registry"
+msgstr "Efface le registre des classes de plugins"
+
+msgid "Reloads or imports all modules matching the plugin naming convention"
+msgstr "Recharge ou importe tous les modules correspondant à la convention de nommage des plugins"
+
+msgid "Like :func:`discover_plugins`, this is not thread-safe: call it from the Qt main thread only."
+msgstr "Comme :func:`discover_plugins`, cette fonction n'est pas thread-safe : ne l'appelez que depuis le thread principal Qt."
+
+msgid "Headless contracts for plugin-provided scientific recipes."
+msgstr "Contrats sans interface graphique pour les recettes scientifiques fournies par les plugins."
+
+msgid "Raised when recipe execution observes a cancellation request."
+msgstr "Levée lorsque l'exécution d'une recette constate une demande d'annulation."
+
+msgid "Number of objects accepted by a recipe input slot."
+msgstr "Nombre d'objets acceptés par un emplacement d'entrée de recette."
+
+msgid "Versioned, typed declaration of a plugin-provided headless recipe."
+msgstr "Déclaration typée et versionnée d'une recette sans interface graphique fournie par un plugin."
+
+msgid "A missing ``parameter_class`` declares a parameterless recipe whose run callable receives ``None`` as its second argument. Otherwise, that argument must be an instance of the declared ``DataSet`` subclass."
+msgstr "L'absence de ``parameter_class`` déclare une recette sans paramètre dont la fonction d'exécution reçoit ``None`` comme second argument. Dans le cas contraire, cet argument doit être une instance de la sous-classe ``DataSet`` déclarée."
+
+msgid "``suggest_bindings`` receives the candidate objects and returns a proposed assignment of some of them to input slots (e.g. from metadata). Hosts use it to bind inputs without asking the user."
+msgstr "``suggest_bindings`` reçoit les objets candidats et renvoie une proposition d'affectation de certains d'entre eux aux emplacements d'entrée (par exemple à partir des métadonnées). Les hôtes l'utilisent pour affecter les entrées sans interroger l'utilisateur."
+
+msgid "``check_inputs`` receives complete inputs and parameters (defaults when assessing a selection) and returns diagnostics: errors block the run, warnings are shown. It must stay fast (metadata, shapes, counts) because hosts call it whenever the selection changes."
+msgstr "``check_inputs`` reçoit des entrées complètes et les paramètres (ceux par défaut lors de l'évaluation d'une sélection) et renvoie des diagnostics : les erreurs bloquent l'exécution, les avertissements sont affichés. Il doit rester rapide (métadonnées, dimensions, effectifs) car les hôtes l'appellent à chaque changement de sélection."
+
+msgid "Return the owning plugin ID encoded in the recipe ID."
+msgstr "Renvoie l'identifiant du plugin propriétaire encodé dans l'identifiant de la recette."
+
+msgid "Return the recipe-local ID encoded in the recipe ID."
+msgstr "Renvoie l'identifiant local de la recette encodé dans l'identifiant de la recette."
+
+msgid "Return one declared input slot by its ID."
+msgstr "Renvoie un emplacement d'entrée déclaré à partir de son identifiant."
+
+msgid "Structured, machine-identifiable diagnostic emitted by a recipe."
+msgstr "Diagnostic structuré et identifiable par une machine, émis par une recette."
+
+msgid "Severity of a structured recipe diagnostic."
+msgstr "Gravité d'un diagnostic structuré de recette."
+
+msgid "Technology-neutral progress and cancellation callbacks for a recipe."
+msgstr "Fonctions de rappel de progression et d'annulation indépendantes de la technologie, pour une recette."
+
+msgid "Return whether cancellation has been requested."
+msgstr "Indique si une annulation a été demandée."
+
+msgid "Raise :class:`RecipeCancellationError` when cancellation is requested."
+msgstr "Lève :class:`RecipeCancellationError` lorsqu'une annulation est demandée."
+
+msgid "Report normalized progress between zero and one."
+msgstr "Signale une progression normalisée entre zéro et un."
+
+msgid "Typed input slot declared by a recipe."
+msgstr "Emplacement d'entrée typé déclaré par une recette."
+
+msgid "slot ID, local to the recipe"
+msgstr "identifiant de l'emplacement, local à la recette"
+
+msgid "type of the accepted objects"
+msgstr "type des objets acceptés"
+
+msgid "one object, or several objects"
+msgstr "un objet, ou plusieurs objets"
+
+msgid "True if the slot cannot be left empty"
+msgstr "True si l'emplacement ne peut pas rester vide"
+
+msgid "human-readable slot name (derived from ``id`` if empty)"
+msgstr "nom lisible de l'emplacement (dérivé de ``id`` s'il est vide)"
+
+msgid "what the objects must represent and how they are acquired"
+msgstr "ce que les objets doivent représenter et comment ils sont acquis"
+
+msgid "minimum number of objects of a non-empty ``MANY`` slot"
+msgstr "nombre minimal d'objets d'un emplacement ``MANY`` non vide"
+
+msgid "metadata entries expected on every bound object"
+msgstr "entrées de métadonnées attendues sur chaque objet affecté"
+
+msgid "Return the declared title, or one derived from the slot ID."
+msgstr "Renvoie le titre déclaré, ou un titre dérivé de l'identifiant de l'emplacement."
+
+msgid "Metadata entry expected on the objects bound to a recipe input slot."
+msgstr "Entrée de métadonnées attendue sur les objets affectés à un emplacement d'entrée de recette."
+
+msgid "metadata key"
+msgstr "clé de métadonnée"
+
+msgid "meaning of the value (unit, allowed values...)"
+msgstr "signification de la valeur (unité, valeurs autorisées...)"
+
+msgid "True if objects lacking the key cannot be analyzed; False documents an optional hint, e.g. used to assign objects to slots"
+msgstr "True si les objets dépourvus de la clé ne peuvent pas être analysés ; False documente une indication facultative, utilisée par exemple pour affecter les objets aux emplacements"
+
+msgid "Named signal or image produced by a recipe."
+msgstr "Signal ou image nommé produit par une recette."
+
+msgid "Scientific object type accepted by a recipe input slot."
+msgstr "Type d'objet scientifique accepté par un emplacement d'entrée de recette."
+
+msgid "Objects, anchored scalar results, and diagnostics produced by a recipe."
+msgstr "Objets, résultats scalaires ancrés et diagnostics produits par une recette."
+
+msgid "Named scalar result attached to a named object output."
+msgstr "Résultat scalaire nommé rattaché à une sortie d'objet nommée."
+
+msgid "Versioned local provenance shared by every output of a recipe run."
+msgstr "Provenance locale versionnée partagée par toutes les sorties d'une exécution de recette."
+
+msgid "The record is persisted as JSON metadata (see :meth:`to_dict`) under the ``RECIPE_RUN_RECORD_OPTION`` metadata option of every output object, so external consumers (DataLab-Web, HDF5 workspaces, tooling) can rely on the following schema (version ``1``):"
+msgstr "L'enregistrement est conservé sous forme de métadonnées JSON (voir :meth:`to_dict`) dans l'option de métadonnées ``RECIPE_RUN_RECORD_OPTION`` de chaque objet de sortie, afin que les consommateurs externes (DataLab-Web, espaces de travail HDF5, outils) puissent s'appuyer sur le schéma suivant (version ``1``) :"
+
+msgid "``schema_version`` (int): always ``RECIPE_RUN_RECORD_SCHEMA_VERSION``"
+msgstr "``schema_version`` (int) : toujours ``RECIPE_RUN_RECORD_SCHEMA_VERSION``"
+
+msgid "``run_id`` (str): UUID shared by all outputs of one recipe invocation"
+msgstr "``run_id`` (str) : UUID partagé par toutes les sorties d'un même appel de recette"
+
+msgid "``plugin_id`` / ``plugin_version`` (str): owning plugin and its version"
+msgstr "``plugin_id`` / ``plugin_version`` (str) : plugin propriétaire et sa version"
+
+msgid "``recipe_id`` / ``recipe_version`` (str): recipe (``<plugin_id>:<name>``) and its contract version"
+msgstr "``recipe_id`` / ``recipe_version`` (str) : recette (``<plugin_id>:<name>``) et version de son contrat"
+
+msgid "``parameters_json`` (str): guidata DataSet serialized with ``dataset_to_json`` (``\"null\"`` for parameterless recipes)"
+msgstr "``parameters_json`` (str) : DataSet guidata sérialisé avec ``dataset_to_json`` (``\"null\"`` pour les recettes sans paramètre)"
+
+msgid "``input_uuids`` (dict[str, list[str]]): object UUIDs consumed per input slot — a mapping (not a flat list) so slot roles survive round-trips"
+msgstr "``input_uuids`` (dict[str, list[str]]) : UUID des objets consommés par emplacement d'entrée — un dictionnaire (et non une liste à plat) afin que les rôles des emplacements soient conservés lors des allers-retours"
+
+msgid "``output_uuids`` (dict[str, str]): object UUID produced per output ID"
+msgstr "``output_uuids`` (dict[str, str]) : UUID de l'objet produit pour chaque identifiant de sortie"
+
+msgid "``datalab_version`` / ``sigima_version`` (str): environment versions"
+msgstr "``datalab_version`` / ``sigima_version`` (str) : versions de l'environnement"
+
+msgid "``status`` (str): a ``RecipeRunStatus`` value"
+msgstr "``status`` (str) : une valeur de ``RecipeRunStatus``"
+
+msgid "``started_at`` / ``finished_at`` (str): timezone-aware ISO 8601"
+msgstr "``started_at`` / ``finished_at`` (str) : ISO 8601 avec fuseau horaire"
+
+msgid "Compatibility policy: readers must reject records whose ``schema_version`` they do not know (as :meth:`from_dict` does); any field addition, removal, or semantic change requires bumping ``RECIPE_RUN_RECORD_SCHEMA_VERSION`` and providing an explicit migration path for persisted workspaces."
+msgstr "Politique de compatibilité : les lecteurs doivent rejeter les enregistrements dont ils ne connaissent pas la ``schema_version`` (comme le fait :meth:`from_dict`) ; tout ajout, suppression ou changement sémantique de champ impose d'incrémenter ``RECIPE_RUN_RECORD_SCHEMA_VERSION`` et de fournir un chemin de migration explicite pour les espaces de travail enregistrés."
+
+msgid "Return a representation composed only of JSON-compatible values."
+msgstr "Renvoie une représentation composée uniquement de valeurs compatibles JSON."
+
+msgid "Restore a recipe run record from persisted metadata."
+msgstr "Restaure un enregistrement d'exécution de recette à partir des métadonnées enregistrées."
+
+msgid "Terminal status persisted on successful recipe outputs."
+msgstr "Statut final enregistré sur les sorties d'une recette réussie."
+
+msgid "Raised when recipe inputs or parameters violate their descriptor."
+msgstr "Levée lorsque les entrées ou les paramètres d'une recette ne respectent pas son descripteur."
+
+msgid "Portable declarations for plugin-provided example workspaces."
+msgstr "Déclarations portables des espaces de travail d'exemple fournis par les plugins."
+
+msgid "Packaged or generated example, and the recipes it was designed for."
+msgstr "Exemple empaqueté ou généré, et recettes pour lesquelles il est conçu."
+
+msgid "An example without recipe is presented as a plain dataset."
+msgstr "Un exemple sans recette est présenté comme un simple jeu de données."
+
+msgid "Return the importable package containing the example resource."
+msgstr "Renvoie le paquet importable contenant la ressource de l'exemple."
+
+msgid "Return the POSIX-style path relative to the resource package."
+msgstr "Renvoie le chemin de style POSIX relatif au paquet de ressources."
+
+msgid "Resolve the declared resource without requiring a filesystem path."
+msgstr "Résout la ressource déclarée sans nécessiter de chemin dans le système de fichiers."
+
+msgid "Materialize the resource for APIs that require a filesystem path."
+msgstr "Matérialise la ressource pour les API qui nécessitent un chemin dans le système de fichiers."
+
+msgid "Scientific objects and per-recipe defaults generated by a plugin."
+msgstr "Objets scientifiques et valeurs par défaut par recette générés par un plugin."
+
+msgid "generated signals and images"
+msgstr "signaux et images générés"
+
+msgid "recipe ID to parameter values suited to these objects"
+msgstr "identifiant de recette vers les valeurs de paramètres adaptées à ces objets"
+
+msgid "Return the parameter values suited to one recipe (empty if none)."
+msgstr "Renvoie les valeurs de paramètres adaptées à une recette (vide s'il n'y en a pas)."
+
+msgid "Portable declarations for plugin-provided welcome page tiles."
+msgstr "Déclarations portables des tuiles de la page d'accueil fournies par les plugins."
+
+msgid "Welcome page tile exposed by an application plugin"
+msgstr "Tuile de la page d'accueil exposée par un plugin d'application"
+
+msgid "plugin-local tile ID (lowercase letters, digits, ``.``, ``_``, ``-``)"
+msgstr "ID de la tuile, local au plugin (lettres minuscules, chiffres, ``.``, ``_``, ``-``)"
+
+msgid "tile title"
+msgstr "titre de la tuile"
+
+msgid "short description shown below the title"
+msgstr "description courte affichée sous le titre"
+
+msgid "``package:path`` resource (SVG or bitmap) or DataLab icon file name; ``None`` falls back to the plugin icon"
+msgstr "ressource ``package:path`` (SVG ou bitmap) ou nom de fichier d'une icône de DataLab ; ``None`` utilise l'icône du plugin"
+
+msgid "name of the plugin method called when the tile is clicked; ``None`` shows the plugin page in the **Applications** panel"
+msgstr "nom de la méthode du plugin appelée lors d'un clic sur la tuile ; ``None`` affiche la page du plugin dans le panneau **Applications**"
+
+msgid "Return True if the icon is a ``package:path`` resource"
+msgstr "Renvoie True si l'icône est une ressource ``package:path``"
+
+msgid "Declarations of plugin-owned tools listed in the Applications catalog."
+msgstr "Déclarations des outils propres aux plugins listés dans le catalogue Applications."
+
+msgid "DataLab Desktop and DataLab-Web share this module."
+msgstr "DataLab Desktop et DataLab-Web partagent ce module."
+
+msgid "Tool with its own user interface, exposed by an application plugin"
+msgstr "Outil doté de sa propre interface utilisateur, exposé par un plugin d'application"
+
+msgid "Recipes cover headless analyses run by DataLab; a tool covers any other interaction owned by the plugin (wizard, interactive editor, data preparation, instrument...). DataLab lists tools in the Applications catalog and in the plugin's submenu of the *Plugins* menu."
+msgstr "Les recettes couvrent les analyses sans interface exécutées par DataLab ; un outil couvre toute autre interaction propre au plugin (assistant, éditeur interactif, préparation des données, instrument...). DataLab liste les outils dans le catalogue Applications et dans le sous-menu du plugin du menu *Plugins*."
+
+msgid "A tool is opened either by a ``launcher`` method, called without arguments, or by an ``instrument`` method returning a :class:`datalab.plugins.instruments.PluginInstrument`, which DataLab shows in a window with a live view and the instrument settings."
+msgstr "Un outil est ouvert soit par une méthode ``launcher``, appelée sans argument, soit par une méthode ``instrument`` renvoyant un :class:`datalab.plugins.instruments.PluginInstrument`, que DataLab affiche dans une fenêtre avec une vue en direct et les réglages de l'instrument."
+
+msgid "plugin-local tool ID (lowercase letters, digits, ``.``, ``_``, ``-``)"
+msgstr "identifiant de l'outil local au plugin (lettres minuscules, chiffres, ``.``, ``_``, ``-``)"
+
+msgid "tool title"
+msgstr "titre de l'outil"
+
+msgid "name of the plugin method called, without arguments, to open the tool"
+msgstr "nom de la méthode du plugin appelée, sans argument, pour ouvrir l'outil"
+
+msgid "short description of what the tool does"
+msgstr "courte description de ce que fait l'outil"
+
+msgid "name of the plugin method returning the instrument shown by DataLab (exclusive with ``launcher``)"
+msgstr "nom de la méthode du plugin renvoyant l'instrument affiché par DataLab (exclusif avec ``launcher``)"
+
+msgid "type of the objects the tool works on or creates; the tool is listed in the menu of that panel (``None``: both panels)"
+msgstr "type des objets sur lesquels l'outil travaille ou qu'il crée ; l'outil est listé dans le menu de ce panneau (``None`` : les deux panneaux)"
+
+msgid "selection needed to open the tool, counting objects of ``object_type`` only"
+msgstr "sélection nécessaire pour ouvrir l'outil, en ne comptant que les objets de type ``object_type``"
+
+msgid "Selection a tool needs to be opened (names follow DataLab's conditions)."
+msgstr "Sélection nécessaire à l'ouverture d'un outil (les noms suivent les conditions de DataLab)."
+
+msgid "Return True if the selected objects allow opening the tool."
+msgstr "Renvoie True si les objets sélectionnés permettent d'ouvrir l'outil."
+
+msgid "tool to open"
+msgstr "outil à ouvrir"
+
+msgid "selected objects"
+msgstr "objets sélectionnés"
+
+msgid "True if the number of selected objects of the tool's object type matches the tool's selection"
+msgstr "True si le nombre d'objets sélectionnés du type de l'outil correspond à la sélection de l'outil"
+
+msgid "Instruments exposed by application plugins as tools."
+msgstr "Instruments exposés comme outils par les plugins d'application."
+
+msgid "An instrument is a headless object: it holds settings (a guidata DataSet), returns a live frame for these settings, and acquires objects. DataLab shows it in a window with the live view on the left and the settings on the right. DataLab Desktop and DataLab-Web share this module."
+msgstr "Un instrument est un objet sans interface : il porte des réglages (un DataSet guidata), renvoie une image en direct pour ces réglages et acquiert des objets. DataLab l'affiche dans une fenêtre avec la vue en direct à gauche et les réglages à droite. DataLab Desktop et DataLab-Web partagent ce module."
+
+msgid "Objects acquired by an instrument, added by DataLab to the workspace."
+msgstr "Objets acquis par un instrument, ajoutés par DataLab à l'espace de travail."
+
+msgid "DataLab adds them to a new group, or to the current group of the panel when the user turns off the **New group** option of the instrument window (see :attr:`PluginInstrument.new_group`)."
+msgstr "DataLab les ajoute à un nouveau groupe, ou au groupe courant du panneau lorsque l'utilisateur désactive l'option **Nouveau groupe** de la fenêtre de l'instrument (voir :attr:`PluginInstrument.new_group`)."
+
+msgid "title of the group created for the acquisition, if any"
+msgstr "titre du groupe créé pour l'acquisition, le cas échéant"
+
+msgid "acquired signals, or acquired images"
+msgstr "signaux acquis, ou images acquises"
+
+msgid "Live frame shown by DataLab for the current instrument settings."
+msgstr "Image en direct affichée par DataLab pour les réglages courants de l'instrument."
+
+msgid "signals drawn together, or a single image"
+msgstr "signaux tracés ensemble, ou une seule image"
+
+msgid "short text shown below the view (e.g. measured levels)"
+msgstr "court texte affiché sous la vue (par exemple les niveaux mesurés)"
+
+msgid "fixed Y range of signals, or color range of the image (``None``: automatic)"
+msgstr "plage fixe en Y des signaux, ou plage de couleurs de l'image (``None`` : automatique)"
+
+msgid "Instrument opened by a plugin tool."
+msgstr "Instrument ouvert par un outil de plugin."
+
+msgid "DataLab writes the edited values into :attr:`settings` before calling :meth:`preview` or :meth:`acquire`. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used. The plugin keeps one instance per tool during the session, so settings are kept from one opening to the next."
+msgstr "DataLab écrit les valeurs modifiées dans :attr:`settings` avant d'appeler :meth:`preview` ou :meth:`acquire`. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés. Le plugin conserve une instance par outil pendant la session : les réglages sont ainsi conservés d'une ouverture à l'autre."
+
+msgid "DataLab calls :meth:`open` when the instrument window opens and :meth:`close` when it closes (including when the plugin is reloaded or DataLab quits). It calls these methods, :meth:`preview` and :meth:`acquire` one at a time, outside the GUI thread, even when the window is closed and opened again while a call is running, and writes :attr:`settings` only between two calls: a slow instrument does not freeze DataLab. Data received by the instrument in its own threads (e.g. device events) must be stored for the next :meth:`preview` or :meth:`acquire` call."
+msgstr "DataLab appelle :meth:`open` à l'ouverture de la fenêtre de l'instrument et :meth:`close` à sa fermeture (y compris lorsque le plugin est rechargé ou que DataLab se ferme). Il appelle ces méthodes, :meth:`preview` et :meth:`acquire` une à la fois, en dehors du fil d'exécution de l'interface graphique, même lorsque la fenêtre est fermée puis rouverte pendant un appel, et ne modifie :attr:`settings` qu'entre deux appels : un instrument lent ne fige pas DataLab. Les données reçues par l'instrument dans ses propres fils d'exécution (par exemple les événements d'un appareil) doivent être conservées jusqu'au prochain appel de :meth:`preview` ou :meth:`acquire`."
+
+msgid "instrument settings, edited by DataLab"
+msgstr "réglages de l'instrument, modifiés par DataLab"
+
+msgid "Interval between two frames in live mode, in milliseconds"
+msgstr "Intervalle entre deux images en mode direct, en millisecondes"
+
+msgid "Default state of the **New group** option of the instrument window (if True, each acquisition is added to a new group, otherwise to the current group of the panel). The choice of the user, once made, prevails."
+msgstr "État par défaut de l'option **Nouveau groupe** de la fenêtre de l'instrument (si True, chaque acquisition est ajoutée à un nouveau groupe, sinon au groupe courant du panneau). Une fois fait, le choix de l'utilisateur prévaut."
+
+msgid "Prepare the instrument when its window opens (e.g. connect to it)."
+msgstr "Préparer l'instrument à l'ouverture de sa fenêtre (par exemple s'y connecter)."
+
+msgid "Raises ``ValueError`` with a user-facing message if the instrument cannot be used: DataLab shows this message, and does not call :meth:`preview` or :meth:`acquire` until a new request (e.g. after a settings change) opens the instrument successfully. Does nothing by default."
+msgstr "Lève ``ValueError`` avec un message destiné à l'utilisateur si l'instrument ne peut pas être utilisé : DataLab affiche ce message, et n'appelle pas :meth:`preview` ou :meth:`acquire` tant qu'une nouvelle demande (par exemple après une modification des réglages) n'a pas ouvert l'instrument avec succès. Ne fait rien par défaut."
+
+msgid "Release the instrument when its window closes (e.g. disconnect)."
+msgstr "Libérer l'instrument à la fermeture de sa fenêtre (par exemple s'en déconnecter)."
+
+msgid "Called even if :meth:`open` failed, and possibly several times: it must release only what is still held. Does nothing by default."
+msgstr "Appelée même si :meth:`open` a échoué, et éventuellement plusieurs fois : elle ne doit libérer que ce qui est encore détenu. Ne fait rien par défaut."
+
+msgid "Return a live frame for the current settings."
+msgstr "Renvoie une image en direct pour les réglages courants."
+
+msgid "Acquire objects with the current settings."
+msgstr "Acquiert des objets avec les réglages courants."
+
+msgid "Transactional Desktop runner for plugin-provided scientific recipes."
+msgstr "Exécuteur transactionnel Desktop pour les recettes scientifiques fournies par les plugins."
+
+msgid "Raised after a failed recipe workspace commit has been rolled back."
+msgstr "Levée après l'annulation d'une validation (commit) échouée d'une recette dans l'espace de travail."
+
+msgid "Exception raised by the rollback itself, or None when the workspace was successfully restored."
+msgstr "Exception levée par l'annulation elle-même, ou None si l'espace de travail a été restauré avec succès."
+
+msgid "Validate, execute, and transactionally commit a recipe on Desktop."
+msgstr "Valide, exécute et valide de manière transactionnelle une recette sur Desktop."
+
+msgid "Validate, execute, and atomically commit one recipe invocation."
+msgstr "Valide, exécute et valide de manière atomique un appel de recette."
+
