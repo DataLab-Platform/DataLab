@@ -62,7 +62,10 @@ def fixture_store(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
 
 
 def publish_catalog(
-    site: Path, versions: tuple[str, ...], requires_python: dict[str, str] | None = None
+    site: Path,
+    versions: tuple[str, ...],
+    requires_python: dict[str, str] | None = None,
+    environment_requirements: tuple[str, ...] = (),
 ) -> str:
     """Publish probe plugin releases in a catalog folder and return its URL."""
     releases = []
@@ -92,6 +95,8 @@ def publish_catalog(
                 "targets": ["desktop"],
             }
         )
+        if environment_requirements:
+            releases[-1]["environment_requirements"] = list(environment_requirements)
     catalog = {
         "schema_version": 1,
         "plugins": [
@@ -180,6 +185,54 @@ def test_catalog_plugin_is_installed_then_offered_as_update(
         available.refresh()
         assert "Cannot download" in available.errors_label.text()
         assert not available.item_widgets
+        dialog.close()
+        dialog.deleteLater()
+
+
+def test_environment_requirements_are_shown_before_installation(
+    store: InstalledPluginStore, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Install is offered only once the Python environment has the packages."""
+    missing = "datalab-environment-probe>=2"
+    site = tmp_path / "site"
+    with datalab_test_app_context(console=False) as win:
+        dialog = PluginConfigDialog(win)
+        available = dialog.available_plugins_widget
+        monkeypatch.setattr(available, "run_task", run_now)
+
+        def row_for(*requirements: str):
+            Conf.plugins_catalog_url.set(
+                publish_catalog(site, ("1.0.0",), environment_requirements=requirements)
+            )
+            available.refresh()
+            (row,) = available.item_widgets
+            labels = [label.text() for label in row.findChildren(QW.QLabel)]
+            return row, labels
+
+        row, labels = row_for("datalab-platform>=1.0", missing)
+        assert row.action_button is None
+        assert row.status_label.text() == (
+            f"Install {missing} in the Python environment of DataLab first"
+        )
+        assert any(
+            "Requires in the Python environment of DataLab: datalab-platform&gt;=1.0, "
+            f"{missing.replace('>', '&gt;')}" in text
+            for text in labels
+        )
+        with monkeypatch.context() as context:
+            context.setattr(sys, "frozen", True, raising=False)
+            row, _labels = row_for(missing)
+            assert row.action_button is None
+            assert row.status_label.text() == (
+                f"Not available for the standalone version (requires {missing})"
+            )
+
+        row, labels = row_for("datalab-platform>=1.0")
+        assert row.action_button.text() == "Install"
+        assert any("Requires in the Python environment" in text for text in labels)
+        row, labels = row_for()
+        assert row.action_button.text() == "Install"
+        assert not any("Requires in the Python environment" in text for text in labels)
         dialog.close()
         dialog.deleteLater()
 

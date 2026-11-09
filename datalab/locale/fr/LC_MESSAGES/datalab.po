@@ -2486,6 +2486,10 @@ msgid "Source code"
 msgstr "Code source"
 
 #, python-format
+msgid "Requires in the Python environment of DataLab: %s"
+msgstr "Nécessite dans l'environnement Python de DataLab : %s"
+
+#, python-format
 msgid "Local catalog: %s"
 msgstr "Catalogue local : %s"
 
@@ -2531,6 +2535,14 @@ msgstr "Révision installée différente"
 
 msgid "Replace..."
 msgstr "Remplacer..."
+
+#, python-format
+msgid "Not available for the standalone version (requires %s)"
+msgstr "Non disponible pour la version autonome (nécessite %s)"
+
+#, python-format
+msgid "Install %s in the Python environment of DataLab first"
+msgstr "Installez d'abord %s dans l'environnement Python de DataLab"
 
 msgid "Install"
 msgstr "Installer"
