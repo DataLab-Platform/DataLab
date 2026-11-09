@@ -392,18 +392,63 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         )
         overflow_tile.SIG_CLICKED.connect(self.__show_applications)
         self.tile_grid = TileGrid(overflow_tile)
-        self.browse_applications_button = QW.QPushButton(
-            get_icon("libre-gui-plugin.svg"), _("Browse all applications...")
+        self.browse_applications_button = self.__create_link_button(
+            "libre-gui-plugin.svg",
+            _("Browse all applications..."),
+            self.__show_applications,
         )
+        self.discover_plugins_button = self.__create_link_button(
+            "libre-gui-add.svg",
+            _("Discover plugins..."),
+            self.mainwindow.show_plugin_catalog,
+        )
+        # Without application, an invitation replaces the tiles and the buttons
+        self.discover_plugins_entry = WelcomeEntry(
+            "libre-gui-plugin.svg",
+            _("Discover plugins..."),
+            _(
+                "No application is installed yet: install applications and "
+                "processing features from the DataLab plugin catalog."
+            ),
+            card=True,
+        )
+        self.discover_plugins_entry.SIG_CLICKED.connect(
+            self.mainwindow.show_plugin_catalog
+        )
+        self.entries["plugin_catalog"] = self.discover_plugins_entry
         self.start_title = self.__create_section_title("")
         self.header_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
         self.columns_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
+        self.footer_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
         self.startup_checkbox = QW.QCheckBox(
             _("Show welcome page when the current panel is empty")
         )
         self.startup_checkbox.setChecked(Conf.welcome_on_startup.get())
         self.startup_checkbox.toggled.connect(Conf.welcome_on_startup.set)
+        self.resource_links = {
+            "documentation": self.__create_link_button(
+                "libre-gui-help.svg",
+                _("Documentation"),
+                lambda: webbrowser.open(Conf.app_docurl.get()),
+            ),
+            "release_notes": self.__create_link_button(
+                "libre-gui-about.svg",
+                _("What's new in version %s") % datalab.__version__,
+                lambda: webbrowser.open(get_release_notes_url()),
+            ),
+        }
         self.__setup_ui()
+
+    @staticmethod
+    def __create_link_button(
+        icon_name: str, text: str, callback: Callable[[], None]
+    ) -> QW.QPushButton:
+        """Create a flat button, displayed as a link"""
+        button = QW.QPushButton(get_icon(icon_name), text)
+        button.setFlat(True)
+        button.setCursor(QC.Qt.PointingHandCursor)
+        button.clicked.connect(callback)
+        return button
 
     @staticmethod
     def __create_section_title(text: str) -> QW.QLabel:
@@ -438,19 +483,32 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
 
     def __setup_applications_section(self) -> None:
         """Setup the section gathering the application plugin tiles"""
-        button = self.browse_applications_button
-        button.setFlat(True)
-        button.setCursor(QC.Qt.PointingHandCursor)
-        button.clicked.connect(self.__show_applications)
         header_layout = QW.QHBoxLayout()
         header_layout.addWidget(self.__create_section_title(_("Applications")))
         header_layout.addStretch(1)
-        header_layout.addWidget(button)
+        header_layout.addWidget(self.discover_plugins_button)
+        header_layout.addWidget(self.browse_applications_button)
         layout = QW.QVBoxLayout(self.applications_section)
         layout.setContentsMargins(0, 0, 0, 12)
         layout.addLayout(header_layout)
         layout.addWidget(self.tile_grid)
-        self.applications_section.hide()
+        layout.addWidget(self.discover_plugins_entry)
+        self.__update_applications_visibility()
+
+    def __update_applications_visibility(self) -> None:
+        """Show the application tiles, or an invitation to discover plugins
+
+        The section is hidden when third-party plugins are disabled. It is kept,
+        with its buttons, when the user hid all the applications from the page.
+        """
+        has_applications = bool(self.application_tiles)
+        self.applications_section.setVisible(
+            has_applications or Conf.plugins_enabled.get()
+        )
+        self.tile_grid.setVisible(has_applications)
+        self.browse_applications_button.setVisible(has_applications)
+        self.discover_plugins_button.setVisible(has_applications)
+        self.discover_plugins_entry.setVisible(not has_applications)
 
     def __show_applications(self) -> None:
         """Show the Applications panel"""
@@ -506,8 +564,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
             [self.application_groups[plugin.plugin_id] for plugin in plugins],
             Conf.welcome_application_rows.get(),
         )
-        # Keep the section (and its "Browse all" button) when all tiles are hidden
-        self.applications_section.setVisible(bool(self.application_tiles))
+        self.__update_applications_visibility()
 
     def __create_tile_menu(
         self, plugin: PluginBase, tiles: list[WelcomeTile]
@@ -710,20 +767,6 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
                 _("Watch DataLab create, process and analyze signals and images."),
                 mw.play_demo,
             ),
-            (
-                "documentation",
-                "libre-gui-help.svg",
-                _("Read the documentation"),
-                _("Open the online user guide, tutorials and reference."),
-                lambda: webbrowser.open(Conf.app_docurl.get()),
-            ),
-            (
-                "release_notes",
-                "libre-gui-about.svg",
-                _("What's new in version %s") % datalab.__version__,
-                _("Browse the release notes of this version."),
-                lambda: webbrowser.open(get_release_notes_url()),
-            ),
         ):
             self.__add_entry(learn_layout, *args, card=True)
         learn_layout.addStretch(1)
@@ -751,7 +794,12 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         content_layout.addLayout(self.columns_layout)
         content_layout.addSpacing(16)
         content_layout.addWidget(separator)
-        content_layout.addWidget(self.startup_checkbox)
+        self.footer_layout.addWidget(self.startup_checkbox)
+        self.footer_layout.addStretch(1)
+        for link in self.resource_links.values():
+            # Aligned, rather than stretched, when the footer is stacked
+            self.footer_layout.addWidget(link, 0, QC.Qt.AlignLeft)
+        content_layout.addLayout(self.footer_layout)
         content_layout.addStretch(1)
 
         container = QW.QWidget()
@@ -845,12 +893,12 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
             self.update_application_tiles()
 
     def resizeEvent(self, event: QG.QResizeEvent) -> None:  # pylint: disable=invalid-name
-        """Stack the columns when the page is too narrow"""
+        """Stack the columns and the footer when the page is too narrow"""
         if event.size().width() < SINGLE_COLUMN_WIDTH:
             direction = QW.QBoxLayout.TopToBottom
         else:
             direction = QW.QBoxLayout.LeftToRight
-        for layout in (self.header_layout, self.columns_layout):
+        for layout in (self.header_layout, self.columns_layout, self.footer_layout):
             if layout.direction() != direction:
                 layout.setDirection(direction)
         super().resizeEvent(event)

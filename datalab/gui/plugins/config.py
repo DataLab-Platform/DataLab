@@ -742,6 +742,10 @@ class PluginConfigDialog(QW.QDialog):
         self.setMinimumWidth(max(DIALOG_MIN_WIDTH, self._get_tab_titles_width()))
         super().showEvent(event)
 
+    def show_catalog(self) -> None:
+        """Select the Catalog tab, listing the plugins available for installation"""
+        self.tabs.setCurrentWidget(self.available_plugins_widget)
+
     def _get_tab_titles_width(self) -> int:
         """Return the dialog width showing all tab titles and the global toggle."""
         margins = self.layout().contentsMargins()

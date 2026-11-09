@@ -4540,18 +4540,15 @@ msgstr "Lancer la démo"
 msgid "Watch DataLab create, process and analyze signals and images."
 msgstr "Regardez DataLab créer, traiter et analyser des signaux et des images."
 
-msgid "Read the documentation"
-msgstr "Lire la documentation"
+msgid "Discover plugins..."
+msgstr "Découvrir des plugins..."
 
-msgid "Open the online user guide, tutorials and reference."
-msgstr "Ouvrez le guide utilisateur en ligne, les tutoriels et la référence."
+msgid "No application is installed yet: install applications and processing features from the DataLab plugin catalog."
+msgstr "Aucune application n'est encore installée : installez des applications et des traitements depuis le catalogue de plugins DataLab."
 
 #, python-format
 msgid "What's new in version %s"
 msgstr "Nouveautés de la version %s"
-
-msgid "Browse the release notes of this version."
-msgstr "Consultez les nouveautés et corrections de cette version."
 
 msgid "Image"
 msgstr "Image"

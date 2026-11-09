@@ -46,6 +46,9 @@ def test_welcome_page(monkeypatch) -> None:
     calls: list[object] = []
     monkeypatch.setattr(DLMainWindow, "show_tour", lambda self: calls.append("tour"))
     monkeypatch.setattr(DLMainWindow, "play_demo", lambda self: calls.append("demo"))
+    monkeypatch.setattr(
+        DLMainWindow, "show_plugin_catalog", lambda self: calls.append("catalog")
+    )
     monkeypatch.setattr(welcome.webbrowser, "open", calls.append)
 
     def choose_image(menu: QW.QMenu, *_args) -> QW.QAction:
@@ -69,6 +72,16 @@ def test_welcome_page(monkeypatch) -> None:
         assert is_in_front(dock) and not is_in_front(sigdock)
         assert page.start_title.text() == _("Get started")
 
+        # Without application, the Applications section invites to discover some
+        assert not page.applications_section.isHidden()
+        assert not page.entries["plugin_catalog"].isHidden()
+        for widget in (
+            page.tile_grid,
+            page.discover_plugins_button,
+            page.browse_applications_button,
+        ):
+            assert widget.isHidden()
+
         # Panel-specific entries ask for the destination panel first
         monkeypatch.setattr(QW.QMenu, "exec", choose_image)
         for key, method in (
@@ -83,10 +96,10 @@ def test_welcome_page(monkeypatch) -> None:
         monkeypatch.setattr(
             win, "open_h5_files", lambda import_all=None: calls.append(import_all)
         )
-        for key in ("browse_h5", "open_h5", "tour", "demo"):
+        for key in ("browse_h5", "open_h5", "tour", "demo", "plugin_catalog"):
             page.entries[key].SIG_CLICKED.emit()
         for key in ("documentation", "release_notes"):
-            page.entries[key].SIG_CLICKED.emit()
+            page.resource_links[key].click()
         assert calls == [
             "open",
             "import_text",
@@ -94,6 +107,7 @@ def test_welcome_page(monkeypatch) -> None:
             True,
             "tour",
             "demo",
+            "catalog",
             Conf.app_docurl.get(),
             welcome.get_release_notes_url(),
         ]
@@ -200,10 +214,14 @@ def test_welcome_page_application_tiles(monkeypatch) -> None:
     launched: list[tuple[str, str]] = []
     errors: list[tuple[str, str]] = []
     shown: list[str | None] = []
+    catalog_shown: list[bool] = []
     monkeypatch.setattr(
         welcome,
         "qt_handle_error_message",
         lambda _widget, exc, context: errors.append((str(exc), context)),
+    )
+    monkeypatch.setattr(
+        DLMainWindow, "show_plugin_catalog", lambda self: catalog_shown.append(True)
     )
     camera = _application_plugin(
         "org.example.camera",
@@ -241,6 +259,11 @@ def test_welcome_page_application_tiles(monkeypatch) -> None:
 
             keys = ["org.example.camera", "org.example.pulse"]
             assert not page.applications_section.isHidden()
+            # With applications, the invitation becomes a button of the section
+            assert page.entries["plugin_catalog"].isHidden()
+            assert not page.discover_plugins_button.isHidden()
+            page.discover_plugins_button.click()
+            assert catalog_shown == [True]
             assert list(page.application_tiles) == keys
             camera_group, pulse_group = (page.application_groups[key] for key in keys)
             assert len(camera_group) == 1 and len(pulse_group) == 3
@@ -275,9 +298,29 @@ def test_welcome_page_application_tiles(monkeypatch) -> None:
             registry[:] = [processing]
             page.refresh_application_tiles()
             assert page.application_tiles == {}
-            assert page.applications_section.isHidden()
+            assert not page.applications_section.isHidden()
+            assert not page.entries["plugin_catalog"].isHidden()
+            assert page.tile_grid.isHidden()
+            page.entries["plugin_catalog"].SIG_CLICKED.emit()
+            assert catalog_shown == [True, True]
         finally:
             registry[:] = previous_plugins
+
+
+def test_welcome_page_stacks_columns_and_footer() -> None:
+    """The columns and the footer links are stacked on a narrow page"""
+    with datalab_test_app_context(console=False) as win:
+        page = win.welcomepanel
+        win.show_welcome_page()
+        QW.QApplication.processEvents()
+        for width, direction in (
+            (welcome.SINGLE_COLUMN_WIDTH - 100, QW.QBoxLayout.TopToBottom),
+            (welcome.SINGLE_COLUMN_WIDTH + 100, QW.QBoxLayout.LeftToRight),
+        ):
+            size = QC.QSize(width, page.height())
+            page.resizeEvent(QG.QResizeEvent(size, page.size()))
+            assert page.columns_layout.direction() == direction
+            assert page.footer_layout.direction() == direction
 
 
 def test_tile_grid_wraps_and_overflows() -> None:
