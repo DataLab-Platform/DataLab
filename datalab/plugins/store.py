@@ -41,6 +41,7 @@ from packaging.utils import canonicalize_name
 
 from datalab.plugins.dependencies import (
     DEPENDENCIES_DIRECTORY,
+    DependencyError,
     DependencyPlan,
     install_dependencies,
     installed_versions,
@@ -346,6 +347,24 @@ class InstalledPluginStore:
         if not missing:
             return manifest, None
         source = wheelhouse or osp.join(osp.dirname(path), DEPENDENCIES_DIRECTORY)
+        if not osp.isdir(source):
+            requirements = ", ".join(missing)
+            hint = (
+                f'their wheels in a "{DEPENDENCIES_DIRECTORY}" folder next to the '
+                "plugin wheel, then install the plugin again."
+            )
+            if getattr(sys, "frozen", False):
+                message = (
+                    "Packages required by this plugin are not provided by this "
+                    f"standalone version of DataLab: {requirements}. Put {hint}"
+                )
+            else:
+                message = (
+                    "Packages required by this plugin are missing from DataLab's "
+                    f"Python environment: {requirements}. Install them in this "
+                    f"environment, or put {hint}"
+                )
+            raise DependencyError(message)
         plan = plan_dependencies(
             missing,
             source,

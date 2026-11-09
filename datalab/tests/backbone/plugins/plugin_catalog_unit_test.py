@@ -17,6 +17,7 @@ from datalab.plugins.catalog import (
     download_dependency_wheels,
     download_release,
     fetch_catalog,
+    get_unsatisfied_requirements,
 )
 
 FILENAME = "example_plugin-1.0.0-py3-none-any.whl"
@@ -165,6 +166,56 @@ def test_installable_release_suits_the_host_python(tmp_path: Path) -> None:
     assert plugin.get_installable_release(python_version="3.11").version == "1.0.0"
     assert plugin.get_installable_release(python_version="3.8") is None
     assert plugin.get_installable_release(python_version="").version == "3.0.0"
+
+
+def test_environment_requirements_are_read_and_evaluated(tmp_path: Path) -> None:
+    """Packages that users install themselves are checked against a host."""
+    requirements = [
+        "PyTango>=9.5.1",
+        'helper>=1; python_version >= "4"',
+        'test-tool; extra == "test"',
+        "numpy>=1.22",
+    ]
+    releases = [
+        publish(tmp_path, b"2", "2.0.0", environment_requirements=requirements),
+        publish(tmp_path, b"1", "1.0.0"),
+    ]
+    (plugin,) = fetch_catalog(write_catalog(tmp_path, [plugin_record(releases)]))
+    latest, oldest = plugin.releases
+    assert latest.environment_requirements == tuple(requirements)
+    assert oldest.environment_requirements == ()
+
+    def unsatisfied(available: dict[str, str]) -> list[str]:
+        return get_unsatisfied_requirements(latest.environment_requirements, available)
+
+    assert unsatisfied({}) == ["PyTango>=9.5.1", "numpy>=1.22"]
+    assert unsatisfied({"pytango": "9.5.0", "NumPy": "2.1.0"}) == ["PyTango>=9.5.1"]
+    assert unsatisfied({"PYTANGO": "10.3.1", "numpy": "1.21"}) == ["numpy>=1.22"]
+    assert unsatisfied({"pytango": "10.3.1", "numpy": "not a version"}) == [
+        "numpy>=1.22"
+    ]
+    assert not unsatisfied({"pytango": "10.3.1", "numpy": "2.1.0"})
+
+
+@pytest.mark.parametrize(
+    ("release", "extra"),
+    [
+        ({"environment_requirements": "pytango"}, {}),
+        ({"environment_requirements": ["pytango>="]}, {}),
+        (
+            {"environment_requirements": ["pytango"]},
+            {"kind": "module", "module": "datalab_example", "distribution": ""},
+        ),
+    ],
+)
+def test_invalid_environment_requirements_are_refused(
+    tmp_path: Path, release: dict, extra: dict
+) -> None:
+    """Requirements are a list of PEP 508 strings, never for single-file modules."""
+    record = plugin_record([{"version": "1.0.0", "sha256": "a" * 64, **release}])
+    record.update(extra)
+    with pytest.raises(CatalogError, match="Invalid plugin catalog"):
+        fetch_catalog(write_catalog(tmp_path, [record]))
 
 
 def test_downloads_must_match_the_catalog(tmp_path: Path) -> None:

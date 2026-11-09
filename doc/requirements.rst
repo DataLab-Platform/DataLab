@@ -158,3 +158,6 @@ Optional modules for running test suite:
     * - httpx
       -
       - The next generation HTTP client.
+    * - pyyaml
+      -
+      - YAML parser and emitter for Python

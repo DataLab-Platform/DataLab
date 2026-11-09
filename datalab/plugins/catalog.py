@@ -29,11 +29,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import zipfile
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from email.message import Message
 from email.parser import BytesParser
 from email.policy import default as email_policy
 
+from packaging.requirements import Requirement
 from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.tags import sys_tags
 from packaging.utils import canonicalize_name, parse_wheel_filename
@@ -91,6 +92,10 @@ class CatalogRelease:
         targets: Hosts supported by the wheel (``desktop``, ``web``)
         yanked: Reason why the release should not be installed, if any
         requires_python: ``Requires-Python`` metadata of the wheel, if any
+        dependency_wheels: Dependency artifacts distributed with the release
+        kind: Artifact kind (``wheel`` or ``module``)
+        environment_requirements: Requirements, with their environment markers,
+         that users install themselves in DataLab's Python environment
     """
 
     version: str
@@ -103,6 +108,7 @@ class CatalogRelease:
     requires_python: str | None = None
     dependency_wheels: tuple[CatalogWheel, ...] = ()
     kind: str = "wheel"
+    environment_requirements: tuple[str, ...] = ()
 
 
 @dataclasses.dataclass(frozen=True)
@@ -239,6 +245,48 @@ def _module_python_compatible(
         return False
 
 
+def get_unsatisfied_requirements(
+    requirements: Sequence[str], available: Mapping[str, str]
+) -> list[str]:
+    """Return the requirements that the running environment does not satisfy.
+
+    Args:
+        requirements: Requirement strings, with their environment markers
+        available: Versions of the distributions available to plugins
+
+    Returns:
+        Requirements applying to the running interpreter, missing or with an
+        incompatible available version
+    """
+    versions = {canonicalize_name(name): value for name, value in available.items()}
+    unsatisfied: list[str] = []
+    for value in requirements:
+        requirement = Requirement(value)
+        # Catalog requirements never select extras of the plugin
+        if requirement.marker is not None and not requirement.marker.evaluate(
+            {"extra": ""}
+        ):
+            continue
+        version = versions.get(canonicalize_name(requirement.name))
+        try:
+            satisfied = version is not None and Version(version) in (
+                requirement.specifier
+            )
+        except InvalidVersion:
+            satisfied = False
+        if not satisfied:
+            unsatisfied.append(value)
+    return unsatisfied
+
+
+def _parse_requirements(values: object) -> tuple[str, ...]:
+    if not isinstance(values, list) or not all(
+        isinstance(value, str) for value in values
+    ):
+        raise ValueError("Environment requirements must be a list of strings")
+    return tuple(str(Requirement(value)) for value in values)
+
+
 def _parse_release(
     item: dict, resolve: Callable[[str], str], kind: str = "wheel"
 ) -> CatalogRelease:
@@ -260,6 +308,8 @@ def _parse_release(
     if kind == "module":
         if dependencies:
             raise ValueError("Module plugins cannot install additional dependencies")
+        if "environment_requirements" in item:
+            raise ValueError("Module plugins cannot require additional packages")
         if url:
             module_name(item["filename"])
             if tuple(item.get("targets", ())) != ("desktop",):
@@ -279,6 +329,9 @@ def _parse_release(
         requires_python=item.get("requires_python"),
         dependency_wheels=tuple(dependencies),
         kind=kind,
+        environment_requirements=_parse_requirements(
+            item.get("environment_requirements", [])
+        ),
     )
 
 
@@ -758,6 +811,7 @@ __all__ = [
     "download_dependency_wheels",
     "download_release",
     "fetch_catalog",
+    "get_unsatisfied_requirements",
     "list_folder_modules",
     "list_folder_wheels",
     "load_catalog_json",

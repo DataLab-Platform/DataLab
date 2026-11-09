@@ -52,7 +52,7 @@ jobs:
         sudo apt-get install -y libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils
         /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
         python -m pip install --upgrade pip
-        python -m pip install ruff pytest httpx
+        python -m pip install ruff pytest httpx pyyaml
         pip install PyQt5
         # PRs select by target branch; pushes and manual runs by their own branch.
         case "${{ github.base_ref || github.ref_name }}" in
@@ -170,7 +170,7 @@ jobs:
           --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
 
         python -m pip install --upgrade pip
-        python -m pip install ruff pytest httpx
+        python -m pip install ruff pytest httpx pyyaml
         python -m pip install PyQt5
 
         # Clone and install Sigima and SigimaX from the same branch as DataLab
@@ -192,8 +192,8 @@ jobs:
 
         # Extract dependency names from the pyproject.toml of DataLab and SigimaX
         # (excluding Sigima and SigimaX, installed from local clones above) and
-        # install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(sorted({re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomllib.loads(open(p, 'rb').read().decode())['project']['dependencies'] if not any(n in d for n in ['Sigima', 'SigimaX', 'datalab-capsule'])})))")
+        # install latest versions, keeping extras such as uvicorn[standard]
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(sorted({re.sub(r'[<>=!~,;\s].*$', '', d).strip() for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomllib.loads(open(p, 'rb').read().decode())['project']['dependencies'] if not any(n in d for n in ['Sigima', 'SigimaX', 'datalab-capsule'])})))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
