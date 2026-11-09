@@ -4540,6 +4540,12 @@ msgstr "Lancer la démo"
 msgid "Watch DataLab create, process and analyze signals and images."
 msgstr "Regardez DataLab créer, traiter et analyser des signaux et des images."
 
+msgid "Discover plugins..."
+msgstr "Découvrir des plugins..."
+
+msgid "Install applications and processing features from the DataLab plugin catalog."
+msgstr "Installez des applications et des traitements depuis le catalogue de plugins DataLab."
+
 msgid "Read the documentation"
 msgstr "Lire la documentation"
 

@@ -711,6 +711,16 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
                 mw.play_demo,
             ),
             (
+                "plugin_catalog",
+                "libre-gui-plugin.svg",
+                _("Discover plugins..."),
+                _(
+                    "Install applications and processing features from the "
+                    "DataLab plugin catalog."
+                ),
+                mw.show_plugin_catalog,
+            ),
+            (
                 "documentation",
                 "libre-gui-help.svg",
                 _("Read the documentation"),

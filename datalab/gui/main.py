@@ -1264,6 +1264,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dialog = PluginConfigDialog(self)
         dialog.exec()
 
+    def show_plugin_catalog(self) -> None:
+        """Open the plugin configuration dialog on its Catalog tab"""
+        dialog = PluginConfigDialog(self)
+        dialog.show_catalog()
+        dialog.exec()
+
     def show_applications(self, plugin_id: str | None = None) -> None:
         """Show the Applications panel
 

@@ -23,6 +23,9 @@ msgstr "Prérequis"
 msgid "Runtime requirements are unchanged since version 1.4.0."
 msgstr "Les prérequis d'exécution sont inchangés depuis la version 1.4.0."
 
+msgid "**Third-party**:"
+msgstr "**Bibliothèques tierces** :"
+
 msgid "PyYAML is now part of the `test` optional dependencies: the test suite needs it to check the projects created by the plugin generator."
 msgstr "PyYAML fait désormais partie des dépendances optionnelles `test` : la suite de tests en a besoin pour vérifier les projets créés par le générateur de plugins."
 
@@ -40,6 +43,9 @@ msgstr "**Générateur de plugins** : le workflow de publication d'un projet de 
 
 msgid "**Plugin catalog**: a plugin may now require packages that users install themselves in DataLab's Python environment, such as PyTango for the TANGO Instruments plugin. The **Catalog** tab shows these packages and offers to install the plugin only once they are installed; in the standalone application, such plugins are shown as not available."
 msgstr "**Catalogue de plugins** : un plugin peut désormais nécessiter des paquets que les utilisateurs installent eux-mêmes dans l'environnement Python de DataLab, comme PyTango pour le plugin TANGO Instruments. L'onglet **Catalogue** affiche ces paquets et ne propose d'installer le plugin qu'une fois qu'ils sont installés ; dans l'application autonome, ces plugins sont signalés comme non disponibles."
+
+msgid "**Welcome page**: the new \"Discover plugins...\" entry opens the **Catalog** tab of the plugin configuration dialog, to find and install the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), including when no plugin is installed yet."
+msgstr "**Page d'accueil** : la nouvelle entrée « Découvrir des plugins... » ouvre l'onglet **Catalogue** de la boîte de dialogue de configuration des plugins, pour trouver et installer les plugins du [catalogue de plugins DataLab](https://datalab-platform.com/plugins/), y compris lorsqu'aucun plugin n'est encore installé."
 
 msgid "DataLab Version 1.4.0"
 msgstr "DataLab Version 1.4.0"
@@ -64,9 +70,6 @@ msgstr "guidata 3.17.2 ou ultérieur est requis : il fournit les éléments de p
 
 msgid "PlotPy 2.12.1 or later is required: it provides sharp SVG icons on high-DPI displays, min/max signal auto-downsampling and faster image overlay interactions."
 msgstr "PlotPy 2.12.1 ou ultérieur est requis : il fournit des icônes SVG nettes sur les écrans haute résolution, le sous-échantillonnage automatique min/max des signaux et des interactions plus fluides sur les superpositions d'images."
-
-msgid "**Third-party**:"
-msgstr "**Bibliothèques tierces** :"
 
 msgid "The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter."
 msgstr "Le package Python et les nouveaux projets de plugins générés exigent désormais Python 3.10 ou ultérieur. Les utilisateurs de Python 3.9 doivent conserver une version antérieure compatible. L'application autonome continue d'inclure son propre interpréteur Python."

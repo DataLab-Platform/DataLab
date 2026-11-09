@@ -56,8 +56,11 @@ A **Welcome** page is shown next to the signal and image views when DataLab star
   browse an HDF5 file, open a previously saved HDF5 workspace, or import text
   data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose
   between signals and images;
-- ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
-  online documentation, or browse the release notes of the running version.
+- ask the :ref:`ai_assistant`, take the guided tour, run the demo, discover
+  plugins, read the online documentation, or browse the release notes of the
+  running version. "Discover plugins..." opens the **Catalog** tab of the plugin
+  configuration dialog, which lists the plugins of the `DataLab plugin catalog
+  <https://datalab-platform.com/plugins/>`_, ready to install (see :ref:`about_plugins`).
 
 When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application shows its page in the :ref:`applications_panel`, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and shows the Applications panel. The "Browse all applications..." button also shows this panel, where the "…" menu of each application offers the same "Show on welcome page" and "Pin to the welcome page" options (see :ref:`about_plugins`).
 

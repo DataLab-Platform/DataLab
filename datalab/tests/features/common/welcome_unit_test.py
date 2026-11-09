@@ -46,6 +46,9 @@ def test_welcome_page(monkeypatch) -> None:
     calls: list[object] = []
     monkeypatch.setattr(DLMainWindow, "show_tour", lambda self: calls.append("tour"))
     monkeypatch.setattr(DLMainWindow, "play_demo", lambda self: calls.append("demo"))
+    monkeypatch.setattr(
+        DLMainWindow, "show_plugin_catalog", lambda self: calls.append("catalog")
+    )
     monkeypatch.setattr(welcome.webbrowser, "open", calls.append)
 
     def choose_image(menu: QW.QMenu, *_args) -> QW.QAction:
@@ -83,7 +86,7 @@ def test_welcome_page(monkeypatch) -> None:
         monkeypatch.setattr(
             win, "open_h5_files", lambda import_all=None: calls.append(import_all)
         )
-        for key in ("browse_h5", "open_h5", "tour", "demo"):
+        for key in ("browse_h5", "open_h5", "tour", "demo", "plugin_catalog"):
             page.entries[key].SIG_CLICKED.emit()
         for key in ("documentation", "release_notes"):
             page.entries[key].SIG_CLICKED.emit()
@@ -94,6 +97,7 @@ def test_welcome_page(monkeypatch) -> None:
             True,
             "tour",
             "demo",
+            "catalog",
             Conf.app_docurl.get(),
             welcome.get_release_notes_url(),
         ]
