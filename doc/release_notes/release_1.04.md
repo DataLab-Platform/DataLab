@@ -4,7 +4,9 @@
 
 ### Requirements ###
 
-* Requirements are unchanged since version 1.4.0.
+* Runtime requirements are unchanged since version 1.4.0.
+* **Third-party**:
+  * PyYAML is now part of the `test` optional dependencies: the test suite needs it to check the projects created by the plugin generator.
 
 ### 🛠️ Bug Fixes since version 1.4.0 ###
 

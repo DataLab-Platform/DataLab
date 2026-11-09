@@ -20,8 +20,11 @@ msgstr "DataLab Version 1.4.1"
 msgid "Requirements"
 msgstr "Prérequis"
 
-msgid "Requirements are unchanged since version 1.4.0."
-msgstr "Les prérequis sont inchangés depuis la version 1.4.0."
+msgid "Runtime requirements are unchanged since version 1.4.0."
+msgstr "Les prérequis d'exécution sont inchangés depuis la version 1.4.0."
+
+msgid "PyYAML is now part of the `test` optional dependencies: the test suite needs it to check the projects created by the plugin generator."
+msgstr "PyYAML fait désormais partie des dépendances optionnelles `test` : la suite de tests en a besoin pour vérifier les projets créés par le générateur de plugins."
 
 msgid "🛠️ Bug Fixes since version 1.4.0"
 msgstr "🛠️ Corrections de bugs depuis la version 1.4.0"
