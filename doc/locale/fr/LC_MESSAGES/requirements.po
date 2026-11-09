@@ -306,3 +306,9 @@ msgstr ""
 
 msgid "The next generation HTTP client."
 msgstr "Client HTTP de nouvelle génération."
+
+msgid "pyyaml"
+msgstr ""
+
+msgid "YAML parser and emitter for Python"
+msgstr "Analyseur et générateur YAML pour Python"

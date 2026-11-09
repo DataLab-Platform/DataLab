@@ -26,6 +26,7 @@ pyinstaller == 6.16.0
 pylint
 pytest
 pytest-xvfb
+pyyaml
 ruff
 scikit-image >= 0.19.2, < 0.27
 sphinx

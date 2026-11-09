@@ -499,5 +499,11 @@ msgstr ""
 msgid "The next generation HTTP client."
 msgstr "Client HTTP de nouvelle génération."
 
+msgid "pyyaml"
+msgstr ""
+
+msgid "YAML parser and emitter for Python"
+msgstr "Analyseur et générateur YAML pour Python"
+
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"

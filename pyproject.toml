@@ -103,7 +103,7 @@ doc = [
     "pydata-sphinx-theme",
     "sphinxcontrib-svg2pdfconverter[CairoSVG]",
 ]
-test = ["pytest", "pytest-xvfb", "httpx"]
+test = ["pytest", "pytest-xvfb", "httpx", "pyyaml"]
 
 [tool.setuptools.packages.find]
 include = ["datalab*"]
