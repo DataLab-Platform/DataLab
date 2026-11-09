@@ -172,8 +172,8 @@ jobs:
 
         # Extract dependency names from the pyproject.toml of DataLab and SigimaX
         # (excluding Sigima and SigimaX, installed from local clones above) and
-        # install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(sorted({re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomllib.loads(open(p, 'rb').read().decode())['project']['dependencies'] if not any(n in d for n in ['Sigima', 'SigimaX', 'datalab-capsule'])})))")
+        # install latest versions, keeping extras such as uvicorn[standard]
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(sorted({re.sub(r'[<>=!~,;\s].*$', '', d).strip() for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomllib.loads(open(p, 'rb').read().decode())['project']['dependencies'] if not any(n in d for n in ['Sigima', 'SigimaX', 'datalab-capsule'])})))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
