@@ -192,6 +192,37 @@ def test_missing_transitive_wheel_leaves_the_store_unchanged(
     assert not store.get_dependency_paths()
 
 
+@pytest.mark.parametrize("frozen", [False, True])
+def test_missing_packages_without_dependency_wheels_are_named(
+    store: InstalledPluginStore,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    frozen: bool,
+) -> None:
+    """Without any dependency folder, users learn which packages to install."""
+    requirement = "datalab-deliberately-unavailable-dependency>=1"
+    plugin = tmp_path / wheel_filename("datalab-offline-plugin-probe", "1.0.0")
+    plugin.write_bytes(
+        make_plugin_wheel(
+            distribution="datalab-offline-plugin-probe",
+            version="1.0.0",
+            package="datalab_offline_plugin_probe",
+            requires_dist=(requirement,),
+        )
+    )
+    if frozen:
+        monkeypatch.setattr(sys, "frozen", True, raising=False)
+        expected = "not provided by this standalone version of DataLab"
+    else:
+        expected = "missing from DataLab's Python environment"
+    with pytest.raises(DependencyError, match=f"{expected}: {requirement}") as info:
+        store.prepare_wheel_file(str(plugin))
+    assert str(tmp_path) not in str(info.value)
+    assert '"dependencies" folder next to the plugin wheel' in str(info.value)
+    assert not store.get_plugins()
+    assert not store.get_dependency_paths()
+
+
 def test_resolution_preserves_the_hosts_development_import_paths(
     store: InstalledPluginStore, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

@@ -23,11 +23,20 @@ msgstr "Prérequis"
 msgid "Requirements are unchanged since version 1.4.0."
 msgstr "Les prérequis sont inchangés depuis la version 1.4.0."
 
+msgid "🛠️ Bug Fixes since version 1.4.0"
+msgstr "🛠️ Corrections de bugs depuis la version 1.4.0"
+
+msgid "**Plugin installation**: installing a plugin whose required packages are missing now names these packages and tells how to provide them, instead of reporting an unexplained \"Dependency wheelhouse not found\" error with a temporary folder."
+msgstr "**Installation de plugins** : l'installation d'un plugin dont des paquets requis sont manquants nomme désormais ces paquets et indique comment les fournir, au lieu de signaler une erreur inexpliquée « Dependency wheelhouse not found » mentionnant un dossier temporaire."
+
 msgid "🔧 Improvements since version 1.4.0"
 msgstr "🔧 Améliorations depuis la version 1.4.0"
 
 msgid "**Plugin generator**: the release workflow of a generated plugin project (`.github/workflows/release.yml`) now checks that the tag matches the version of both `pyproject.toml` and the package, runs the tests before building the wheel, and publishes the wheel with its SHA-256 checksum and its build provenance attestation, which users can check with `gh attestation verify`. A tag such as `v0.2.0-rc1` publishes a release candidate as a GitHub pre-release, without plugin catalog entry. The generated test no longer compares the plugin version with a fixed value, so it no longer fails when the version changes. Existing plugin projects are not affected."
 msgstr "**Générateur de plugins** : le workflow de publication d'un projet de plugin généré (`.github/workflows/release.yml`) vérifie désormais que l'étiquette correspond à la version de `pyproject.toml` et à celle du package, exécute les tests avant de construire le wheel, et publie le wheel avec sa somme de contrôle SHA-256 et son attestation de provenance, vérifiable avec `gh attestation verify`. Une étiquette comme `v0.2.0-rc1` publie une version candidate sous forme de pré-release GitHub, sans fiche pour le catalogue de plugins. Le test généré ne compare plus la version du plugin à une valeur fixe : il n'échoue donc plus lorsque la version change. Les projets de plugins existants ne sont pas concernés."
+
+msgid "**Plugin catalog**: a plugin may now require packages that users install themselves in DataLab's Python environment, such as PyTango for the TANGO Instruments plugin. The **Catalog** tab shows these packages and offers to install the plugin only once they are installed; in the standalone application, such plugins are shown as not available."
+msgstr "**Catalogue de plugins** : un plugin peut désormais nécessiter des paquets que les utilisateurs installent eux-mêmes dans l'environnement Python de DataLab, comme PyTango pour le plugin TANGO Instruments. L'onglet **Catalogue** affiche ces paquets et ne propose d'installer le plugin qu'une fois qu'ils sont installés ; dans l'application autonome, ces plugins sont signalés comme non disponibles."
 
 msgid "DataLab Version 1.4.0"
 msgstr "DataLab Version 1.4.0"
@@ -887,3 +896,4 @@ msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
+

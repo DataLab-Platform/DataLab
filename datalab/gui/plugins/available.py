@@ -40,10 +40,11 @@ from datalab.plugins.catalog import (
     CatalogsContent,
     download_dependency_wheels,
     download_release,
+    get_unsatisfied_requirements,
     load_catalogs,
 )
 from datalab.plugins.dependencies import DEPENDENCIES_DIRECTORY
-from datalab.plugins.store import MODULE_KIND, WHEEL_KIND
+from datalab.plugins.store import MODULE_KIND, WHEEL_KIND, get_available_distributions
 from datalab.widgets.expandabletext import apply_palette_color, apply_subdued_color
 
 CATALOG_PAGE_URL = "https://datalab-platform.com/plugins/"
@@ -83,6 +84,8 @@ class AvailablePluginItemWidget(QW.QWidget):
         plugin: Catalog plugin
         installed: How the plugin is installed (``""``, ``"file"`` or
          ``"environment"``) and its installed version
+        missing_requirements: Environment requirements of the installable
+         release that the Python environment does not satisfy
         parent: Parent widget
     """
 
@@ -91,6 +94,8 @@ class AvailablePluginItemWidget(QW.QWidget):
         plugin: CatalogPlugin,
         installed: tuple[str, str, str],
         parent: QW.QWidget | None = None,
+        *,
+        missing_requirements: Sequence[str] = (),
     ) -> None:
         super().__init__(parent)
         self.plugin = plugin
@@ -110,10 +115,16 @@ class AvailablePluginItemWidget(QW.QWidget):
         details = " &middot; ".join(
             part for part in (escape(plugin.license), source_link) if part
         )
+        requirements = ""
+        if release is not None and release.environment_requirements:
+            text = _("Requires in the Python environment of DataLab: %s") % ", ".join(
+                release.environment_requirements
+            )
+            requirements = f"<br><small>{escape(text)}</small>"
         label = QW.QLabel(
             f"<b>{escape(plugin.name)}</b>{version} "
             f"<small>({escape(_source_label(plugin))})</small><br>"
-            f"{escape(plugin.summary)}<br><small>{details}</small>"
+            f"{escape(plugin.summary)}{requirements}<br><small>{details}</small>"
         )
         if plugin.source:
             label.setToolTip(_("Local catalog: %s") % plugin.source)
@@ -122,7 +133,7 @@ class AvailablePluginItemWidget(QW.QWidget):
         label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
         layout.addWidget(label, 1)
 
-        status, action = self._describe(release, installed)
+        status, action = self._describe(release, installed, missing_requirements)
         self.status_label = QW.QLabel(status)
         self.status_label.setWordWrap(True)
         self.status_label.setAlignment(QC.Qt.AlignRight | QC.Qt.AlignVCenter)
@@ -136,7 +147,10 @@ class AvailablePluginItemWidget(QW.QWidget):
             layout.addWidget(self.action_button)
 
     def _describe(
-        self, release: CatalogRelease | None, installed: tuple[str, str, str]
+        self,
+        release: CatalogRelease | None,
+        installed: tuple[str, str, str],
+        missing_requirements: Sequence[str] = (),
     ) -> tuple[str, str | None]:
         """Return the status text and the action button text, if any."""
         plugin = self.plugin
@@ -177,6 +191,21 @@ class AvailablePluginItemWidget(QW.QWidget):
             return notice or _("Different installed revision"), _("Replace...")
         if how == "file" and not _is_newer(release.version, version):
             return _("Installed"), None
+        if missing_requirements:
+            requirements = ", ".join(missing_requirements)
+            if getattr(sys, "frozen", False):
+                status = (
+                    _("Not available for the standalone version (requires %s)")
+                    % requirements
+                )
+            else:
+                status = (
+                    _("Install %s in the Python environment of DataLab first")
+                    % requirements
+                )
+            if how == "file":
+                status = _("Installed: %s") % version + "\n" + status
+            return status, None
         status = ""
         if plugin.status == "deprecated":
             status = _("Deprecated: %s") % plugin.status_reason
@@ -404,6 +433,14 @@ class AvailablePluginsWidget(QW.QWidget):
         self.status_label.setText("")
         QW.QMessageBox.warning(self, _("Install plugin"), message)
 
+    def _get_available_distributions(self) -> dict[str, str]:
+        """Return the distributions that installed plugins may use."""
+        try:
+            return self._installer.store.get_available_distributions()
+        except (OSError, ValueError):
+            # Shared dependency errors are reported when installing a plugin
+            return get_available_distributions()
+
     def _get_installed(self, plugin: CatalogPlugin) -> tuple[str, str, str]:
         """Return how a catalog plugin is installed, and its version."""
         try:
@@ -457,10 +494,21 @@ class AvailablePluginsWidget(QW.QWidget):
         if self.plugins is None:
             return
         text = self.search_edit.text()
+        available: dict[str, str] | None = None
         for plugin in self.plugins:
             if not plugin.matches(text):
                 continue
-            widget = AvailablePluginItemWidget(plugin, self._get_installed(plugin))
+            release = plugin.get_installable_release()
+            missing: list[str] = []
+            if release is not None and release.environment_requirements:
+                if available is None:
+                    available = self._get_available_distributions()
+                missing = get_unsatisfied_requirements(
+                    release.environment_requirements, available
+                )
+            widget = AvailablePluginItemWidget(
+                plugin, self._get_installed(plugin), missing_requirements=missing
+            )
             if widget.action_button is not None:
                 widget.action_button.clicked.connect(
                     lambda _checked=False, item=plugin: self.install(item)
