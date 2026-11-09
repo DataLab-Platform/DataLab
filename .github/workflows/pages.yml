@@ -145,6 +145,16 @@ jobs:
           </body>
           </html>
           EOF
+          # robots.txt is only read at the site root: list the sitemaps of the
+          # documentation and of the plugin catalog (published under /plugins/
+          # by the DataLab-Platform/plugins repository).
+          cat > site/robots.txt <<'EOF'
+          User-agent: *
+          Disallow:
+
+          Sitemap: https://datalab-platform.com/sitemap.xml
+          Sitemap: https://datalab-platform.com/plugins/sitemap.xml
+          EOF
 
       - name: Upload built site as artifact
         uses: actions/upload-artifact@v6
