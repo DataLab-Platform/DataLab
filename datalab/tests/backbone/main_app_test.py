@@ -15,11 +15,33 @@ import os
 import pytest
 import sigima.params
 import sigima.proc.signal as sips
+from qtpy import QtWidgets as QW
 from sigima.tests.data import create_paracetamol_signal
 
+from datalab.config import ensure_initialized
 from datalab.env import execenv
+from datalab.gui.main import DLMainWindow
 from datalab.objectmodel import get_short_id, get_uuid
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, record_shown_windows
+from datalab.utils import qthelpers as qth
+
+
+def test_main_window_creation_shows_no_transient_window() -> None:
+    """Building the main window shows no window before the main window itself
+
+    Between the splash screen and the main window, any widget made visible while
+    it has no parent would flash on screen as a top-level window.
+    """
+    ensure_initialized(load_user_config=False)
+    with qth.datalab_app_context(exec_loop=False):
+        with record_shown_windows() as shown:
+            win = DLMainWindow(console=False)
+            QW.QApplication.processEvents()
+        try:
+            assert not shown
+        finally:
+            win.set_modified(False)
+            win.close()
 
 
 def test_calc_reports_feature_errors_without_trying_other_panels(monkeypatch):
