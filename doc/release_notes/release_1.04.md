@@ -11,6 +11,8 @@
 ### 🛠️ Bug Fixes since version 1.4.0 ###
 
 * **Plugin installation**: installing a plugin whose required packages are missing now names these packages and tells how to provide them, instead of reporting an unexplained "Dependency wheelhouse not found" error with a temporary folder.
+* **Brightness and contrast**: the **Minimum** and **Maximum** fields of **Processing > Exposure > Brightness and contrast** (in its dialog and in the **Processing** tab of the properties panel) showed numbers with 17 significant digits in fields too narrow for them, so that their beginning was cut off, e.g. `835736228608e-43` instead of `6.5127532828723551e-44`. These fields now show the complete value, with a precision matching that of the sliders (e.g. `0` and `1.7557`), and the exact value in their tooltip; a value which is not modified is kept exactly (fixes [Issue #510](https://github.com/DataLab-Platform/DataLab/issues/510)).
+* **Processing parameters**: moving the slider of a numeric parameter gave values such as `0.30000000000000004` or `1.2000000000000002` instead of `0.3` or `1.2`, which were then used and recorded as processing parameters, e.g. with **Sigmoid correction** and **Adaptive histogram equalization** (**Processing > Exposure**), the **Butterworth** filter (**Processing > Frequency filters**) or the signal **Peak detection** (**Analysis**). Slider values are now free of these spurious digits (fixes [Issue #510](https://github.com/DataLab-Platform/DataLab/issues/510)).
 
 ### 📖 Documentation since version 1.4.0 ###
 
