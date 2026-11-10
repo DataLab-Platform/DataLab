@@ -466,6 +466,15 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 - If a test double lacks a required attribute, fix the test double to satisfy the production contract; do not weaken production code solely to accommodate incomplete mocks.
 - Defensive attribute access is appropriate only for verified optional capabilities, supported compatibility paths, or genuinely dynamic attribute names. Make the reason clear and cover the supported absence case in tests. If access occurs too early, fix the initialization order or call timing instead of hiding the defect.
 
+### Qt Widget Parenting
+
+A `QWidget` without a parent is a top-level window: making it visible (`show()`, `setVisible(True)`, `setVisible(condition)`, `setHidden(False)`) before it is laid out flashes it on screen as a separate window. This defect has recurred several times, between the splash screen and the main window and when opening dialogs.
+
+- Create a widget with its parent (e.g., `QW.QWidget(self)`) when its visibility may be set before it is laid out. Otherwise, add it to its layout (or call `setParent`) **before** setting its visibility.
+- A layout reparents its widgets only once it is installed on a widget (`QVBoxLayout(widget)`, `widget.setLayout(layout)`, or nested in such a layout): adding a widget to a detached layout does not parent it.
+- `hide()` or `setVisible(False)` on a parentless widget is harmless; showing a child of a hidden widget is harmless too.
+- Cover widgets built hidden (startup, dialogs) with `datalab.tests.record_shown_windows()` and assert that no window is shown. `test_main_window_creation_shows_no_transient_window` (`datalab/tests/backbone/main_app_test.py`) guards the whole main window construction: when it fails, it names the class and code location of the flashing widget.
+
 ### Type Annotations
 
 **Always use** `from __future__ import annotations` for forward references:

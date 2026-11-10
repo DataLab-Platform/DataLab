@@ -383,7 +383,8 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         self.application_plugins: dict[str, PluginBase] = {}
         self.application_tiles: dict[str, WelcomeEntry] = {}
         self.application_groups: dict[str, list[WelcomeEntry]] = {}
-        self.applications_section = QW.QWidget()
+        # Parented at once: its visibility is set before it is laid out
+        self.applications_section = QW.QWidget(self)
         overflow_tile = WelcomeEntry(
             "libre-gui-plugin.svg",
             "",

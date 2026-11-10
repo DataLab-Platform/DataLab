@@ -26,6 +26,7 @@ import os.path as osp
 import socket
 import sys
 import time
+import traceback
 from contextlib import contextmanager
 from typing import Generator
 
@@ -38,6 +39,8 @@ if "pytest" in sys.modules:
 import psutil
 import pytest
 from guidata.guitest import run_testlauncher
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima.tests import helpers
 
 import datalab.config  # Loading icons
@@ -114,6 +117,44 @@ def datalab_test_app_context(
                 # Closing main window properly
                 win.set_modified(False)
                 win.close()
+
+
+class _ShownWindowsRecorder(QC.QObject):
+    """Record the top-level windows shown while installed on the application"""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.shown: list[str] = []
+
+    def eventFilter(self, obj: QC.QObject, event: QC.QEvent) -> bool:  # pylint: disable=invalid-name
+        """Record the class of each shown window and the code showing it"""
+        if event.type() == QC.QEvent.Show and obj.isWidgetType() and obj.isWindow():
+            caller = traceback.extract_stack(limit=2)[0]
+            self.shown.append(
+                f"{type(obj).__name__} shown from {caller.filename}:{caller.lineno}"
+            )
+        return False
+
+
+@contextmanager
+def record_shown_windows() -> Generator[list[str], None, None]:
+    """Record the top-level windows shown within the context
+
+    A widget made visible while it has no parent is shown as a top-level window,
+    flashing on screen until it is added to a layout. Use this context to check
+    that building widgets shows no such transient window.
+
+    Yields:
+        List filled, within the context, with one entry per shown window: its
+         class name and the code location showing it
+    """
+    recorder = _ShownWindowsRecorder()
+    app = QW.QApplication.instance()
+    app.installEventFilter(recorder)
+    try:
+        yield recorder.shown
+    finally:
+        app.removeEventFilter(recorder)
 
 
 def is_pid_alive(pid: int) -> bool:
