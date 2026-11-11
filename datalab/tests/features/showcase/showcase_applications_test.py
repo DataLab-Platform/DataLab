@@ -239,9 +239,11 @@ def _play(win, scenario_id: str, speed: float = 0.0):
     # Once the application was asked to quit outside its event loop (e.g. by a
     # previous test), every dialog executed afterwards returns at once, rejected,
     # until the event loop runs again: it is run once here, so that the parameter
-    # dialogs of the methods are accepted by the demo mode, whatever the test order
+    # dialogs of the methods are accepted by the demo mode, whatever the test order.
+    # `exit` (unlike `quit` with Qt 6) does not close the windows: closing the main
+    # window would unregister the plugins.
     qt_app = QW.QApplication.instance()
-    QC.QTimer.singleShot(0, qt_app.quit)
+    QC.QTimer.singleShot(0, lambda: qt_app.exit(0))
     qt_app.exec()
     scenarios = showcase_applications.create_application_scenarios(win)
     options = ShowcaseOptions(scenario_ids=[scenario_id], speed=speed)
