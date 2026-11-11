@@ -18,6 +18,10 @@ from datalab.utils.smoketest import DEFAULT_REPORT as SMOKE_TEST_REPORT
 # We could import DEBUG from datalab.config, but is it really worth it?
 DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 
+#: Public deployment of DataLab Web, played by the showcase mode interlude when no
+#: other URL is given (see :mod:`datalab.gui.showcase.scenarios.web_interlude`)
+SHOWCASE_WEB_URL = "https://datalab-platform.com/web/"
+
 
 class DLExecEnv(SGMXExecEnv):
     """Object representing the DataLab execution environment."""
@@ -33,6 +37,14 @@ class DLExecEnv(SGMXExecEnv):
         # Path of the installation check report (``--smoke-test`` option): when set,
         # DataLab checks its installation and exits instead of opening its window
         self.smoke_test_report: str | None = None
+        # Showcase mode (``--showcase`` options): scenarios played once the main
+        # window is shown (see :mod:`datalab.gui.showcase`)
+        self.showcase: str | None = None
+        self.showcase_loop = False
+        self.showcase_speed: float | None = None
+        self.showcase_screen: int | None = None
+        self.showcase_fullscreen = False
+        self.showcase_web: str | None = None
         if "pytest" not in sys.argv[0]:
             self.parse_args()
         if self.unattended:
@@ -129,6 +141,48 @@ class DLExecEnv(SGMXExecEnv):
             help="check the installation, write a JSON report (default: "
             "%(const)s) and exit with a non-zero code if a check failed",
         )
+        parser.add_argument(
+            "--showcase",
+            nargs="?",
+            const="all",
+            default=None,
+            metavar="IDS",
+            help="play the showcase mode once the main window is shown: all the "
+            "scenarios, or the scenarios whose comma-separated IDS are given",
+        )
+        parser.add_argument(
+            "--showcase-loop",
+            action="store_true",
+            help="play the showcase scenarios in a loop",
+        )
+        parser.add_argument(
+            "--showcase-speed",
+            type=float,
+            default=None,
+            metavar="SPEED",
+            help="showcase delay factor: 1 by default, slower above, faster below",
+        )
+        parser.add_argument(
+            "--showcase-screen",
+            type=int,
+            default=None,
+            metavar="N",
+            help="index of the screen showing the showcase (0 for the first one)",
+        )
+        parser.add_argument(
+            "--showcase-fullscreen",
+            action="store_true",
+            help="show DataLab in full screen during the showcase",
+        )
+        parser.add_argument(
+            "--showcase-web",
+            nargs="?",
+            const=SHOWCASE_WEB_URL,
+            default=None,
+            metavar="URL",
+            help="end each showcase loop with one pass of the DataLab Web showcase, "
+            "in a browser window: DataLab Web at URL (default: %(const)s)",
+        )
         args, _unknown = parser.parse_known_args()
 
         if args.h5:
@@ -155,6 +209,12 @@ class DLExecEnv(SGMXExecEnv):
                 print("Done.")
             sys.exit()
         self.smoke_test_report = args.smoke_test
+        self.showcase = args.showcase
+        self.showcase_loop = args.showcase_loop
+        self.showcase_speed = args.showcase_speed
+        self.showcase_screen = args.showcase_screen
+        self.showcase_fullscreen = args.showcase_fullscreen
+        self.showcase_web = args.showcase_web
         self.set_env_from_args(args)
 
     def set_env_from_args(self, args: argparse.Namespace) -> None:

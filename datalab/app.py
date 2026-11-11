@@ -130,7 +130,18 @@ def run(
             size=size,
         )
         QW.QApplication.processEvents()
-        window.execute_post_show_actions()
+        if execenv.showcase is None:
+            window.execute_post_show_actions()
+        else:
+            # pylint: disable=import-outside-toplevel
+            from datalab.gui.showcase import play_from_command_line, quiet_startup
+
+            # No startup question (e.g. about the logs of a previous session): it
+            # would block the showcase, which may run unattended
+            with quiet_startup():
+                window.execute_post_show_actions()
+            # Played once the event loop runs, i.e. once the main window is shown
+            QC.QTimer.singleShot(0, lambda: play_from_command_line(window))
 
 
 if __name__ == "__main__":

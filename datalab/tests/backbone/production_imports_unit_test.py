@@ -29,7 +29,7 @@ TESTS_PACKAGE = "datalab.tests"
 TEST_DEPENDENCIES = ("pytest", "_pytest", "pytest_xvfb", "httpx")
 
 #: Modules of the application which must be importable without test dependencies
-APPLICATION_MODULES = ("datalab.app", "datalab.gui.demo")
+APPLICATION_MODULES = ("datalab.app", "datalab.gui.demo", "datalab.gui.showcase")
 
 #: Launchers which are allowed to run the test suite
 TEST_LAUNCHERS = ("datalab-tests",)

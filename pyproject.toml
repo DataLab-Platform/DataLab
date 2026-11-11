@@ -68,6 +68,7 @@ Documentation = "https://datalab-platform.com/"
 [project.gui-scripts]
 datalab = "datalab.app:run"
 datalab-demo = "datalab.gui.demo:run"
+datalab-showcase = "datalab.gui.showcase:run"
 datalab-tests = "datalab.tests:run"
 
 [project.scripts]

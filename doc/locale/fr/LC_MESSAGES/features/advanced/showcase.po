@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DataLab showcase mode: live and unattended demos for exhibitions and booths"
+msgstr "Mode vitrine de DataLab : démonstrations en direct et sans surveillance pour les salons et les stands"
+
+msgid "DataLab, showcase, demo, exhibition, booth, conference, kiosk"
+msgstr "DataLab, vitrine, démo, salon, stand, conférence, borne"
+
+msgid "Showcase mode"
+msgstr "Mode vitrine"
+
+msgid "The showcase mode plays live demos of DataLab features, without any user interaction: it is designed for exhibitions, conference booths and kiosks, where DataLab presents itself on a screen, in a loop."
+msgstr "Le mode vitrine joue des démonstrations en direct des fonctionnalités de DataLab, sans aucune interaction de l'utilisateur : il est conçu pour les salons, les stands de conférence et les bornes, où DataLab se présente lui-même sur un écran, en boucle."
+
+msgid "Each demo drives the real user interface, as a user would do: a title card introduces the demo, then captions explain each step while the mouse pointer moves, menus open and the relevant parts of the window are highlighted. The captions follow the language of the user interface. At the end of the demos, an end card invites the audience to try DataLab."
+msgstr "Chaque démo pilote la véritable interface utilisateur, comme le ferait un utilisateur : un carton de titre présente la démo, puis des légendes expliquent chaque étape pendant que le pointeur de la souris se déplace, que les menus s'ouvrent et que les parties concernées de la fenêtre sont mises en évidence. Les légendes suivent la langue de l'interface utilisateur. À la fin des démos, un carton final invite le public à essayer DataLab."
+
+msgid "The showcase mode clears the workspace (signals, images, macros and history) before each demo."
+msgstr "Le mode vitrine vide l'espace de travail (signaux, images, macros et historique) avant chaque démo."
+
+msgid "The following demos are available:"
+msgstr "Les démos suivantes sont disponibles :"
+
+msgid "Identifier"
+msgstr "Identifiant"
+
+msgid "Demo"
+msgstr "Démo"
+
+msgid "``d1``"
+msgstr ""
+
+msgid "Full traceability: history, provenance, cascade recompute"
+msgstr "Traçabilité totale : historique, provenance, recalcul en cascade"
+
+msgid "``d2``"
+msgstr ""
+
+msgid "Reproducibility: provenance capsules (RO-Crate)"
+msgstr "Reproductibilité : capsules de provenance (RO-Crate)"
+
+msgid "``d3``"
+msgstr ""
+
+msgid "Advanced, interactive image analysis"
+msgstr "Analyse d'image avancée et interactive"
+
+msgid "``d4``"
+msgstr ""
+
+msgid "Automation and openness: macros and remote control"
+msgstr "Automatisation et ouverture : macros et contrôle à distance"
+
+msgid "Starting the showcase mode"
+msgstr "Démarrer le mode vitrine"
+
+msgid "From the menu"
+msgstr "Depuis le menu"
+
+msgid "Select **? > Showcase mode...**: a dialog lets you choose"
+msgstr "Sélectionner **? > Mode vitrine...** : une boîte de dialogue permet de choisir"
+
+msgid "the demos to play,"
+msgstr "les démos à jouer,"
+
+msgid "whether to play them in a loop,"
+msgstr "s'il faut les jouer en boucle,"
+
+msgid "the pace (slow, normal or fast),"
+msgstr "le rythme (lent, normal ou rapide),"
+
+msgid "whether to show DataLab in full screen,"
+msgstr "s'il faut afficher DataLab en plein écran,"
+
+msgid "whether to include DataLab Web, and its URL (see :ref:`ref-to-showcase-web` below),"
+msgstr "s'il faut inclure DataLab Web, et son URL (voir :ref:`ref-to-showcase-web` ci-dessous),"
+
+msgid "the screen showing DataLab, when several screens are available."
+msgstr "l'écran affichant DataLab, lorsque plusieurs écrans sont disponibles."
+
+msgid "These choices are remembered for the next time."
+msgstr "Ces choix sont mémorisés pour la fois suivante."
+
+msgid "From the command line"
+msgstr "Depuis la ligne de commande"
+
+msgid "The showcase mode may also be started with command-line options, e.g. to start a booth computer directly in showcase mode, with the standalone version of DataLab:"
+msgstr "Le mode vitrine peut aussi être démarré avec des options de ligne de commande, par exemple pour démarrer un ordinateur de stand directement en mode vitrine, avec la version autonome de DataLab :"
+
+msgid "With the Python package, the ``datalab-showcase`` command is equivalent to ``datalab --showcase --showcase-loop --showcase-fullscreen``."
+msgstr "Avec le paquet Python, la commande ``datalab-showcase`` équivaut à ``datalab --showcase --showcase-loop --showcase-fullscreen``."
+
+msgid "Option"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "``--showcase [IDS]``"
+msgstr ""
+
+msgid "Play the showcase once the main window is shown: all the demos, or the demos whose comma-separated identifiers are given (e.g. ``d1,d3``)"
+msgstr "Lancer le mode vitrine une fois la fenêtre principale affichée : toutes les démos, ou celles dont les identifiants, séparés par des virgules, sont indiqués (par exemple ``d1,d3``)"
+
+msgid "``--showcase-loop``"
+msgstr ""
+
+msgid "Play the demos in a loop, until the operator stops the showcase"
+msgstr "Jouer les démos en boucle, jusqu'à ce que l'opérateur arrête le mode vitrine"
+
+msgid "``--showcase-speed SPEED``"
+msgstr ""
+
+msgid "Delay factor: 1 by default, slower above (e.g. 1.5), faster below (e.g. 0.7)"
+msgstr "Facteur de délai : 1 par défaut, plus lent au-dessus (par exemple 1.5), plus rapide en dessous (par exemple 0.7)"
+
+msgid "``--showcase-screen N``"
+msgstr ""
+
+msgid "Index of the screen showing DataLab (0 for the first screen)"
+msgstr "Indice de l'écran affichant DataLab (0 pour le premier écran)"
+
+msgid "``--showcase-fullscreen``"
+msgstr ""
+
+msgid "Show DataLab in full screen during the showcase"
+msgstr "Afficher DataLab en plein écran pendant le mode vitrine"
+
+msgid "``--showcase-web [URL]``"
+msgstr ""
+
+msgid "End each loop with one pass of the DataLab Web showcase, in a browser window (see :ref:`ref-to-showcase-web` below): DataLab Web at URL, or its public deployment if no URL is given"
+msgstr "Terminer chaque boucle par un passage du mode vitrine de DataLab Web, dans une fenêtre de navigateur (voir :ref:`ref-to-showcase-web` ci-dessous) : DataLab Web à l'adresse URL, ou son déploiement public si aucune URL n'est donnée"
+
+msgid "Operator hotkeys"
+msgstr "Raccourcis clavier de l'opérateur"
+
+msgid "While the showcase mode plays, the operator may use the following keys:"
+msgstr "Pendant le mode vitrine, l'opérateur peut utiliser les touches suivantes :"
+
+msgid ":kbd:`F9`: pause or resume the showcase,"
+msgstr ":kbd:`F9` : mettre en pause ou reprendre le mode vitrine,"
+
+msgid ":kbd:`Shift+F12`, or :kbd:`Esc` twice quickly: stop the showcase after the current demo."
+msgstr ":kbd:`Shift+F12`, ou deux fois rapidement :kbd:`Esc` : arrêter le mode vitrine après la démo en cours."
+
+msgid "Once the showcase is stopped, or once all the demos have been played (without loop), DataLab is given back for a live demonstration: the window gets its previous state back, and the dialogs are no longer accepted automatically."
+msgstr "Une fois le mode vitrine arrêté, ou une fois toutes les démos jouées (sans boucle), DataLab est rendu à l'opérateur pour une démonstration en direct : la fenêtre retrouve son état précédent, et les boîtes de dialogue ne sont plus validées automatiquement."
+
+msgid "The showcase mode is designed to run unattended for hours: if a demo fails, the showcase moves on to the next one, and the dialogs left open are accepted after a while."
+msgstr "Le mode vitrine est conçu pour fonctionner sans surveillance pendant des heures : si une démo échoue, le mode vitrine passe à la suivante, et les boîtes de dialogue restées ouvertes sont validées au bout d'un moment."
+
+msgid "DataLab Web on the same booth"
+msgstr "DataLab Web sur le même stand"
+
+msgid "`DataLab Web <https://datalab-platform.com/web/>`_, the version of DataLab running in a web browser, has its own showcase mode, playing demos of its features."
+msgstr "`DataLab Web <https://datalab-platform.com/web/>`_, la version de DataLab qui s'exécute dans un navigateur web, a son propre mode vitrine, qui joue des démos de ses fonctionnalités."
+
+msgid "With two screens, run both showcases side by side: DataLab on one screen (see the **Screen** option of the dialog, or the ``--showcase-screen`` option), and DataLab Web on the other screen, in a browser window, as described in the documentation of DataLab Web."
+msgstr "Avec deux écrans, faire fonctionner les deux modes vitrine côte à côte : DataLab sur un écran (voir l'option **Écran** de la boîte de dialogue, ou l'option ``--showcase-screen``), et DataLab Web sur l'autre écran, dans une fenêtre de navigateur, comme décrit dans la documentation de DataLab Web."
+
+msgid "With a single screen, DataLab may include DataLab Web: each loop then ends with an interlude, during which DataLab Web takes over in a browser window for one pass of its own demos, in the language of DataLab. Once the browser window closes, DataLab shows up again and the showcase goes on. To include DataLab Web:"
+msgstr "Avec un seul écran, DataLab peut inclure DataLab Web : chaque boucle se termine alors par un intermède, pendant lequel DataLab Web prend le relais dans une fenêtre de navigateur pour un passage de ses propres démos, dans la langue de DataLab. Une fois la fenêtre du navigateur fermée, DataLab réapparaît et le mode vitrine continue. Pour inclure DataLab Web :"
+
+msgid "check **Include DataLab Web** in the **Showcase mode** dialog, and enter the URL of DataLab Web (the public deployment is used if no URL is entered),"
+msgstr "cocher **Inclure DataLab Web** dans la boîte de dialogue **Mode vitrine**, et saisir l'URL de DataLab Web (le déploiement public est utilisé si aucune URL n'est saisie),"
+
+msgid "or use the ``--showcase-web [URL]`` command-line option, e.g.:"
+msgstr "ou utiliser l'option de ligne de commande ``--showcase-web [URL]``, par exemple :"
+
+msgid "The DataLab Web interlude needs a Chromium-based web browser: Google Chrome (the preferred one), Microsoft Edge (always available on Windows) or Chromium. With Microsoft Edge, DataLab Web may run slower when the *Enhance your security on the web* setting of Edge applies to it. The browser runs with a profile dedicated to the showcase, stored in the DataLab configuration folder: the browser window does not show the bookmarks nor the tabs of the usual browser profile, and the Python runtime of DataLab Web, downloaded on the first interlude, is kept for the next ones. The browser window is shown in full screen when DataLab is."
+msgstr "L'intermède DataLab Web nécessite un navigateur web basé sur Chromium : Google Chrome (à privilégier), Microsoft Edge (toujours disponible sous Windows) ou Chromium. Avec Microsoft Edge, DataLab Web peut s'exécuter plus lentement lorsque le paramètre *Améliorer votre sécurité sur le web* (*Enhance your security on the web*) d'Edge s'y applique. Le navigateur s'exécute avec un profil dédié au mode vitrine, stocké dans le dossier de configuration de DataLab : la fenêtre du navigateur n'affiche ni les favoris ni les onglets du profil habituel du navigateur, et l'environnement d'exécution Python de DataLab Web, téléchargé lors du premier intermède, est conservé pour les suivants. La fenêtre du navigateur est affichée en plein écran lorsque DataLab l'est."
+
+msgid "The identifier of the interlude is ``web``: give it among the identifiers of the demos to play it elsewhere than at the end of the loop (e.g. ``--showcase d1,web,d2``). To stop the showcase during the interlude, close the browser window (e.g. with :kbd:`Alt+F4`): DataLab shows up again, then press :kbd:`Shift+F12`."
+msgstr "L'identifiant de l'intermède est ``web`` : l'indiquer parmi les identifiants des démos pour le jouer ailleurs qu'en fin de boucle (par exemple ``--showcase d1,web,d2``). Pour arrêter le mode vitrine pendant l'intermède, fermer la fenêtre du navigateur (par exemple avec :kbd:`Alt+F4`) : DataLab réapparaît, puis appuyer sur :kbd:`Shift+F12`."
+
+msgid "The DataLab Web interlude lasts 15 minutes at most: the browser window is closed afterwards. This duration and the DataLab Web demos to play (all of them, by default) may be changed in the ``[main]`` section of the DataLab configuration file, with the ``showcase_web_timeout`` option (in minutes) and the ``showcase_web_ids`` option (comma-separated identifiers of the DataLab Web demos)."
+msgstr "L'intermède DataLab Web dure 15 minutes au plus : la fenêtre du navigateur est ensuite fermée. Cette durée et les démos de DataLab Web à jouer (toutes, par défaut) peuvent être modifiées dans la section ``[main]`` du fichier de configuration de DataLab, avec l'option ``showcase_web_timeout`` (en minutes) et l'option ``showcase_web_ids`` (identifiants des démos de DataLab Web, séparés par des virgules)."
+
+msgid "Demos of the installed applications"
+msgstr "Démos des applications installées"
+
+msgid "Besides the demos of DataLab itself, each installed application plugin (see :doc:`plugins`) takes part in the showcase with a demo presenting the application in the **Applications** panel. The demos of DataLab and those of the applications alternate. The identifier of the demo of an application is ``app:`` followed by the plugin identifier (e.g. ``app:org.example.my-application``)."
+msgstr "Outre les démos de DataLab lui-même, chaque plugin d'application installé (voir :doc:`plugins`) participe au mode vitrine avec une démo présentant l'application dans le panneau **Applications**. Les démos de DataLab et celles des applications alternent. L'identifiant de la démo d'une application est ``app:`` suivi de l'identifiant du plugin (par exemple ``app:org.example.my-application``)."
+
+msgid "The demo of an application is built from what the application declares, without any code specific to the showcase:"
+msgstr "La démo d'une application est construite à partir de ce que l'application déclare, sans aucun code propre au mode vitrine :"
+
+msgid "The application is presented with its name and its description."
+msgstr "L'application est présentée avec son nom et sa description."
+
+msgid "Its first two examples designed for a method are tried with their **Try with this example** command: the example is opened, the parameters of the method are shown, then the method runs. Its main result is shown, with its table of results, if any. When the example is designed for several methods, the next one may then run on this result (e.g. compute an absorption spectrum, then normalize it)."
+msgstr "Ses deux premiers exemples conçus pour une méthode sont essayés avec leur commande **Essayer avec cet exemple** : l'exemple est ouvert, les paramètres de la méthode sont affichés, puis la méthode s'exécute. Son résultat principal est affiché, avec son tableau de résultats, le cas échéant. Lorsque l'exemple est conçu pour plusieurs méthodes, la suivante peut ensuite s'appliquer à ce résultat (par exemple calculer un spectre d'absorption, puis le normaliser)."
+
+msgid "An application without such an example opens its first tool which needs no selection, an instrument first: the instrument window shows its live view, acquires a few times (with and without the **New group** option), then is closed, which disconnects the instrument."
+msgstr "Une application sans un tel exemple ouvre son premier outil ne nécessitant aucune sélection, en priorité un instrument : la fenêtre de l'instrument affiche sa vue en direct, effectue quelques acquisitions (avec et sans l'option **Nouveau groupe**), puis est fermée, ce qui déconnecte l'instrument."
+
+msgid "The demo ends with an invitation to discover more applications in the plugin catalog."
+msgstr "La démo se termine par une invitation à découvrir d'autres applications dans le catalogue de plugins."
+
+msgid "An application without example nor tool is only presented. The options changed by the demo (method selected in the Applications panel, recent applications of the welcome page, **New group** option of the instruments) are restored at the end of the demo."
+msgstr "Une application sans exemple ni outil est seulement présentée. Les options modifiées par la démo (méthode sélectionnée dans le panneau Applications, applications récentes de la page d'accueil, option **Nouveau groupe** des instruments) sont restaurées à la fin de la démo."
+

@@ -224,6 +224,82 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="IDs of the recently used applications, most recent first.",
         )
+        self.showcase_excluded_scenarios = TypedOptionField(
+            self,
+            "showcase_excluded_scenarios",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the scenarios deselected in the Showcase mode dialog.",
+        )
+        self.showcase_loop = TypedOptionField(
+            self,
+            "showcase_loop",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description="If True, the showcase mode plays its scenarios in a loop.",
+        )
+        self.showcase_pace = TypedOptionField(
+            self,
+            "showcase_pace",
+            category="main",
+            default="normal",
+            expected_type=str,
+            description="Pace of the showcase mode: 'slow', 'normal' or 'fast'.",
+        )
+        self.showcase_fullscreen = TypedOptionField(
+            self,
+            "showcase_fullscreen",
+            category="main",
+            default=True,
+            expected_type=bool,
+            description="If True, the showcase mode shows DataLab in full screen.",
+        )
+        self.showcase_screen = TypedOptionField(
+            self,
+            "showcase_screen",
+            category="main",
+            default=-1,
+            expected_type=int,
+            description="Index of the showcase mode screen (-1: current screen).",
+        )
+        self.showcase_web_enabled = TypedOptionField(
+            self,
+            "showcase_web_enabled",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description="If True, the showcase mode ends each loop with a DataLab Web "
+            "interlude: one pass of the DataLab Web showcase, in a browser window.",
+        )
+        self.showcase_web_url = TypedOptionField(
+            self,
+            "showcase_web_url",
+            category="main",
+            default="",
+            expected_type=str,
+            description="URL of DataLab Web for the showcase mode interlude (empty: "
+            "public deployment).",
+        )
+        self.showcase_web_ids = TypedOptionField(
+            self,
+            "showcase_web_ids",
+            category="main",
+            default="",
+            expected_type=str,
+            description="Comma-separated IDs of the DataLab Web demos played by the "
+            "showcase mode interlude (empty: all).",
+        )
+        self.showcase_web_timeout = TypedOptionField(
+            self,
+            "showcase_web_timeout",
+            category="main",
+            default=15,
+            expected_type=int,
+            description="Maximum duration (minutes) of the showcase mode DataLab Web "
+            "interlude: the browser window is closed afterwards.",
+        )
         self.applications_panel_shown = TypedOptionField(
             self,
             "applications_panel_shown",

@@ -1702,6 +1702,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     icon=get_icon("play_demo.svg"),
                     triggered=self.play_demo,
                 ),
+                create_action(
+                    self,
+                    _("Showcase mode") + "...",
+                    icon=get_icon("replay.svg"),
+                    triggered=self.show_showcase_dialog,
+                ),
                 None,
             ]
         )
@@ -2992,6 +2998,44 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         from datalab.gui import demo
 
         demo.play_demo(self)
+
+    def show_showcase_dialog(self) -> None:
+        """Show the Showcase mode dialog, then play the showcase"""
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from datalab.gui import showcase
+
+        showcase.show_showcase_dialog(self)
+
+    def play_showcase(
+        self,
+        scenario_ids: list[str] | None = None,
+        loop: bool = False,
+        speed: float = 1.0,
+        fullscreen: bool = False,
+        screen: int | None = None,
+        web_url: str | None = None,
+    ) -> None:
+        """Play the showcase mode: live and unattended demos of DataLab features
+
+        Args:
+            scenario_ids: IDs of the scenarios to play (default: all scenarios)
+            loop: True to play the scenarios in a loop, until the operator stops
+             it (Shift+F12)
+            speed: Delay factor: 1 for the normal pace, 1.5 slower, 0.7 faster
+            fullscreen: True to show the main window in full screen
+            screen: Index of the screen showing the main window (default: current)
+            web_url: URL of DataLab Web, to end each loop with one pass of the
+             DataLab Web showcase, in a browser window (default: no DataLab Web)
+        """
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from datalab.gui import showcase
+
+        options = showcase.ShowcaseOptions(
+            scenario_ids, loop, speed, fullscreen, screen, web_url
+        )
+        showcase.play_showcase(self, options)
 
     def show_tour(self) -> None:
         """Show tour"""

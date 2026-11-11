@@ -2415,6 +2415,72 @@ msgstr "Exemples conçus pour cette méthode"
 msgid "Try with this example"
 msgstr "Essayer avec cet exemple"
 
+msgid "Applications extend DataLab for specific fields: their methods, examples and tools are gathered in the Applications panel"
+msgstr "Les applications étendent DataLab à des domaines spécifiques : leurs méthodes, exemples et outils sont réunis dans le panneau Applications"
+
+msgid "Its methods run on your own data, selected in the workspace"
+msgstr "Ses méthodes s'appliquent à vos propres données, sélectionnées dans l'espace de travail"
+
+#, python-format
+msgid "Example: %s"
+msgstr "Exemple : %s"
+
+#, python-format
+msgid "One click opens the example, then runs the method “%s” on it"
+msgstr "Un clic ouvre l'exemple, puis lui applique la méthode « %s »"
+
+#, python-format
+msgid "The method “%s” adds its results to the workspace, in a new group"
+msgstr "La méthode « %s » ajoute ses résultats à l'espace de travail, dans un nouveau groupe"
+
+msgid "Its measurements are attached to the result, in a table"
+msgstr "Ses mesures sont jointes au résultat, sous forme de tableau"
+
+#, python-format
+msgid "Then, the method “%s” runs on this result"
+msgstr "Puis la méthode « %s » s'applique à ce résultat"
+
+#, python-format
+msgid "Tool: %s"
+msgstr "Outil : %s"
+
+msgid "The tool opens in its own window"
+msgstr "L'outil s'ouvre dans sa propre fenêtre"
+
+msgid "Connecting to the instrument..."
+msgstr "Connexion à l'instrument..."
+
+msgid "The instrument window shows a live view, next to the instrument settings"
+msgstr "La fenêtre de l'instrument affiche une vue en direct, à côté des réglages de l'instrument"
+
+msgid "The instrument may take a few seconds to start..."
+msgstr "L'instrument peut mettre quelques secondes à démarrer..."
+
+msgid "This tool needs a connected instrument: it is only shown here"
+msgstr "Cet outil nécessite un instrument connecté : il est seulement présenté ici"
+
+msgid "Closing the window disconnects the instrument"
+msgstr "La fermeture de la fenêtre déconnecte l'instrument"
+
+msgid "The acquisitions are ready to be processed in DataLab"
+msgstr "Les acquisitions sont prêtes à être traitées dans DataLab"
+
+msgid "Live view: the instrument is refreshed continuously"
+msgstr "Vue en direct : l'instrument est rafraîchi en continu"
+
+msgid "Each acquisition is added to the workspace"
+msgstr "Chaque acquisition est ajoutée à l'espace de travail"
+
+msgid "With “New group”, each acquisition gets its own group"
+msgstr "Avec « Nouveau groupe », chaque acquisition a son propre groupe"
+
+msgid "Without “New group”, acquisitions accumulate in the current group"
+msgstr "Sans « Nouveau groupe », les acquisitions s'accumulent dans le groupe courant"
+
+#, python-format
+msgid "Discover more applications in the plugin catalog: %s"
+msgstr "Découvrez d'autres applications dans le catalogue de plugins : %s"
+
 msgid "Details"
 msgstr "Détails"
 
@@ -5979,3 +6045,332 @@ msgstr "Forme"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "Stopping after this demo"
+msgstr "Arrêt après cette démo"
+
+msgid "Paused (F9 to resume)"
+msgstr "En pause (F9 pour reprendre)"
+
+#, python-format
+msgid "Step %d"
+msgstr "Étape %d"
+
+msgid "Try DataLab"
+msgstr "Essayez DataLab"
+
+msgid "DataLab Web: in your browser"
+msgstr "DataLab Web : dans votre navigateur"
+
+msgid "Moving on to the next demo..."
+msgstr "Passons à la démo suivante..."
+
+msgid "Showcase mode"
+msgstr "Mode vitrine"
+
+msgid "Play live demos of DataLab features, without any user interaction, for exhibitions and booths."
+msgstr "Jouer des démonstrations en direct des fonctionnalités de DataLab, sans aucune interaction de l'utilisateur, pour les salons et les stands."
+
+msgid "Hotkeys: F9 to pause or resume, Shift+F12 to stop after the current demo."
+msgstr "Raccourcis : F9 pour mettre en pause ou reprendre, Maj+F12 pour arrêter après la démo en cours."
+
+msgid "Demos"
+msgstr "Démos"
+
+msgid "Play in a loop"
+msgstr "Jouer en boucle"
+
+msgid "Slow"
+msgstr "Lent"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Rapide"
+
+msgid "Pace"
+msgstr "Rythme"
+
+msgid "Full screen"
+msgstr "Plein écran"
+
+msgid "Include DataLab Web"
+msgstr "Inclure DataLab Web"
+
+msgid "For a single screen: each loop ends with one pass of the DataLab Web showcase, in a browser window (Google Chrome, Microsoft Edge or Chromium). The showcase resumes once the window is closed."
+msgstr "Pour un écran unique : chaque boucle se termine par un passage du mode vitrine de DataLab Web, dans une fenêtre de navigateur (Google Chrome, Microsoft Edge ou Chromium). Le mode vitrine reprend une fois la fenêtre fermée."
+
+#, python-format
+msgid "URL of DataLab Web (empty: public deployment, %s)"
+msgstr "URL de DataLab Web (vide : déploiement public, %s)"
+
+msgid "DataLab Web URL"
+msgstr "URL de DataLab Web"
+
+msgid "DataLab Web: the same platform in a browser"
+msgstr "DataLab Web : la même plateforme dans un navigateur"
+
+msgid "One pass of the DataLab Web showcase, then back to the desktop"
+msgstr "Un passage du mode vitrine de DataLab Web, puis retour à l'application de bureau"
+
+msgid "DataLab Web now takes over, in a browser"
+msgstr "DataLab Web prend maintenant le relais, dans un navigateur"
+
+msgid "Back to DataLab, on the desktop"
+msgstr "Retour à DataLab, l'application de bureau"
+
+msgid "Current screen"
+msgstr "Écran actuel"
+
+msgid "Screen"
+msgstr "Écran"
+
+msgid "The showcase mode clears the workspace (signals, images, macros and history) before each demo."
+msgstr "Le mode vitrine vide l'espace de travail (signaux, images, macros et historique) avant chaque démo."
+
+msgid "Full traceability: history, provenance, cascade recompute"
+msgstr "Traçabilité totale : historique, provenance, recalcul en cascade"
+
+msgid "Every result knows where it comes from"
+msgstr "Chaque résultat sait d'où il vient"
+
+msgid "Every processing step is traced, from the raw data to the result"
+msgstr "Chaque étape de traitement est tracée, des données brutes au résultat"
+
+msgid "The History panel records every action, ready to be replayed"
+msgstr "Le panneau d'historique enregistre chaque action, prête à être rejouée"
+
+msgid "Paracetamol"
+msgstr "Paracétamol"
+
+msgid "A raw X-ray diffraction pattern of paracetamol"
+msgstr "Un diffractogramme de rayons X brut du paracétamol"
+
+msgid "Simulate a noisy acquisition: add Gaussian noise"
+msgstr "Simulons une acquisition bruitée : ajout d'un bruit gaussien"
+
+#, python-format
+msgid "Smooth it with a moving average (window: %d points)"
+msgstr "Lissage par moyenne mobile (fenêtre : %d points)"
+
+msgid "Remove the linear trend of the baseline"
+msgstr "Élimination de la tendance linéaire de la ligne de base"
+
+msgid "Detect the diffraction peaks"
+msgstr "Détection des pics de diffraction"
+
+msgid "Fit the peaks with a sum of Gaussians"
+msgstr "Ajustement des pics par une somme de gaussiennes"
+
+msgid "The fit matches the detected peaks"
+msgstr "L'ajustement épouse les pics détectés"
+
+msgid "The whole chain is recorded: each step, with its parameters"
+msgstr "Toute la chaîne est enregistrée : chaque étape, avec ses paramètres"
+
+#, python-format
+msgid "Change a parameter upstream: the smoothing window, from %d to %d points"
+msgstr "Modifions un paramètre en amont : la fenêtre de lissage, de %d à %d points"
+
+msgid "Detrending and peak detection are recomputed in cascade, in place: same objects, new data"
+msgstr "L'élimination de tendance et la détection de pics sont recalculées en cascade, sur place : mêmes objets, nouvelles données"
+
+msgid "Each execution keeps its provenance: Sigima operation, parameters, inputs and their fingerprints"
+msgstr "Chaque exécution garde sa provenance : opération Sigima, paramètres, entrées et leurs empreintes"
+
+msgid "Reproducibility: provenance capsules (RO-Crate)"
+msgstr "Reproductibilité : capsules de provenance (RO-Crate)"
+
+msgid "Share an analysis that anyone can replay and verify"
+msgstr "Partagez une analyse que chacun peut rejouer et vérifier"
+
+msgid "Start from a raw image of cells: it is noisy"
+msgstr "Partons d'une image brute de cellules : elle est bruitée"
+
+msgid "Reduce the noise first (total variation denoising)"
+msgstr "D'abord, réduisons le bruit (filtrage variationnel)"
+
+msgid "Then detect the edges of the cells"
+msgstr "Puis détectons les contours des cellules"
+
+msgid "Edges of the cells (Sobel filter)"
+msgstr "Contours des cellules (filtre de Sobel)"
+
+msgid "Finally, detect the cells as blobs on the denoised image"
+msgstr "Enfin, détectons les cellules comme des taches sur l'image débruitée"
+
+#, python-format
+msgid "%d cells detected, drawn on the image"
+msgstr "%d cellules détectées, tracées sur l'image"
+
+#, python-format
+msgid "%.1f MB"
+msgstr "%.1f Mo"
+
+#, python-format
+msgid "Change one parameter: a stronger denoising (weight %s → %s)"
+msgstr "Changeons un paramètre : un débruitage plus fort (poids %s → %s)"
+
+msgid "Each step is recorded, with its parameters"
+msgstr "Chaque étape est enregistrée, avec ses paramètres"
+
+msgid "Pack data, processing and provenance into a capsule"
+msgstr "Regroupons données, traitements et provenance dans une capsule"
+
+msgid "Cells analysis"
+msgstr "Analyse de cellules"
+
+msgid "Raw cells image, denoised, edges and blobs"
+msgstr "Image brute de cellules, débruitée, contours et taches"
+
+#, python-format
+msgid ""
+"Capsule “%(name)s” exported (%(size)s, RO-Crate)\n"
+"Fingerprint: %(fp)s"
+msgstr ""
+"Capsule « %(name)s » exportée (%(size)s, RO-Crate)\n"
+"Empreinte : %(fp)s"
+
+msgid "The workspace is cleared: everything is gone"
+msgstr "L'espace de travail est vidé : tout a disparu"
+
+msgid "Open the capsule..."
+msgstr "Ouvrons la capsule..."
+
+#, python-format
+msgid "Everything is back: %d images, parameters and history, with identical checksums"
+msgstr "Tout est revenu : %d images, paramètres et historique, avec des sommes de contrôle identiques"
+
+msgid "Replay each step and compare it with the stored result"
+msgstr "Rejouons chaque étape et comparons-la au résultat enregistré"
+
+msgid "Exact match, bit for bit: the analysis is reproducible"
+msgstr "Résultat identique, bit à bit : l'analyse est reproductible"
+
+#, python-format
+msgid "Dependent results are updated: %d cells detected"
+msgstr "Les résultats dépendants sont mis à jour : %d cellules détectées"
+
+msgid "Export a child revision of the capsule"
+msgstr "Exportons une révision fille de la capsule"
+
+#, python-format
+msgid "Revision %(child)s ← parent %(parent)s: the lineage is kept"
+msgstr "Révision %(child)s ← parente %(parent)s : la filiation est conservée"
+
+msgid "The same capsule opens in DataLab Web, right in a browser"
+msgstr "La même capsule s'ouvre dans DataLab Web, directement dans un navigateur"
+
+msgid "Advanced, interactive image analysis"
+msgstr "Analyse d'image avancée et interactive"
+
+msgid "Measure, detect and annotate images, right on the plot"
+msgstr "Mesurer, détecter et annoter les images, directement sur le graphique"
+
+msgid "Noisy 2D peaks"
+msgstr "Pics 2D bruités"
+
+msgid "Noisy ring"
+msgstr "Anneau bruité"
+
+msgid "A noisy image with bright spots: let us find them automatically"
+msgstr "Une image bruitée avec des taches lumineuses : trouvons-les automatiquement"
+
+msgid "2D peak detection, with a region of interest around each peak"
+msgstr "Détection de pics 2D, avec une région d'intérêt autour de chaque pic"
+
+msgid "Each peak is detected, and a region of interest is created around it"
+msgstr "Chaque pic est détecté, et une région d'intérêt est créée autour de lui"
+
+msgid "Within each region of interest, the spot contour is fitted"
+msgstr "Dans chaque région d'intérêt, le contour de la tache est ajusté"
+
+msgid "An ellipse is fitted on each spot, and shown on the image"
+msgstr "Une ellipse est ajustée sur chaque tache, et affichée sur l'image"
+
+msgid "The results are gathered in tables, ready to be exported"
+msgstr "Les résultats sont rassemblés dans des tableaux, prêts à être exportés"
+
+msgid "Results may also be plotted: e.g. the peak coordinates"
+msgstr "Les résultats peuvent aussi être tracés : par exemple, les coordonnées des pics"
+
+msgid "Results become signals, for further processing"
+msgstr "Les résultats deviennent des signaux, pour la suite des traitements"
+
+msgid "A noisy ring: a low-pass filter will smooth it out"
+msgstr "Un anneau bruité : un filtre passe-bas va le lisser"
+
+msgid "Its live preview follows the cut-off frequency, while it is dragged"
+msgstr "Son aperçu en direct suit la fréquence de coupure, pendant qu'on la fait glisser"
+
+msgid "Parameters stay attached to the result: they may be changed later, in the Processing tab"
+msgstr "Les paramètres restent attachés au résultat : ils peuvent être modifiés plus tard, dans l'onglet Traitement"
+
+msgid "The radial profile of the ring is computed around its centroid"
+msgstr "Le profil radial de l'anneau est calculé autour de son barycentre"
+
+msgid "Its full width at half maximum is measured, on one side"
+msgstr "Sa largeur à mi-hauteur est mesurée, d'un côté du profil"
+
+msgid "The width of the ring is measured, and annotated on the curve"
+msgstr "La largeur de l'anneau est mesurée, et annotée sur la courbe"
+
+msgid "Finally, a line profile is picked right on the image"
+msgstr "Enfin, un profil rectiligne est choisi directement sur l'image"
+
+msgid "The profile lands in the Signal Panel, ready for analysis"
+msgstr "Le profil arrive dans le panneau Signal, prêt pour l'analyse"
+
+msgid "Detect, measure, preview, extract: all interactive, all traced"
+msgstr "Détecter, mesurer, prévisualiser, extraire : tout est interactif, tout est tracé"
+
+msgid "Automation & openness: macros and remote control"
+msgstr "Automatisation et ouverture : macros et contrôle à distance"
+
+msgid "Python macros, Jupyter notebooks and remote control"
+msgstr "Macros Python, notebooks Jupyter et contrôle à distance"
+
+msgid "Macros automate DataLab with Python scripts"
+msgstr "Les macros automatisent DataLab avec des scripts Python"
+
+msgid "DataLab can also be controlled remotely, from Jupyter or any application"
+msgstr "DataLab peut aussi être piloté à distance, depuis Jupyter ou toute autre application"
+
+msgid "A new macro: a few lines of Python, with NumPy and the DataLab proxy"
+msgstr "Une nouvelle macro : quelques lignes de Python, avec NumPy et le proxy de DataLab"
+
+msgid "The macro creates two chirp signals with NumPy, then asks DataLab for their spectrum"
+msgstr "La macro crée deux signaux chirp avec NumPy, puis demande leur spectre à DataLab"
+
+msgid "The macro runs in its own Python process, and drives DataLab remotely"
+msgstr "La macro s'exécute dans son propre processus Python, et pilote DataLab à distance"
+
+msgid "Its output is shown in the console of the Macro Panel"
+msgstr "Sa sortie s'affiche dans la console du gestionnaire de macros"
+
+msgid "Signals and spectra created by the macro, ready for further analysis"
+msgstr "Signaux et spectres créés par la macro, prêts pour la suite de l'analyse"
+
+#, python-format
+msgid "Web API server listening at %s, protected by an access token (%s)"
+msgstr "Serveur de l'API Web à l'écoute sur %s, protégé par un jeton d'accès (%s)"
+
+msgid "A separate Python process, like a Jupyter notebook, now drives DataLab through this API"
+msgstr "Un processus Python séparé, comme un notebook Jupyter, pilote maintenant DataLab via cette API"
+
+msgid "Python client (separate process)"
+msgstr "Client Python (processus séparé)"
+
+#, python-format
+msgid "The client sends %d noisy acquisitions, one per second..."
+msgstr "Le client envoie %d acquisitions bruitées, une par seconde..."
+
+msgid "...then asks DataLab for their average, and retrieves the result"
+msgstr "...puis demande leur moyenne à DataLab, et en récupère le résultat"
+
+#, python-format
+msgid "Average of %d acquisitions, computed by DataLab: noise reduced by %d%%"
+msgstr "Moyenne de %d acquisitions, calculée par DataLab : bruit réduit de %d %%"
+
+msgid "Jupyter, scripts, any HTTP client can drive DataLab"
+msgstr "Jupyter, scripts, tout client HTTP peut piloter DataLab"

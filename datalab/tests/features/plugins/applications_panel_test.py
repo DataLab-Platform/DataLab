@@ -1100,6 +1100,11 @@ def test_application_commands_delegate_to_plugin_contracts(make_panel) -> None:
     assert not page.outcome_label.isHidden()
     assert "Created 0 objects" in page.outcome_label.text()
 
+    # Outcomes are forgotten on request (e.g. once the workspace is cleared)
+    panel.clear_outcomes()
+    assert row.outcome_label.isHidden() and not row.outcome_label.text()
+    assert page.outcome_label.isHidden() and not page.outcome_label.text()
+
 
 def test_application_command_failures_are_reported_not_raised(
     make_panel, monkeypatch

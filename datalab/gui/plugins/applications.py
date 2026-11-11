@@ -822,6 +822,11 @@ class RecipeRow(QW.QFrame):
         self.outcome_label.setText(_format_outcome_html(outcome))
         self.outcome_label.show()
 
+    def clear_outcome(self) -> None:
+        """Hide the outcome of the last run of the recipe, if any"""
+        self.outcome_label.hide()
+        self.outcome_label.clear()
+
 
 class RecipeDetails(QW.QWidget):
     """Details of a recipe: description, readiness, expected inputs and examples.
@@ -1267,6 +1272,14 @@ class ApplicationPage(QW.QWidget):
             self.outcome_label.setText(_format_outcome_html(outcome))
             self.outcome_label.show()
 
+    def clear_outcomes(self) -> None:
+        """Hide the outcomes of the previous runs (e.g. once the workspace holding
+        the objects they created is cleared)"""
+        for row in self.recipe_rows.values():
+            row.clear_outcome()
+        self.outcome_label.hide()
+        self.outcome_label.clear()
+
 
 class FlashOverlay(QW.QWidget):
     """Frame drawn over a widget, in the highlight color of the current theme.
@@ -1604,6 +1617,11 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
         """Return the page of the shown application, if any."""
         page = self.application_stack.currentWidget()
         return page if isinstance(page, ApplicationPage) else None
+
+    def clear_outcomes(self) -> None:
+        """Hide the outcomes of the previous runs, on the pages of all applications"""
+        for page in self.application_pages:
+            page.clear_outcomes()
 
     def refresh(self) -> None:
         """Rebuild the pages if the application plugins have changed.

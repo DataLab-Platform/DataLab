@@ -145,5 +145,6 @@ This section describes the advanced features of DataLab.
    advanced/model
    advanced/logviewer
    advanced/instviewer
+   advanced/showcase
    advanced/command
    advanced/api
