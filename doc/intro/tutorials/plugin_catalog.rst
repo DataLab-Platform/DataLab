@@ -97,7 +97,7 @@ Fork the `catalog repository <https://github.com/DataLab-Platform/plugins>`_ and
         sha256: <SHA-256 digest of the released file>
         requires_python: ">=3.10"
 
-``kind: module`` means that the plugin is a single Python file: the catalog offers such plugins to DataLab Desktop. The ID, name and version must agree with those of the file. The ``sha256`` field gives the digest of the file attached to the release; you may compute it with ``sha256sum datalab_spectrum_tools.py`` on Linux and macOS, or with ``Get-FileHash datalab_spectrum_tools.py`` in Windows PowerShell (in lowercase). If you leave it out, the first run of the automatic checks fails and prints the line to add.
+``kind: module`` means that the plugin is a single Python file: the catalog offers such plugins to DataLab Desktop. The ID and version must agree with those of the file; the catalog shows the name given in the YAML file. The ``sha256`` field gives the digest of the file attached to the release; you may compute it with ``sha256sum datalab_spectrum_tools.py`` on Linux and macOS, or with ``Get-FileHash datalab_spectrum_tools.py`` in Windows PowerShell (in lowercase). If you leave it out, the first run of the automatic checks fails and prints the line to add.
 
 Then open a pull request. Its automatic checks download the file from the release, verify its digest and inspect it without running it: file name, Python syntax, plugin identity and version, license. The maintainers of the catalog then check that the plugin matches its description; this review is not a security audit.
 
@@ -111,4 +111,4 @@ To publish a new version, increase the version in the file, create a new release
 .. admonition:: Larger plugins
     :class: tip
 
-    For a plugin made of several modules, with resources, tests or dependencies, create a layered project with ``datalab-plugin create --project`` (see :ref:`plugin_project`). Its release workflow builds the wheel of the plugin when you push a version tag, attaches it to a GitHub release with its SHA-256 digest, and prints the entry to submit to the catalog. A wheel may also declare a DataLab-Web plugin, so that the plugin is offered to the users of both editions (see :ref:`plugins_web`).
+    For a plugin made of several modules, with resources, tests or dependencies, create a layered project with ``datalab-plugin create --project`` (see :ref:`plugin_project`). Its release workflow builds the wheel of the plugin when you push a version tag, attaches it to a GitHub release with its SHA-256 digest, and prints the entry to submit to the catalog. A wheel may also declare a distinct DataLab-Web plugin class in the ``datalab.web_plugins`` entry-point group, so that the plugin is offered to the users of both editions (see :ref:`plugins_web`).

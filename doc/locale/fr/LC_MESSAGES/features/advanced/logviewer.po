@@ -22,8 +22,8 @@ msgstr "Journaux de bord"
 msgid "Despite countless efforts (unit testing, test coverage...), DataLab might crash or behave unexpectedly."
 msgstr "Malgré des efforts considérables en matière de tests (tests unitaires, couverture de tests...), DataLab peut s'arrêter inopinément ou se comporter de façon inattendue."
 
-msgid "For those situations, DataLab provides two logs (located in your home directory):"
-msgstr "Pour traiter ce type de situation, DataLab fournit deux types de journaux de bord (localisés dans votre répertoire utilisateur) :"
+msgid "For those situations, DataLab provides two logs (located in the DataLab configuration folder, e.g. ``~/.DataLab_v1``):"
+msgstr "Pour traiter ce type de situation, DataLab fournit deux types de journaux de bord (localisés dans le répertoire de configuration de DataLab, par exemple ``~/.DataLab_v1``) :"
 
 msgid "\"Traceback log\", for Python exceptions"
 msgstr "\"Traceback log\", pour les exceptions Python"

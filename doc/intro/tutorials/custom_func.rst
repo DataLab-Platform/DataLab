@@ -66,7 +66,7 @@ We then reorganize the DataLab window layout to have a comfortable environment f
 developing and testing our function: we reorganize the window layout of DataLab to have
 the "Image Panel" on the left and the "Macro Panel" on the right. To do so, you can
 simply drag and drop the panels to the desired position. If the
-"Macro Panel" is not visible, you can enable it from the "View > Panels > Macro Panel".
+"Macro Panel" is not visible, you can enable it from the "View > Macro Panel" menu.
 
 .. figure:: ../../images/tutorials/custom_func/01.png
 
@@ -215,9 +215,9 @@ Now, let's execute the macro-command by clicking on the "Run macro"
     "Macro Panel" window: the process standard output is displayed in the
     "Console" below the macro editor. We can see the following messages:
 
-    - ``---[...]---[# ==> Running 'Untitled 01' macro...]``: the macro-command starts
+    - ``---[...]---[# ==> Running 'macro_01' macro...]``: the macro-command starts
     - ``Connecting to DataLab XML-RPC server...OK [...]``: the proxy is connected to DataLab
-    - ``---[...]---[# <== 'Untitled 01' macro has finished]``: the macro-command ends
+    - ``---[...]---[# <== 'macro_01' macro has finished]``: the macro-command ends
 
 .. |libre-camera-flash-on| image:: ../../../datalab/data/icons/libre-camera-flash-on.svg
     :width: 24px

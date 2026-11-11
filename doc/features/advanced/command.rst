@@ -104,12 +104,13 @@ Run technical validation tests
 -------------------------------
 
 .. note:: Technical validation tests are directly included in individual unit tests
-    and are disseminated throughout the code. The test functions including validation
-    tests are marked with the ``@pytest.mark.validation`` decorator.
+    of the `Sigima <https://sigima.readthedocs.io/>`_ library, which provides the
+    signal and image processing features of DataLab. The test functions including
+    validation tests are marked with the ``@pytest.mark.validation`` decorator.
 
 To execute DataLab technical validation tests, run the following::
 
-    $ pytest -m validation
+    $ pytest --pyargs sigima -m validation
 
 .. seealso:: See section :ref:`validation` for more information on DataLab's validation strategy.
 

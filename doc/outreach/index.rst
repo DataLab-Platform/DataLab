@@ -49,7 +49,7 @@ Since its public release, DataLab has been introduced at several prestigious con
 
         **Paris, France - December 2025**
 
-        Advanced use case: Automatic X-ray scene reconstruction with DataLab
+        DataLab 1.0: a complete application and a modular platform
 
     .. grid-item-card:: 🇵🇱 EuroSciPy 2026
         :link: euroscipy2026

@@ -157,8 +157,8 @@ msgstr "Créer une branche de correction d'anomalie à partir de ``release`` :"
 msgid "Merge the fix branch back into ``release``:"
 msgstr "Fusionner la branche de correction de nouveau dans ``release`` :"
 
-msgid "Do not create a ``fix/xxx`` branch from a ``develop/feature_name`` branch. Always branch from ``develop`` or ``release`` to ensure fixes are correctly propagated."
-msgstr "Ne pas créer une branche ``fix/xxx`` à partir d'une branche ``develop/feature_name``. Toujours créer une branche à partir de ``develop`` ou ``release`` pour garantir que les corrections sont correctement propagées."
+msgid "Do not create a ``fix/xxx`` branch from a ``feature/feature_name`` branch. Always branch from ``develop`` or ``release`` to ensure fixes are correctly propagated."
+msgstr "Ne pas créer une branche ``fix/xxx`` à partir d'une branche ``feature/feature_name``. Toujours créer une branche à partir de ``develop`` ou ``release`` pour garantir que les corrections sont correctement propagées."
 
 msgid "Workflow for Critical Hotfixes"
 msgstr "Workflow pour les correctifs urgents"

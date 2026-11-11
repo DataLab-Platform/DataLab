@@ -25,8 +25,8 @@ msgstr "Premiers pas"
 msgid "DataLab is an open platform for signal and image processing, designed to be used by scientists, engineers, and researchers in academia and industry, while offering the reliability of industrial-grade software. It is a versatile software that can be used for a wide range of applications, from simple data analysis to complex signal processing and image analysis tasks."
 msgstr "DataLab est une plateforme ouverte de traitement de signaux et d'images, conçue pour être utilisée par les scientifiques, ingénieurs et chercheurs du monde académique et industriel, tout en offrant la fiabilité d'un logiciel industriel. C'est un logiciel polyvalent qui peut être utilisé pour un large éventail d'applications, de l'analyse de données simple aux tâches complexes de traitement de signaux et d'analyse d'images."
 
-msgid "DataLab integrates seemlessly into your workflow thanks to three main operating modes:"
-msgstr "DataLab s'intègre parfaitement dans votre flux de travail grâce à trois modes de fonctionnement principaux :"
+msgid "DataLab integrates seamlessly into your workflow thanks to three main operating modes:"
+msgstr "DataLab s'intègre parfaitement dans votre flux de travail grâce à trois modes de fonctionnement principaux :"
 
 msgid "|appmode|"
 msgstr ""
@@ -67,14 +67,17 @@ msgstr "`Sigima <https://github.com/DataLab-Platform/Sigima>`_ pour le traitemen
 msgid "`SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ for the Qt application framework the desktop application is built upon (part of the DataLab Platform)"
 msgstr "`SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ pour le framework applicatif Qt sur lequel repose l'application de bureau (faisant partie de la plateforme DataLab)"
 
+msgid "`DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_ for the provenance of the workspace and the RO-Crate ``.dlcapsule`` workspace capsules (part of the DataLab Platform)"
+msgstr "`DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_ pour la provenance de l'espace de travail et les capsules d'espace de travail RO-Crate ``.dlcapsule`` (faisant partie de la plateforme DataLab)"
+
 msgid "`NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)"
 msgstr "`NumPy <https://numpy.org/>`_ pour le calcul numérique (tableaux, algèbre linéaire, etc.)"
 
 msgid "`SciPy <https://www.scipy.org/>`_ for scientific computing (interpolation, special functions, etc.)"
 msgstr "`SciPy <https://www.scipy.org/>`_ pour le calcul scientifique (interpolation, fonctions spéciales, etc.)"
 
-msgid "`scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ for image processing"
-msgstr "`scikit-image <https://scikit-image.org/>`_ et `OpenCV <https://opencv.org/>`_ pour le traitement d'images"
+msgid "`scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ (optional) for image processing"
+msgstr "`scikit-image <https://scikit-image.org/>`_ et `OpenCV <https://opencv.org/>`_ (facultatif) pour le traitement d'images"
 
 msgid "`PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ for wavelet transform"
 msgstr "`PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ pour la transformée en ondelettes"

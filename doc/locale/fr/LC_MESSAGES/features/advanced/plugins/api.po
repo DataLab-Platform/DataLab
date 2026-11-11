@@ -339,6 +339,39 @@ msgstr "Capacité exposée par un plugin aux consommateurs de DataLab."
 msgid "Plugin info"
 msgstr "Informations sur le plugin"
 
+msgid "Plugin display name"
+msgstr "Nom d'affichage du plugin"
+
+msgid "type"
+msgstr ""
+
+msgid "str"
+msgstr ""
+
+msgid "Plugin version"
+msgstr "Version du plugin"
+
+msgid "Plugin description"
+msgstr "Description du plugin"
+
+msgid "Plugin icon: ``package:relative/path`` resource, ``module:filename`` image registered with guidata, or DataLab icon file name"
+msgstr "Icône du plugin : ressource ``package:relative/path``, image ``module:filename`` enregistrée auprès de guidata, ou nom de fichier d'une icône de DataLab"
+
+msgid "Stable, namespaced plugin ID (e.g. ``\"org.example.my-plugin\"``)"
+msgstr "Identifiant de plugin stable et préfixé par un espace de noms (par exemple ``\"org.example.my-plugin\"``)"
+
+msgid "str | None"
+msgstr ""
+
+msgid "Plugin capabilities (:class:`PluginCapability` values)"
+msgstr "Capacités du plugin (valeurs de :class:`PluginCapability`)"
+
+msgid "collections.abc.Collection[datalab.plugins.base.PluginCapability]"
+msgstr ""
+
+msgid "HTTP or HTTPS URL of the plugin documentation, opened by the **Documentation** action of the **Applications** panel"
+msgstr "URL HTTP ou HTTPS de la documentation du plugin, ouverte par l'action **Documentation** du panneau **Applications**"
+
 msgid "Metaclass for registering plugins"
 msgstr "Métaclasse pour l'enregistrement des plugins"
 
@@ -499,6 +532,9 @@ msgstr "Recharge ou importe tous les modules correspondant à la convention de n
 msgid "Like :func:`discover_plugins`, this is not thread-safe: call it from the Qt main thread only."
 msgstr "Comme :func:`discover_plugins`, cette fonction n'est pas thread-safe : ne l'appelez que depuis le thread principal Qt."
 
+msgid "``datalab.plugins.PLUGIN_ENTRY_POINT_GROUP`` is the entry-point group of DataLab Desktop plugin classes (``\"datalab.plugins\"``); DataLab-Web plugin classes use the ``datalab.web_plugins`` group (see :ref:`plugins_web`). The other names exported by :mod:`datalab.plugins`, such as ``PluginRegistry`` or ``discover_plugins``, are used by DataLab to load and manage plugins, and are not described here."
+msgstr "``datalab.plugins.PLUGIN_ENTRY_POINT_GROUP`` est le groupe de points d'entrée des classes de plugins de DataLab Desktop (``\"datalab.plugins\"``) ; les classes de plugins de DataLab-Web utilisent le groupe ``datalab.web_plugins`` (voir :ref:`plugins_web`). Les autres noms exportés par :mod:`datalab.plugins`, tels que ``PluginRegistry`` ou ``discover_plugins``, sont utilisés par DataLab pour charger et gérer les plugins, et ne sont pas décrits ici."
+
 msgid "Headless contracts for plugin-provided scientific recipes."
 msgstr "Contrats sans interface graphique pour les recettes scientifiques fournies par les plugins."
 
@@ -651,6 +687,120 @@ msgstr "Statut final enregistré sur les sorties d'une recette réussie."
 
 msgid "Raised when recipe inputs or parameters violate their descriptor."
 msgstr "Levée lorsque les entrées ou les paramètres d'une recette ne respectent pas son descripteur."
+
+msgid "Host-independent assignment of objects to recipe inputs, and readiness."
+msgstr "Affectation des objets aux entrées des recettes, indépendante de l'hôte, et état de préparation."
+
+msgid "DataLab Desktop and DataLab-Web share this module: both propose bindings from the selected objects, assess whether a recipe can run on them, and phrase the returned issues in their own user interface."
+msgstr "DataLab Desktop et DataLab-Web partagent ce module : tous deux proposent des affectations à partir des objets sélectionnés, évaluent si une recette peut s'exécuter sur ceux-ci et formulent les problèmes renvoyés dans leur propre interface utilisateur."
+
+msgid "Diagnostic code of an exception raised by a recipe input check"
+msgstr "Code de diagnostic d'une exception levée par une vérification des entrées d'une recette"
+
+msgid "Objects proposed for each recipe input slot."
+msgstr "Objets proposés pour chaque emplacement d'entrée de recette."
+
+msgid "Generic problem found on one recipe input slot."
+msgstr "Problème générique détecté sur un emplacement d'entrée de recette."
+
+msgid "``details`` holds what hosts need to phrase the problem: ``count`` and ``min_count`` (``TOO_FEW``), ``count`` (``TOO_MANY``), ``key``, ``count`` and ``titles`` of the objects lacking it (``MISSING_METADATA``), ``count`` and ``titles`` (``WRONG_TYPE``, ``DUPLICATE``)."
+msgstr "``details`` contient ce dont les hôtes ont besoin pour formuler le problème : ``count`` et ``min_count`` (``TOO_FEW``), ``count`` (``TOO_MANY``), ``key``, ``count`` et ``titles`` des objets qui en sont dépourvus (``MISSING_METADATA``), ``count`` et ``titles`` (``WRONG_TYPE``, ``DUPLICATE``)."
+
+msgid "Generic reason why objects cannot be bound to a recipe input slot."
+msgstr "Raison générique pour laquelle des objets ne peuvent pas être affectés à un emplacement d'entrée de recette."
+
+msgid "Result of the assessment of recipe inputs."
+msgstr "Résultat de l'évaluation des entrées d'une recette."
+
+msgid "Return True if the recipe can run with the assessed bindings."
+msgstr "Renvoie True si la recette peut s'exécuter avec les affectations évaluées."
+
+msgid "Whether a recipe can run on a set of candidate objects."
+msgstr "Indique si une recette peut s'exécuter sur un ensemble d'objets candidats."
+
+msgid "No candidate object has a type accepted by the recipe"
+msgstr "Aucun objet candidat n'a un type accepté par la recette"
+
+msgid "Inputs are available but must be assigned to slots by the user"
+msgstr "Des entrées sont disponibles, mais doivent être affectées aux emplacements par l'utilisateur"
+
+msgid "Inputs violate the slot declarations or the recipe input checks"
+msgstr "Les entrées ne respectent pas les déclarations des emplacements ou les vérifications des entrées de la recette"
+
+msgid "The recipe can run, but its input checks returned warnings"
+msgstr "La recette peut s'exécuter, mais ses vérifications des entrées ont renvoyé des avertissements"
+
+msgid "The recipe can run"
+msgstr "La recette peut s'exécuter"
+
+msgid "Assess whether a recipe can run on candidate objects or bindings."
+msgstr "Évalue si une recette peut s'exécuter sur des objets candidats ou des affectations."
+
+msgid "recipe descriptor"
+msgstr "descripteur de recette"
+
+msgid "candidate objects, used when ``bindings`` is None"
+msgstr "objets candidats, utilisés lorsque ``bindings`` vaut None"
+
+msgid "parameters passed to the recipe input checks"
+msgstr "paramètres transmis aux vérifications des entrées de la recette"
+
+msgid "explicit bindings (e.g. edited by the user)"
+msgstr "affectations explicites (par exemple modifiées par l'utilisateur)"
+
+msgid "Readiness status, bindings, generic issues, and recipe diagnostics"
+msgstr "État de préparation, affectations, problèmes génériques et diagnostics de la recette"
+
+msgid "Run the input checks of a recipe on complete inputs."
+msgstr "Exécute les vérifications des entrées d'une recette sur des entrées complètes."
+
+msgid "An exception raised by the checks (e.g. by a validation function reused from the recipe) is reported as an error diagnostic."
+msgstr "Une exception levée par les vérifications (par exemple par une fonction de validation réutilisée par la recette) est signalée comme un diagnostic d'erreur."
+
+msgid "objects bound to each slot"
+msgstr "objets affectés à chaque emplacement"
+
+msgid "recipe parameters, or None for a parameterless recipe"
+msgstr "paramètres de la recette, ou None pour une recette sans paramètres"
+
+msgid "Diagnostics returned by the recipe"
+msgstr "Diagnostics renvoyés par la recette"
+
+msgid "Create default recipe parameters, updated with known values."
+msgstr "Crée les paramètres par défaut d'une recette, mis à jour avec des valeurs connues."
+
+msgid "parameter values, e.g. suited to an example"
+msgstr "valeurs de paramètres, par exemple adaptées à un exemple"
+
+msgid "Parameters, or None for a parameterless recipe"
+msgstr "Paramètres, ou None pour une recette sans paramètres"
+
+msgid "a value does not match a recipe parameter"
+msgstr "une valeur ne correspond à aucun paramètre de la recette"
+
+msgid "Check bindings against the declaration of the recipe input slots."
+msgstr "Vérifie les affectations par rapport à la déclaration des emplacements d'entrée de la recette."
+
+msgid "unbound slots awaiting a user assignment"
+msgstr "emplacements non affectés, en attente d'une affectation par l'utilisateur"
+
+msgid "Problems found, in slot declaration order"
+msgstr "Problèmes détectés, dans l'ordre de déclaration des emplacements"
+
+msgid "Return True if an object has the type accepted by an input slot."
+msgstr "Renvoie True si un objet a le type accepté par un emplacement d'entrée."
+
+msgid "Propose objects for each input slot of a recipe."
+msgstr "Propose des objets pour chaque emplacement d'entrée d'une recette."
+
+msgid "The recipe's binding suggestions come first. Otherwise, all compatible candidates go to the only slot accepting their type; slots sharing a type with others are left to the user (ambiguous slots)."
+msgstr "Les suggestions d'affectation de la recette passent en premier. Sinon, tous les candidats compatibles vont à l'unique emplacement acceptant leur type ; les emplacements partageant un type avec d'autres sont laissés à l'utilisateur (emplacements ambigus)."
+
+msgid "candidate objects, e.g. the current selection"
+msgstr "objets candidats, par exemple la sélection courante"
+
+msgid "Proposed bindings and the slots requiring a user decision"
+msgstr "Affectations proposées et emplacements nécessitant une décision de l'utilisateur"
 
 msgid "Portable declarations for plugin-provided example workspaces."
 msgstr "Déclarations portables des espaces de travail d'exemple fournis par les plugins."
@@ -825,6 +975,36 @@ msgstr "Renvoie une image en direct pour les réglages courants."
 
 msgid "Acquire objects with the current settings."
 msgstr "Acquiert des objets avec les réglages courants."
+
+msgid "Package resources declared by plugins with the ``package:path`` syntax."
+msgstr "Ressources de paquet déclarées par les plugins avec la syntaxe ``package:path``."
+
+msgid "Plugin-local identifier syntax (examples, welcome page tiles)"
+msgstr "Syntaxe des identifiants locaux à un plugin (exemples, tuiles de la page d'accueil)"
+
+msgid "Resolve a ``package:path`` resource without requiring a filesystem path"
+msgstr "Résout une ressource ``package:path`` sans nécessiter de chemin dans le système de fichiers"
+
+msgid "resource declaration, e.g. ``\"my_plugin:icons/logo.svg\"``"
+msgstr "déclaration de la ressource, par exemple ``\"my_plugin:icons/logo.svg\"``"
+
+msgid "resource description used in error messages"
+msgstr "description de la ressource utilisée dans les messages d'erreur"
+
+msgid "``importlib.resources`` traversable, also valid for zipped packages"
+msgstr "objet traversable ``importlib.resources``, également valide pour les paquets zippés"
+
+msgid "if the declaration is malformed"
+msgstr "si la déclaration est mal formée"
+
+msgid "if the package does not contain the resource"
+msgstr "si le paquet ne contient pas la ressource"
+
+msgid "Validate a ``package:path`` resource and return its two parts"
+msgstr "Valide une ressource ``package:path`` et renvoie ses deux parties"
+
+msgid "Importable package name and POSIX path relative to this package"
+msgstr "Nom du paquet importable et chemin POSIX relatif à ce paquet"
 
 msgid "Transactional Desktop runner for plugin-provided scientific recipes."
 msgstr "Exécuteur transactionnel Desktop pour les recettes scientifiques fournies par les plugins."

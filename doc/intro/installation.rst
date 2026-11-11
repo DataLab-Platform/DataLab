@@ -66,7 +66,7 @@ DataLab is available in several forms:
 .. seealso::
 
     Impatient to try the next version of DataLab? You can also install the
-    latest development version of DataLab from the master branch of the
+    latest development version of DataLab from the ``develop`` branch of the
     Git repository. See :ref:`install_development` for more information.
 
 .. _install_conda:
@@ -133,6 +133,13 @@ Or, if you prefer, you can install DataLab without the Qt library (not recommend
 .. code-block:: console
 
     $ pip install datalab-platform
+
+The optional ``opencv`` extra installs `OpenCV <https://opencv.org/>`_, which is
+required only by the OpenCV blob detection feature. To install it along with Qt:
+
+.. code-block:: console
+
+    $ pip install datalab-platform[qt,opencv]
 
 .. note::
 
@@ -226,7 +233,7 @@ install DataLab on an existing Python distribution:
 
 .. code-block:: console
 
-    $ pip install --upgrade DataLab-1.0.1-py2.py3-none-any.whl
+    $ pip install --upgrade datalab_platform-X.Y.Z-py3-none-any.whl
 
 .. _install_source:
 
@@ -239,7 +246,7 @@ Installing DataLab directly from the source package may be done using ``pip``:
 
 .. code-block:: console
 
-    $ pip install --upgrade datalab-1.0.1.tar.gz
+    $ pip install --upgrade datalab_platform-X.Y.Z.tar.gz
 
 Or, if you prefer, you can install it manually by running the following command
 from the root directory of the source package:
@@ -256,7 +263,7 @@ by running the following command from the root directory of the source package
 
     $ pip install build wheel  # Install build and wheel packages (if needed)
     $ python -m build  # Build the wheel package
-    $ pip install --upgrade dist/datalab-1.0.1-py2.py3-none-any.whl  # Install the wheel package
+    $ pip install --upgrade dist/datalab_platform-X.Y.Z-py3-none-any.whl  # Install the wheel package
 
 .. _install_development:
 
@@ -266,14 +273,14 @@ Development version
 :octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
 If you want to try the latest development version of DataLab, you can install
-it directly from the master branch of the Git repository.
+it directly from the ``develop`` branch of the Git repository.
 
 The first time you install DataLab from the Git repository, enter the following
 command:
 
 .. code-block:: console
 
-    $ pip install git+https://github.com/DataLab-Platform/DataLab.git
+    $ pip install git+https://github.com/DataLab-Platform/DataLab.git@develop
 
 Then, if at some point you want to upgrade to the latest version of DataLab,
 just run the same command with options to force the reinstall of the package
@@ -281,7 +288,7 @@ without handling dependencies (because it would reinstall all dependencies):
 
 .. code-block:: console
 
-    $ pip install --force-reinstall --no-deps git+https://github.com/DataLab-Platform/DataLab.git
+    $ pip install --force-reinstall --no-deps git+https://github.com/DataLab-Platform/DataLab.git@develop
 
 .. note::
 
@@ -297,6 +304,9 @@ Dependencies
     libraries as well as Python itself.
 
 .. include:: ../requirements.rst
+
+The optional ``opencv`` extra (``opencv-python-headless``), not listed above, is
+required only by the OpenCV blob detection feature (see :ref:`install_pip`).
 
 .. note::
 

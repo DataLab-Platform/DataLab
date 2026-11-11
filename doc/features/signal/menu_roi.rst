@@ -19,9 +19,9 @@ The Regions Of Interest (ROI) are signal areas that are defined by the user to p
 
 ROI are taken into account almost in all computing features in DataLab:
 
-- The "Operations" menu features are done only on the ROI if one is defined (except if the operation changes the number of points, like interpolation or resampling).
+- The "Operations" menu features are done only on the ROI if one is defined.
 
-- The "Processing" menu actions are performed only on the ROI if one is defined (except if the destination signal data type is different from the source's, like in the Fourier analysis features).
+- The "Processing" menu actions are performed only on the ROI if one is defined (except if the operation changes the number of points, like interpolation or resampling, or if the destination signal data type is different from the source's, like in the Fourier analysis features).
 
 - The "Analysis" menu actions are done only on the ROI if one is defined.
 
@@ -60,7 +60,7 @@ The "ROI" menu allows you to:
 
 - "Export" |roi_export|: export the defined ROIs to a file. This allows you to save the ROIs for later use or to share them with others.
 
-- "Remove all" |roi_delete|: remove all defined ROI for the selected signals.
+- "Remove" |roi_delete|: remove a single ROI (one entry per ROI of the selected signal) or all defined ROIs for the selected signals ("Remove all").
 
 .. figure:: /images/shots/s_roi_dialog.png
 

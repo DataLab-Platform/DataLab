@@ -116,8 +116,17 @@ msgstr "Crée une nouvelle image avec des coordonnées uniformes (c'est-à-dire 
 msgid "Polynomial calibration"
 msgstr "Étalonnage polynomial"
 
-msgid "Create a new image which is a polynomial calibration of each selected image with respect to Z axis."
-msgstr "Crée une image à partir de l'étalonnage polynomial (par rapport à l'axe des Z) de chaque image sélectionnée."
+msgid "Create a new image which is a polynomial calibration (up to degree 3) of each selected image with respect to the X, Y or Z axis (**Calibrate** parameter, Z axis by default):"
+msgstr "Crée une image à partir de l'étalonnage polynomial (jusqu'au degré 3) de chaque image sélectionnée par rapport à l'axe des X, des Y ou des Z (paramètre **Étalonner**, axe des Z par défaut) :"
+
+#, python-brace-format
+msgid ""
+"t' = a_{0} + a_{1} t + a_{2} t^{2} + a_{3} t^{3}\n"
+"\n"
+msgstr ""
+
+msgid "where :math:`t` stands for the X, Y or Z values of the image."
+msgstr "où :math:`t` représente les valeurs X, Y ou Z de l'image."
 
 msgid "Linear calibration was removed from the UI as it is a special case of polynomial calibration with degree 1."
 msgstr "L'étalonnage linéaire a été supprimé de l'interface utilisateur car il s'agit d'un cas particulier d'étalonnage polynomial de degré 1."
@@ -146,7 +155,7 @@ msgstr ""
 msgid "Amplitude"
 msgstr "Amplitude"
 
-msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{\\max}-z_{\\min}}`"
+msgid ":math:`z_{1} = \\dfrac{z_{0}-z_{\\min}}{z_{\\max}-z_{\\min}}`"
 msgstr ""
 
 msgid "Area"
@@ -332,8 +341,8 @@ msgstr "Nombre de colonnes à ajouter (si `strategy` est 'custom')"
 msgid "Position"
 msgstr "Position"
 
-msgid "Position of the added zeros: 'bottom-right', 'centered'"
-msgstr "Position des zéros ajoutés : 'bottom-right', 'centered'"
+msgid "Position of the added zeros: 'Bottom-right' or 'Around' (zeros distributed around the image)"
+msgstr "Position des zéros ajoutés : 'En bas à droite' ou 'Autour' (zéros répartis autour de l'image)"
 
 msgid "Zero padding strategy refers to the method used to add zeros to the image, and it can be one of the following:"
 msgstr "Les stratégies de complément de zéros font référence à la méthode utilisée pour ajouter des zéros à l'image, et peuvent être l'une des suivantes :"
@@ -424,8 +433,8 @@ msgstr ""
 msgid "FFT and inverse FFT are performed using frequency shifting if the option is enabled in DataLab settings (see :ref:`settings`)."
 msgstr "La FFT et la FFT inverse sont effectuées avec décalage de fréquence si l'option est activée dans les paramètres de DataLab (voir :ref:`settings`)."
 
-msgid "Frequency-domain filters"
-msgstr "Filtre fréquentiels"
+msgid "Frequency filters"
+msgstr "Filtres fréquentiels"
 
 msgid "The following frequency-domain filters are available:"
 msgstr "Les filtres fréquentiels suivants sont disponibles :"
@@ -438,6 +447,12 @@ msgstr "Butterworth"
 
 msgid "Butterworth filter, based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_"
 msgstr "Filtre de Butterworth, basé sur `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_"
+
+msgid "Gaussian bandpass"
+msgstr "Passe-bande gaussien"
+
+msgid "Gaussian band-pass filter applied in the frequency domain, centered on the **Center frequency** :math:`f_{0}` with a standard deviation **σ** (both in cycles per pixel): the FFT of the image is multiplied by :math:`\\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{f-f_{0}}{\\sigma}\\right)^{2}\\right)`, where :math:`f` is the radial frequency, and the real part of the inverse FFT is returned."
+msgstr "Filtre passe-bande gaussien appliqué dans le domaine fréquentiel, centré sur la **Fréquence centrale** :math:`f_{0}` avec un écart-type **σ** (tous deux en cycles par pixel) : la FFT de l'image est multipliée par :math:`\\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{f-f_{0}}{\\sigma}\\right)^{2}\\right)`, où :math:`f` est la fréquence radiale, et la partie réelle de la FFT inverse est renvoyée."
 
 msgid "Thresholding"
 msgstr "Seuillage"
@@ -664,8 +679,8 @@ msgstr ""
 msgid "The \"All morphological operations\" option allows to perform all morphological operations on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different morphological operations on the same image."
 msgstr "L'option \"Toutes les opérations morphologiques\" permet d'appliquer toutes les opérations morphologiques à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différentes opérations morphologiques sur la même image."
 
-msgid "Edges"
-msgstr "Contours"
+msgid "Edge detection"
+msgstr "Détection de contours"
 
 msgid "Create a new image which is the result of edge filtering on each selected image."
 msgstr "Crée une image à partir du résultat d'un filtrage de contours sur chaque image sélectionnée."
@@ -760,7 +775,7 @@ msgstr "Filtre de Sobel (vertical)"
 msgid "`skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_"
 msgstr ""
 
-msgid "The \"All edges filters\" option allows to perform all edge filtering algorithms on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different edge filters on the same image."
+msgid "The \"All edge detection filters\" option allows to perform all edge filtering algorithms on the same image. Combined with the \"distribute on a grid\" option, this allows to compare the different edge filters on the same image."
 msgstr "L'option \"Tous les filtres de contours\" permet d'appliquer tous les algorithmes de filtrage de contours à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différents filtres de contours sur la même image."
 
 msgid "Erase area"

@@ -53,8 +53,8 @@ msgstr "Configurer l'environnement de test"
 msgid "To test our processing function, we will use an image generated from a DataLab plugin example (`plugins/examples/datalab_example_imageproc.py`). Before starting, make sure that the plugin is installed in DataLab (see the first steps of the tutorial :ref:`tutorial_blobs` to understand how to do it)."
 msgstr "Pour tester notre fonction de traitement, nous allons utiliser une image générée à partir d'un exemple de plugin DataLab (`plugins/examples/datalab_example_imageproc.py`). Avant de commencer, assurez-vous que le plugin est installé dans DataLab (voir les premières étapes du tutoriel :ref:`tutorial_blobs` pour comprendre comment le faire)."
 
-msgid "We then reorganize the DataLab window layout to have a comfortable environment for developing and testing our function: we reorganize the window layout of DataLab to have the \"Image Panel\" on the left and the \"Macro Panel\" on the right. To do so, you can simply drag and drop the panels to the desired position. If the \"Macro Panel\" is not visible, you can enable it from the \"View > Panels > Macro Panel\"."
-msgstr "Nous réorganisons ensuite la disposition de la fenêtre de DataLab pour avoir un environnement confortable pour développer et tester notre fonction : nous réorganisons la disposition de la fenêtre de DataLab pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\" à droite. Pour ce faire, vous pouvez simplement faire glisser et déposer les panneaux à la position souhaitée. Si le \"Gestionnaire de Macros\" n'est pas visible, vous pouvez l'activer depuis le menu \"Affichage > Panneaux > Gestionnaire de Macros\"."
+msgid "We then reorganize the DataLab window layout to have a comfortable environment for developing and testing our function: we reorganize the window layout of DataLab to have the \"Image Panel\" on the left and the \"Macro Panel\" on the right. To do so, you can simply drag and drop the panels to the desired position. If the \"Macro Panel\" is not visible, you can enable it from the \"View > Macro Panel\" menu."
+msgstr "Nous réorganisons ensuite la disposition de la fenêtre de DataLab pour avoir un environnement confortable pour développer et tester notre fonction : nous réorganisons la disposition de la fenêtre de DataLab pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\" à droite. Pour ce faire, vous pouvez simplement faire glisser et déposer les panneaux à la position souhaitée. Si le \"Gestionnaire de Macros\" n'est pas visible, vous pouvez l'activer depuis le menu \"Affichage > Gestionnaire de Macros\"."
 
 msgid "The window layout of DataLab reorganized to have the \"Image Panel\" on the left and the \"Macro Panel\" on the right."
 msgstr "La disposition de la fenêtre de DataLab réorganisée pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\" à droite."
@@ -137,14 +137,14 @@ msgstr ""
 msgid "During the execution of the macro-command, we can see the progress in the \"Macro Panel\" window: the process standard output is displayed in the \"Console\" below the macro editor. We can see the following messages:"
 msgstr "Pendant l'exécution de la macro-commande, nous pouvons voir la progression dans la fenêtre \"Gestionnaire de Macros\" : la sortie standard du processus est affichée dans la \"Console\" en dessous de l'éditeur de macro. Nous pouvons voir les messages suivants :"
 
-msgid "``---[...]---[# ==> Running 'Untitled 01' macro...]``: the macro-command starts"
-msgstr "``---[...]---[# ==> Running 'Untitled 01' macro...]`` : la macro-commande démarre"
+msgid "``---[...]---[# ==> Running 'macro_01' macro...]``: the macro-command starts"
+msgstr "``---[...]---[# ==> Running 'macro_01' macro...]`` : la macro-commande démarre"
 
 msgid "``Connecting to DataLab XML-RPC server...OK [...]``: the proxy is connected to DataLab"
 msgstr "``Connecting to DataLab XML-RPC server...OK [...]`` : le proxy est connecté à DataLab"
 
-msgid "``---[...]---[# <== 'Untitled 01' macro has finished]``: the macro-command ends"
-msgstr "``---[...]---[# <== 'Untitled 01' macro has finished]`` : la macro-commande se termine"
+msgid "``---[...]---[# <== 'macro_01' macro has finished]``: the macro-command ends"
+msgstr "``---[...]---[# <== 'macro_01' macro has finished]`` : la macro-commande se termine"
 
 msgid "When the macro-command has finished, we can see the new image in the \"Image Panel\". Our filter has been applied to the image, and we can see that the noise has been reduced."
 msgstr "Lorsque la macro-commande est terminée, nous pouvons voir la nouvelle image dans le \"Panneau Image\". Notre filtre a été appliqué à l'image, et nous pouvons voir que le bruit a été réduit."

@@ -46,11 +46,11 @@ Create a new image from various models
       - :math:`z[i]` is uniformly distributed between two configurable bounds
     * - .. image:: ../../../datalab/data/icons/create/2d-gaussian.svg
            :width: 30px
-      - 2D Gaussian
+      - Gaussian
       - :math:`z = A \cdot \exp\left(-\dfrac{\left(\sqrt{\left(x-x_0\right)^2+\left(y-y_0\right)^2}-\mu\right)^2}{2\sigma^2}\right)`
     * - .. image:: ../../../datalab/data/icons/create/2d-ramp.svg
            :width: 30px
-      - 2D Ramp
+      - Ramp
       - :math:`z = A (x - x_0) + B (y - y_0) + C`
     * - .. image:: ../../../datalab/data/icons/create/checkerboard.svg
            :width: 30px
@@ -73,7 +73,7 @@ Create a new image from various models
       - 2D sinc
       - :math:`z = A \cdot \mathrm{sinc}\left(\dfrac{\sqrt{(x-x_0)^2+(y-y_0)^2}}{\sigma}\right) + C`
 
-The 2D Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and
+The Gaussian, ramp, sinusoidal grating, ring pattern, Siemens star and
 2D sinc models are computed over a domain
 :math:`[x_{min}, x_{max}] \times [y_{min}, y_{max}]`. When the
 **Physical coordinates** option is enabled (default), this domain defines the

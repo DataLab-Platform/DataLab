@@ -63,16 +63,16 @@ feature (this requires to install DataLab as a Python package)
 
 DataLab requires **Python 3.10+**.
 
-From [PyPI](https://pypi.org/project/datalab-platform/):
+From [PyPI](https://pypi.org/project/datalab-platform/), with the Qt bindings (`qt` extra):
 
 ```bash
-pip install datalab-platform
+pip install "datalab-platform[qt]"
 ```
 
-From [conda-forge](https://anaconda.org/conda-forge/datalab-platform):
+From [conda-forge](https://anaconda.org/conda-forge/datalab):
 
 ```bash
-conda install -c conda-forge datalab-platform
+conda install conda-forge::datalab
 ```
 
 On [NixOS](https://nixos.org/), DataLab is available from the [NGI Forge](https://ngi.nixos.org/app/datalab), packaged by the [Nix@NGI team](https://nixos.org/community/teams/ngi/) (an NLnet partner) as part of DataLab's NGI0 Commons Fund grant.

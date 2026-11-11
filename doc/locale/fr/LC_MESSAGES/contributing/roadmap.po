@@ -46,8 +46,8 @@ msgstr "[CEA](https://www.cea.fr/) - Commissariat à l'énergie atomique et aux 
 msgid "<a href=\"https://codra.net/en/offer/software-engineering/datalab/\" target=\"_blank\"><img src=\"../_images/codra.svg\" alt=\"CODRA\" width=\"50\"/></a>"
 msgstr ""
 
-msgid "[CODRA](https://codra.net/), a software engineering company and software publisher, has supported DataLab’s open-source journey since its inception:<br>• Open-source project management and communication (social media, website, etc.)<br>• Conferences and events: [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), [Open Source Experience 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), etc.<br>• Documentation: tutorials, videos, and more"
-msgstr "[CODRA](https://codra.net/), société d’ingénierie en informatique et éditeur de logiciels, soutient le projet open source DataLab depuis sa création :<br>• Gestion de projet open source et communication (réseaux sociaux, site web, etc.)<br>• Conférences et événements : [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), [Open Source Experience 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), etc.<br>• Documentation : tutoriels, vidéos, et bien plus"
+msgid "[CODRA](https://codra.net/), a software engineering company and software publisher, has supported DataLab’s open-source journey since its inception:<br>• Open-source project management and communication (social media, website, etc.)<br>• Conferences and events: [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), [Open Source Experience 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), etc.<br>• Documentation: tutorials, videos, and more"
+msgstr "[CODRA](https://codra.net/), société d’ingénierie en informatique et éditeur de logiciels, soutient le projet open source DataLab depuis sa création :<br>• Gestion de projet open source et communication (réseaux sociaux, site web, etc.)<br>• Conférences et événements : [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), [Open Source Experience 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), etc.<br>• Documentation : tutoriels, vidéos, et bien plus"
 
 msgid "<a href=\"https://nlnet.nl/\" target=\"_blank\"><img src=\"../_images/nlnet.svg\" alt=\"NLnet\" width=\"50\"/></a>"
 msgstr ""
@@ -174,8 +174,12 @@ msgstr "Intégration avec pandas ou SQLAlchemy pour un échange de données flex
 msgid "This evolution would help bridge the gap between **data acquisition, analysis, and long-term storage**, enabling more robust scientific data workflows."
 msgstr "Cette évolution aiderait à combler le fossé entre **l'acquisition de données, l'analyse et le stockage à long terme**, permettant des flux de travail scientifiques plus robustes."
 
-msgid "📓 Jupyter Plugin for Interactive Data Analysis"
-msgstr "📓 Plugin Jupyter pour l'analyse de données interactive"
+msgid "📓 Jupyter Plugin for Interactive Data Analysis 🚧 Partially Delivered"
+msgstr "📓 Plugin Jupyter pour l'analyse de données interactive 🚧 Partiellement livré"
+
+#, python-brace-format
+msgid "ℹ️ The first feature below has been delivered by **DataLab-Kernel** (see its [documentation](https://datalab-kernel.readthedocs.io/) and the {ref}`ecosystem overview <ecosystem>`): a Jupyter kernel giving notebook access to DataLab workspaces, with optional live synchronization with a running DataLab instance. The original notes are kept below for context."
+msgstr "ℹ️ La première fonctionnalité ci-dessous a été livrée par **DataLab-Kernel** (voir sa [documentation](https://datalab-kernel.readthedocs.io/) et la {ref}`présentation de l'écosystème <ecosystem>`) : un noyau Jupyter donnant aux notebooks l'accès aux espaces de travail DataLab, avec une synchronisation en direct optionnelle avec une instance DataLab en cours d'exécution. Les notes originales sont conservées ci-dessous à titre de contexte."
 
 #, python-brace-format
 msgid "Although DataLab can already be remotely controlled from a Jupyter notebook — thanks to its existing remote control capabilities (see {ref}`ref-to-remote-control`) — the user experience could be greatly enhanced by developing a **dedicated Jupyter plugin**."
@@ -268,11 +272,14 @@ msgstr "DataLab s'appuie actuellement sur XML-RPC pour le contrôle à distance,
 msgid "This improvement is tracked in [Issue #18](https://github.com/DataLab-Platform/DataLab/issues/18)."
 msgstr "Cette amélioration est tracée par l'[Issue #18](https://github.com/DataLab-Platform/DataLab/issues/18)."
 
-msgid "🚫 2025: Drop Qt5 Support and Migrate to Qt6"
-msgstr "🚫 2025 : Abandonner la prise en charge de Qt5 et migrer vers Qt6"
+msgid "🚫 Drop Qt5 Support and Migrate to Qt6 🚧 Started"
+msgstr "🚫 Abandonner la prise en charge de Qt5 et migrer vers Qt6 🚧 Amorcé"
 
-msgid "With the **end-of-life of Qt5 scheduled for mid-2025**, DataLab will fully migrate to **Qt6**. This transition is expected to be **straightforward**, thanks to:"
-msgstr "Avec la **fin de vie de Qt5 prévue pour mi-2025**, DataLab migrera entièrement vers **Qt6**. Cette transition devrait être **simple**, grâce à :"
+msgid "ℹ️ DataLab supports PyQt6 since version 1.1 (tested by the continuous integration), but PyQt5 remains the reference Qt binding: it is installed by the `qt` extra and used by the stand-alone Windows installer."
+msgstr "ℹ️ DataLab prend en charge PyQt6 depuis la version 1.1 (testé par l'intégration continue), mais PyQt5 reste le binding Qt de référence : il est installé par la dépendance optionnelle `qt` et utilisé par l'installateur Windows autonome."
+
+msgid "With the **end-of-life of Qt5 in mid-2025**, DataLab will fully migrate to **Qt6**. This transition is expected to be **straightforward**, thanks to:"
+msgstr "Avec la **fin de vie de Qt5 à la mi-2025**, DataLab migrera entièrement vers **Qt6**. Cette transition devrait être **simple**, grâce à :"
 
 msgid "The use of the `qtpy` abstraction layer;"
 msgstr "L'utilisation de la couche d'abstraction `qtpy` ;"
@@ -314,8 +321,8 @@ msgstr "Cette tâche est tracée par l'[Issue #26](https://github.com/DataLab-Pl
 msgid "🏆 Past Milestones"
 msgstr "🏆 Jalons passés"
 
-msgid "From version 0.9 to 1.0, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images."
-msgstr "De la version 0.9 à 1.0, DataLab a connu un développement et des améliorations significatifs. Le projet a évolué d'un simple outil d'analyse de données à une plateforme puissante pour le traitement et la visualisation des signaux et des images."
+msgid "From version 0.9 to 1.4, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images."
+msgstr "De la version 0.9 à 1.4, DataLab a connu un développement et des améliorations significatifs. Le projet a évolué d'un simple outil d'analyse de données à une plateforme puissante pour le traitement et la visualisation des signaux et des images."
 
 msgid "Those enhancements have been made possible thanks to the support of the following organizations (see [Funding](#funding) for more details):"
 msgstr "Ces améliorations ont été rendues possibles grâce au soutien des organisations suivantes (voir [Financement](#funding) pour plus de détails) :"
@@ -413,7 +420,7 @@ msgstr ""
 msgid "• Add a tour and demo feature<br>• Add tutorials to the documentation<br>• Add a Text file import assistant"
 msgstr "• Ajouter une visite et une fonctionnalité de démonstration<br>• Ajouter des tutoriels à la documentation<br>• Ajouter un assistant d'importation de fichiers texte"
 
-msgid "[0.11](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.11.0)<br>2024/01"
+msgid "[0.11](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.11)<br>2024/01"
 msgstr ""
 
 msgid "• Add features for reordering signals and images (e.g. drag-and-drop)<br>• Add 1D convolution, interpolation, resampling and detrending features"

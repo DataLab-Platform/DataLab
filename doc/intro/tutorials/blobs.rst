@@ -16,19 +16,10 @@ and also covers other features such as the plugin system:
 -   Detect blobs on an image
 -   Save the workspace to a file
 
-First, we open DataLab, and open the settings dialog (using "File > Settings...",
-or the |libre-gui-settings| icon in the toolbar).
-
-.. |libre-gui-settings| image:: ../../../datalab/data/icons/libre-gui-settings.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. figure:: ../../images/tutorials/blobs/01.png
-
-    In the "General" tab, we can see the "Plugins path" field. This is the path where
-    DataLab will look for plugins. We can add a new plugin by copying/pasting the
-    plugin file in this directory.
+First, we open DataLab. Plugins are loaded from plugin directories, which are listed
+in the "Advanced" tab of the plugin configuration dialog ("Plugins > Configure
+plugins..."). We can add a new plugin by copying/pasting the plugin file in one of
+these directories.
 
 .. seealso::
 
@@ -38,12 +29,14 @@ Let's add the `datalab_example_imageproc.py` plugin to DataLab (this is an examp
 plugin that is shipped with DataLab source package, or may be downloaded from
 `here <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
-If we close and reopen DataLab, we can see that the plugin is now available in the
-"Plugins" menu: there is a new "Extract blobs (example)" entry.
+If we reload the plugins with "Plugins > Reload plugins" (or restart DataLab), we can
+see that the plugin is now available in the "Plugins" menu: there is a new "Extract
+blobs (example)" entry.
 
 .. figure:: ../../images/tutorials/blobs/02.png
 
-    The "About DataLab" dialog shows the list of available plugins.
+    The "Plugins and I/O features" tab of the "Installation and configuration" dialog
+    ("?" menu) shows the list of available plugins.
 
 .. figure:: ../../images/tutorials/blobs/03.png
 
@@ -100,19 +93,19 @@ To reduce the noise there are several functions available in DataLab. Due to the
 considerations we just made, we can consider that a binning would reduce the noise
 without losing the information we look for. Let's apply a binning to the image by a
 factor of 2 on both axes.
-This will reduce the image size by a factor of 4, and the noise standard deviation
-by a factor of 2. Choosing to change the pixel size accordingly
+This will reduce the image size by a factor of 4, and improve the signal-to-noise
+ratio by a factor of 2. Choosing to change the pixel size accordingly
 will keep the blob size constant in the previous unit (in this case, pixels,
 but in a real application we can calibrate them to respect a real physical size).
 
 .. figure:: ../../images/tutorials/blobs/05.png
 
-    Click on "Operations > Pixel binning".
+    Click on "Processing > Pixel binning...".
 
 .. figure:: ../../images/tutorials/blobs/06.png
 
-    The "Binning" dialog opens, with several options. Set the binning factor to 2 for
-    both axes, select the "change pixel size" case and click on "OK".
+    The "Pixel binning" dialog opens, with several options. Set the cluster size to 2
+    for both axes, check the "Change pixel size" option and click on "OK".
 
 .. figure:: ../../images/tutorials/blobs/07.png
 
@@ -128,7 +121,7 @@ resolution. Let's see how to do that.
 
 .. figure:: ../../images/tutorials/blobs/08.png
 
-    Click on "Processing > Noise reduction > Moving median" entry,
+    Click on "Processing > Noise reduction > Moving median..." entry,
     and set the window size to ``5``.
 
 .. figure:: ../../images/tutorials/blobs/09.png
@@ -140,6 +133,13 @@ We can thus move to the following step: detect the blobs on the image.
 To do that, we can use the "Blob detection" function available in the
 "Analysis" menu. Different :ref:`algorithms <ima-blob-detection>` are available,
 here we will use the OpenCV one.
+
+.. note::
+
+    OpenCV is an optional dependency of DataLab: it is included in the stand-alone
+    version of DataLab but, when DataLab is installed with ``pip``, the "Blob detection
+    (OpenCV)" feature requires the ``opencv`` extra
+    (``pip install datalab-platform[opencv]``).
 
 .. figure:: ../../images/tutorials/blobs/10.png
 
@@ -157,11 +157,8 @@ here we will use the OpenCV one.
 
 .. note::
 
-    If you want to show the analysis results again, you can select the "Show results"
-    |show_results| entry in the "Analysis" menu, or the "Results" |show_results|
-    button, in the property panel below the image list:
-
-    .. image:: ../../images/tutorials/fabry_perot/12.png
+    If you want to show the analysis results again, you can select the "Show results..."
+    |show_results| entry in the "Analysis" menu.
 
 .. |show_results| image:: ../../images/icons/show_results.svg
     :width: 24px
@@ -184,7 +181,7 @@ button in the toolbar.
     :height: 24px
     :class: dark-light no-scaled-link
 
-If you want to load the workspace again, you can use the "File > Open HDF5 file..."
+If you want to load the workspace again, you can use the "File > Open HDF5 files..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.

@@ -49,8 +49,8 @@ geometrical shapes to the images. They are useful to highlight regions of
 interest, to add comments, to mark points, and so on.
 
 .. note::
-    The annotations are saved in the metadata of the image, so they are
-    persistent and will be displayed every time you visualize the image.
+    The annotations are stored with the image (separately from its metadata), so
+    they are persistent and will be displayed every time you visualize the image.
 
 .. figure:: /images/annotations/image_annotations1.png
 
@@ -65,16 +65,17 @@ The typical workflow to edit annotations is as follows:
    the text, the color, the position, etc.) using the "Parameters" option in the
    context menu of the annotations.
 4. When you are done, click on the "OK" button to save the annotations. This will
-   close the window and the annotations will be saved in the metadata of the image
+   close the window and the annotations will be saved with the image
    and will be displayed in the main window.
 
 .. figure:: /images/annotations/image_annotations2.png
 
-    Annotations are now part of the image metadata.
+    Annotations are now displayed in the main window.
 
 .. note::
     Annotations may be copied from an image to another by using the
-    "copy/paste metadata" features.
+    "Copy annotations" and "Paste annotations" actions of the
+    "Edit ▸ Annotations" submenu (see :ref:`ima-menu-edit`).
 
 Auto-refresh
 ^^^^^^^^^^^^
@@ -93,8 +94,8 @@ large. Therefore, you may want to disable the auto-refresh feature when you are
 working with large data sets, and enable it again when you are done. This will
 avoid unnecessary refreshes.
 
-Show only first selected image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Show first object only
+^^^^^^^^^^^^^^^^^^^^^^
 
 Toggle between showing all selected images or only the first one.
 
@@ -124,3 +125,14 @@ This option allows you to show or hide the titles of the graphical objects
 (e.g., the titles of the analysis results or annotations). Hiding the titles
 can be useful when you want to visualize the data without any distractions,
 or if there are too many titles and they are overlapping.
+
+Panels and toolbars
+^^^^^^^^^^^^^^^^^^^
+
+The last entries of the "View" menu show or hide the panels of the main window:
+the "Welcome" page (see :ref:`welcome_page`), the "Macro Panel" (see
+:ref:`about_macros`), the "History Panel" (see :ref:`historypanel`), the
+"AI Assistant" (see :ref:`ai_assistant`), the "Applications" panel (see
+:ref:`applications_panel`), and the "Signal View" and "Image View" panels. They
+also show or hide the toolbars of the main window ("Main Toolbar",
+"Signal Panel Toolbar" and "Image Panel Toolbar").

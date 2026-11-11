@@ -21,7 +21,7 @@ the object properties) and a set of modules to handle the GUI features:
 - :mod:`datalab.gui.objectview`: Widgets to display object (signal/image) trees
 - :mod:`datalab.gui.plothandler`: `PlotPy` items for representing signals and images
 - :mod:`datalab.gui.processor`: Processor (computation)
-- :mod:`datalab.gui.panel.roieditor`: ROI editor
+- :mod:`datalab.gui.roieditor`: ROI editor
 
 The Macro Panel is used to display and run macros. It relies on the
 :mod:`datalab.gui.macroeditor` module to handle the macro edition and execution.

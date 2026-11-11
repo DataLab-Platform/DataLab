@@ -42,8 +42,8 @@ msgstr "Machine hors ligne"
 msgid "GNU/Linux, Windows, or macOS"
 msgstr "GNU/Linux, Windows ou macOS"
 
-msgid "Python 3.10 to 3.14 installed with the **same major version** as the online machine"
-msgstr "Python 3.10 à 3.14 installé avec la **même version majeure** que la machine en ligne"
+msgid "Python 3.10 to 3.14 installed with the **same minor version** (3.x) as the online machine"
+msgstr "Python 3.10 à 3.14 installé avec la **même version mineure** (3.x) que la machine en ligne"
 
 msgid "No assumptions regarding installed packages"
 msgstr "Aucune hypothèse concernant les paquets installés"
@@ -51,14 +51,14 @@ msgstr "Aucune hypothèse concernant les paquets installés"
 msgid "**Version compatibility is critical:**"
 msgstr "**La compatibilité des versions est critique :**"
 
-msgid "✅ **Allowed:** Python 3.10.2 ↔ Python 3.10.11 (same major version)"
-msgstr "✅ **Autorisé :** Python 3.10.2 ↔ Python 3.10.11 (même version majeure)"
+msgid "✅ **Allowed:** Python 3.10.2 ↔ Python 3.10.11 (same minor version)"
+msgstr "✅ **Autorisé :** Python 3.10.2 ↔ Python 3.10.11 (même version mineure)"
 
-msgid "❌ **Not allowed:** Python 3.10.x ↔ Python 3.11.x (different major versions)"
-msgstr "❌ **Non autorisé :** Python 3.10.x ↔ Python 3.11.x (versions majeures différentes)"
+msgid "❌ **Not allowed:** Python 3.10.x ↔ Python 3.11.x (different minor versions)"
+msgstr "❌ **Non autorisé :** Python 3.10.x ↔ Python 3.11.x (versions mineures différentes)"
 
-msgid "SciPy, NumPy, and scikit-image are highly dependent on the Python major version. Both machines must use the same major Python version for reliable offline installation."
-msgstr "SciPy, NumPy et scikit-image dépendent fortement de la version majeure de Python. Les deux machines doivent utiliser la même version majeure de Python pour une installation hors ligne fiable."
+msgid "SciPy, NumPy, and scikit-image are highly dependent on the Python minor version. Both machines must use the same minor Python version for reliable offline installation."
+msgstr "SciPy, NumPy et scikit-image dépendent fortement de la version mineure de Python. Les deux machines doivent utiliser la même version mineure de Python pour une installation hors ligne fiable."
 
 msgid "To check your Python version, run:"
 msgstr "Pour vérifier votre version de Python, exécutez :"
@@ -69,8 +69,8 @@ msgstr "Machine en ligne"
 msgid "Windows, Linux, or macOS"
 msgstr "Windows, Linux ou macOS"
 
-msgid "Python with the **same major version** as the offline machine"
-msgstr "Python avec la **même version majeure** que la machine hors ligne"
+msgid "Python with the **same minor version** as the offline machine"
+msgstr "Python avec la **même version mineure** que la machine hors ligne"
 
 msgid "``pip`` installed"
 msgstr "``pip`` installé"
@@ -105,6 +105,9 @@ msgstr "``sigima``"
 msgid "``sigimax``"
 msgstr "``sigimax``"
 
+msgid "``datalab-capsule``"
+msgstr ""
+
 msgid "``plotpy``"
 msgstr "``plotpy``"
 
@@ -114,8 +117,14 @@ msgstr "``guidata``"
 msgid "``pythonqwt``"
 msgstr "``pythonqwt``"
 
+msgid "``pyqt5`` (Qt bindings, installed by the ``qt`` extra)"
+msgstr "``pyqt5`` (bindings Qt, installé par la dépendance optionnelle ``qt``)"
+
 msgid "``numpy``, ``scipy``, ``scikit-image``, and other dependencies"
 msgstr "``numpy``, ``scipy``, ``scikit-image`` et d'autres dépendances"
+
+msgid "The OpenCV blob detection feature requires the optional ``opencv`` extra: to use it, replace ``datalab-platform[qt]`` by ``datalab-platform[qt,opencv]`` in the download and installation commands."
+msgstr "La fonctionnalité de détection de taches OpenCV nécessite la dépendance optionnelle ``opencv`` : pour l'utiliser, remplacez ``datalab-platform[qt]`` par ``datalab-platform[qt,opencv]`` dans les commandes de téléchargement et d'installation."
 
 msgid "Expected folder structure"
 msgstr "Structure de dossier attendue"
@@ -192,8 +201,8 @@ msgstr "`WinPython <https://winpython.github.io/>`_ est particulièrement adapt�
 msgid "Prepare on online machine"
 msgstr "Préparation sur la machine en ligne"
 
-msgid "Download WinPython with the **same major Python version** as your target system"
-msgstr "Téléchargez WinPython avec la **même version majeure de Python** que votre système cible"
+msgid "Download WinPython with the **same minor Python version** as your target system"
+msgstr "Téléchargez WinPython avec la **même version mineure de Python** que votre système cible"
 
 msgid "Install WinPython"
 msgstr "Installez WinPython"

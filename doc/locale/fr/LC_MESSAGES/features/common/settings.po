@@ -51,14 +51,14 @@ msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil,
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"
 
-msgid "When enabled, each computation runs in a separate process, preventing the application from freezing during long computations. This is the recommended setting for better responsiveness."
-msgstr "Si le réglage est activé, chaque calcul s'exécute dans un processus séparé, empêchant l'application de geler pendant les longs calculs. Il s'agit du paramètre recommandé pour une meilleure réactivité."
+msgid "When enabled, each computation runs in a separate process, preventing the application from freezing during long computations. This is the recommended setting for better responsiveness. Changing this option requires restarting DataLab."
+msgstr "Si le réglage est activé, chaque calcul s'exécute dans un processus séparé, empêchant l'application de geler pendant les longs calculs. Il s'agit du paramètre recommandé pour une meilleure réactivité. La modification de cette option nécessite de redémarrer DataLab."
 
 msgid "**RPC server**"
 msgstr "**Serveur RPC**"
 
-msgid "Enable the RPC (Remote Procedure Call) server to communicate with external applications, such as your own scripts running in Spyder, Jupyter, or other software. This allows programmatic control of DataLab."
-msgstr "Activer le serveur RPC (Remote Procedure Call) pour communiquer avec des applications externes, telles que vos propres scripts s'exécutant dans Spyder, Jupyter ou d'autres logiciels. Cela permet un contrôle programmatique de DataLab."
+msgid "Enable the RPC (Remote Procedure Call) server to communicate with external applications, such as your own scripts running in Spyder, Jupyter, or other software. This allows programmatic control of DataLab. Changing this option requires restarting DataLab."
+msgstr "Activer le serveur RPC (Remote Procedure Call) pour communiquer avec des applications externes, telles que vos propres scripts s'exécutant dans Spyder, Jupyter ou d'autres logiciels. Cela permet un contrôle programmatique de DataLab. La modification de cette option nécessite de redémarrer DataLab."
 
 msgid "**Web API localhost bypass**"
 msgstr "**Contournement localhost de l'API Web**"
@@ -72,8 +72,8 @@ msgstr "Lorsque cette option est activée, toute application s'exécutant sur vo
 msgid "**Memory threshold**"
 msgstr "**Seuil de mémoire**"
 
-msgid "Set a threshold (in MB) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
-msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."
+msgid "Set a threshold (in MB, default: 500) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
+msgstr "Définir un seuil (en Mo, par défaut : 500) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."
 
 msgid "Plugin-related settings (global enabling of third-party plugins, per-plugin enabling and additional plugin directories) are not part of this dialog: they are grouped in the plugin configuration dialog, available from the ``Plugins > Configure plugins...`` menu action (see :ref:`about_plugins`)."
 msgstr "Paramètres liés aux plugins (activation globale des plugins tiers, activation par plugin et répertoires de plugins supplémentaires) ne font pas partie de cette boîte de dialogue : ils sont regroupés dans la boîte de dialogue de configuration des plugins, accessible depuis l'action de menu ``Plugins > Configurer les plugins...`` (voir :ref:`about_plugins`)."
@@ -163,14 +163,14 @@ msgstr "**Titre de la source** : utiliser les titres actuels des objets sources,
 msgid "This setting changes only the displayed reference, in the object trees, plot legends, plot titles and labels added with *Add object title to plot*. The title edited in the Properties panel keeps its stored references. Result titles store 8-character references (``g``-prefixed for groups), while each object's identity remains its full UUID. Signal, image and group items in the trees show their own ``#UUID8`` (or ``#gUUID8``) reference below their title."
 msgstr "Ce réglage modifie uniquement la référence affichée, dans les arborescences d'objets, les légendes et titres des graphiques et les étiquettes ajoutées avec *Ajouter le titre de l'objet au graphique*. Le titre modifié dans le panneau Propriétés conserve ses références enregistrées. Les titres de résultats stockent des références de 8 caractères (préfixées par ``g`` pour les groupes), tandis que l'identité de chaque objet reste son UUID complet. Les signaux, images et groupes des arborescences affichent leur propre référence ``#UUID8`` (ou ``#gUUID8``) sous leur titre."
 
-msgid "**Use signal bounds for new signals**"
-msgstr "**Utiliser les bornes du signal pour les nouveaux signaux**"
+msgid "**Use current signal bounds**"
+msgstr "**Utiliser les bornes du signal courant**"
 
 msgid "When enabled, the xmin and xmax values for new signals are initialized from the current signal's bounds. When disabled, default values are used."
 msgstr "Si le réglage est activé, les valeurs xmin et xmax pour les nouveaux signaux sont initialisées à partir des bornes du signal actuel. Lorsque désactivé, les valeurs par défaut sont utilisées."
 
-msgid "**Use image dimensions for new images**"
-msgstr "**Utiliser les dimensions d'image pour les nouvelles images**"
+msgid "**Use current image dimensions**"
+msgstr "**Utiliser les dimensions de l'image courante**"
 
 msgid "When enabled, the width and height values for new images are initialized from the current image's dimensions. When disabled, default values are used."
 msgstr "Si le réglage est activé, les valeurs de largeur et de hauteur pour les nouvelles images sont initialisées à partir des dimensions de l'image actuelle. Lorsque désactivé, les valeurs par défaut sont utilisées."
@@ -181,29 +181,35 @@ msgstr "**Décalage FFT**"
 msgid "Enable FFT shift to center the zero-frequency component in the frequency spectrum for easier visualization and analysis."
 msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle dans le spectre de fréquences pour une visualisation et une analyse plus faciles."
 
+msgid "**Auto-normalize convolution/deconvolution kernel**"
+msgstr "**Normalisation automatique du noyau de convolution/déconvolution**"
+
+msgid "When enabled, convolution and deconvolution kernels are automatically normalized, for signals and images, to preserve signal energy and image intensity. This option is disabled by default."
+msgstr "Si le réglage est activé, les noyaux de convolution et de déconvolution sont automatiquement normalisés, pour les signaux et les images, afin de préserver l'énergie du signal et l'intensité de l'image. Cette option est désactivée par défaut."
+
 msgid "**Extract multiple ROIs in a single object**"
 msgstr "**Extraire plusieurs ROI dans un seul objet**"
 
 msgid "When enabled, multiple regions of interest (ROIs) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
 msgstr "Lorsque cette option est activée, plusieurs régions d'intérêt (ROI) sont extraites dans un seul objet. Lorsqu'elle est désactivée, chaque ROI est extraite dans un objet distinct."
 
-msgid "**Ignore warnings**"
-msgstr "**Ignorer les avertissements**"
+msgid "**Ignore warnings during computations**"
+msgstr "**Ignorer les avertissements lors des calculs**"
 
 msgid "Suppress warning messages during computations."
 msgstr "Supprimer les messages d'avertissement pendant les calculs."
 
-msgid "**X-array compatibility behavior**"
-msgstr "**Comportement de compatibilité des tableaux des X**"
+msgid "**X-axis**"
+msgstr "**Axe des X**"
 
 msgid "Choose the behavior when X arrays are incompatible in multi-signal computations:"
 msgstr "Choisir le comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :"
 
-msgid "**Ask**: display a confirmation dialog (default)"
-msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par défaut)"
+msgid "**Ask before interpolation**: display a confirmation dialog (default)"
+msgstr "**Demander avant d'interpoler** : afficher une boîte de dialogue de confirmation (par défaut)"
 
-msgid "**Interpolate**: automatically interpolate signals"
-msgstr "**Interpoler** : interpoler automatiquement les signaux"
+msgid "**Interpolate systematically**: automatically interpolate signals"
+msgstr "**Interpoler systématiquement** : interpoler automatiquement les signaux"
 
 msgid "History sessions"
 msgstr "Sessions d'historique"
@@ -271,8 +277,8 @@ msgstr "Si le réglage est activé, les résultats des analyses précédentes so
 msgid "**Show results dialog automatically after processing**"
 msgstr "**Afficher automatiquement la boîte de dialogue des résultats après le traitement**"
 
-msgid "When enabled, the results dialog is shown automatically after each processing operation producing results. When disabled, the results dialog is not shown automatically but results can still be viewed using the dedicated button or menu option."
-msgstr "Si le réglage est activé, la boîte de dialogue des résultats est affichée automatiquement après chaque opération de traitement produisant des résultats. Lorsque désactivé, la boîte de dialogue des résultats n'est pas affichée automatiquement, mais les résultats peuvent toujours être consultés à l'aide du bouton ou de l'option de menu dédiée."
+msgid "When enabled, the results dialog is shown automatically after each processing operation producing results. When disabled, the results dialog is not shown automatically but results can still be viewed using the \"Show results...\" entry of the \"Analysis\" menu."
+msgstr "Si le réglage est activé, la boîte de dialogue des résultats est affichée automatiquement après chaque opération de traitement produisant des résultats. Lorsque désactivé, la boîte de dialogue des résultats n'est pas affichée automatiquement, mais les résultats peuvent toujours être consultés à l'aide de l'entrée \"Afficher les résultats...\" du menu \"Analyse\"."
 
 msgid "Visualization"
 msgstr "Visualisation"
@@ -323,8 +329,8 @@ msgstr "**Épaisseur par défaut**"
 msgid "Default line width for curves representing signals. This setting affects all signal visualizations unless overridden individually. Note: for signals exceeding the line width performance threshold (see below), the line width is automatically clamped to 1.0 for optimal rendering performance. Curves of width 1.0 or less are drawn one screen pixel wide, also on high-DPI screens (e.g. with a 150% display scaling), which keeps their rendering fast."
 msgstr "Épaisseur de trait par défaut pour les courbes représentant les signaux. Ce paramètre affecte toutes les visualisations de signaux, sauf si elles sont remplacées individuellement. Remarque : pour les signaux dépassant le seuil de performance de l'épaisseur de trait (voir ci-dessous), l'épaisseur de trait est automatiquement plafonnée à 1,0 pour des performances de rendu optimales. Les courbes d'épaisseur 1,0 ou moins sont tracées avec une largeur d'un pixel de l'écran, y compris sur les écrans haute résolution (par exemple avec une mise à l'échelle de l'affichage de 150%), ce qui préserve la rapidité de leur tracé."
 
-msgid "**Line width performance threshold**"
-msgstr "**Seuil de performance de l'épaisseur de trait**"
+msgid "**Performance threshold**"
+msgstr "**Seuil de performance**"
 
 msgid "For signals with more than this number of points (default: 1,000), line width is automatically limited to 1.0 for performance reasons. This prevents the ~10x rendering slowdown caused by Qt's raster engine when drawing thick lines (width > 1.0) on large datasets. For smaller signals, the configured default line width applies normally. This optimization is transparent and requires no user intervention."
 msgstr "Pour les signaux comportant plus de ce nombre de points (par défaut : 1 000), l'épaisseur de trait est automatiquement limitée à 1,0 pour des raisons de performance. Cela évite le ralentissement du rendu d'environ 10x causé par le moteur raster de Qt lors du dessin de lignes épaisses (largeur > 1,0) sur de grands ensembles de données. Pour les signaux plus petits, l'épaisseur de trait par défaut configurée s'applique normalement. Cette optimisation est transparente et ne nécessite aucune intervention de l'utilisateur."
@@ -345,8 +351,8 @@ msgid "**Autoscale margin**"
 msgstr "**Marge d'échelle automatique**"
 
 #, python-format
-msgid "Percentage of margin to add around data when auto-scaling signal plots. A value of 0.2% adds a small margin for better visualization. Set to 0% for no margin (exact data bounds)."
-msgstr "Pourcentage de marge à ajouter autour des données lors de la mise à l'échelle automatique des tracés de signaux. Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation. Mettre à 0 % pour aucune marge (bornes de données exactes)."
+msgid "Percentage of margin to add around data when auto-scaling signal plots (default: 2%). Set to 0% for no margin (exact data bounds)."
+msgstr "Pourcentage de marge à ajouter autour des données lors de la mise à l'échelle automatique des tracés de signaux (par défaut : 2 %). Mettre à 0 % pour aucune marge (bornes de données exactes)."
 
 msgid "**DateTime format (s/min/h)**"
 msgstr "**Format DateTime (s/min/h)**"
@@ -419,8 +425,8 @@ msgid "Percentage of the highest and lowest values to eliminate from the image h
 msgstr "Pourcentage des valeurs les plus élevées et les plus basses à éliminer de l'histogramme de l'image. Les valeurs recommandées sont inférieures à 1 %."
 
 #, python-format
-msgid "Percentage of margin to add around data when auto-scaling image plots. A value of 0.2% adds a small margin for better visualization. Set to 0% for no margin (exact data bounds)."
-msgstr "Pourcentage de marge à ajouter autour des données lors de la mise à l'échelle automatique des tracés d'images. Une valeur de 0,2 % ajoute une petite marge pour une meilleure visualisation. Mettre à 0 % pour aucune marge (bornes de données exactes)."
+msgid "Percentage of margin to add around data when auto-scaling image plots (default: 1%). Set to 0% for no margin (exact data bounds)."
+msgstr "Pourcentage de marge à ajouter autour des données lors de la mise à l'échelle automatique des tracés d'images (par défaut : 1 %). Mettre à 0 % pour aucune marge (bornes de données exactes)."
 
 msgid "**Default image visualization settings**"
 msgstr "**Paramètres de visualisation d'image par défaut**"
@@ -611,8 +617,8 @@ msgstr "Onglet des préférences de console"
 msgid "**Console enabled**"
 msgstr "**Console activée**"
 
-msgid "Enable the internal Python console for debugging and advanced scripting."
-msgstr "Activer la console Python interne pour le débogage et les scripts avancés."
+msgid "Enable the internal Python console for debugging and advanced scripting. Changing this option requires restarting DataLab."
+msgstr "Activer la console Python interne pour le débogage et les scripts avancés. La modification de cette option nécessite de redémarrer DataLab."
 
 msgid "**Show console on error**"
 msgstr "**Afficher la console en cas d'erreur**"
@@ -623,12 +629,13 @@ msgstr "Si le réglage est activé, la console est automatiquement affichée lor
 msgid "**External editor path**"
 msgstr "**Chemin de l'éditeur externe**"
 
-msgid "Path to an external text editor to use for editing Python code from the console."
-msgstr "Chemin vers un éditeur de texte externe à utiliser pour éditer du code Python depuis la console."
+msgid "Path (or command) of the external editor used to open a source file at the line of an error, from a traceback shown in the console or in a warning or error message box (default: ``code``, i.e. Visual Studio Code)."
+msgstr "Chemin (ou commande) de l'éditeur externe utilisé pour ouvrir un fichier source à la ligne d'une erreur, depuis une trace d'erreur affichée dans la console ou dans une boîte de message d'avertissement ou d'erreur (par défaut : ``code``, c'est-à-dire Visual Studio Code)."
 
 msgid "**External editor arguments**"
 msgstr "**Arguments de l'éditeur externe**"
 
-msgid "Command-line arguments to pass to the external editor."
-msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
+#, python-brace-format
+msgid "Command-line arguments to pass to the external editor: ``{path}`` and ``{line_number}`` are replaced by the path of the file and the line number of the error (default: ``-g {path}:{line_number}``)."
+msgstr "Arguments de ligne de commande à transmettre à l'éditeur externe : ``{path}`` et ``{line_number}`` sont remplacés par le chemin du fichier et le numéro de ligne de l'erreur (par défaut : ``-g {path}:{line_number}``)."
 

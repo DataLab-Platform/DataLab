@@ -10,7 +10,8 @@ We follow the `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ coding style.
 
 In particular, we are especially strict about the following guidelines:
 
-- Limit all lines to a maximum of 79 characters.
+- Limit all lines to a maximum of 88 characters (the line length configured for
+  ``ruff`` in ``pyproject.toml``).
 - Respect the naming conventions (classes, functions, variables, etc.).
 - Use specific exceptions instead of the generic :class:`Exception`.
 
@@ -24,7 +25,7 @@ ruff
 
 If you are using `Visual Studio Code <https://code.visualstudio.com/>`_,
 the project settings will automatically format your code with `ruff` on save
-(you may also run the task "Run Ruff" to run `ruff` on the project).
+(you may also run the task "🧽🔦 Ruff" to run `ruff` on the project).
 
 To run `ruff`, run the following command::
 
@@ -38,11 +39,13 @@ To run `pylint`, run the following command::
     pylint datalab
 
 If you are using `Visual Studio Code <https://code.visualstudio.com/>`_
-on Windows, you may run the task "Run Pylint" to run `pylint` on the project.
+on Windows, you may run the task "🔦 Pylint" to run `pylint` on the project.
 
 .. note::
 
-    A `pylint` rating greater than 9/10 is required to merge a pull request.
+    A `pylint` rating greater than 9/10 is expected to merge a pull request.
+    Unlike `ruff`, `pylint` is not run by the continuous integration: check
+    the rating before submitting your pull request.
 
 Specific coding guidelines
 --------------------------

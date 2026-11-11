@@ -95,7 +95,7 @@ Workflow for New Features
    .. code-block:: sh
 
          git checkout develop
-         git checkout -b develop/feature_name
+         git checkout -b feature/feature_name
 
 2. Develop the feature and commit changes.
 
@@ -104,13 +104,13 @@ Workflow for New Features
    .. code-block:: sh
 
          git checkout develop
-         git merge --no-ff develop/feature_name
+         git merge --no-ff feature/feature_name
 
 4. Delete the feature branch:
 
    .. code-block:: sh
 
-         git branch -d develop/feature_name
+         git branch -d feature/feature_name
 
 .. warning::
 
@@ -170,13 +170,13 @@ For current maintenance release (target: ``release``):
 
 .. warning::
 
-      Do not create a ``fix/xxx`` branch from a ``develop/feature_name`` branch.
+      Do not create a ``fix/xxx`` branch from a ``feature/feature_name`` branch.
       Always branch from ``develop`` or ``release`` to ensure fixes are correctly propagated.
 
       .. code-block:: sh
 
             # Incorrect:
-            git checkout develop/feature_name
+            git checkout feature/feature_name
             git checkout -b fix/wrong_branch
 
       .. code-block:: sh
@@ -290,7 +290,7 @@ Best Practices
 
   .. code-block:: sh
 
-        git checkout develop/feature_name
+        git checkout feature/feature_name
         git rebase develop
 
 - Avoid long-lived branches to minimize merge conflicts.

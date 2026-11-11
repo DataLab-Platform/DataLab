@@ -17,9 +17,8 @@ User-defined templates
 
 Additional templates can be dropped into the user templates directory
 (by default ``<USER_CONFIG_DIR>/macro_templates`` — typically
-``~/.DataLab/macro_templates`` on Linux/macOS and
-``%APPDATA%\\.DataLab\\macro_templates`` on Windows). The location can be
-overridden through ``Conf.macro_templates_path``.
+``~/.DataLab_v1/macro_templates``, i.e. ``%USERPROFILE%\\.DataLab_v1\\macro_templates``
+on Windows). The location can be overridden through ``Conf.macro_templates_path``.
 
 Any ``*.py`` file placed in that directory is exposed in the "New macro"
 dropdown after the bundled templates. Filenames starting with an

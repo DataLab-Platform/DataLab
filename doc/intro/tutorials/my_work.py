@@ -75,7 +75,6 @@ def generate_2d_data(
     proxy = None
     if debug_with_datalab:
         proxy = SimpleRemoteProxy()
-        proxy.connect()
     z = np.zeros((num_lines, num_points))
     for i in range(num_lines):
         amplitude = 0.1 * i**2

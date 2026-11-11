@@ -285,7 +285,19 @@ class PluginCapability(str, enum.Enum):
 
 @dataclasses.dataclass
 class PluginInfo:
-    """Plugin info"""
+    """Plugin info
+
+    Attributes:
+        name: Plugin display name
+        version: Plugin version
+        description: Plugin description
+        icon: Plugin icon: ``package:relative/path`` resource, ``module:filename``
+         image registered with guidata, or DataLab icon file name
+        id: Stable, namespaced plugin ID (e.g. ``"org.example.my-plugin"``)
+        capabilities: Plugin capabilities (:class:`PluginCapability` values)
+        documentation_url: HTTP or HTTPS URL of the plugin documentation, opened
+         by the **Documentation** action of the **Applications** panel
+    """
 
     name: str = None
     version: str = "0.0.0"

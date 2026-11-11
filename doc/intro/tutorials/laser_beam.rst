@@ -25,7 +25,8 @@ Load the images
 
     The images used in this tutorial "TEM00_z_*.jpg" are available in the tutorial data
     folder of DataLab's installation directory
-    (``<DataLab installation directory>/data/tutorials/``).
+    (``<DataLab installation directory>/_internal/datalab/data/tutorials/laser_beam/``
+    for the stand-alone version of DataLab).
 
     .. only:: html
 
@@ -45,7 +46,7 @@ loads all images from a selected directory at once.
 
 .. figure:: ../../images/tutorials/laser_beam/00.png
 
-   The "File > Open Image..." menu
+   The "File > Open from directory..." menu
 
 .. |fileopen_dir| image:: ../../../datalab/data/icons/io/fileopen_directory.svg
     :width: 24px
@@ -145,7 +146,7 @@ Note that these tools are not persistent: the analysis results disappear when yo
 another image, they are intended to provide a fast insight on the image data.
 
 Now we can clip the image at 35 lsb to remove the background noise
-using the "Processing > Level Adjustment > Clipping..." menu.
+using the "Processing > Level adjustment > Clipping..." menu.
 
 .. figure:: ../../images/tutorials/laser_beam/05b.png
 
@@ -163,9 +164,9 @@ To do this, select "Analysis > Centroid" from the menu.
     The centroid position is displayed on the image.
 
 Next, we can extract a line profile along the horizontal axis using
-"Analysis > Intensity profiles > Line profile". Set the Y coordinate of the
+"Analysis > Intensity profiles > Line profile...". Set the Y coordinate of the
 row to the Y coordinate of the previously computed centroid (i.e., 668) using the
-"Set Parameters" button.
+"Edit profile parameters" button.
 See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction.
 
 The intensity profile will be displayed in the "Signal panel". We can then fit the profile
@@ -186,7 +187,7 @@ selected both signals for comparison.
     selected.
 
 Now let's explore another method to compute the FWHM. Returning to the intensity profile signal,
-we can directly compute the FWHM using "Analysis > Full width at half maximum".
+we can directly compute the FWHM using "Analysis > Full width at half-maximum...".
 You can choose the estimation method based on your curve characteristics
 and optionally specify the interval to consider for this computation. Once complete,
 the results window will display the FWHM value, which is stored in the metadata and
@@ -208,7 +209,7 @@ shown on the curve.
 Let's also try another method to measure the beam size by returning to the image.
 
 From the "Image panel", we can extract the radial intensity profile using
-"Analysis > Intensity profiles > Radial profile". The radial intensity profile
+"Analysis > Intensity profiles > Radial profile extraction...". The radial intensity profile
 can be computed around the centroid position, the center of the image,
 or a user-defined position, depending on your data.
 For our data, which appears to have radial symmetry with a center not necessarily
@@ -269,11 +270,8 @@ will display the FWHM values for all profiles.
 
 .. note::
 
-    To display the analysis results again, select "Show results"
-    |show_results| from the "Analysis" menu, or click the "Show results" |show_results|
-    button below the image list:
-
-    .. image:: ../../images/tutorials/fabry_perot/12.png
+    To display the analysis results again, select "Show results..."
+    |show_results| from the "Analysis" menu.
 
 .. |show_results| image:: ../../images/icons/show_results.svg
     :width: 24px
@@ -284,7 +282,7 @@ Finally, we can plot the beam size as a function of position along the
 propagation axis using the "Plot results" feature |plot_results|
 from the "Analysis" menu. This feature allows you to plot result datasets by
 selecting the x and y axes from the available result columns. Here, we will
-plot the FWHM values (`L`) as a function of the image index (`Indices`).
+plot the FWHM values (`Δx`) as a function of the image index (`Indices`).
 
 .. figure:: ../../images/tutorials/laser_beam/16.png
 
@@ -301,7 +299,8 @@ plot the FWHM values (`L`) as a function of the image index (`Indices`).
     The beam size as a function of position along the
     propagation axis (the position is in arbitrary units—the image index).
 
-We can also calibrate the X and Y axes using "Processing > Linear calibration".
+We can also calibrate the X and Y axes using "Processing > Axis transformation >
+Linear calibration...".
 Here we set the X axis to the position in mm (entering the title and
 unit in the "Properties" group box) using the formula:
 :math:`X[\textrm{mm}] = 0.5 \cdot i + 10` where :math:`i` is the image index.
@@ -321,7 +320,7 @@ metadata, and the annotations.
     :height: 24px
     :class: dark-light no-scaled-link
 
-If you want to load the workspace again, you can use the "File > Open HDF5 file..."
+If you want to load the workspace again, you can use the "File > Open HDF5 files..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.

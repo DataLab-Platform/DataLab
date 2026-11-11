@@ -57,9 +57,11 @@ Installing all required packages :
 ℹ️ See [Installation](https://datalab-platform.com/en/intro/installation.html)
 for more details on reference Python and Qt versions.
 
-⚠️ If you are contributing to DataLab's processing features, you will need to work on both DataLab's main repository and sigima's repository. To install `sigima` in editable mode, use the following command:
+⚠️ DataLab relies on its sibling repositories [Sigima](https://github.com/DataLab-Platform/Sigima) (processing features), [SigimaX](https://github.com/DataLab-Platform/SigimaX) (application framework) and [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) (workspace capsules). If your contribution needs unreleased changes of these repositories (e.g. a processing feature, implemented in Sigima), you will need to work on them too. Either install them in editable mode:
 
-    pip install -e ../sigima  # Adjust the path to your local sigima repository
+    pip install -e ../Sigima -e ../SigimaX -e ../DataLab-Capsule  # Adjust the paths to your local repositories
+
+or add them to the `PYTHONPATH` variable of the `.env` file (see below), e.g. `PYTHONPATH=.;../Sigima;../SigimaX;../DataLab-Capsule/src`.
 
 If you are using [WinPython](https://winpython.github.io/), thank you for supporting
 the scientific open-source Python community!
@@ -72,6 +74,7 @@ The following table lists the currently officially used Python distributions:
 | 3.11           | OK           | 3.11.5.0          |
 | 3.12           | OK           | 3.12.3.0          |
 | 3.13           | OK           | 3.13.2.0          |
+| 3.14           | OK           | 3.14.5.0          |
 
 ⚠ We strongly recommend using the `.dot` versions of WinPython which are lightweight
 and can be customized to your needs (using `pip install -r requirements.txt`).
@@ -121,7 +124,7 @@ Windows installer
 
 The official Windows executable and MSI installer are built by the GitHub CI release pipeline. The Python version embedded in the standalone application shipped to end users is defined by the `python-version` input default of the reusable build workflow (`.github/workflows/_build.yml`), consumed by its `build-msi` job; the release workflows do not override it. That workflow is the single source of truth — refer to it for the exact version currently in use.
 
-The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5.
+The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4 (the CI release pipeline installs the latest 4.x version, with the WiX UI extension V4.0.5).
 Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum.
 
 You may install .NET SDK using `winget`:
@@ -131,16 +134,18 @@ You may install .NET SDK using `winget`:
 Once .NET SDK is installed, the WiX Toolset can be installed and configured using the
 following commands:
 
-    dotnet tool install --global wix --version 4.0.5
-    wix extension add WixToolset.UI.wixext/4.0.5
+    dotnet tool install --global wix --version 4.*
+    wix extension add -g WixToolset.UI.wixext/4.0.5
 
-First, you need to generate the installer script from a generic template:
+First, you need to generate the installer script from a generic template (replace `X.Y.Z` by the version of DataLab, e.g. `1.4.0`):
 
-    python wix/makewxs.py
+    python wix/makewxs.py DataLab X.Y.Z
 
 Building the installer is done using the following command:
 
-    wix build .\wix\DataLab.wxs -ext WixToolset.UI.wixext
+    wix build wix\DataLab-X.Y.Z.wxs -ext WixToolset.UI.wixext
+
+Alternatively, `scripts\build_installer.bat` (Visual Studio Code task "📦 Create installer") runs both commands for the current version of DataLab.
 
 Release smoke test
 ------------------

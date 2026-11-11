@@ -13,8 +13,8 @@ msgstr ""
 msgid "Contour Detection"
 msgstr "Détection de contours"
 
-msgid "DataLab provides a \"Contour Detection\" feature which is based on `the marching cubes algorithm <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_."
-msgstr "DataLab fournit une fonctionnalté de \"Détection de contours\" qui est basée sur l'algorithme des `marching cubes <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_"
+msgid "DataLab provides a \"Contour Detection\" feature which is based on `the marching squares algorithm <https://en.wikipedia.org/wiki/Marching_squares>`_."
+msgstr "DataLab fournit une fonctionnalité de \"Détection de contours\" qui est basée sur `l'algorithme des marching squares <https://en.wikipedia.org/wiki/Marching_squares>`_."
 
 msgid "Contour detection parameters."
 msgstr "Paramètres de détection de contours."
@@ -31,38 +31,29 @@ msgstr "Créer éventuellement une ROI autour de la zone cible de l'image"
 msgid "Select \"Contour detection\" in \"Analysis\" menu"
 msgstr "Sélectionner \"Détection de contours\" dans le menu Analyse\""
 
-msgid "Enter parameter \"Shape\" (\"Ellipse\", \"Circle\" or \"Polygon\")"
-msgstr "Saisir le paramètre \"Forme\" (\"Ellipse\", \"Cercle\" ou \"Polygone\")"
+msgid "Enter parameters \"Relative threshold\" and \"Shape\" (\"Ellipse\", \"Circle\" or \"Polygon\")"
+msgstr "Saisir les paramètres \"Seuil relatif\" et \"Forme\" (\"Ellipse\", \"Cercle\" ou \"Polygone\")"
 
-msgid "Optionally, enable \"Create regions of interest\" to automatically create ROIs around each detected contour:"
-msgstr "Optionnellement, activer \"Créer des régions d'intérêt\" pour créer automatiquement des ROIs autour de chaque contour détecté :"
+msgid "Optionally, enable \"Create regions of interest\" to automatically create a ROI from each detected contour:"
+msgstr "Optionnellement, activer \"Créer des régions d'intérêt\" pour créer automatiquement une ROI à partir de chaque contour détecté :"
 
-msgid "Choose ROI geometry: \"Rectangle\" or \"Circle\""
-msgstr "Choisir la géométrie de la ROI : \"Rectangle\" ou \"Cercle\""
-
-msgid "ROI size is automatically calculated based on the minimum distance between detected contours (to avoid overlap)"
-msgstr "La taille de la ROI est automatiquement calculée en fonction de la distance minimale entre les contours détectés (pour éviter le chevauchement)"
-
-msgid "This feature requires at least 2 detected contours"
-msgstr "Cette fonctionnalité nécessite au moins 2 contours détectés"
+msgid "ROI geometry is determined by the selected shape: circular ROIs for circles, polygonal ROIs for polygons and ellipses (approximated by a polygon)"
+msgstr "La géométrie de la ROI est déterminée par la forme sélectionnée : ROI circulaires pour les cercles, ROI polygonales pour les polygones et les ellipses (approchées par un polygone)"
 
 msgid "Created ROIs can be useful for subsequent processing on each contour area"
 msgstr "Les ROIs créées peuvent être utiles pour le traitement ultérieur de chaque zone de contour (par exemple, détection de pics, mesures, etc.)"
 
-msgid "Contour detection results (see test \"contour_app.py\")"
-msgstr "Résultats de la détection de contours (cf. test \"contour_app.py\")"
+msgid "Contour detection results (see test \"contour_app_test.py\")"
+msgstr "Résultats de la détection de contours (cf. test \"contour_app_test.py\")"
 
 msgid "Results are shown in a table:"
 msgstr "Les résultats sont affichés dans un tableau :"
 
-msgid "Each row is associated to a contour"
-msgstr "Chaque ligne est associée à un contour"
+msgid "Each row is associated to a contour, and is labelled with the name of the function and the reference of the image (followed by the ROI title, if a ROI is defined on input image)"
+msgstr "Chaque ligne est associée à un contour et porte le nom de la fonction et la référence de l'image (suivis du titre de la ROI, si une ROI est définie sur l'image d'entrée)"
 
-msgid "First column shows the ROI index (0 if no ROI is defined on input image)"
-msgstr "La première colonne contient l'indice de la ROI (0 si aucune ROI n'est définie)"
-
-msgid "Other columns show contour coordinates: 4 columns for circles (coordinates of diameter), 8 columns for ellipses (coordinates of diameters)"
-msgstr "Les colonnes suivantes présentent les coordonnées des contours : 4 colonnes pour les cercles (coordonnées du diamètre) et 8 colonnes pour les ellipses (coordonnées des diamètres)"
+msgid "Columns show contour coordinates: 3 columns for circles (center coordinates x, y and radius r), 5 columns for ellipses (center coordinates x, y, semi-axes a, b and angle θ), and vertex coordinates (x0, y0, x1, y1, ...) for polygons"
+msgstr "Les colonnes contiennent les coordonnées des contours : 3 colonnes pour les cercles (coordonnées x, y du centre et rayon r), 5 colonnes pour les ellipses (coordonnées x, y du centre, demi-axes a, b et angle θ), et les coordonnées des sommets (x0, y0, x1, y1, ...) pour les polygones"
 
 msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."

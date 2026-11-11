@@ -18,8 +18,29 @@ When the "Image Panel" is selected, the menus and toolbars are updated to
 provide image-related actions.
 
 The "Operations" menu allows you to perform various operations on the current
-image or group of images. It also allows you to extract profiles, distribute
-images on a grid, or resize images.
+image or group of images, such as arithmetic operations, mathematical functions,
+convolution, or flat-field correction.
+
+Arithmetic
+----------
+
+The "Arithmetic" |arithmetic| action creates a new image which is the result of
+an arithmetic operation between each selected image and a second image (selected
+in a dialog box):
+
+.. math::
+    z = (z_{1} \odot z_{2}) \times a + b
+
+where :math:`z_{1}` is the selected image, :math:`z_{2}` is the second image,
+:math:`\odot` is the **Operator** (:math:`+`, :math:`-`, :math:`\times` or
+:math:`/`), :math:`a` is the **Factor** and :math:`b` is the **Constant**.
+The **Operation** field shows the resulting expression. By default, the result
+is converted to the data type of the selected image.
+
+.. |arithmetic| image:: ../../../datalab/data/icons/operations/arithmetic.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
 
 Operations with a constant
 --------------------------
@@ -142,7 +163,7 @@ Basic mathematical functions
       - :math:`z_{k} = \exp(z_{k})`
     * - |log10| Logarithm (base 10)
       - :math:`z_{k} = \log_{10}(z_{k})`
-    * - Log10(z+10)
+    * - Log10(z+n)
       - :math:`z_{k} = \log_{10}(z_{k}+n)` (useful if image background is zero)
 
 .. |exp| image:: ../../../datalab/data/icons/operations/exp.svg

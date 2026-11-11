@@ -27,7 +27,8 @@ full width at 1/e².
     In DataLab vocabulary, an "analysis" is a feature that computes a scalar
     result from a signal. This result is stored as metadata, and thus attached
     to signal. This is different from a "processing" which creates a new signal
-    from an existing one.
+    from an existing one. The "Histogram" feature is an exception: it creates a
+    new signal from each selected signal.
 
 Statistics
 ^^^^^^^^^^
@@ -97,25 +98,40 @@ Then, compute the full width at 1/e².
     Metadata is attached to signal and serialized with it when exporting
     current session in a HDF5 file.
 
-Arguments of the min and max
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Full width at y=...
+^^^^^^^^^^^^^^^^^^^
+
+Compute the full width of the selected signal at a given ordinate value, chosen
+by moving a horizontal cursor in a dialog box. The computed result is displayed
+as an annotated segment.
+
+Abscissa of the minimum and maximum
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compute the smallest argument of the minima and the smallest argument of the maxima of
 the selected signal.
 
-Abscissa at y=...
+First abscissa at y=...
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Compute the abscissa at a given ordinate value for the selected signal (using linear
+interpolation), chosen by moving a horizontal cursor in a dialog box.
+If there is no solution, the displayed result is NaN.
+If there are multiple solutions, the displayed result is the first one.
+
+Ordinate at x=...
 ^^^^^^^^^^^^^^^^^
 
-Compute the abscissa at a given ordinate value for the selected signal.
-If there is no solution, the displayed result is NaN.
-If there are multiple solutions, the displayed result is the smallest value.
+Compute the ordinate at a given abscissa value for the selected signal (using linear
+interpolation), chosen by moving a vertical cursor in a dialog box.
+If the abscissa is outside the signal range, the displayed result is NaN.
 
 Peak detection
 ^^^^^^^^^^^^^^
 
 DataLab offers two complementary ways to detect peaks. Both produce the
 same result: an *XY-markers* :class:`~sigima.objects.scalar.TableResult`
-attached to the signal (visible from *View ▸ Show results* and overlayed
+attached to the signal (visible from *Analysis ▸ Show results* and overlayed
 on the curve).
 
 .. list-table::
@@ -298,3 +314,10 @@ Plot results
 
 Plot the results of analyses performed on the selected signals, with user-defined
 X and Y axes (e.g. plot the FWHM as a function of the signal index).
+
+Delete results
+^^^^^^^^^^^^^^
+
+Delete analysis results of the selected signals: this submenu lists the results
+(one entry per result, to delete it individually), followed by a
+"Delete all results..." entry.

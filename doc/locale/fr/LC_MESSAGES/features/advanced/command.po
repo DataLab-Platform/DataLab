@@ -61,8 +61,8 @@ msgstr "Pour exécuter le mode de démonstration de DataLab, taper la commande s
 msgid "Run technical validation tests"
 msgstr "Exécuter les tests de validation technique"
 
-msgid "Technical validation tests are directly included in individual unit tests and are disseminated throughout the code. The test functions including validation tests are marked with the ``@pytest.mark.validation`` decorator."
-msgstr "Les tests de validation technique sont directement inclus dans les tests unitaires individuels et sont disséminés dans tout le code. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
+msgid "Technical validation tests are directly included in individual unit tests of the `Sigima <https://sigima.readthedocs.io/>`_ library, which provides the signal and image processing features of DataLab. The test functions including validation tests are marked with the ``@pytest.mark.validation`` decorator."
+msgstr "Les tests de validation technique sont directement inclus dans les tests unitaires individuels de la bibliothèque `Sigima <https://sigima.readthedocs.io/>`_, qui fournit les fonctionnalités de traitement du signal et de l'image de DataLab. Les fonctions de test incluant des tests de validation sont marquées avec le décorateur ``@pytest.mark.validation``."
 
 msgid "To execute DataLab technical validation tests, run the following::"
 msgstr "Pour exécuter les tests de validation technique de DataLab, taper la commande suivante::"

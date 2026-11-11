@@ -41,38 +41,38 @@ msgstr "Sauvegarder l'espace de travail dans un fichier"
 msgid "DataLab menus change depending on the context. Since we are going to work with a spectrum, a 1D signal, we need to select the Signal Panel before proceeding."
 msgstr "Les menus de DataLab changent en fonction du contexte. Comme nous allons travailler avec un spectre, un signal 1D, nous devons sélectionner le panneau Signal avant de continuer."
 
-msgid "In a typical workflow, we would open DataLab and read the spectrum from a file using \"File > Open...\", the |fileopen_sig| button in the toolbar, or by dragging and dropping the file into the panel on the right. However, for this tutorial, we will use the \"Plugins > Test data > Load spectrum of paracetamol\" feature to generate a test spectrum, which is convenient for demonstration purposes."
-msgstr "Dans un flux de travail typique, nous ouvririons DataLab et lirions le spectre à partir d'un fichier en utilisant \"Fichier > Ouvrir...\", le bouton |fileopen_sig| dans la barre d'outils, ou en faisant glisser-déposer le fichier dans le panneau de droite. Cependant, pour ce tutoriel, nous utiliserons la fonction \"Plugins > Données de test > Charger le spectre de paracétamol\" pour générer un spectre de test, ce qui est pratique à des fins de démonstration."
+msgid "In a typical workflow, we would open DataLab and read the spectrum from a file using \"File > Open signal...\", the |fileopen_sig| button in the toolbar, or by dragging and dropping the file into the panel on the right. However, for this tutorial, we will use the \"Plugins > Test data > Load spectrum of paracetamol\" feature to generate a test spectrum, which is convenient for demonstration purposes."
+msgstr "Dans un flux de travail typique, nous ouvririons DataLab et lirions le spectre à partir d'un fichier en utilisant \"Fichier > Ouvrir un objet signal...\", le bouton |fileopen_sig| dans la barre d'outils, ou en faisant glisser-déposer le fichier dans le panneau de droite. Cependant, pour ce tutoriel, nous utiliserons la fonction \"Plugins > Données de test > Charger le spectre du paracétamol\" pour générer un spectre de test, ce qui est pratique à des fins de démonstration."
 
 msgid "fileopen_sig"
 msgstr "fileopen_sig"
 
-msgid "The \"File > Open...\" menu to open a spectrum file."
-msgstr "Le menu \"Fichier > Ouvrir...\" pour ouvrir un fichier de spectre."
+msgid "The \"File > Open signal...\" menu to open a spectrum file."
+msgstr "Le menu \"Fichier > Ouvrir un objet signal...\" pour ouvrir un fichier de spectre."
 
 msgid "The \"Plugins > Test data > Load spectrum of paracetamol\" plugin to generate the test spectrum for this tutorial."
 msgstr "Le plugin \"Plugins > Données de test > Charger le spectre de paracétamol\" pour générer le spectre de test pour ce tutoriel."
 
-msgid "Once opened, the spectrum is displayed in the main window. It is a 1D signal, so it is displayed as a curve. The horizontal axis is the energy axis, and the vertical axis is the intensity axis."
-msgstr "Une fois ouvert, le spectre est affiché dans la fenêtre principale. C'est un signal 1D, il est donc affiché sous forme de courbe. L'axe horizontal est l'axe de l'énergie et l'axe vertical est l'axe de l'intensité."
+msgid "Once opened, the spectrum is displayed in the main window. It is a 1D signal, so it is displayed as a curve. The horizontal axis is the diffraction angle 2θ (in degrees), and the vertical axis is the intensity axis."
+msgstr "Une fois ouvert, le spectre est affiché dans la fenêtre principale. C'est un signal 1D, il est donc affiché sous forme de courbe. L'axe horizontal est l'angle de diffraction 2θ (en degrés) et l'axe vertical est l'axe de l'intensité."
 
 msgid "The spectrum displayed on the \"Signal View\" panel."
 msgstr "Le spectre affiché dans le panneau \"Vue Signal\"."
 
-msgid "The signal is quite clean. However, to demonstrate DataLab's filtering capabilities, we will apply a Wiener filter to reduce any residual noise while preserving the spectral features. This is available under \"Processing > Noise Reduction > Wiener filter\"."
-msgstr "Le signal est assez propre. Cependant, pour démontrer les capacités de filtrage de DataLab, nous allons appliquer un filtre de Wiener pour réduire tout bruit résiduel tout en préservant les caractéristiques spectrales. Ceci est disponible sous \"Traitement > Réduction du bruit > Filtre de Wiener\"."
+msgid "The signal is quite clean. However, to demonstrate DataLab's filtering capabilities, we will apply a Wiener filter to reduce any residual noise while preserving the spectral features. This is available under \"Processing > Noise reduction > Wiener filter\"."
+msgstr "Le signal est assez propre. Cependant, pour démontrer les capacités de filtrage de DataLab, nous allons appliquer un filtre de Wiener pour réduire tout bruit résiduel tout en préservant les caractéristiques spectrales. Ceci est disponible sous \"Traitement > Réduction de bruit > Filtre de Wiener\"."
 
-msgid "The \"Processing > Noise Reduction > Wiener filter\" menu option."
-msgstr "L'option de menu \"Traitement > Réduction du bruit > Filtre de Wiener\"."
+msgid "The \"Processing > Noise reduction > Wiener filter\" menu option."
+msgstr "L'option de menu \"Traitement > Réduction de bruit > Filtre de Wiener\"."
 
 msgid "The result displayed in the main window."
 msgstr "Le résultat affiché dans la fenêtre principale."
 
-msgid "Let's focus our analysis on one of the peaks of interest. To do that, we define a region of interest (ROI) around the feature we want to analyze and use the \"ROI > Extract...\" menu to extract it. The \"Regions of interest\" dialog box will be displayed. Select an area and click \"OK\". A confirmation window will appear—click \"Yes\" to extract the region of interest. A new signal containing the ROI will be created and displayed in the main window."
-msgstr "Concentrons notre analyse sur l'un des pics d'intérêt. Pour ce faire, nous définissons une région d'intérêt (ROI) autour de la caractéristique que nous voulons analyser et utilisons le menu \"ROI > Extraire...\" pour l'extraire. La boîte de dialogue \"Régions d'intérêt\" sera affichée. Sélectionnez une zone et cliquez sur \"OK\". Une fenêtre de confirmation apparaîtra—cliquez sur \"Oui\" pour extraire la région d'intérêt. Un nouveau signal contenant la ROI sera créé et affiché dans la fenêtre principale."
+msgid "Let's focus our analysis on one of the peaks of interest. To do that, we define a region of interest (ROI) around the feature we want to analyze and use the \"ROI > Extract...\" menu to extract it. The \"Regions of interest\" dialog box will be displayed. Select an area and click \"OK\". A confirmation window (\"Regions of Interest\") will appear—click \"OK\" to extract the region of interest. A new signal containing the ROI will be created and displayed in the main window."
+msgstr "Concentrons notre analyse sur l'un des pics d'intérêt. Pour ce faire, nous définissons une région d'intérêt (ROI) autour de la caractéristique que nous voulons analyser et utilisons le menu \"ROI > Extraire...\" pour l'extraire. La boîte de dialogue \"Régions d'intérêt\" sera affichée. Sélectionnez une zone et cliquez sur \"OK\". Une fenêtre de confirmation (\"Régions d'intérêt\") apparaîtra—cliquez sur \"OK\" pour extraire la région d'intérêt. Un nouveau signal contenant la ROI sera créé et affiché dans la fenêtre principale."
 
-msgid "The \"Operations > ROI extraction\" menu."
-msgstr "Le menu \"Opérations > Extraction de ROI\"."
+msgid "The \"ROI > Extract...\" menu."
+msgstr "Le menu \"ROI > Extraire...\"."
 
 msgid "The \"Regions of interest\" dialog box displayed."
 msgstr "La boîte de dialogue \"Régions d'intérêt\" affichée."
@@ -80,8 +80,8 @@ msgstr "La boîte de dialogue \"Régions d'intérêt\" affichée."
 msgid "The region of interest displayed in the main window."
 msgstr "La région d'intérêt affichée dans la fenêtre principale."
 
-msgid "Open the model fitting window with \"Processing > Fitting > Gaussian fit\"."
-msgstr "Ouvrir la fenêtre d'ajustement du modèle avec \"Traitement > Ajustement > Ajustement gaussien\"."
+msgid "Fit a Gaussian model to the extracted peak with \"Processing > Fitting > Gaussian fit\" (automatic fit, without dialog box; an interactive version is available in the \"Processing > Fitting > Interactive fitting\" submenu)."
+msgstr "Ajustez un modèle gaussien au pic extrait avec \"Traitement > Ajustement > Ajustement gaussien\" (ajustement automatique, sans boîte de dialogue ; une version interactive est disponible dans le sous-menu \"Traitement > Ajustement > Ajustement interactif\")."
 
 msgid "The result of the fit displayed in the main window."
 msgstr "Le résultat de l'ajustement affiché dans la fenêtre principale."
@@ -146,8 +146,8 @@ msgstr "Le signal sans tendance résultant est affiché, maintenant avec une lig
 msgid "Automatic peak detection"
 msgstr "Détection automatique des pics"
 
-msgid "We can use DataLab's \"Multi-Gaussian fit\" function to automatically identify and fit multiple peaks in the spectrum by selecting \"Processing > Fitting > Multi-Gaussian fit\" from the menu."
-msgstr "Nous pouvons utiliser la fonction \"Ajustement multi-gaussien\" de DataLab pour identifier et ajuster automatiquement plusieurs pics dans le spectre en sélectionnant \"Traitement > Ajustement > Ajustement multi-gaussien\" dans le menu."
+msgid "We can use DataLab's \"Multi-Gaussian fit\" function to automatically identify and fit multiple peaks in the spectrum by selecting \"Processing > Fitting > Interactive fitting > Multi-Gaussian fit\" from the menu."
+msgstr "Nous pouvons utiliser la fonction \"Ajustement multi-gaussien\" de DataLab pour identifier et ajuster automatiquement plusieurs pics dans le spectre en sélectionnant \"Traitement > Ajustement > Ajustement interactif > Ajustement multi-gaussien\" dans le menu."
 
 msgid "First, the \"Signal peak detection\" dialog box appears. You can adjust the vertical cursor position to set the threshold for peak detection and specify the minimum distance between peaks. Then click \"OK\"."
 msgstr "Tout d'abord, la boîte de dialogue \"Détection de pics de signal\" apparaît. Vous pouvez ajuster la position du curseur vertical pour définir le seuil de détection des pics et spécifier la distance minimale entre les pics. Ensuite, cliquez sur \"OK\"."
@@ -161,8 +161,8 @@ msgstr "Le résultat de l'ajustement est affiché dans la fenêtre principale. I
 msgid "Alternatively, we could use the \"Peak detection\" feature from the \"Analysis\" menu to detect peaks in the spectrum. This is the first step of the \"Multi-Gaussian fit\" function and can be used independently to extract peak positions as a result table attached to the signal."
 msgstr "Alternativement, nous pourrions utiliser la fonction \"Détection de pics\" du menu \"Analyse\" pour détecter les pics dans le spectre. C'est la première étape de la fonction \"Ajustement multi-gaussien\" et peut être utilisée indépendamment pour extraire les positions des pics sous forme d'un tableau de résultats attaché au signal."
 
-msgid "Open the \"Peak detection\" window with \"Analysis > Peak detection\"."
-msgstr "Ouvrir la fenêtre \"Détection de pics\" avec \"Analyse > Détection de pics\"."
+msgid "Open the \"Peak detection\" window with \"Analysis > Peak detection...\"."
+msgstr "Ouvrir la fenêtre \"Détection de pics\" avec \"Analyse > Détection de pics...\"."
 
 msgid "After adjusting the peak detection parameters (using the same dialog as for the multi-Gaussian fit), click \"OK\". The detected peak positions are stored as an XY-markers result and overlayed on the spectrum."
 msgstr "Après avoir ajusté les paramètres de détection des pics (en utilisant la même boîte de dialogue que pour l'ajustement multi-gaussien), cliquez sur \"OK\". Les positions des pics détectés sont stockées sous forme de résultat XY-markers et superposées au spectre."
@@ -182,8 +182,8 @@ msgstr "Sauvegarder l'espace de travail dans un fichier avec \"Fichier > Sauvega
 msgid "filesave_h5"
 msgstr "filesave_h5"
 
-msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
-msgstr "Pour charger à nouveau l'espace de travail, vous pouvez utiliser « Fichier > Ouvrir un fichier HDF5... » (ou le bouton |fileopen_h5| de la barre d'outils) pour charger l'ensemble de l'espace de travail, ou « Fichier > Parcourir un fichier HDF5... » (ou le bouton |h5browser| de la barre d'outils) pour charger uniquement une sélection de jeux de données."
+msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 files...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
+msgstr "Pour charger à nouveau l'espace de travail, vous pouvez utiliser « Fichier > Ouvrir des fichiers HDF5... » (ou le bouton |fileopen_h5| de la barre d'outils) pour charger l'ensemble de l'espace de travail, ou « Fichier > Parcourir un fichier HDF5... » (ou le bouton |h5browser| de la barre d'outils) pour charger uniquement une sélection de jeux de données."
 
 msgid "fileopen_h5"
 msgstr "fileopen_h5"

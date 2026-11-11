@@ -86,8 +86,14 @@ Create a new image with uniform coordinates (i.e., with a constant pixel size in
 Polynomial calibration
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Create a new image which is a polynomial calibration
-of each selected image with respect to Z axis.
+Create a new image which is a polynomial calibration (up to degree 3)
+of each selected image with respect to the X, Y or Z axis (**Calibrate** parameter,
+Z axis by default):
+
+.. math::
+    t' = a_{0} + a_{1} t + a_{2} t^{2} + a_{3} t^{3}
+
+where :math:`t` stands for the X, Y or Z values of the image.
 
 .. note::
 
@@ -111,7 +117,7 @@ by maximum, amplitude, sum, energy or RMS:
     * - Maximum
       - :math:`z_{1} = \dfrac{z_{0}}{z_{\max}}`
     * - Amplitude
-      - :math:`z_{1} = \dfrac{z_{0}}{z_{\max}-z_{\min}}`
+      - :math:`z_{1} = \dfrac{z_{0}-z_{\min}}{z_{\max}-z_{\min}}`
     * - Area
       - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
     * - Energy
@@ -234,7 +240,8 @@ The following parameters are available:
     * - Columns
       - Number of columns to add (if `strategy` is 'custom')
     * - Position
-      - Position of the added zeros: 'bottom-right', 'centered'
+      - Position of the added zeros: 'Bottom-right' or 'Around' (zeros distributed
+        around the image)
 
 Zero padding strategy refers to the method used to add zeros to the image, and it can be one of the following:
 
@@ -288,8 +295,8 @@ The following functions are available:
     FFT and inverse FFT are performed using frequency shifting if the option is enabled
     in DataLab settings (see :ref:`settings`).
 
-Frequency-domain filters
-^^^^^^^^^^^^^^^^^^^^^^^^
+Frequency filters
+^^^^^^^^^^^^^^^^^
 
 The following frequency-domain filters are available:
 
@@ -301,8 +308,13 @@ The following frequency-domain filters are available:
       - Description
     * - Butterworth
       - Butterworth filter, based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_
-    * - Gaussian filter
-      - Gaussian filter
+    * - Gaussian bandpass
+      - Gaussian band-pass filter applied in the frequency domain, centered on
+        the **Center frequency** :math:`f_{0}` with a standard deviation
+        **σ** (both in cycles per pixel): the FFT of the image is multiplied by
+        :math:`\exp\left(-\dfrac{1}{2}\left(\dfrac{f-f_{0}}{\sigma}\right)^{2}\right)`,
+        where :math:`f` is the radial frequency, and the real part of the
+        inverse FFT is returned.
 
 Thresholding
 ^^^^^^^^^^^^
@@ -460,8 +472,8 @@ The following functions are available:
     on the same image. Combined with the "distribute on a grid" option, this allows to compare
     the different morphological operations on the same image.
 
-Edges
-^^^^^
+Edge detection
+^^^^^^^^^^^^^^
 
 Create a new image which is the result of edge filtering on each selected image.
 
@@ -506,7 +518,7 @@ The following functions are available:
 
 .. note::
 
-    The "All edges filters" option allows to perform all edge filtering algorithms
+    The "All edge detection filters" option allows to perform all edge filtering algorithms
     on the same image. Combined with the "distribute on a grid" option, this allows
     to compare the different edge filters on the same image.
 

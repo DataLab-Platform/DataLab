@@ -322,13 +322,10 @@ msgstr ""
 msgid "``cdl.computation.image.dst_11()``"
 msgstr ""
 
-msgid "``sigima.proc.image.dst_1to1()``"
+msgid "``sigima.proc.base.dst_1_to_1()``"
 msgstr ""
 
 msgid "``cdl.computation.signal.dst_11()``"
-msgstr ""
-
-msgid "``sigima.proc.signal.dst_1to1()``"
 msgstr ""
 
 msgid "**Processor methods** (`p` is a signal or image processor instance)"
@@ -469,25 +466,25 @@ msgstr "**Fonctions d'entrée/sortie**"
 msgid "``cdl.io.image.read_image()``"
 msgstr "``cdl.io.image.read_image()``"
 
-msgid "``sigima.io.image.read_image()``"
-msgstr "``sigima.io.image.read_image()``"
+msgid "``sigima.io.read_image()``"
+msgstr ""
 
 msgid "``cdl.io.image.write_image()``"
 msgstr ""
 
-msgid "``sigima.io.image.write_image()``"
+msgid "``sigima.io.write_image()``"
 msgstr ""
 
 msgid "``cdl.io.signal.read_signal()``"
 msgstr ""
 
-msgid "``sigima.io.signal.read_signal()``"
+msgid "``sigima.io.read_signal()``"
 msgstr ""
 
 msgid "``cdl.io.signal.write_signal()``"
 msgstr ""
 
-msgid "``sigima.io.signal.write_signal()``"
+msgid "``sigima.io.write_signal()``"
 msgstr ""
 
 msgid "**Enumerations**"
@@ -580,11 +577,11 @@ msgstr "``cdl.obj`` → ``sigima.objects``"
 msgid "``cdl.tests.data`` → ``sigima.tests.data``"
 msgstr "``cdl.tests.data`` → ``sigima.tests.data``"
 
-msgid "``dst_11`` → ``dst_1to1``"
-msgstr "``dst_11`` → ``dst_1to1``"
+msgid "The custom ``add_noise_to_image`` function, built with ``dst_11`` (now ``sigima.proc.base.dst_1_to_1``) and a test data helper, is replaced by ``sigima.proc.image.add_gaussian_noise``"
+msgstr "La fonction personnalisée ``add_noise_to_image``, construite avec ``dst_11`` (désormais ``sigima.proc.base.dst_1_to_1``) et une fonction utilitaire de données de test, est remplacée par ``sigima.proc.image.add_gaussian_noise``"
 
-msgid "``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistribution2DParam``"
-msgstr "``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistribution2DParam``"
+msgid "``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistributionParam``"
+msgstr ""
 
 msgid "``create_noisygauss_image`` → ``create_noisy_gaussian_image``"
 msgstr "``create_noisygauss_image`` → ``create_noisy_gaussian_image``"
@@ -763,8 +760,8 @@ msgstr "**Solution** : Mettez à jour tous les imports de ``cdl.*`` vers soit ``
 msgid "Attribute errors on processor"
 msgstr "Erreurs d'attribut sur le processeur"
 
-msgid "**Problem**: ``AttributeError: 'ImageProcessor' object has no attribute 'compute_binning'``"
-msgstr "**Problème** : ``AttributeError: 'ImageProcessor' object has no attribute 'compute_binning'``"
+msgid "**Problem**: ``AttributeError: 'ImageProcessor' object has no attribute 'compute_moving_median'``"
+msgstr "**Problème** : ``AttributeError: 'ImageProcessor' object has no attribute 'compute_moving_median'``"
 
 msgid "**Solution**: Replace ``compute_*`` method calls with ``run_feature()`` calls:"
 msgstr "**Solution** : Remplacez les appels de méthode ``compute_*`` par des appels ``run_feature()`` :"

@@ -16,7 +16,7 @@ A plugin is Python code loaded by DataLab: a single ``datalab_<name>.py`` file, 
 Find plugins in the catalog
 ---------------------------
 
-The `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ lists the plugins maintained by the DataLab team (**Official**) and by their authors (**Community**). Each release is checked automatically before it is published: pure Python code, open-source license and dependencies provided by DataLab.
+The `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ lists the plugins maintained by the DataLab team (**Official**) and by their authors (**Community**). Each release is checked automatically before it is published: pure Python plugin code, open-source license, and dependencies provided by DataLab or, for DataLab Desktop, supplied as additional wheels or installed by users in DataLab's Python environment (see :ref:`plugin_dependencies`).
 
 To install a plugin of the catalog, open **Plugins > Configure plugins...** in DataLab and select the **Catalog** tab (see :ref:`plugin_catalog`). A plugin downloaded from the catalog page may also be installed from the **From file** tab, including in the standalone version of DataLab. The catalog indicates which plugins also run in DataLab-Web (see :ref:`plugins_web`).
 

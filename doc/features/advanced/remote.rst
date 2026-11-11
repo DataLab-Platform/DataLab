@@ -24,9 +24,11 @@ allows to access DataLab main features from a separate process.
     If you are looking for a lightweight alternative to remote control DataLab
     (i.e. without installing the whole DataLab package and its dependencies in
     your environment), use the :py:class:`sigima.client.SimpleRemoteProxy` class
-    provided by the `Sigima`_ package (``pip install sigima``). It exposes the
-    same XML-RPC entry points as the ``RemoteProxy`` class described below, with
-    a minimal set of dependencies.
+    provided by the `Sigima`_ package (``pip install sigima``). It exposes most
+    of the XML-RPC entry points of the ``RemoteProxy`` class described below,
+    with a minimal set of dependencies: only ``call_method``, ``remove_object``,
+    ``export_capsule``, ``open_capsule``, ``start_webapi_server``,
+    ``stop_webapi_server`` and ``get_webapi_status`` are missing.
 
     This class supersedes ``cdlclient.SimpleRemoteProxy``: the ``cdlclient``
     package is deprecated and archived since DataLab 1.3. Its connection dialog
@@ -62,11 +64,12 @@ XML-RPC. For example, it is possible to write a remote client application in
 Python, Java, C++, C#, etc. The remote client application may be a graphical
 application or a command line application.
 
-The remote client application may be run on the same computer as DataLab or on
-a different computer. In the latter case, the remote client application must
-know the IP address of the computer running DataLab.
+The remote client application must run on the same computer as DataLab: the
+XML-RPC server only accepts connections from the local machine (``127.0.0.1``).
+To control DataLab from another computer, forward the XML-RPC port through a
+secure channel, such as an SSH tunnel.
 
-The remote client application may be run before or after DataLab. In the latter
+The remote client application may be run before or after DataLab. In the former
 case, the remote client application must try to connect to DataLab until it
 succeeds.
 
@@ -75,16 +78,27 @@ Supported features
 
 Supported features are the following:
 
+- Get DataLab version, raise or close its main window
 - Switch to signal or image panel
-- Remove all signals and images
+- Toggle auto-refresh and the display of object titles
+- Remove all signals and images, or the current object
 - Save current session to a HDF5 file
 - Open HDF5 files into current session
 - Browse HDF5 file
-- Open a signal or an image from file
-- Add a signal
-- Add an image
-- Get object list
+- Export or open a workspace capsule
+- Open signals or images from files or from a directory
+- Add a signal, an image, an object or a group, or replace an object
+- Get object list, UUIDs, groups, current and selected objects
+- Select objects or groups
+- Delete metadata, add annotations or a label with object title,
+  get the shapes of an object
 - Run calculation with parameters
+- Import, run or stop a macro
+- Call any public method of the main window or of a panel
+- Start, stop or query the Web API server
+
+See the :ref:`remote_public_api` section below for the description of the
+corresponding methods.
 
 .. note::
 
@@ -135,6 +149,8 @@ blocking ``connect()`` method, i.e. both ``RemoteProxy`` and
 Example of use:
 
 .. literalinclude:: ../../../datalab/tests/features/control/connect_dialog.py
+
+.. _remote_public_api:
 
 Public API
 ^^^^^^^^^^

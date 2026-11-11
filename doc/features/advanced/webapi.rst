@@ -65,8 +65,9 @@ There are several ways to enable the Web API server:
 1. **Via UI**: File → Web API → Start Web API Server
 2. **Via environment variable**: Set ``DATALAB_WEBAPI_ENABLED=1`` before starting DataLab
 
-When started, DataLab displays the server URL and authentication token in a dialog.
-The status bar also shows the Web API port when the server is running.
+When started from the menu or from the status bar, DataLab displays the server URL
+and authentication token in a dialog. The status bar also shows the Web API port when
+the server is running: click it to display the connection information again.
 
 The default port is **18080** (or the next available port if busy).
 
@@ -113,11 +114,11 @@ set environment variables before starting your notebook kernel:
     export DATALAB_WORKSPACE_URL=http://127.0.0.1:18080
     export DATALAB_WORKSPACE_TOKEN=<your-token>
 
-Then in your notebook using DataLab-Kernel:
+Then, in a notebook using the DataLab-Kernel kernel (or after
+``%load_ext datalab_kernel``), use the ``workspace`` object which is already
+defined in the namespace:
 
 .. code-block:: python
-
-    from datalab_kernel import workspace
 
     # List objects in DataLab
     workspace.list()
@@ -149,7 +150,9 @@ Status Endpoint (No Auth Required)
 Object Operations (Auth Required)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-All endpoints below require the ``Authorization: Bearer <token>`` header.
+All endpoints below require the ``Authorization: Bearer <token>`` header, except
+for requests from the local machine while the localhost bypass is enabled (default,
+see :ref:`webapi_localhost_bypass`).
 
 .. list-table::
    :header-rows: 1
@@ -235,7 +238,8 @@ SignalObj NPZ Structure
     ├── y.npy          # Y data (float64)
     ├── dx.npy         # X uncertainties (optional)
     ├── dy.npy         # Y uncertainties (optional)
-    └── metadata.json  # Labels, units, title
+    └── metadata.json  # Type ("signal"), title, labels, units,
+                       # object metadata (optional)
 
 ImageObj NPZ Structure
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -246,13 +250,20 @@ ImageObj NPZ Structure
     ├── data.npy       # 2D image array (preserves dtype)
     ├── xcoords.npy    # X pixel centers (only for non-uniform coordinates)
     ├── ycoords.npy    # Y pixel centers (only for non-uniform coordinates)
-    └── metadata.json  # Labels, units, coordinates
-                       # (x0, y0, dx, dy, is_uniform_coords)
+    └── metadata.json  # Type ("image"), title, labels, units,
+                       # coordinates (x0, y0, dx, dy, is_uniform_coords),
+                       # object metadata (optional)
+
+In ``metadata.json``, the ``type`` key (``"signal"`` or ``"image"``) is required to
+read an archive. The optional ``obj_metadata`` key holds the metadata of the object
+(e.g. analysis results).
 
 Authentication
 --------------
 
-All API endpoints except ``/status`` require a bearer token:
+All API endpoints except ``/status`` require a Bearer token, unless the request comes
+from the local machine while the localhost bypass is enabled (default, see
+:ref:`webapi_localhost_bypass`):
 
 .. code-block:: text
 
@@ -288,24 +299,32 @@ The Web API implements the following security measures:
    the local machine (127.0.0.1).
 
 2. **Token authentication**: Every request (except status) must include a valid
-   bearer token.
+   Bearer token, except for requests from the local machine while the localhost
+   bypass is enabled, which is the default (see :ref:`webapi_localhost_bypass`).
+   With the default localhost binding, local clients therefore connect without a
+   token until you disable this bypass.
 
 3. **Explicit opt-in**: Remote binding (0.0.0.0) requires explicit configuration.
+
+.. _webapi_localhost_bypass:
 
 Localhost Token Bypass
 ^^^^^^^^^^^^^^^^^^^^^^
 
-For simplified local development, you can disable token verification for localhost
-connections in **Edit → Settings → Web API localhost bypass**.
+By default, DataLab does not check the token of requests coming from the local
+machine (``127.0.0.1`` or ``::1``): local clients, such as DataLab-Kernel, connect
+without a token. This makes auto-discovery work seamlessly even when the connection
+file cannot be read (e.g., in JupyterLite or sandboxed environments).
 
-When enabled, clients connecting from ``127.0.0.1`` do not need to provide a token.
-This makes auto-discovery work seamlessly even when the connection file cannot be
-read (e.g., in JupyterLite or sandboxed environments).
+To require the token for local requests too, disable the **Web API localhost bypass**
+option in the **General** tab of **File → Settings...**. The change applies the next
+time the Web API server starts.
 
 .. warning::
 
-    Only enable localhost bypass when you control all applications running on
-    your machine. Malicious local software could access your data without a token.
+    While the localhost bypass is enabled (default), any software running on your
+    machine, including malicious software, can access your data without a token.
+    Disable it if you do not control all applications running on your machine.
 
 .. warning::
 

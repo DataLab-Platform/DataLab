@@ -109,7 +109,8 @@ Debugging a data processing application
   DataLab can be used as an advanced debugging tool for your data processing
   applications, independently from the development environment or the language
   used (Python, C#, C++, etc.). All you need is to be able to communicate with
-  DataLab via its remote control interface (standard XML-RPC protocol). This
+  DataLab via its remote control interface (standard XML-RPC protocol; an HTTP/JSON
+  Web API is also available, see :ref:`ref-to-webapi`). This
   allows you to send data to DataLab (signals, images or even geometric shapes),
   visualize the data at each step of the processing chain, manipulate them to
   better understand the behavior of your algorithms, and even modify them to
@@ -145,9 +146,16 @@ The main technical features of DataLab include:
 - Standard operations and processing on signals and images
 - Advanced image processing (restoration, morphology, edge detection, etc.)
 - Management of multiple regions of interest (calculations, extractions)
+- History panel to record and replay processing chains
+- Provenance of results (verification by recomputation) and workspace capsules
+  (``.dlcapsule``), based on `DataLab-Capsule
+  <https://github.com/DataLab-Platform/DataLab-Capsule>`_
+- HDF5 workspaces and HDF5/NeXus browser
 - Macro-command editor
-- Remote-controllable API
+- Remote-controllable API (XML-RPC) and HTTP/JSON Web API
 - Embedded interactive Python console
+- Command palette, welcome page and Applications panel
+- Optional AI assistant
 
 .. _key_strengths:
 

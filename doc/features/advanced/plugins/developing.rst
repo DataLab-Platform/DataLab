@@ -189,7 +189,7 @@ Camera pilot:
 ``core`` holds host-independent domain behavior, ``workflow`` may use DataLab's
 headless recipe contracts, and ``adapters`` owns host integration. The
 ``datalab.plugins`` entry point targets the Desktop adapter; Web support starts
-explicitly as ``unsupported``. A generated AST test prevents ``core`` and
+explicitly as ``unsupported`` (see :ref:`plugins_web`). A generated AST test prevents ``core`` and
 ``workflow`` from importing GUI, browser, or adapter modules.
 
 The project also includes a stable :class:`datalab.plugins.PluginInfo`, an owned
@@ -334,6 +334,7 @@ DataLab also provides plugin templates used by integration tests in
 ``datalab/tests/features/plugins/templates``. They are useful as development references for:
 
 - basic valid plugin structure,
+- processing feature owned by a plugin (``register_computations``),
 - nested plugin menus,
 - plugins with dialog actions,
 - plugins with many actions,
@@ -366,22 +367,51 @@ Once the pull request is merged, the plugin appears on the catalog page and in t
 Plugins and DataLab-Web
 -----------------------
 
-Plugins are largely portable between the desktop application and :ref:`DataLab-Web
-<ecosystem>`, the browser-native edition of the platform. The same :class:`datalab.plugins.PluginBase`
-subclass can run in both, because the plugin API is shared. A few constraints apply to the
-browser runtime, however:
+:ref:`DataLab-Web <ecosystem>`, the browser-native edition of the platform, provides its own
+implementation of the :class:`datalab.plugins.PluginBase` API, which differs from the one of
+DataLab Desktop. A plugin targeting both editions therefore generally defines a distinct class
+for each of them:
 
-- **Parameter dialogs must be opened asynchronously.** In the browser, the synchronous
-  ``param.edit(self.main)`` call cannot block the event loop; use
-  ``await param.edit_async(self.main)`` instead. A plugin written this way still works
-  unchanged on the desktop.
+- **One entry point per edition.** A wheel declares its Desktop class in the
+  ``datalab.plugins`` entry-point group and its DataLab-Web class in the
+  ``datalab.web_plugins`` group: the browser only imports the classes of the
+  ``datalab.web_plugins`` group. Both classes may share the host-independent code of the
+  plugin, such as the ``core`` and ``workflow`` layers of a project created by
+  ``datalab-plugin create --project``, whose ``adapters/web.py`` module starts as
+  unsupported, without Web entry point:
+
+  .. code-block:: toml
+
+    [project.entry-points."datalab.plugins"]
+    my_plugin = "my_package.adapters.desktop:MyDesktopPlugin"
+
+    [project.entry-points."datalab.web_plugins"]
+    my_plugin = "my_package.adapters.web:MyWebPlugin"
+
+- **Desktop features not supported in the browser.** DataLab-Web does not support the
+  registration of processing features with ``register_computations()`` and ``action_for()``,
+  used by the plugin generator and by the processing plugin example, nor welcome page tiles
+  (``WELCOME_TILES``), recipe launchers (``RECIPE_LAUNCHERS``) and the Desktop methods running
+  recipes or opening examples (``start_recipe``, ``try_example``, ``open_example``, etc.). Such
+  a plugin may load in the browser without error, but without these features. A DataLab-Web
+  class declares its headless recipes, examples and tools (``RECIPES``, ``EXAMPLES`` and
+  ``TOOLS``), which DataLab-Web presents and runs itself. The support of the Desktop
+  registration model in the browser is tracked by `DataLab-Web issue #94
+  <https://github.com/DataLab-Platform/web/issues/94>`_.
+- **Asynchronous dialogs are specific to DataLab-Web.** In the browser, a dialog cannot block
+  the event loop: DataLab-Web plugins use ``async`` action callbacks,
+  ``await param.edit_async(self.main)`` and the ``*_async`` helpers of their base class (such as
+  ``show_info_async`` or ``edit_new_signal_parameters_async``). DataLab Desktop does not run
+  ``async`` action callbacks (the action then does nothing), and its
+  :class:`datalab.plugins.PluginBase` class has no ``*_async`` helpers: Desktop plugins use
+  synchronous callbacks and helpers.
 - **No Qt-only graphical interfaces.** Plugins that embed custom Qt widgets or rely on
   PlotPy interactive tools are desktop-only; their graphical parts have no equivalent in the
   browser.
 - **Execution happens inside the browser** (WebAssembly), with no native file-system access
   beyond the in-memory file system.
 
-As a result, a plugin that relies on a custom graphical user interface may not be fully compatible with DataLab-Web. The `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ indicates which of its plugins also support DataLab-Web. Refer to the DataLab-Web documentation for the practical guide to loading plugins in the browser.
+The `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ indicates which of its plugins also support DataLab-Web; the `Camera & Detector Characterization <https://github.com/DataLab-Platform/datalab-camera-characterization>`_ and `Pulse & Transient Characterization <https://github.com/DataLab-Platform/datalab-pulse-characterization>`_ plugins are examples of plugins with a distinct DataLab-Web class. See the `DataLab-Web plugin guide <https://github.com/DataLab-Platform/web/blob/develop/doc/plugins.md>`_ for the plugin API of the browser and for loading plugins in DataLab-Web.
 
 Migrating from v0.20 to v1.0
 ----------------------------

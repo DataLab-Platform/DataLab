@@ -26,8 +26,27 @@ msgstr "Capture d'écran du menu \"Opérations\"."
 msgid "When the \"Image Panel\" is selected, the menus and toolbars are updated to provide image-related actions."
 msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux images."
 
-msgid "The \"Operations\" menu allows you to perform various operations on the current image or group of images. It also allows you to extract profiles, distribute images on a grid, or resize images."
-msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur l'image ou le groupe d'images courant. Il permet également d'extraire des profils, de distribuer des images sur une grille, ou de redimensionner des images."
+msgid "The \"Operations\" menu allows you to perform various operations on the current image or group of images, such as arithmetic operations, mathematical functions, convolution, or flat-field correction."
+msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur l'image ou le groupe d'images courant, telles que des opérations arithmétiques, des fonctions mathématiques, la convolution ou la correction de champ plat."
+
+msgid "Arithmetic"
+msgstr "Arithmétique"
+
+msgid "The \"Arithmetic\" |arithmetic| action creates a new image which is the result of an arithmetic operation between each selected image and a second image (selected in a dialog box):"
+msgstr "L'action \"Arithmétique\" |arithmetic| crée une nouvelle image qui est le résultat d'une opération arithmétique entre chaque image sélectionnée et une seconde image (sélectionnée dans une boîte de dialogue) :"
+
+msgid "arithmetic"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"z = (z_{1} \\odot z_{2}) \\times a + b\n"
+"\n"
+msgstr ""
+
+#, python-brace-format
+msgid "where :math:`z_{1}` is the selected image, :math:`z_{2}` is the second image, :math:`\\odot` is the **Operator** (:math:`+`, :math:`-`, :math:`\\times` or :math:`/`), :math:`a` is the **Factor** and :math:`b` is the **Constant**. The **Operation** field shows the resulting expression. By default, the result is converted to the data type of the selected image."
+msgstr "où :math:`z_{1}` est l'image sélectionnée, :math:`z_{2}` est la seconde image, :math:`\\odot` est l'**Opérateur** (:math:`+`, :math:`-`, :math:`\\times` ou :math:`/`), :math:`a` est le **Facteur** et :math:`b` est la **Constante**. Le champ **Opération** affiche l'expression résultante. Par défaut, le résultat est converti dans le type de données de l'image sélectionnée."
 
 msgid "Operations with a constant"
 msgstr "Opérations avec une constante"
@@ -184,7 +203,7 @@ msgstr ""
 msgid ":math:`z_{k} = \\log_{10}(z_{k})`"
 msgstr ""
 
-msgid "Log10(z+10)"
+msgid "Log10(z+n)"
 msgstr ""
 
 #, python-brace-format
@@ -333,7 +352,13 @@ msgid ""
 "    z_{0} & \\text{otherwise}\n"
 "\\end{cases}`\n"
 "\n"
-msgstr "z_{1} =\n\\begin{cases}\n    \\dfrac{z_{0}}{z_{f}}.\\overline{z_{f}} & \\text{si } z_{0} > z_{threshold} \\\\\n    z_{0} & \\text{sinon}\n\\end{cases}`\n\n"
+msgstr ""
+"z_{1} =\n"
+"\\begin{cases}\n"
+"    \\dfrac{z_{0}}{z_{f}}.\\overline{z_{f}} & \\text{si } z_{0} > z_{threshold} \\\\\n"
+"    z_{0} & \\text{sinon}\n"
+"\\end{cases}`\n"
+"\n"
 
 msgid "where :math:`z_{0}` is the raw image, :math:`z_{f}` is the flat field image, :math:`z_{threshold}` is an adjustable threshold and :math:`\\overline{z_{f}}` is the flat field image average value:"
 msgstr "où :math:`z_{0}` est l'image brute, :math:`z_{f}` est l'image d'homogénéité, :math:`z_{threshold}` est un seuil ajustable et :math:`\\overline{z_{f}}` est la valeur moyenne de l'image d'homogénéité :"
@@ -345,4 +370,4 @@ msgid ""
 msgstr ""
 
 msgid "Raw image and flat field image are supposedly already corrected by performing a dark frame subtraction."
-msgstr "L'image brute et l'image d'homogénéité sont supposées avoir déjà été corrigées par soustraction d'image de noir."`n`n
+msgstr "L'image brute et l'image d'homogénéité sont supposées avoir déjà été corrigées par soustraction d'image de noir.\"`n`"
