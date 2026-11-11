@@ -7,13 +7,14 @@ DataLab settings test
 # guitest: show
 
 import guidata.dataset as gds
-from guidata.dataset.qtwidgets import DataSetGroupEditDialog
+from guidata.dataset.qtwidgets import DataSetEditGroupBox, DataSetGroupEditDialog
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
 from datalab.env import execenv
 from datalab.gui.settings import (
+    AISettings,
     ProcSettings,
     conf_to_datasets,
     create_dataset_dict,
@@ -28,6 +29,22 @@ def test_edit_settings():
     with qt_app_context():
         changed = edit_settings(None)
         execenv.print(changed)
+
+
+def test_ai_settings_follow_enable_checkbox() -> None:
+    """AI Assistant fields are inactive while the AI Assistant is disabled"""
+    with qt_app_context(exec_loop=False):
+        groupbox = DataSetEditGroupBox(_("AI Assistant"), AISettings)
+        groupbox.get()
+        widgets = {w.item.item.get_name(): w for w in groupbox.edit.widgets}
+        checkbox = widgets.pop("enabled").checkbox
+        assert widgets, "AI Assistant settings have no field besides 'enabled'"
+        for checked in (False, True):
+            checkbox.setChecked(checked)
+            for name, widget in widgets.items():
+                assert bool(widget.is_active()) is checked, (
+                    f"{name} (checked={checked})"
+                )
 
 
 def test_proc_history_policy_settings_round_trip() -> None:
