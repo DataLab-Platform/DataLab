@@ -105,7 +105,11 @@ from datalab.utils.qthelpers import (
     configure_menu_about_to_show,
     qt_handle_error_message,
 )
-from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
+from datalab.webapi import (
+    WEBAPI_AVAILABLE,
+    get_webapi_controller,
+    webapi_unavailable_message,
+)
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
 from datalab.widgets import status as dl_status
@@ -826,17 +830,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             Dictionary with "url" and "token" keys.
 
         Raises:
-            RuntimeError: If Web API deps not installed or server already running.
+            RuntimeError: If Web API imports are unavailable or the server is running.
         """
         if not WEBAPI_AVAILABLE:
-            raise RuntimeError(
-                "Web API dependencies not installed. "
-                "Install with: pip install datalab-platform[webapi]"
-            )
+            raise RuntimeError(webapi_unavailable_message())
 
-        controller = get_webapi_controller()
-        controller.set_main_window(self)
-        url, token = controller.start(host=host, port=port)
+        try:
+            controller = get_webapi_controller()
+            controller.set_main_window(self)
+            url, token = controller.start(host=host, port=port)
+        except ImportError as error:
+            raise RuntimeError(webapi_unavailable_message()) from error
         return {"url": url, "token": token}
 
     @remote_controlled
@@ -845,7 +849,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if not WEBAPI_AVAILABLE:
             return
 
-        controller = get_webapi_controller()
+        try:
+            controller = get_webapi_controller()
+        except ImportError:
+            return
         controller.stop()
 
     @remote_controlled
@@ -858,7 +865,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if not WEBAPI_AVAILABLE:
             return {"running": False, "url": None, "token": None, "available": False}
 
-        controller = get_webapi_controller()
+        try:
+            controller = get_webapi_controller()
+        except ImportError:
+            return {"running": False, "url": None, "token": None, "available": False}
         info = controller.get_connection_info()
         info["available"] = True
         return info

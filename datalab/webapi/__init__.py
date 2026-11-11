@@ -51,44 +51,67 @@ See Also
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 __all__ = [
     "WEBAPI_AVAILABLE",
     "get_webapi_controller",
+    "webapi_unavailable_message",
 ]
 
-# Check if webapi dependencies are available
 try:
     import fastapi  # noqa: F401
+    import pydantic  # noqa: F401
     import uvicorn  # noqa: F401
-
-    WEBAPI_AVAILABLE = True
-except ImportError:
+except ImportError as error:
     WEBAPI_AVAILABLE = False
+    _WEBAPI_IMPORT_ERROR = error
+else:
+    WEBAPI_AVAILABLE = True
+    _WEBAPI_IMPORT_ERROR = None
 
 _CONTROLLER_INSTANCE = None
+
+
+def webapi_unavailable_message(_: Callable[[str], str] = str) -> str:
+    """Return repair guidance, optionally translated for the GUI.
+
+    Args:
+        _: Translation function. Defaults to leaving the message in English.
+
+    Returns:
+        The diagnostic in English or translated by the given function.
+    """
+    return _(
+        "Web API is unavailable. FastAPI, Uvicorn and Pydantic are required "
+        "dependencies. Check or repair your DataLab installation using the original "
+        "installation method or package manager. For pip installations, run "
+        "python -m pip check in DataLab's Python environment to check installed "
+        "dependency requirements."
+    )
 
 
 def get_webapi_controller():
     """Get the singleton WebAPI controller instance.
 
     Returns:
-        WebApiController instance, or None if webapi dependencies not installed.
+        WebApiController instance.
 
     Raises:
-        ImportError: If webapi dependencies are not available.
+        ImportError: If Web API dependencies or the controller cannot be imported.
     """
     # pylint: disable=global-statement
     global _CONTROLLER_INSTANCE  # noqa: PLW0603
 
     if not WEBAPI_AVAILABLE:
-        raise ImportError(
-            "Web API dependencies not installed. "
-            "Install with: pip install datalab-platform[webapi]"
-        )
+        raise ImportError(webapi_unavailable_message()) from _WEBAPI_IMPORT_ERROR
 
     if _CONTROLLER_INSTANCE is None:
-        # pylint: disable=import-outside-toplevel
-        from datalab.webapi.controller import WebApiController
+        try:
+            # pylint: disable=import-outside-toplevel
+            from datalab.webapi.controller import WebApiController
+        except ImportError as error:
+            raise ImportError(webapi_unavailable_message()) from error
 
         _CONTROLLER_INSTANCE = WebApiController()
 
