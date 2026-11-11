@@ -16,6 +16,7 @@
 * **Image coordinates**: since DataLab 1.2.0, **Set uniform coordinates** was missing from **Processing > Axis transformation** in the Image panel, so this feature could no longer be run from the menus. It is available again, next to **Polynomial calibration** (fixes [Issue #515](https://github.com/DataLab-Platform/DataLab/issues/515)).
 * **Web API**: starting the Web API server through the remote control (XML-RPC), e.g. with `RemoteProxy.start_webapi_server()`, used port 8080 instead of the automatic port (18080, or the next free one), so that DataLab-Kernel could not find the server automatically. Unless a port is given, the server now uses the automatic port, as when it is started from **File > Web API** (fixes [Issue #516](https://github.com/DataLab-Platform/DataLab/issues/516)).
 * **AI Assistant settings**: the fields of the **AI Assistant** tab of **File > Settings...** stayed editable when **Enable AI Assistant** was unchecked, as if they still had an effect. They are now inactive while the AI Assistant is disabled (fixes [Issue #517](https://github.com/DataLab-Platform/DataLab/issues/517)).
+* **Stability analysis**: **Overlapping Allan variance** was missing from **Processing > Stability analysis** in the Signal panel, so it could only be computed with the other methods, through **All stability features...**. It is now listed with the other variances (fixes [Issue #518](https://github.com/DataLab-Platform/DataLab/issues/518)).
 
 ### 📖 Documentation since version 1.4.0 ###
 

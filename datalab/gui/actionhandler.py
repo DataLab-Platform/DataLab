@@ -1433,6 +1433,7 @@ class SignalActionHandler(BaseActionHandler):
             with self.new_menu(_("Stability analysis"), icon_name="stability.svg"):
                 self.action_for("allan_variance")
                 self.action_for("allan_deviation")
+                self.action_for("overlapping_allan_variance")
                 self.action_for("modified_allan_variance")
                 self.action_for("hadamard_variance")
                 self.action_for("total_variance")

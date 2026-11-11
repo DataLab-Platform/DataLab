@@ -78,5 +78,24 @@ def test_shared_submenus_keep_all_actions() -> None:
         )
 
 
+def test_stability_analysis_menu_lists_all_variances() -> None:
+    """The Stability analysis submenu lists every stability analysis feature"""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        _check_features_in_menu(
+            win.signalpanel,
+            ActionCategory.PROCESSING,
+            (
+                "allan_variance",
+                "allan_deviation",
+                "overlapping_allan_variance",
+                "modified_allan_variance",
+                "hadamard_variance",
+                "total_variance",
+                "time_deviation",
+            ),
+        )
+
+
 if __name__ == "__main__":
     test_shared_submenus_keep_all_actions()
+    test_stability_analysis_menu_lists_all_variances()
