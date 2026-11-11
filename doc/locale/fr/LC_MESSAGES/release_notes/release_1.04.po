@@ -53,6 +53,9 @@ msgstr "**Préférences de l'assistant IA** : les champs de l'onglet **Assistant
 msgid "**Stability analysis**: **Overlapping Allan variance** was missing from **Processing > Stability analysis** in the Signal panel, so it could only be computed with the other methods, through **All stability features...**. It is now listed with the other variances (fixes [Issue #518](https://github.com/DataLab-Platform/DataLab/issues/518))."
 msgstr "**Analyse de stabilité** : **Variance d’Allan avec recouvrement** manquait dans **Traitement > Analyse de stabilité** du panneau Signal, si bien qu'elle ne pouvait être calculée qu'avec les autres méthodes, par **Toutes les analyses de stabilité...**. Elle figure désormais avec les autres variances (corrige [l'issue #518](https://github.com/DataLab-Platform/DataLab/issues/518))."
 
+msgid "**Web API**: when required components could not be imported, the menu and remote control suggested installing a nonexistent extra. They now name the required dependencies and explain how to check or repair the installation using its original method or package manager; pip users can run `python -m pip check` to check dependency requirements (fixes [Issue #525](https://github.com/DataLab-Platform/DataLab/issues/525))."
+msgstr "**API Web** : lorsque les composants requis ne pouvaient pas être importés, le menu et le contrôle à distance suggéraient d'installer un extra inexistant. Ils nomment désormais les dépendances requises et expliquent comment vérifier ou réparer l'installation avec sa méthode ou son gestionnaire de paquets d'origine ; les utilisateurs de pip peuvent exécuter `python -m pip check` pour vérifier les exigences des dépendances (corrige [l'issue #525](https://github.com/DataLab-Platform/DataLab/issues/525))."
+
 msgid "📖 Documentation since version 1.4.0"
 msgstr "📖 Documentation depuis la version 1.4.0"
 

@@ -4997,8 +4997,11 @@ msgstr "Copier l'URL et le jeton dans le presse-papier"
 msgid "Status: Not running"
 msgstr "Statut : Non démarré"
 
-msgid "Web API unavailable (install datalab-platform[webapi])"
-msgstr "API Web non disponible (installer datalab-platform[webapi])"
+msgid "Web API unavailable (hover for details)"
+msgstr "API Web indisponible (survoler pour afficher les détails)"
+
+msgid "Web API is unavailable. FastAPI, Uvicorn and Pydantic are required dependencies. Check or repair your DataLab installation using the original installation method or package manager. For pip installations, run python -m pip check in DataLab's Python environment to check installed dependency requirements."
+msgstr "L'API Web est indisponible. FastAPI, Uvicorn et Pydantic sont des dépendances requises. Vérifiez ou réparez votre installation de DataLab à l'aide de la méthode d'installation ou du gestionnaire de paquets d'origine. Pour les installations avec pip, exécutez python -m pip check dans l'environnement Python de DataLab afin de vérifier les exigences des dépendances installées."
 
 msgid "Web API"
 msgstr "API Web"
