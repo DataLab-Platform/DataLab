@@ -478,9 +478,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             menu = self.__submenus[key]
             if self.__category_in_progress is ActionCategory.PLUGINS:
                 menu.setStyleSheet(SCROLLABLE_MENU_STYLESHEET)
-            # When reusing an existing submenu (e.g. after re-running
-            # plugin action creation), clear previous actions so that the
-            # submenu contents reflect the latest definitions.
+            # Reopening a built-in submenu redefines its contents: this is how a
+            # panel handler replaces the contents of a submenu created by the
+            # base handler (e.g. "Axis transformation"), so the panel handler
+            # must list all the actions of that submenu.
             #
             # However, if we are in the PLUGINS category, we don't want to
             # clear the menu because multiple plugins might contribute to the
@@ -1554,11 +1555,6 @@ class ImageActionHandler(BaseActionHandler):
                     select_condition=SelectCond.at_least_two,
                 )
 
-            with self.new_menu(
-                _("Axis transformation"), icon_name="axis_transform.svg"
-            ):
-                self.action_for("set_uniform_coords")
-
         super().create_first_actions()
 
         # MARK: CREATE
@@ -1620,6 +1616,10 @@ class ImageActionHandler(BaseActionHandler):
 
         # MARK: PROCESSING (2/2)
         with self.new_category(ActionCategory.PROCESSING):
+            # Redefines the submenu created by the base handler (see `new_menu`)
+            with self.new_menu(_("Axis transformation")):
+                self.action_for("set_uniform_coords")
+                self.action_for("calibration")
             with self.new_menu(_("Frequency filters"), icon_name="noise_reduction.svg"):
                 self.action_for("butterworth")
                 self.action_for("gaussian_freq_filter")
