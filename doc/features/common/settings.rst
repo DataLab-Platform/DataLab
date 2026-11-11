@@ -32,12 +32,12 @@ The General settings tab contains main window and general feature settings:
 **Process isolation**
     When enabled, each computation runs in a separate process, preventing the application
     from freezing during long computations. This is the recommended setting for better
-    responsiveness.
+    responsiveness. Changing this option requires restarting DataLab.
 
 **RPC server**
     Enable the RPC (Remote Procedure Call) server to communicate with external applications,
     such as your own scripts running in Spyder, Jupyter, or other software. This allows
-    programmatic control of DataLab.
+    programmatic control of DataLab. Changing this option requires restarting DataLab.
 
 **Web API localhost bypass**
     When enabled (default), connections from localhost (127.0.0.1) to the Web API do not
@@ -51,9 +51,9 @@ The General settings tab contains main window and general feature settings:
         stricter security.
 
 **Memory threshold**
-    Set a threshold (in MB) below which a warning is displayed before loading new data.
-    This helps prevent out-of-memory errors when working with large datasets. Set to 0
-    to disable the warning.
+    Set a threshold (in MB, default: 500) below which a warning is displayed before
+    loading new data. This helps prevent out-of-memory errors when working with large
+    datasets. Set to 0 to disable the warning.
 
 .. note::
 
@@ -132,11 +132,11 @@ The Processing settings tab controls computation behavior and default parameters
     identity remains its full UUID. Signal, image and group items in the trees show
     their own ``#UUID8`` (or ``#gUUID8``) reference below their title.
 
-**Use signal bounds for new signals**
+**Use current signal bounds**
     When enabled, the xmin and xmax values for new signals are initialized from
     the current signal's bounds. When disabled, default values are used.
 
-**Use image dimensions for new images**
+**Use current image dimensions**
     When enabled, the width and height values for new images are initialized from
     the current image's dimensions. When disabled, default values are used.
 
@@ -144,18 +144,23 @@ The Processing settings tab controls computation behavior and default parameters
     Enable FFT shift to center the zero-frequency component in the frequency spectrum
     for easier visualization and analysis.
 
+**Auto-normalize convolution/deconvolution kernel**
+    When enabled, convolution and deconvolution kernels are automatically normalized,
+    for signals and images, to preserve signal energy and image intensity. This option
+    is disabled by default.
+
 **Extract multiple ROIs in a single object**
     When enabled, multiple regions of interest (ROIs) are extracted into a single object.
     When disabled, each ROI is extracted into a separate object.
 
-**Ignore warnings**
+**Ignore warnings during computations**
     Suppress warning messages during computations.
 
-**X-array compatibility behavior**
+**X-axis**
     Choose the behavior when X arrays are incompatible in multi-signal computations:
 
-    - **Ask**: display a confirmation dialog (default)
-    - **Interpolate**: automatically interpolate signals
+    - **Ask before interpolation**: display a confirmation dialog (default)
+    - **Interpolate systematically**: automatically interpolate signals
 
 .. _history-session-settings:
 
@@ -208,7 +213,7 @@ Result management
 **Show results dialog automatically after processing**
     When enabled, the results dialog is shown automatically after each processing operation
     producing results. When disabled, the results dialog is not shown automatically but
-    results can still be viewed using the dedicated button or menu option.
+    results can still be viewed using the "Show results..." entry of the "Analysis" menu.
 
 Visualization
 -------------
@@ -255,7 +260,7 @@ The Signals sub-tab contains settings specific to signal visualizations:
     screen pixel wide, also on high-DPI screens (e.g. with a 150% display scaling),
     which keeps their rendering fast.
 
-**Line width performance threshold**
+**Performance threshold**
     For signals with more than this number of points (default: 1,000), line width is
     automatically limited to 1.0 for performance reasons. This prevents the ~10x rendering
     slowdown caused by Qt's raster engine when drawing thick lines (width > 1.0) on large
@@ -273,9 +278,8 @@ The Signals sub-tab contains settings specific to signal visualizations:
     number of points is displayed.
 
 **Autoscale margin**
-    Percentage of margin to add around data when auto-scaling signal plots. A value of
-    0.2% adds a small margin for better visualization. Set to 0% for no margin (exact
-    data bounds).
+    Percentage of margin to add around data when auto-scaling signal plots (default:
+    2%). Set to 0% for no margin (exact data bounds).
 
 **DateTime format (s/min/h)**
     Format string for datetime X-axis labels when using standard time units (s, min, h).
@@ -325,9 +329,8 @@ The Images sub-tab contains settings specific to image visualizations:
     Recommended values are below 1%.
 
 **Autoscale margin**
-    Percentage of margin to add around data when auto-scaling image plots. A value of
-    0.2% adds a small margin for better visualization. Set to 0% for no margin (exact
-    data bounds).
+    Percentage of margin to add around data when auto-scaling image plots (default:
+    1%). Set to 0% for no margin (exact data bounds).
 
 **Default image visualization settings**
     Click this button to configure default visualization settings for images (colormap,
@@ -491,7 +494,8 @@ The Console settings tab configures the internal console for debugging and advan
     Console settings tab
 
 **Console enabled**
-    Enable the internal Python console for debugging and advanced scripting.
+    Enable the internal Python console for debugging and advanced scripting. Changing
+    this option requires restarting DataLab.
 
 **Show console on error**
     When enabled, the console is automatically shown when an error occurs in the
@@ -499,7 +503,11 @@ The Console settings tab configures the internal console for debugging and advan
     traceback.
 
 **External editor path**
-    Path to an external text editor to use for editing Python code from the console.
+    Path (or command) of the external editor used to open a source file at the line
+    of an error, from a traceback shown in the console or in a warning or error
+    message box (default: ``code``, i.e. Visual Studio Code).
 
 **External editor arguments**
-    Command-line arguments to pass to the external editor.
+    Command-line arguments to pass to the external editor: ``{path}`` and
+    ``{line_number}`` are replaced by the path of the file and the line number of
+    the error (default: ``-g {path}:{line_number}``).

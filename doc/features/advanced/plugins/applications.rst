@@ -9,6 +9,8 @@ Application plugins
 
 An application plugin, declaring the ``APPLICATION`` capability, provides complete workflows, such as the characterization of a camera or of pulsed signals: its methods are presented in the :ref:`applications_panel`, and its tiles on the :ref:`welcome_page`. This page describes what a plugin may declare for this purpose: headless recipes and packaged examples, which any plugin may provide, then tools, instruments and welcome page tiles, which require the ``APPLICATION`` capability. The `Camera & Detector Characterization <https://github.com/DataLab-Platform/datalab-camera-characterization>`_ and `Pulse & Transient Characterization <https://github.com/DataLab-Platform/datalab-pulse-characterization>`_ plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ are complete examples.
 
+This page describes DataLab Desktop. DataLab-Web runs the headless recipes, examples and tools declared by a distinct plugin class, but it does not support the Desktop methods launching recipes and examples, nor welcome page tiles (see :ref:`plugins_web`).
+
 Headless recipes
 ----------------
 
@@ -258,6 +260,9 @@ A tool may name an ``instrument`` method instead of a ``launcher``. This method 
 .. code-block:: python
 
   import guidata.dataset as gds
+  import numpy as np
+  from sigima.objects import create_signal
+
   from datalab.plugins.instruments import (
     InstrumentAcquisition,
     InstrumentFrame,
@@ -273,6 +278,11 @@ A tool may name an ``instrument`` method instead of a ``launcher``. This method 
 
     def __init__(self):
       super().__init__(SourceSettings())
+
+    def make_signal(self):
+      x = np.linspace(0.0, 1.0, 500)
+      y = self.settings.amplitude * np.sin(2 * np.pi * 5 * x)
+      return create_signal("Source", x, y + np.random.normal(0.0, 0.05, x.size))
 
     def preview(self):
       signal = self.make_signal()
@@ -316,6 +326,7 @@ The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:rela
 
 .. code-block:: python
 
+  from datalab.plugins import PluginBase, PluginCapability, PluginInfo
   from datalab.plugins.tiles import WelcomeTile
 
   class MyPlugin(PluginBase):
@@ -345,3 +356,5 @@ The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:rela
 Declared tiles replace the default tile. The first one is the main tile of the plugin; the others are shown next to it when the **Applications** section has room for them, and otherwise become actions of its menu, opened from its "…" button or by right-clicking it. A tile without ``launcher`` shows the plugin page in the **Applications** panel; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab.
 
 The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** panel.
+
+Welcome page tiles are specific to DataLab Desktop: DataLab-Web does not provide the ``datalab.plugins.tiles`` module, so the DataLab-Web class of a plugin cannot declare them.

@@ -249,8 +249,12 @@ The following parameters are available:
       - Description
     * - Strategy
       - Zero padding strategy (see below)
+    * - Location
+      - Where to add the zeros: 'append' (after the signal), 'prepend' (before
+        the signal) or 'both' (half before, half after)
     * - Number of points
-      - Custom length (if `strategy` is "custom")
+      - Number of points to add (user-defined if `strategy` is "custom", computed
+        automatically otherwise)
 
 Zero padding strategy refers to the method used to increase the length of the signal, and it can be one of the following:
 
@@ -261,13 +265,13 @@ Zero padding strategy refers to the method used to increase the length of the si
     * - Strategy
       - Description
     * - next_pow2
-      - Next power of 2 (e.g. 1024 → 2048)
+      - Next power of 2, greater than or equal to the signal length (e.g. 1000 → 1024)
     * - double
       - Double the length (e.g. 1024 → 2048)
     * - triple
       - Triple the length (e.g. 1024 → 3072)
     * - custom
-      - Custom length (user-defined)
+      - Custom number of points to add (user-defined)
 
 FFT related functions
 ~~~~~~~~~~~~~~~~~~~~~
@@ -374,8 +378,10 @@ Fitting
 ^^^^^^^
 
 Fit a model to each selected signal.
-This can be done automatically or through an interactive curve fitting dialog,
-which shows the formula of the model below the fit parameters.
+This can be done automatically or through an interactive curve fitting dialog
+(**Interactive fitting** submenu), which shows the formula of the model below the
+fit parameters. Most models are available in both modes, except Multi-Gaussian and
+Multi-Lorentzian fits (interactive mode only) and Sigmoid fit (automatic mode only).
 
 The fitted signal stores the model parameters in its metadata
 (``metadata["fit_params"]``), under the names given in the last column of the
@@ -416,7 +422,7 @@ table below:
       - | :math:`y = y_{0,L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
         | :math:`y = y_{0,R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
       - :math:`A_L`: ``amp_left``, :math:`A_R`: ``amp_right``, :math:`\sigma_L`: ``sigma_left``, :math:`\sigma_R`: ``sigma_right``, :math:`x_0`: ``x0``, :math:`y_{0,L}`: ``y0_left``, :math:`y_{0,R}`: ``y0_right``
-    * - Two back-to-back exponentials
+    * - Piecewise exponential (raise-decay)
       - | :math:`y = y_{0} + a_{L} \cdot \exp\left(b_{L} \cdot x\right)` if :math:`x < x_{c}`
         | :math:`y = y_{0} + a_{R} \cdot \exp\left(b_{R} \cdot x\right)` otherwise
       - :math:`x_c`: ``x_center``, :math:`a_L`: ``a_left``, :math:`b_L`: ``b_left``, :math:`a_R`: ``a_right``, :math:`b_R`: ``b_right``, :math:`y_0`: ``y0``

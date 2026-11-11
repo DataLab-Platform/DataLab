@@ -28,8 +28,8 @@ msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'o
 msgid "The \"Analysis\" menu allows you to perform various computations on the selected signals, such as statistics, full width at half-maximum, or full width at 1/e²."
 msgstr "Le menu Analyse\" permet d'effectuer divers calculs sur les signaux sélectionnés, tels que des statistiques, la largeur à mi-hauteur, ou encore la largeur à 1/e²."
 
-msgid "In DataLab vocabulary, an \"analysis\" is a feature that computes a scalar result from a signal. This result is stored as metadata, and thus attached to signal. This is different from a \"processing\" which creates a new signal from an existing one."
-msgstr "Dans le vocabulaire de DataLab, un \"analyse\" est une fonctionnalité qui calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké sous la forme de métadonnées ; il est donc attaché au signal. Cela diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un signal existant."
+msgid "In DataLab vocabulary, an \"analysis\" is a feature that computes a scalar result from a signal. This result is stored as metadata, and thus attached to signal. This is different from a \"processing\" which creates a new signal from an existing one. The \"Histogram\" feature is an exception: it creates a new signal from each selected signal."
+msgstr "Dans le vocabulaire de DataLab, une \"analyse\" est une fonctionnalité qui calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké sous la forme de métadonnées ; il est donc attaché au signal. Cela diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un signal existant. La fonctionnalité \"Histogramme\" est une exception : elle crée un nouveau signal à partir de chaque signal sélectionné."
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -121,23 +121,35 @@ msgstr "Réalise l'ajustement des données à une gaussienne en utilisant un alg
 msgid "Computed scalar results are systematically stored as metadata. Metadata is attached to signal and serialized with it when exporting current session in a HDF5 file."
 msgstr "Les résultats de calcul scalaires sont systématiquement stockés dans les métadonnées. Les métadonnées sont attachées au signal et sérialisées avec ce dernier par exemple lors de l'export d'une session de DataLab vers un fichier HDF5."
 
-msgid "Arguments of the min and max"
+msgid "Full width at y=..."
+msgstr "Largeur à y=..."
+
+msgid "Compute the full width of the selected signal at a given ordinate value, chosen by moving a horizontal cursor in a dialog box. The computed result is displayed as an annotated segment."
+msgstr "Calcule la largeur totale du signal sélectionné à une valeur d'ordonnée donnée, choisie en déplaçant un curseur horizontal dans une boîte de dialogue. Le résultat calculé est affiché sous la forme d'un segment annoté."
+
+msgid "Abscissa of the minimum and maximum"
 msgstr "Abscisse du minimum et du maximum"
 
 msgid "Compute the smallest argument of the minima and the smallest argument of the maxima of the selected signal."
 msgstr "Calcule le plus petit argument du minimum et le plus petit argument du maximum du signal sélectionné."
 
-msgid "Abscissa at y=..."
-msgstr "Abscisse pour y=..."
+msgid "First abscissa at y=..."
+msgstr "Première abscisse à y=..."
 
-msgid "Compute the abscissa at a given ordinate value for the selected signal. If there is no solution, the displayed result is NaN. If there are multiple solutions, the displayed result is the smallest value."
-msgstr "Calcule l'abscisse pour une ordonnée donnée du signal sélectionné. Si aucune solution n'est trouvée, le résultat affiché est NaN. Si plusieurs solutions existent, le résultat affiché est la plus petite valeur."
+msgid "Compute the abscissa at a given ordinate value for the selected signal (using linear interpolation), chosen by moving a horizontal cursor in a dialog box. If there is no solution, the displayed result is NaN. If there are multiple solutions, the displayed result is the first one."
+msgstr "Calcule l'abscisse pour une ordonnée donnée du signal sélectionné (par interpolation linéaire), choisie en déplaçant un curseur horizontal dans une boîte de dialogue. Si aucune solution n'est trouvée, le résultat affiché est NaN. Si plusieurs solutions existent, le résultat affiché est la première."
+
+msgid "Ordinate at x=..."
+msgstr "Ordonnée à x=..."
+
+msgid "Compute the ordinate at a given abscissa value for the selected signal (using linear interpolation), chosen by moving a vertical cursor in a dialog box. If the abscissa is outside the signal range, the displayed result is NaN."
+msgstr "Calcule l'ordonnée pour une abscisse donnée du signal sélectionné (par interpolation linéaire), choisie en déplaçant un curseur vertical dans une boîte de dialogue. Si l'abscisse est en dehors de l'intervalle du signal, le résultat affiché est NaN."
 
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-msgid "DataLab offers two complementary ways to detect peaks. Both produce the same result: an *XY-markers* :class:`~sigima.objects.scalar.TableResult` attached to the signal (visible from *View ▸ Show results* and overlayed on the curve)."
-msgstr "DataLab propose deux entrées complémentaires pour détecter les pics. Les deux produisent le même résultat : un :class:`~sigima.objects.scalar.TableResult` de type *marqueurs XY* attaché au signal (visible depuis *Vue ▸ Afficher les résultats* et superposé à la courbe)."
+msgid "DataLab offers two complementary ways to detect peaks. Both produce the same result: an *XY-markers* :class:`~sigima.objects.scalar.TableResult` attached to the signal (visible from *Analysis ▸ Show results* and overlayed on the curve)."
+msgstr "DataLab propose deux entrées complémentaires pour détecter les pics. Les deux produisent le même résultat : un :class:`~sigima.objects.scalar.TableResult` de type *marqueurs XY* attaché au signal (visible depuis *Analyse ▸ Afficher les résultats* et superposé à la courbe)."
 
 msgid "Entry point"
 msgstr "Entrée"
@@ -232,7 +244,9 @@ msgstr "Le contraste est défini comme le rapport de la différence et de la som
 msgid ""
 "\\text{Contrast} = \\dfrac{\\text{max}(y) - \\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n"
 "\n"
-msgstr "\\text{Contraste} = \\dfrac{\\text{max}(y) - \\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n\n"
+msgstr ""
+"\\text{Contraste} = \\dfrac{\\text{max}(y) - \\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n"
+"\n"
 
 msgid "This feature assumes that the signal is a profile from an image, where the contrast is meaningful. This justifies the optical definition of contrast."
 msgstr "Cette fonctionnalité suppose que le signal est un profil extrait d'une image, pour laquelle le contraste a un sens. Cela justifie la définition optique du contraste."
@@ -404,3 +418,9 @@ msgstr "Tracer les résultats"
 
 msgid "Plot the results of analyses performed on the selected signals, with user-defined X and Y axes (e.g. plot the FWHM as a function of the signal index)."
 msgstr "Trace les résultats des analyses effectuées sur les signaux sélectionnés, avec des axes X et Y définis par l'utilisateur (p.ex. trace la largeur à mi-hauteur en fonction de l'indice du signal)."
+
+msgid "Delete results"
+msgstr "Supprimer les résultats"
+
+msgid "Delete analysis results of the selected signals: this submenu lists the results (one entry per result, to delete it individually), followed by a \"Delete all results...\" entry."
+msgstr "Supprime les résultats d'analyse des signaux sélectionnés : ce sous-menu liste les résultats (une entrée par résultat, pour le supprimer individuellement), suivis d'une entrée \"Supprimer tous les résultats...\"."

@@ -46,9 +46,11 @@ full control over when analyses are refreshed.
 
 .. note::
 
-    This action is only available for signals that have stored processing parameters
-    (created through processing operations) or stored analysis parameters (analysis
-    operations previously run on them).
+    This action is enabled as soon as a signal or a group is selected, but it only
+    applies to signals that have stored processing parameters (created through
+    processing operations) or stored analysis parameters (analysis operations
+    previously run on them). When none of the selected signals has such parameters,
+    an information message is displayed.
 
 Select source objects
 ---------------------
@@ -65,8 +67,8 @@ for the current result.
 
 .. note::
 
-    This action is only available when exactly one signal is selected and that signal
-    has source object references.
+    This action is enabled when exactly one signal is selected. When that signal has
+    no source object references, an information message is displayed.
 
 Metadata
 --------
@@ -133,10 +135,10 @@ metadata to a file and then import it back later.
     :height: 24px
     :class: dark-light no-scaled-link
 
-Delete metadata
-^^^^^^^^^^^^^^^
+Delete object metadata
+^^^^^^^^^^^^^^^^^^^^^^
 
-When deleting metadata using the "Delete metadata" |metadata_delete| action in the
+When deleting metadata using the "Delete object metadata" |metadata_delete| action in the
 "Edit" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs)
 if they are present in the metadata. After this eventual confirmation, the metadata
 will be deleted, meaning that analysis results, ROIs, and any other information
@@ -296,29 +298,27 @@ are not stored in the metadata of the signal (but in an attribute of the signal 
 
 The "Edit" menu allows you to:
 
-- "Add object title to plot": this action will add a label on top of the signal
-  with its title.
+- "Insert object title as annotation label": this action will add a label on top of
+  the signal with its title.
 
 - "Copy titles to clipboard" |copy_titles|: this action will copy the titles of the
   selected signals to the clipboard, which might be useful to paste them in a text
   editor or in a spreadsheet.
 
-  Example of the content of the clipboard:
+  Example of the content of the clipboard (titles of processed signals refer to
+  their sources by the first 8 characters of their unique identifier, prefixed by
+  "g" for groups):
 
   .. code-block:: text
 
-    g001:
-        s001: lorentz(A=1,σ=1,μ=0,y0=0)
-        s002: derivative(s001)
-        s003: wiener(s002)
-    g002: derivative(g001)
-        s004: derivative(s001)
-        s005: derivative(s002)
-        s006: derivative(s003)
-    g003: fft(g002)
-        s007: fft(s004)
-        s008: fft(s005)
-        s009: fft(s006)
+    Raw data
+        lorentz(A=1,σ=1,μ=0,y0=0)
+        derivative(511f1709)
+        wiener(241270f6)
+    derivative(g25fb9d07)
+        derivative(511f1709)
+        derivative(241270f6)
+        derivative(fedb39d5)
 
 .. |copy_titles| image:: ../../../datalab/data/icons/edit/copy_titles.svg
     :width: 24px

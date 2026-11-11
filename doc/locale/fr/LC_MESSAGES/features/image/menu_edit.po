@@ -50,8 +50,8 @@ msgstr ""
 msgid "It also refreshes analysis results (statistics, FWHM, centroid, peak/contour/blob detection, etc.) using their stored parameters. Analysis results are not recomputed automatically when you modify a region of interest, the data, or object properties: existing results are left untouched until you explicitly trigger this action, giving you full control over when analyses are refreshed."
 msgstr "Cette action actualise également les résultats d'analyse (statistiques, FWHM, centroïde, détection de pics, de contours ou de blobs, etc.) à partir de leurs paramètres enregistrés. Les résultats d'analyse ne sont pas recalculés automatiquement lorsque vous modifiez une région d'intérêt, les données ou les propriétés de l'objet : les résultats existants restent inchangés jusqu'à ce que vous déclenchiez explicitement cette action, vous laissant ainsi un contrôle total sur le moment où les analyses sont actualisées."
 
-msgid "This action is only available for images that have stored processing parameters (created through processing operations) or stored analysis parameters (analysis operations previously run on them)."
-msgstr "Cette action n'est disponible que pour les images disposant de paramètres de traitement enregistrés (images créées par des opérations de traitement) ou de paramètres d'analyse enregistrés (opérations d'analyse exécutées précédemment sur celles-ci)."
+msgid "This action is enabled as soon as an image or a group is selected, but it only applies to images that have stored processing parameters (created through processing operations) or stored analysis parameters (analysis operations previously run on them). When none of the selected images has such parameters, an information message is displayed."
+msgstr "Cette action est activée dès qu'une image ou un groupe est sélectionné, mais elle ne s'applique qu'aux images disposant de paramètres de traitement enregistrés (images créées par des opérations de traitement) ou de paramètres d'analyse enregistrés (opérations d'analyse exécutées précédemment sur celles-ci). Lorsqu'aucune des images sélectionnées ne dispose de tels paramètres, un message d'information est affiché."
 
 msgid "Select source objects"
 msgstr "Sélectionner les objets sources"
@@ -62,8 +62,8 @@ msgstr "L'action \"Sélectionner les objets sources\" |goto_source| vous permet 
 msgid "goto_source"
 msgstr ""
 
-msgid "This action is only available when exactly one image is selected and that image has source object references."
-msgstr "Cette action n'est disponible que lorsqu'une seule image est sélectionnée et que cette image possède des références d'objets sources."
+msgid "This action is enabled when exactly one image is selected. When that image has no source object references, an information message is displayed."
+msgstr "Cette action est activée lorsqu'une seule image est sélectionnée. Lorsque cette image ne possède aucune référence d'objets sources, un message d'information est affiché."
 
 msgid "Metadata"
 msgstr "Métadonnées"
@@ -116,10 +116,10 @@ msgstr ""
 msgid "metadata_export"
 msgstr ""
 
-msgid "Delete metadata"
+msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-msgid "When deleting metadata using the \"Delete metadata\" |metadata_delete| action in the \"Edit\" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs) if they are present in the metadata. After this eventual confirmation, the metadata will be deleted, meaning that analysis results, ROIs, and any other information associated with the image will be lost."
+msgid "When deleting metadata using the \"Delete object metadata\" |metadata_delete| action in the \"Edit\" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs) if they are present in the metadata. After this eventual confirmation, the metadata will be deleted, meaning that analysis results, ROIs, and any other information associated with the image will be lost."
 msgstr "Lors de la suppression des métadonnées en utilisant l'action \"Supprimer les métadonnées\" |metadata_delete| dans le menu \"Édition\", vous serez invité à confirmer la suppression des régions d'intérêt (ROIs) si elles sont présentes dans les métadonnées. Après cette confirmation éventuelle, les métadonnées seront supprimées, ce qui signifie que les résultats d'analyse, les ROIs et toute autre information associée à l'image seront perdus."
 
 msgid "metadata_delete"
@@ -301,8 +301,8 @@ msgstr "Les titres des images peuvent être considérés comme des métadonnées
 msgid "The \"Edit\" menu allows you to:"
 msgstr "Le menu \"Édition\" vous permet de :"
 
-msgid "\"Add object title to plot\": this action will add a label on top of the image with its title, which might be useful in combination with the \"Distribute on a grid\" operation (see :ref:`ima-menu-processing`) to easily identify the images."
-msgstr "\"Ajouter le titre de l'objet au graphique\" : cette action ajoutera une étiquette en haut de l'image avec son titre, ce qui peut être utile en combinaison avec l'opération \"Distribuer sur une grille\" (voir :ref:`ima-menu-processing`) pour identifier facilement les images."
+msgid "\"Insert object title as annotation label\": this action will add a label on top of the image with its title, which might be useful in combination with the \"Distribute on a grid\" operation (see :ref:`ima-menu-processing`) to easily identify the images."
+msgstr "\"Insérer le titre de l'objet sous forme d'annotation\" : cette action ajoutera une étiquette en haut de l'image avec son titre, ce qui peut être utile en combinaison avec l'opération \"Distribuer sur une grille\" (voir :ref:`ima-menu-processing`) pour identifier facilement les images."
 
 msgid "\"Copy titles to clipboard\" |copy_titles|: this action will copy the titles of the selected images to the clipboard, which might be useful to paste them in a text editor or in a spreadsheet."
 msgstr "\"Copier les titres dans le presse-papiers\" |copy_titles| : cette action copiera les titres des images sélectionnées dans le presse-papiers, ce qui peut être utile pour les coller dans un éditeur de texte ou dans un tableur."
@@ -310,5 +310,5 @@ msgstr "\"Copier les titres dans le presse-papiers\" |copy_titles| : cette actio
 msgid "copy_titles"
 msgstr ""
 
-msgid "Example of the content of the clipboard:"
-msgstr "Exemple du contenu du presse-papiers :"
+msgid "Example of the content of the clipboard (titles of processed images refer to their sources by the first 8 characters of their unique identifier, prefixed by \"g\" for groups):"
+msgstr "Exemple de contenu du presse-papiers (les titres des images traitées font référence à leurs sources par les 8 premiers caractères de leur identifiant unique, préfixés par \"g\" pour les groupes) :"

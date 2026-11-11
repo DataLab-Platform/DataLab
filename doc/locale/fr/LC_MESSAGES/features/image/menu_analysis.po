@@ -28,8 +28,8 @@ msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'ou
 msgid "The \"Analysis\" menu allows you to perform various computations on the current image or group of images. It also allows you to compute statistics, to compute the centroid, to detect peaks, to detect contours, and so on."
 msgstr "Le menu Analyse\" permet d'effectuer divers calculs sur l'image courante ou sur un groupe d'images. Il permet également de calculer des statistiques, le barycentre, de détecter des pics, des contours, etc."
 
-msgid "In DataLab vocabulary, an \"analysis\" is a feature that computes a scalar result from an image. This result is stored as metadata, and thus attached to image. This is different from a \"processing\" which creates a new image from an existing one."
-msgstr "Dans le vocabulaire de DataLab, une \"analyse\" est une fonctionnalité de calcul d'un résultat scalaire à partir d'une image. Ce résultat est stocké sous la forme de métadonnées, et donc attaché à l'image. C'est différent d'un \"traitement\" qui crée une nouvelle image à partir d'une image existante."
+msgid "In DataLab vocabulary, an \"analysis\" is a feature that computes a scalar result from an image. This result is stored as metadata, and thus attached to image. This is different from a \"processing\" which creates a new image from an existing one. The \"Histogram\", \"Intensity profiles\" and projection features are exceptions: they create new signals from each selected image."
+msgstr "Dans le vocabulaire de DataLab, une \"analyse\" est une fonctionnalité de calcul d'un résultat scalaire à partir d'une image. Ce résultat est stocké sous la forme de métadonnées, et donc attaché à l'image. C'est différent d'un \"traitement\" qui crée une nouvelle image à partir d'une image existante. Les fonctionnalités \"Histogramme\", \"Profils d'intensité\" et de projection sont des exceptions : elles créent de nouveaux signaux à partir de chaque image sélectionnée."
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -139,11 +139,11 @@ msgstr "Projections horizontale et verticale"
 msgid "Compute horizontal and vertical projection profiles:"
 msgstr "Calcule les profils de projection horizontale et verticale :"
 
-msgid "Horizontal projection: Sum the pixel values along each row (projection on the x-axis)."
-msgstr "Projection horizontale : somme des valeurs des pixels le long de chaque ligne (projection sur l'axe des x)."
+msgid "Horizontal projection: Sum the pixel values along each column (projection on the x-axis)."
+msgstr "Projection horizontale : somme des valeurs des pixels le long de chaque colonne (projection sur l'axe des x)."
 
-msgid "Vertical projection: Sum the pixel values along each column (projection on the y-axis)."
-msgstr "Projection verticale : somme des valeurs des pixels le long de chaque colonne (projection sur l'axe des y)."
+msgid "Vertical projection: Sum the pixel values along each row (projection on the y-axis)."
+msgstr "Projection verticale : somme des valeurs des pixels le long de chaque ligne (projection sur l'axe des y)."
 
 msgid "Centroid"
 msgstr "Barycentre"
@@ -166,8 +166,8 @@ msgstr "objets décentrés,"
 msgid "strong background noise."
 msgstr "bruit de fond important."
 
-msgid "Internally, :py:func:`sigima.tools.image.get_centroid_auto` compares the Fourier result with two alternative estimators (a projected profile-based method :py:func:`sigima.tools.image.get_projected_profile_centroid` and a standard centroid from `scikit-image`), and selects the most consistent one."
-msgstr "En interne, :py:func:`sigima.tools.image.get_centroid_auto` compare le résultat de Fourier avec deux estimateurs alternatifs (une méthode basée sur le profil projeté :py:func:`sigima.tools.image.get_projected_profile_centroid` et un barycentre standard de `scikit-image`), et sélectionne le plus cohérent."
+msgid "Internally, :py:func:`sigima.tools.image.get_centroid_auto` computes a reference centroid with a projected profile-based method (:py:func:`sigima.tools.image.get_projected_profile_centroid`), and selects, between the Fourier result and a standard centroid from `scikit-image`, the one which is the most consistent with this reference."
+msgstr "En interne, :py:func:`sigima.tools.image.get_centroid_auto` calcule un barycentre de référence avec une méthode basée sur le profil projeté (:py:func:`sigima.tools.image.get_projected_profile_centroid`), et sélectionne, entre le résultat de Fourier et un barycentre standard de `scikit-image`, celui qui est le plus cohérent avec cette référence."
 
 msgid "This strategy ensures accurate and stable results across a wide range of image types — from clean laboratory data to noisy or partial acquisitions."
 msgstr "Cette stratégie garantit des résultats précis et stables sur une large gamme de types d'images, allant des données de laboratoire propres aux acquisitions bruyantes ou partielles."
@@ -241,8 +241,8 @@ msgstr "Détection de taches basée sur l'implémentation OpenCV de `SimpleBlobD
 msgid "**Automatic ROI creation for detection features**"
 msgstr "**Création automatique de ROIs pour les fonctionnalités de détection**"
 
-msgid "All detection features (2D peak detection, contour detection, circle Hough transform, and blob detection) support automatic ROI creation around detected objects. This feature:"
-msgstr "Toutes les fonctionnalités de détection (détection de pics 2D, détection de contours, transformée de Hough circulaire et détection de taches) prennent en charge la création automatique de ROIs autour des objets détectés. Cette fonctionnalité :"
+msgid "All detection features (2D peak detection, contour detection, circle Hough transform, and blob detection) support automatic ROI creation around detected objects. Except for contour detection (whose ROIs follow the shape of each detected contour, see :ref:`ref-to-contour-detection`), this feature:"
+msgstr "Toutes les fonctionnalités de détection (détection de pics 2D, détection de contours, transformée de Hough circulaire et détection de taches) prennent en charge la création automatique de ROIs autour des objets détectés. À l'exception de la détection de contours (dont les ROI suivent la forme de chaque contour détecté, voir :ref:`ref-to-contour-detection`), cette fonctionnalité :"
 
 msgid "Creates rectangular or circular ROIs around each detected feature"
 msgstr "Crée des ROIs rectangulaires ou circulaires autour de chaque objet détecté"
@@ -282,3 +282,9 @@ msgstr "Tracer les résultats"
 
 msgid "Plot the results of analyses performed on the selected images, with user-defined X and Y axes (e.g. plot the contour circle radius as a function of the image number)."
 msgstr "Trace les résultats des analyses effectuées sur les images sélectionnées, avec des axes X et Y définis par l'utilisateur (p.ex. trace le rayon du cercle de contour en fonction du numéro de l'image)."
+
+msgid "Delete results"
+msgstr "Supprimer les résultats"
+
+msgid "Delete analysis results of the selected images: this submenu lists the results (one entry per result, to delete it individually), followed by a \"Delete all results...\" entry."
+msgstr "Supprime les résultats d'analyse des images sélectionnées : ce sous-menu liste les résultats (une entrée par résultat, pour le supprimer individuellement), suivis d'une entrée \"Supprimer tous les résultats...\"."

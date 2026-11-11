@@ -27,13 +27,13 @@ def get_datalab_xmlrpc_port():
     """Return DataLab current XML-RPC port"""
     if sys.platform == "win32" and "HOME" in os.environ:
         os.environ.pop("HOME")  # Avoid getting old WinPython settings dir
-    fname = osp.join(get_config_dir(), ".DataLab", "DataLab.ini")
+    fname = osp.join(get_config_dir(), ".DataLab_v1", "DataLab_v1_typed.ini")
     ini = cp.ConfigParser()
     ini.read(fname)
     try:
         return ini.get("main", "rpc_server_port")
     except (cp.NoSectionError, cp.NoOptionError):
-        raise ConnectionRefusedError("DataLab has not yet been executed")
+        raise socket.error("DataLab has not yet been executed")
 
 
 class RemoteClient(object):
@@ -53,7 +53,7 @@ class RemoteClient(object):
         try:
             self.get_version()
         except socket.error:
-            raise ConnectionRefusedError("DataLab is currently not running")
+            raise socket.error("DataLab is currently not running")
 
     def get_version(self):
         """Return DataLab public version"""

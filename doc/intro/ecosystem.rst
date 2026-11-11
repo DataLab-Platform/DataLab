@@ -4,8 +4,8 @@ The DataLab Platform
 ====================
 
 .. meta::
-    :description: The DataLab Platform ecosystem - desktop application, browser-native DataLab-Web, DataLab-Kernel Jupyter kernel, the Sigima computation engine and the SigimaX application framework
-    :keywords: DataLab, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, DataLab-Kernel, Jupyter, Sigima, SigimaX, desktop, ecosystem, editions
+    :description: The DataLab Platform ecosystem - desktop application, browser-native DataLab-Web, DataLab-Kernel Jupyter kernel, the Sigima computation engine, the SigimaX application framework and the DataLab-Capsule provenance package
+    :keywords: DataLab, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, DataLab-Kernel, Jupyter, Sigima, SigimaX, DataLab-Capsule, provenance, RO-Crate, desktop, ecosystem, editions
 
 When DataLab started in 2023, it was a single product: a desktop application. Since then,
 the same scientific core has grown into a small family of complementary tools — the
@@ -62,6 +62,13 @@ desktop application. To avoid confusion, this documentation uses the following v
         main window, configuration system, dockable plot widgets, HDF5 workspace and
         browser, log viewer and scientific dialogs. Aimed at developers building their own
         Qt scientific application. `Documentation <https://sigimax.readthedocs.io/>`__.
+    * - **DataLab-Capsule**
+      - The **workspace provenance and capsule** package (``datalab-capsule``), used by
+        both the desktop application and DataLab-Web: it records how results were
+        obtained in the HDF5 workspace, and packages workspaces as open RO-Crate
+        ``.dlcapsule`` archives to exchange, compare and verify them. Its library and
+        command line do not require DataLab. `Project on GitHub
+        <https://github.com/DataLab-Platform/DataLab-Capsule>`__.
 
 .. note::
 
@@ -109,6 +116,14 @@ Members of the platform
             foundation of the desktop application, reusable for your own Qt application.
             See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_.
 
+        .. grid-item-card:: :octicon:`file-zip;1em;sd-text-info`  DataLab-Capsule
+
+            The provenance of the workspace and the open RO-Crate ``.dlcapsule``
+            capsules, shared by the desktop application and DataLab-Web: exchange,
+            compare and verify workspaces with the provenance of their processing (see
+            :ref:`capsules`). Browse the
+            `project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__.
+
         .. grid-item-card:: :octicon:`package;1em;sd-text-info`  DataLab plugin catalog
 
             The plugins of the DataLab team and of the community, checked automatically
@@ -131,6 +146,9 @@ Members of the platform
     - **SigimaX** — the Qt application framework on which the desktop application is built,
       reusable to create other scientific Qt applications
       (`documentation <https://sigimax.readthedocs.io/>`_).
+    - **DataLab-Capsule** — the provenance of the workspace and the open RO-Crate
+      ``.dlcapsule`` capsules, shared by the desktop application and DataLab-Web
+      (`project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__).
     - **DataLab plugin catalog** — the plugins of the DataLab team and of the community,
       checked automatically and installable in one click from the desktop application
       (`datalab-platform.com/plugins <https://datalab-platform.com/plugins/>`_).
@@ -162,8 +180,9 @@ DataLab vs DataLab-Web
 
 DataLab-Web shares the **computation engine** (Sigima) and the **processing catalog** with
 the desktop application: the very same Sigima code — not a port — runs on CPython (desktop)
-and on Pyodide (browser), so results are identical for the same inputs. The differences are
-about the **runtime environment**, not about the science.
+and on Pyodide (browser). With compatible versions of Sigima, the same inputs give
+identical results, or results within the tolerance declared by the contract of the
+operation. The differences are about the **runtime environment**, not about the science.
 
 .. list-table::
     :header-rows: 1
@@ -188,8 +207,8 @@ about the **runtime environment**, not about the science.
       - Native file system I/O
       - Browser file picker, drag-and-drop
     * - Persistence
-      - HDF5 on disk
-      - HDF5 download / upload (workspaces are interoperable)
+      - HDF5 and ``.dlcapsule`` files on disk
+      - HDF5 and ``.dlcapsule`` download / upload (workspaces are interoperable)
     * - Memory
       - Limited by system RAM (64-bit)
       - ~2 GB WebAssembly heap by default; an optional on-disk storage mode lifts this
@@ -207,9 +226,10 @@ about the **runtime environment**, not about the science.
       - In-browser proxy and optional ``postMessage`` SDK
 
 What is **not** different: the object model (``SignalObj``, ``ImageObj``, ROIs, groups), the
-processing catalog discovered from Sigima, the auto-generated parameter dialogs, and the
-HDF5 workspace format. A workspace saved in the desktop application can be opened in
-DataLab-Web, and vice versa.
+processing catalog discovered from Sigima, the auto-generated parameter dialogs, the
+HDF5 workspace format, and the provenance of the workspace and the ``.dlcapsule``
+capsules, handled by DataLab-Capsule in both editions. A workspace saved in the desktop
+application can be opened in DataLab-Web, and vice versa.
 
 .. note::
 

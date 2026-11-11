@@ -31,11 +31,11 @@ msgstr "Les régions d'intérêt (ROI) sont des zones de signal définies par l'
 msgid "ROI are taken into account almost in all computing features in DataLab:"
 msgstr "Les ROI sont prises en compte presque partout dans les fonctionnalités de calcul de DataLab :"
 
-msgid "The \"Operations\" menu features are done only on the ROI if one is defined (except if the operation changes the number of points, like interpolation or resampling)."
-msgstr "Les fonctionnalités du menu \"Opérations\" sont effectuées uniquement sur la ROI si elle est définie (sauf si l'opération modifie le nombre de points, comme l'interpolation ou le rééchantillonnage)."
+msgid "The \"Operations\" menu features are done only on the ROI if one is defined."
+msgstr "Les fonctionnalités du menu \"Opérations\" sont effectuées uniquement sur la ROI si elle est définie."
 
-msgid "The \"Processing\" menu actions are performed only on the ROI if one is defined (except if the destination signal data type is different from the source's, like in the Fourier analysis features)."
-msgstr "Les actions du menu \"Traitement\" sont effectuées uniquement sur la ROI si elle est définie (sauf si le type de données du signal de destination est différent de celui de la source, comme dans les fonctionnalités d'analyse de Fourier)."
+msgid "The \"Processing\" menu actions are performed only on the ROI if one is defined (except if the operation changes the number of points, like interpolation or resampling, or if the destination signal data type is different from the source's, like in the Fourier analysis features)."
+msgstr "Les actions du menu \"Traitement\" sont effectuées uniquement sur la ROI si elle est définie (sauf si l'opération modifie le nombre de points, comme l'interpolation ou le rééchantillonnage, ou si le type de données du signal de destination est différent de celui de la source, comme dans les fonctionnalités d'analyse de Fourier)."
 
 msgid "The \"Analysis\" menu actions are done only on the ROI if one is defined."
 msgstr "Les actions du menu \"Analyse\" sont effectuées uniquement sur la ROI si elle est définie."
@@ -91,8 +91,8 @@ msgstr "\"Exporter\" |roi_export| : exporter les ROI définies vers un fichier. 
 msgid "roi_export"
 msgstr ""
 
-msgid "\"Remove all\" |roi_delete|: remove all defined ROI for the selected signals."
-msgstr "\"Supprimer tout\" |roi_delete| : supprimer toutes les ROI définies pour les signaux sélectionnés."
+msgid "\"Remove\" |roi_delete|: remove a single ROI (one entry per ROI of the selected signal) or all defined ROIs for the selected signals (\"Remove all\")."
+msgstr "\"Supprimer\" |roi_delete| : supprimer une seule ROI (une entrée par ROI du signal sélectionné) ou toutes les ROI définies pour les signaux sélectionnés (\"Supprimer tout\")."
 
 msgid "roi_delete"
 msgstr ""

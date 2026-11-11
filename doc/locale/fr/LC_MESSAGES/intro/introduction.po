@@ -124,8 +124,8 @@ msgstr ":octicon:`book;1em;sd-text-info` Voir le tutoriel :ref:`tutorial_custom_
 msgid "Debugging a data processing application"
 msgstr "Débogage d'une application de traitement de données"
 
-msgid "DataLab can be used as an advanced debugging tool for your data processing applications, independently from the development environment or the language used (Python, C#, C++, etc.). All you need is to be able to communicate with DataLab via its remote control interface (standard XML-RPC protocol). This allows you to send data to DataLab (signals, images or even geometric shapes), visualize the data at each step of the processing chain, manipulate them to better understand the behavior of your algorithms, and even modify them to test the robustness of your code."
-msgstr "DataLab peut être utilisé comme un outil de débogage avancé pour vos applications de traitement de données, indépendamment de l'environnement de développement ou du langage utilisé (Python, C#, C++, etc.). Tout ce dont vous avez besoin est de pouvoir communiquer avec DataLab via son interface de pilotage à distance (protocole XML-RPC standard). Cela vous permet d'envoyer des données à DataLab (signaux, images ou même des formes géométriques), de visualiser les données à chaque étape de la chaîne de traitement, de les manipuler pour mieux comprendre le comportement de vos algorithmes, et même de les modifier pour tester la robustesse de votre code."
+msgid "DataLab can be used as an advanced debugging tool for your data processing applications, independently from the development environment or the language used (Python, C#, C++, etc.). All you need is to be able to communicate with DataLab via its remote control interface (standard XML-RPC protocol; an HTTP/JSON Web API is also available, see :ref:`ref-to-webapi`). This allows you to send data to DataLab (signals, images or even geometric shapes), visualize the data at each step of the processing chain, manipulate them to better understand the behavior of your algorithms, and even modify them to test the robustness of your code."
+msgstr "DataLab peut être utilisé comme un outil de débogage avancé pour vos applications de traitement de données, indépendamment de l'environnement de développement ou du langage utilisé (Python, C#, C++, etc.). Tout ce dont vous avez besoin est de pouvoir communiquer avec DataLab via son interface de pilotage à distance (protocole XML-RPC standard ; une API Web HTTP/JSON est également disponible, voir :ref:`ref-to-webapi`). Cela vous permet d'envoyer des données à DataLab (signaux, images ou même des formes géométriques), de visualiser les données à chaque étape de la chaîne de traitement, de les manipuler pour mieux comprendre le comportement de vos algorithmes, et même de les modifier pour tester la robustesse de votre code."
 
 msgid ":octicon:`bug;1em;sd-text-warning` See the tutorial :ref:`debug_spyder` for a quick overview of this feature."
 msgstr ":octicon:`bug;1em;sd-text-warning` Voir le tutoriel :ref:`debug_spyder` pour un aperçu rapide de cette fonctionnalité."
@@ -160,14 +160,29 @@ msgstr "Traitement d'image avancé (restauration, morphologie, détection de con
 msgid "Management of multiple regions of interest (calculations, extractions)"
 msgstr "Gestion de plusieurs régions d'intérêt (calculs, extractions)"
 
+msgid "History panel to record and replay processing chains"
+msgstr "Panneau d'historique pour enregistrer et rejouer des chaînes de traitement"
+
+msgid "Provenance of results (verification by recomputation) and workspace capsules (``.dlcapsule``), based on `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_"
+msgstr "Provenance des résultats (vérification par recalcul) et capsules d'espace de travail (``.dlcapsule``), reposant sur `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_"
+
+msgid "HDF5 workspaces and HDF5/NeXus browser"
+msgstr "Espaces de travail HDF5 et explorateur HDF5/NeXus"
+
 msgid "Macro-command editor"
 msgstr "Éditeur de macro-commandes"
 
-msgid "Remote-controllable API"
-msgstr "API pilotable à distance"
+msgid "Remote-controllable API (XML-RPC) and HTTP/JSON Web API"
+msgstr "API pilotable à distance (XML-RPC) et API Web HTTP/JSON"
 
 msgid "Embedded interactive Python console"
 msgstr "Console Python interactive embarquée"
+
+msgid "Command palette, welcome page and Applications panel"
+msgstr "Palette de commandes, page d'accueil et panneau Applications"
+
+msgid "Optional AI assistant"
+msgstr "Assistant IA facultatif"
 
 msgid "Key strengths"
 msgstr "Points forts"

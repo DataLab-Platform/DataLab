@@ -11,7 +11,7 @@ reliability of industrial-grade software. It is a versatile software that can be
 for a wide range of applications, from simple data analysis to complex signal processing
 and image analysis tasks.
 
-DataLab integrates seemlessly into your workflow thanks to three main operating modes:
+DataLab integrates seamlessly into your workflow thanks to three main operating modes:
 
 .. tabularcolumns:: |>{\centering\arraybackslash}m{1.2cm}|m{\dimexpr\linewidth-1.2cm-4\tabcolsep\relax}|
 .. list-table::
@@ -70,9 +70,10 @@ the following libraries:
 
 - `Sigima <https://github.com/DataLab-Platform/Sigima>`_ for signal and image processing (part of the DataLab Platform)
 - `SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ for the Qt application framework the desktop application is built upon (part of the DataLab Platform)
+- `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_ for the provenance of the workspace and the RO-Crate ``.dlcapsule`` workspace capsules (part of the DataLab Platform)
 - `NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)
 - `SciPy <https://www.scipy.org/>`_ for scientific computing (interpolation, special functions, etc.)
-- `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ for image processing
+- `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ (optional) for image processing
 - `PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ for wavelet transform
 - `PlotPyStack <https://github.com/PlotPyStack/>`_ for Qt-based interactive data visualization
 

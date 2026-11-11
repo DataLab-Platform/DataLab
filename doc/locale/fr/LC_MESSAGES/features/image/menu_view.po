@@ -56,8 +56,8 @@ msgstr "Cette option vous permet de modifier les annotations des images sélecti
 msgid "Annotations are used to add text, lines, rectangles, ellipses, and other geometrical shapes to the images. They are useful to highlight regions of interest, to add comments, to mark points, and so on."
 msgstr "Les annotations sont utilisées pour ajouter du texte, des lignes, des rectangles, des ellipses et d'autres formes géométriques aux images. Elles sont utiles pour mettre en évidence des régions d'intérêt, ajouter des commentaires, marquer des points, etc."
 
-msgid "The annotations are saved in the metadata of the image, so they are persistent and will be displayed every time you visualize the image."
-msgstr "Les annotations sont enregistrées dans les métadonnées de l'image, elles sont donc persistantes et seront affichées chaque fois que vous visualiserez l'image."
+msgid "The annotations are stored with the image (separately from its metadata), so they are persistent and will be displayed every time you visualize the image."
+msgstr "Les annotations sont enregistrées avec l'image (séparément de ses métadonnées), elles sont donc persistantes et seront affichées chaque fois que vous visualiserez l'image."
 
 msgid "Annotations may be added in the separate view."
 msgstr "Les annotations peuvent être ajoutées dans la vue séparée."
@@ -74,14 +74,14 @@ msgstr "Dans la nouvelle fenêtre, ajoutez des annotations en cliquant sur les b
 msgid "Eventually, customize the annotations by changing their properties (e.g., the text, the color, the position, etc.) using the \"Parameters\" option in the context menu of the annotations."
 msgstr "Personnalisez les annotations en modifiant leurs propriétés (par exemple, le texte, la couleur, la position, etc.) en utilisant l'option \"Paramètres\" dans le menu contextuel des annotations."
 
-msgid "When you are done, click on the \"OK\" button to save the annotations. This will close the window and the annotations will be saved in the metadata of the image and will be displayed in the main window."
-msgstr "Quand vous avez terminé, cliquez sur le bouton \"OK\" pour enregistrer les annotations. Cela fermera la fenêtre et les annotations seront enregistrées dans les métadonnées de l'image et seront affichées dans la fenêtre principale."
+msgid "When you are done, click on the \"OK\" button to save the annotations. This will close the window and the annotations will be saved with the image and will be displayed in the main window."
+msgstr "Quand vous avez terminé, cliquez sur le bouton \"OK\" pour enregistrer les annotations. Cela fermera la fenêtre et les annotations seront enregistrées avec l'image et seront affichées dans la fenêtre principale."
 
-msgid "Annotations are now part of the image metadata."
-msgstr "Les annotations font désormais partie des métadonnées de l'image."
+msgid "Annotations are now displayed in the main window."
+msgstr "Les annotations sont désormais affichées dans la fenêtre principale."
 
-msgid "Annotations may be copied from an image to another by using the \"copy/paste metadata\" features."
-msgstr "Les annotations peuvent être copiées d'une image à une autre en utilisant les fonctionnalités \"copier/coller les métadonnées\"."
+msgid "Annotations may be copied from an image to another by using the \"Copy annotations\" and \"Paste annotations\" actions of the \"Edit ▸ Annotations\" submenu (see :ref:`ima-menu-edit`)."
+msgstr "Les annotations peuvent être copiées d'une image à une autre en utilisant les actions \"Copier les annotations\" et \"Coller les annotations\" du sous-menu \"Édition ▸ Annotations\" (voir :ref:`ima-menu-edit`)."
 
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
@@ -98,8 +98,8 @@ msgstr "Si désactivé, la visualisation n'est pas rafraîchie tant que vous ne 
 msgid "Even though the refresh algorithm is optimized, it may still take some time to refresh the plot view when the data changes, especially when the data set is large. Therefore, you may want to disable the auto-refresh feature when you are working with large data sets, and enable it again when you are done. This will avoid unnecessary refreshes."
 msgstr "Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
 
-msgid "Show only first selected image"
-msgstr "Afficher seulement la première image sélectionnée"
+msgid "Show first object only"
+msgstr "Afficher uniquement le premier objet"
 
 msgid "Toggle between showing all selected images or only the first one."
 msgstr "Basculer entre l'affichage de toutes les images sélectionnées ou seulement de la première."
@@ -130,3 +130,9 @@ msgstr "Affiche/cache les titres des objets graphiques liés aux résultats d'an
 
 msgid "This option allows you to show or hide the titles of the graphical objects (e.g., the titles of the analysis results or annotations). Hiding the titles can be useful when you want to visualize the data without any distractions, or if there are too many titles and they are overlapping."
 msgstr "Cette option vous permet d'afficher ou de masquer les titres des objets graphiques (par exemple, les titres des résultats d'analyse ou des annotations). Masquer les titres peut être utile lorsque vous voulez visualiser les données sans être perturbé, ou s'il y a trop de titres et qu'ils se chevauchent."
+
+msgid "Panels and toolbars"
+msgstr "Panneaux et barres d'outils"
+
+msgid "The last entries of the \"View\" menu show or hide the panels of the main window: the \"Welcome\" page (see :ref:`welcome_page`), the \"Macro Panel\" (see :ref:`about_macros`), the \"History Panel\" (see :ref:`historypanel`), the \"AI Assistant\" (see :ref:`ai_assistant`), the \"Applications\" panel (see :ref:`applications_panel`), and the \"Signal View\" and \"Image View\" panels. They also show or hide the toolbars of the main window (\"Main Toolbar\", \"Signal Panel Toolbar\" and \"Image Panel Toolbar\")."
+msgstr "Les dernières entrées du menu \"Affichage\" affichent ou masquent les panneaux de la fenêtre principale : la page \"Accueil\" (voir :ref:`welcome_page`), le \"Gestionnaire de Macros\" (voir :ref:`about_macros`), le panneau \"Historique\" (voir :ref:`historypanel`), l'\"Assistant IA\" (voir :ref:`ai_assistant`), le panneau \"Applications\" (voir :ref:`applications_panel`), ainsi que les panneaux \"Vue Signal\" et \"Vue Image\". Elles affichent ou masquent également les barres d'outils de la fenêtre principale (\"Barre d'outils principale\", \"Barre d'outils du panneau Signal\" et \"Barre d'outils du panneau Image\")."

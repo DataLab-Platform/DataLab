@@ -214,7 +214,7 @@ and scientific dialogs (see :ref:`ecosystem`).
 
 .. [#f1] DataLab processing primitives are mainly based on
    `Sigima <https://sigima.readthedocs.io/>`_, `NumPy`_, `SciPy`_,
-   `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization
+   `scikit-image`_, `OpenCV`_ (optional) and `PyWavelets`_ libraries. DataLab visualization
    capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries
    for building scientific applications with Qt graphical user interfaces.
    DataLab advanced and specialized processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,

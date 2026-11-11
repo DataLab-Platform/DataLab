@@ -79,8 +79,8 @@ msgstr "En tant que :ref:`install_wheel` précompilé, qui peut être installé 
 msgid "As a :ref:`install_source`, which can be installed using ``pip`` or manually."
 msgstr "En tant que :ref:`install_source`, qui peut être installé à l'aide de ``pip`` ou manuellement."
 
-msgid "Impatient to try the next version of DataLab? You can also install the latest development version of DataLab from the master branch of the Git repository. See :ref:`install_development` for more information."
-msgstr "Impatient d'essayer la prochaine version de DataLab ? Vous pouvez également installer la dernière version de développement de DataLab à partir de la branche principale du dépôt Git. Voir :ref:`install_development` pour plus d'informations."
+msgid "Impatient to try the next version of DataLab? You can also install the latest development version of DataLab from the ``develop`` branch of the Git repository. See :ref:`install_development` for more information."
+msgstr "Impatient d'essayer la prochaine version de DataLab ? Vous pouvez également installer la dernière version de développement de DataLab à partir de la branche ``develop`` du dépôt Git. Voir :ref:`install_development` pour plus d'informations."
 
 msgid "Conda package"
 msgstr "Paquet Conda"
@@ -117,6 +117,9 @@ msgstr "L'installation de DataLab depuis PyPI avec Qt est aussi simple que d'ex�
 
 msgid "Or, if you prefer, you can install DataLab without the Qt library (not recommended):"
 msgstr "Ou, si vous préférez, vous pouvez installer DataLab sans la bibliothèque Qt (non recommandé) :"
+
+msgid "The optional ``opencv`` extra installs `OpenCV <https://opencv.org/>`_, which is required only by the OpenCV blob detection feature. To install it along with Qt:"
+msgstr "La dépendance optionnelle ``opencv`` installe `OpenCV <https://opencv.org/>`_, qui n'est nécessaire que pour la fonctionnalité de détection de taches OpenCV. Pour l'installer avec Qt :"
 
 msgid "If you already have a previous version of DataLab installed, you can upgrade it by running the same command with the ``--upgrade`` option:"
 msgstr "Si vous avez déjà une version antérieure de DataLab installée, vous pouvez la mettre à jour en exécutant la même commande avec l'option ``--upgrade`` :"
@@ -184,8 +187,8 @@ msgstr "Enfin, vous pouvez également créer votre propre paquet Wheel et l'inst
 msgid "Development version"
 msgstr "Version de développement"
 
-msgid "If you want to try the latest development version of DataLab, you can install it directly from the master branch of the Git repository."
-msgstr "Si vous souhaitez essayer la dernière version de développement de DataLab, vous pouvez l'installer directement depuis la branche principale du dépôt Git."
+msgid "If you want to try the latest development version of DataLab, you can install it directly from the ``develop`` branch of the Git repository."
+msgstr "Si vous souhaitez essayer la dernière version de développement de DataLab, vous pouvez l'installer directement depuis la branche ``develop`` du dépôt Git."
 
 msgid "The first time you install DataLab from the Git repository, enter the following command:"
 msgstr "La première fois que vous installez DataLab depuis le dépôt Git, entrez la commande suivante :"
@@ -504,6 +507,9 @@ msgstr ""
 
 msgid "YAML parser and emitter for Python"
 msgstr "Analyseur et générateur YAML pour Python"
+
+msgid "The optional ``opencv`` extra (``opencv-python-headless``), not listed above, is required only by the OpenCV blob detection feature (see :ref:`install_pip`)."
+msgstr "La dépendance optionnelle ``opencv`` (``opencv-python-headless``), non listée ci-dessus, n'est nécessaire que pour la fonctionnalité de détection de taches OpenCV (voir :ref:`install_pip`)."
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"

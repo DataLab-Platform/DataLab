@@ -421,15 +421,6 @@ Example 3: Plugin creating objects and handling results
    from datalab.plugins import PluginBase, PluginInfo
 
 
-   def add_noise_to_image(
-       src: sigima.objects.ImageObj, p: sigima.objects.NormalDistribution2DParam
-   ) -> sigima.objects.ImageObj:
-       """Add gaussian noise to image"""
-       dst = sipi.dst_1to1(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
-       test_data.add_gaussian_noise_to_image(dst, p)
-       return dst
-
-
    class PluginTestData(PluginBase):
        """DataLab Test Data Plugin"""
 
@@ -442,8 +433,8 @@ Example 3: Plugin creating objects and handling results
        def add_noise_to_image(self) -> None:
            """Add noise to image"""
            self.imagepanel.processor.compute_1_to_1(
-               add_noise_to_image,
-               paramclass=sigima.objects.NormalDistribution2DParam,
+               sipi.add_gaussian_noise,
+               paramclass=sigima.objects.NormalDistributionParam,
                title=_("Add noise"),
            )
 
@@ -472,9 +463,11 @@ Example 3: Plugin creating objects and handling results
 1. ``cdl.obj`` → ``sigima.objects``
 2. ``cdl.tests.data`` → ``sigima.tests.data``
 3. ``cdl.computation.image`` → ``sigima.proc.image``
-4. ``dst_11`` → ``dst_1to1``
+4. The custom ``add_noise_to_image`` function, built with ``dst_11`` (now
+   ``sigima.proc.base.dst_1_to_1``) and a test data helper, is replaced by
+   ``sigima.proc.image.add_gaussian_noise``
 5. ``compute_11`` → ``compute_1_to_1``
-6. ``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistribution2DParam``
+6. ``dlo.NormalRandomParam`` → ``sigima.objects.NormalDistributionParam``
 7. ``create_noisygauss_image`` → ``create_noisy_gaussian_image``
 8. ``hide_image_height`` → ``hide_height``, ``hide_image_type`` → ``hide_type``
 
@@ -709,6 +702,7 @@ Some complex features still have dedicated methods:
    # These still use dedicated methods in v1.0
    proc.compute_roi_extraction(roi)
    proc.compute_multigaussianfit()
+   proc.compute_binning(param)  # image processor (or run_feature("binning", param))
 
    # Peak detection (signal): ``compute_peak_detection`` still exists and
    # opens the interactive threshold dialog as before, but it now stores
@@ -744,17 +738,17 @@ Import errors
 Attribute errors on processor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Problem**: ``AttributeError: 'ImageProcessor' object has no attribute 'compute_binning'``
+**Problem**: ``AttributeError: 'ImageProcessor' object has no attribute 'compute_moving_median'``
 
 **Solution**: Replace ``compute_*`` method calls with ``run_feature()`` calls:
 
 .. code-block:: python
 
    # Wrong (v0.20 style)
-   proc.compute_binning(param)
+   proc.compute_moving_median(param)
 
    # Correct (v1.0 style)
-   proc.run_feature("binning", param)
+   proc.run_feature("moving_median", param)
 
 Result object incompatibility
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

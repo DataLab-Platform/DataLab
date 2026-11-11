@@ -33,8 +33,8 @@ Key Concepts
 
 - ``select_condition=None`` (default): Action enabled when ≥1 object selected
 - ``select_condition="always"``: Action always enabled
-- ``select_condition="single"``: Action enabled when exactly 1 object selected
-- See ActionHandler documentation for more options
+- ``select_condition="exactly_one"``: Action enabled when exactly 1 object selected
+- See ``SelectCond`` in ``datalab.gui.actionhandler`` for more options
 
 **Dialog Methods:**
 

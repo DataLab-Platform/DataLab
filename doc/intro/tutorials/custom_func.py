@@ -17,7 +17,6 @@ from sigima.client import SimpleRemoteProxy
 # %% Connecting to DataLab current session
 
 proxy = SimpleRemoteProxy()
-proxy.connect()
 
 # %% Executing commands in DataLab (...)
 

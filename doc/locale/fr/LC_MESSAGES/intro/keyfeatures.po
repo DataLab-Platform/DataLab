@@ -22,8 +22,8 @@ msgstr "Fonctionnalités principales"
 msgid "This page presents briefly DataLab key features."
 msgstr "Cette page présente brièvement les principales fonctionnalités de DataLab."
 
-msgid "DataLab supports dark and light mode depending on your platform settings (this is handled by the `guidata`_ package, and may be overridden by setting the `QT_COLOR_MODE` environment variable to `dark` or `light`)."
-msgstr "DataLab prend en charge le mode sombre et le mode clair en fonction des paramètres de votre plateforme (cela est géré par le paquet `guidata`_ et peut être remplacé en définissant la variable d'environnement `QT_COLOR_MODE` sur `dark` ou `light`)."
+msgid "DataLab supports dark and light mode. The color mode may be chosen in the \"General\" tab of the :ref:`settings`: by default (\"auto\" mode), it follows your platform settings (this is handled by the `guidata <https://pypi.python.org/pypi/guidata>`_ package, and may be overridden by setting the `QT_COLOR_MODE` environment variable to `dark` or `light`)."
+msgstr "DataLab prend en charge le mode sombre et le mode clair. Le mode de couleur peut être choisi dans l'onglet \"Général\" des :ref:`settings` : par défaut (mode \"auto\"), il suit les paramètres de votre plateforme (cela est géré par le paquet `guidata <https://pypi.python.org/pypi/guidata>`_ et peut être remplacé en définissant la variable d'environnement `QT_COLOR_MODE` sur `dark` ou `light`)."
 
 msgid "Data visualization"
 msgstr "Visualisation de données"
@@ -70,7 +70,7 @@ msgstr "Profils d'intensité (ligne, moyen, radial)"
 msgid "Annotations"
 msgstr "Annotations"
 
-msgid "Persistance of settings in workspace"
+msgid "Persistence of settings in workspace"
 msgstr "Persistance des paramètres dans l'espace de travail"
 
 msgid "Distribute images on a grid"
@@ -97,8 +97,11 @@ msgstr "Somme, moyenne, différence, produit..."
 msgid "Operations with a constant"
 msgstr "Opérations avec une constante"
 
-msgid "Square root, power, logarithm, exponential..."
-msgstr "Racine carrée, puissance, logarithme, exponentielle..."
+msgid "Logarithm, exponential..."
+msgstr "Logarithme, exponentielle..."
+
+msgid "Square root, power"
+msgstr "Racine carrée, puissance"
 
 msgid "Average, standard deviation"
 msgstr "Moyenne, écart-type"
@@ -121,11 +124,17 @@ msgstr "Correction de champ plat"
 msgid "Flip, rotation, scaling..."
 msgstr "Symétrie, rotation, redimensionnement..."
 
+msgid "Horizontal and vertical projections"
+msgstr "Projections horizontale et verticale"
+
 msgid "Pixel binning"
 msgstr "Binning de pixels"
 
 msgid "Linear calibration"
 msgstr "Calibration linéaire"
+
+msgid "Polynomial calibration"
+msgstr "Étalonnage polynomial"
 
 msgid "Normalization, Clipping, Offset correction"
 msgstr "Normalisation, rognage, correction de décalage"
@@ -151,8 +160,11 @@ msgstr "Moyenne mobile, médiane mobile"
 msgid "FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density"
 msgstr "FFT, FFT inverse, spectre de puissance/phase/magnitude, densité spectrale de puissance"
 
-msgid "Interpolation, resampling"
-msgstr "Interpolation, rééchantillonnage"
+msgid "Interpolation"
+msgstr "Interpolation"
+
+msgid "Resampling"
+msgstr "Rééchantillonnage"
 
 msgid "Detrending"
 msgstr "Elimination de tendance"
@@ -169,19 +181,22 @@ msgstr "Filtres fréquentiels (passe-bas, passe-haut, passe-bande, coupe-bande)"
 msgid "Windowing (Hann, Hamming...)"
 msgstr "Fenêtrage (Hann, Hamming...)"
 
+msgid "Stability analysis (Allan variance, Hadamard variance...)"
+msgstr "Analyse de stabilité (variance d'Allan, variance d'Hadamard...)"
+
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"
 
 msgid "Exposure correction (gamma, log...)"
 msgstr "Correction d'exposition (gamma, log...)"
 
-msgid "Restauration (Total Variation, Bilateral...)"
+msgid "Restoration (Total Variation, Bilateral...)"
 msgstr "Restauration (variation totale, bilatérale...)"
 
 msgid "Morphology (erosion, dilation...)"
 msgstr "Morphologie (érosion, dilatation...)"
 
-msgid "Edges detection (Roberts, Sobel...)"
+msgid "Edge detection (Roberts, Sobel...)"
 msgstr "Détection de contours (Roberts, Sobel...)"
 
 msgid "Analysis on custom ROI"
@@ -189,6 +204,9 @@ msgstr "Analyse sur ROI personnalisée"
 
 msgid "FWHM, FW @ 1/e²"
 msgstr "FWHM, FW @ 1/e²"
+
+msgid "Pulse features extraction"
+msgstr "Extraction des caractéristiques d'impulsions"
 
 msgid "Dynamic parameters (ENOB, SNR...), Sampling period/Rate"
 msgstr "Paramètres dynamiques (ENOB, SNR...), Période/Taux d'échantillonnage"
@@ -210,6 +228,27 @@ msgstr "Transformée de Hough circulaire"
 
 msgid "Blob detection (OpenCV, Laplacian of Gaussian...)"
 msgstr "Détection de taches (OpenCV, Laplacien de Gauss...)"
+
+msgid "Workspace and traceability"
+msgstr "Espace de travail et traçabilité"
+
+msgid "HDF5 workspaces, and an HDF5 browser to import data sets from any HDF5 or NeXus file (see :ref:`h5browser`)"
+msgstr "Espaces de travail HDF5, et explorateur HDF5 pour importer des jeux de données depuis n'importe quel fichier HDF5 ou NeXus (voir :ref:`h5browser`)"
+
+msgid "History panel to record, replay (silently or step by step) and duplicate processing chains (see :ref:`historypanel`)"
+msgstr "Panneau d'historique pour enregistrer, rejouer (silencieusement ou pas à pas) et dupliquer des chaînes de traitement (voir :ref:`historypanel`)"
+
+msgid "Provenance of results: how each result was obtained, checked against the data and verified by recomputation (see :ref:`provenance`)"
+msgstr "Provenance des résultats : comment chaque résultat a été obtenu, contrôlé par rapport aux données et vérifié par recalcul (voir :ref:`provenance`)"
+
+msgid "Workspace capsules (``.dlcapsule``) to exchange a workspace with the provenance of its processing (see :ref:`capsules`)"
+msgstr "Capsules d'espace de travail (``.dlcapsule``) pour échanger un espace de travail avec la provenance de ses traitements (voir :ref:`capsules`)"
+
+msgid "Welcome page, Applications panel and command palette (see :ref:`overview`)"
+msgstr "Page d'accueil, panneau Applications et palette de commandes (voir :ref:`overview`)"
+
+msgid "Optional AI assistant (see :ref:`ai_assistant`)"
+msgstr "Assistant IA facultatif (voir :ref:`ai_assistant`)"
 
 msgid "Extensibility"
 msgstr "Extensibilité"

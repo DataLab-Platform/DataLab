@@ -29,7 +29,8 @@ Security
 By default, the API:
 
 - Binds to localhost only (127.0.0.1)
-- Requires a bearer token for authentication
+- Requires a bearer token for authentication, except for requests from the local
+  machine while the "Web API localhost bypass" setting is enabled (default)
 - Token is generated at startup and displayed in the UI
 
 Usage
@@ -37,8 +38,7 @@ Usage
 
 Enable the Web API via:
 
-- **UI**: Tools → Web API → Start
-- **CLI**: ``datalab --webapi``
+- **UI**: File → Web API → Start Web API Server
 - **Environment**: ``DATALAB_WEBAPI_ENABLED=1``
 
 See Also

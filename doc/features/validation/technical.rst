@@ -44,7 +44,7 @@ The scope of technical validation in DataLab includes all compute functions that
 operate on DataLab's signal and image objects (i.e. :class:`sigima.objects.SignalObj` and
 :class:`sigima.objects.ImageObj`).
 
-This includes functions for (all functions are named ``compute_<function_name>``):
+This includes functions for:
 
 - Signal processing (:mod:`sigima.proc.signal`)
 - Image processing (:mod:`sigima.proc.image`)
@@ -63,12 +63,15 @@ regarding the test function:
   - ``test_signal_<function_name>`` for signal compute functions
   - ``test_image_<function_name>`` for image compute functions
 
+  The ``sig``/``s`` and ``ima``/``i`` short prefixes, and the ``_unit`` and
+  ``_validation`` suffixes, are also accepted (e.g. ``test_sig_<function_name>_unit``).
+
 .. note::
 
     The ``signal`` or ``image`` prefix is used to indicate the type of object that the
     function operates on. It may be omitted if the function operates exclusively on
     one type of object (e.g. ``test_adjust_gamma`` is the test function for the
-    ``compute_adjust_gamma`` function, which operates on images).
+    ``adjust_gamma`` function, which operates on images).
 
 - The test function should be marked with the ``@pytest.mark.validation`` decorator.
 

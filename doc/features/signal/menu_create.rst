@@ -90,7 +90,7 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/step.svg
            :width: 30px
       - Step
-      - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
+      - :math:`y = \left\{\begin{array}{ll}A_{1} & \text{if } x \leq x_{0} \\ A_{2} & \text{otherwise}\end{array}\right.`
     * - .. image:: ../../../datalab/data/icons/create/exponential.svg
            :width: 30px
       - Exponential

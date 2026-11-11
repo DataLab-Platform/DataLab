@@ -4,7 +4,7 @@
 
 A release takes two steps, both run by [`.github/workflows/release.yml`](.github/workflows/release.yml), which relies on the [release actions](https://github.com/DataLab-Platform/release-actions) shared by the DataLab Platform projects:
 
-1. **Prepare**: pushing a release tag checks the tag, runs the tests, builds the release files (wheel, sdist, French and English PDF documentation, smoke-tested MSI installer), attests their build provenance and creates a **draft** GitHub release with these files and their `SHA256SUMS`. Nothing is published at this stage.
+1. **Prepare**: pushing a release tag checks the tag, runs the tests, builds the release files (wheel, sdist, French and English PDF documentation, smoke-tested MSI installer), attests the build provenance of the wheel, the sdist and the MSI installer, and creates a **draft** GitHub release with these files and their `SHA256SUMS`. Nothing is published at this stage.
 2. **Publish**: when a maintainer publishes the draft release, its wheel and sdist are checked (checksums and attestations) and uploaded to PyPI, then the documentation is deployed to [datalab-platform.com](https://datalab-platform.com/). A release created by hand has none of these files, so nothing is published.
 
 ## One-time prerequisites

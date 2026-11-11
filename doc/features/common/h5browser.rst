@@ -22,15 +22,27 @@ on "Group" (path, description, etc.) and "Attributes" (names and values).
 The HDF5 browser is fairly simple to use:
   * On the left panel, select the curve or image data you want to import
   * Selected data is plotted on the right panel
-  * Click on "Check all" if you want to import all compatible data
+  * Click on "Check all" if you want to import all compatible data (or on
+    "Uncheck all" to clear the selection)
   * Then validate by clicking on "OK"
+
+Other commands are available:
+  * The "Open ..." and "Close" buttons, next to the file selector, add another
+    HDF5 file to the browser or close the current one
+  * The "Show only supported data" check box hides the data that cannot be
+    imported, and the "Show values" check box shows the "Value" column of the tree
+  * The "Show array" button, at the top right of the right panel, shows the
+    values of the selected array in a read-only table
+  * The context menu of the tree expands or collapses all items ("Expand all",
+    "Collapse all") or the selected ones ("Expand selection", "Collapse
+    selection"), and "Restore" restores the original tree layout
 
 .. note::
     The HDF5 browser may be used to explore multiple HDF5 files at once, thus allowing
     to import data from different files into the same DataLab workspace.
 
 NeXus files and physical axes
-----------------------------
+-----------------------------
 
 Open ``.nxs`` and ``.nx5`` files with **Browse HDF5 file**, just like ``.h5``
 files. A NeXus ``NXdata`` group designates a measured dataset and its axes.
@@ -76,7 +88,7 @@ Plugin authors can follow the
 `SigimaX HDF5 import guide <https://sigimax.readthedocs.io/en/latest/user_guide/hdf5_workspace.html>`_.
 
 Large datasets and previews
---------------------------
+---------------------------
 
 Listing numeric datasets uses their shape and type without loading all their
 values. Textual value previews read only the first elements, and attributes
@@ -120,7 +132,7 @@ Developers can also read views without creating objects, using the selection
 API described in the SigimaX guide.
 
 Numerical values and experimental origin
----------------------------------------
+----------------------------------------
 
 Unsigned 32-bit detector counts above 2 147 483 647 are imported as ``float64``
 images without clipping or rounding. Other integer arrays are also converted

@@ -63,7 +63,7 @@ DataLab/
 │   │   └── builtin/      # Built-in plugins (data folder, not a package)
 │   ├── tests/            # pytest test suite
 │   ├── locale/           # Translations (.po files)
-│   ├── config.py         # Configuration management
+│   ├── config/           # Configuration management (package)
 │   └── objectmodel.py    # Object data model for GUI
 ├── doc/                  # Sphinx documentation
 │   ├── locale/fr/        # French documentation translations
@@ -271,7 +271,7 @@ self.register_2_to_1(
 )
 ```
 
-**Code Location**: `datalab/gui/processor/base.py` (lines ~1764, 1886)
+**Code Location**: `datalab/gui/processor/base.py` (`_check_signal_xarray_compatibility()`, called by `prepare_2_to_1_pairs()`, `compute_2_to_1()` and `compute_n_to_1()`)
 
 ### 3. Action Handler Pattern (Menu Management)
 
@@ -288,15 +288,18 @@ self.register_2_to_1(
 
 ```python
 # In SignalActionHandler or ImageActionHandler
-def setup_processing_actions(self) -> None:
-    """Setup processing menu actions."""
+def create_first_actions(self):
+    """Create actions that are added to the menus in the first place"""
+    super().create_first_actions()
 
-    # Reference registered processor operation
-    act = self.action_for("my_processing_func")
-
-    # Add to menu
-    self.processing_menu.addAction(act)
+    # Actions created in a category are added to the corresponding menu
+    with self.new_category(ActionCategory.PROCESSING):
+        with self.new_menu(_("My submenu")):  # Submenu
+            # Reference registered processor operation
+            self.action_for("my_processing_func")
 ```
+
+Actions added at the end of the menus are created in `create_last_actions()`. Reopening an existing built-in submenu (same title in the same category, e.g. "Axis transformation" created by `BaseActionHandler`) replaces its contents: list all the actions of that submenu, as `SignalActionHandler` and `ImageActionHandler` do.
 
 **Menu Organization**:
 
@@ -324,7 +327,7 @@ generated with `scripts/print_datalab_menus.py`).
 
 **Key Classes**:
 - `PluginBase`: Abstract base class for all plugins (uses metaclass `PluginBaseMeta`)
-- `PluginInfo`: Plugin metadata dataclass (name, version, description, icon)
+- `PluginInfo`: Plugin metadata dataclass (name, version, description, icon, id, capabilities, documentation_url)
 - `PluginRegistry`: Metaclass that auto-registers plugin subclasses
 
 **Example: Creating a Plugin**
@@ -366,7 +369,7 @@ class MyPlugin(PluginBase):
 
 **Plugin Discovery**: Plugins are loaded from:
 1. `datalab/plugins/builtin/` (built-in)
-2. User plugin directory (`~/.DataLab/plugins`)
+2. User plugin directory (`~/.DataLab_v1/plugins`, the suffix being the major version of DataLab)
 3. Custom plugin directory (configurable in preferences)
 4. For frozen apps, from `plugins/` directory next to executable
 
@@ -596,8 +599,7 @@ menu_title = "Processing"  # Not translatable!
    refused), increase its `contract_version` (and its qualification) in Sigima in the same change,
    **whatever the releases of DataLab**: Sigima is a reference of its own. Only previously refused
    inputs now accepted, changes without effect on the result, or changes covered by a versioned
-   rule of the execution context (image ROI convention, X alignment) do not require it. The 1.4
-   exception (contracts kept at version 1) was one-off and does not apply anymore. Then update the
+   rule of the execution context (image ROI convention, X alignment) do not require it. In Sigima 1.4.0, 16 contracts are at version 2 (image profiles, `product`, `extract_roi`, `extract_rois` and the image analyses giving geometric results, listed in the Sigima 1.4 release notes), while the others kept version 1, even when their result had changed since 1.3.0 (e.g. `resampling`): this one-off exception does not apply anymore. Then update the
    DataLab provenance tests that check a contract version
    (`datalab/tests/features/common/provenance_*_test.py`). Full rules: Sigima
    `doc/contributing/guidelines.rst` and `doc/user_guide/contracts.rst`.
@@ -622,9 +624,10 @@ menu_title = "Processing"  # Not translatable!
 
 4. **Add menu action** (`datalab/gui/actionhandler.py`):
    ```python
-   def setup_processing_actions(self) -> None:
-       act = self.action_for("my_feature")
-       self.processing_menu.addAction(act)
+   def create_first_actions(self):
+       super().create_first_actions()
+       with self.new_category(ActionCategory.PROCESSING):
+           self.action_for("my_feature")
    ```
 
 5. **Add tests** (`datalab/tests/features/signal/`):
@@ -674,7 +677,7 @@ menu_title = "Processing"  # Not translatable!
 
 1. **Check processor registration**: Look in `register_operations()` methods
 2. **Verify action handler**: Search `actionhandler.py` for `action_for("function_name")`
-3. **Test in isolation**: Use pytest with `--ff` flag (fail-fast)
+3. **Test in isolation**: Use pytest with `--ff` flag (failed tests first), or `-x` to stop at the first failure
 4. **Check translations**: Missing `_()` wrapper causes English-only UI
 5. **Verify imports**: Ensure function is in `__all__` export list
 
@@ -797,7 +800,7 @@ Follow [RELEASING.md](../RELEASING.md). **Never create a GitHub release by hand*
 | `datalab/gui/processor/image.py` | Image processor registration |
 | `datalab/gui/processor/base.py` | Base processor class (generic methods) |
 | `datalab/gui/actionhandler.py` | Menu and action management |
-| `datalab/config.py` | Configuration, `_()` translation function |
+| `datalab/config/` | Configuration package, `_()` translation function |
 | `datalab/plugins/base.py` | Plugin system implementation (public names re-exported by `datalab.plugins`) |
 | `datalab/gui/plugins/config.py` | Plugin configuration dialog |
 | `datalab/control/baseproxy.py` | Abstract base proxy (API definition) |

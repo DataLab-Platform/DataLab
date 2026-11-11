@@ -24,9 +24,10 @@ Load the images
 
 .. note::
 
-    The images used in this tutorial "fabry_perot1.jpg" and "fabry_perot2.jpg" are
+    The images used in this tutorial "fabry-perot1.jpg" and "fabry-perot2.jpg" are
     available in the tutorial data folder of DataLab's installation directory
-    (``<DataLab installation directory>/data/tutorials/``).
+    (``<DataLab installation directory>/_internal/datalab/data/tutorials/fabry_perot/``
+    for the stand-alone version of DataLab).
 
     .. only:: html
 
@@ -39,13 +40,13 @@ Load the images
        https://datalab-platform.com.
 
 
-First, we open DataLab and load the images from the menu file "File > Open Image...",
+First, we open DataLab and load the images from the menu file "File > Open image...",
 with the |fileopen_ima| button in the toolbar or by dragging and dropping the files
 into DataLab.
 
 .. figure:: ../../images/tutorials/fabry_perot/01.png
 
-   Open the image files with "File > Open Image...", or with the |fileopen_ima| button in
+   Open the image files with "File > Open image...", or with the |fileopen_ima| button in
    the toolbar, or by dragging and dropping the files into DataLab (on the panel on
    the right).
 
@@ -57,7 +58,7 @@ into DataLab.
 .. figure:: ../../images/tutorials/fabry_perot/02.png
 
     Go to the tutorial data folder in DataLab's installation directory (or the folder where you placed the images),
-    select "fabry_perot1.jpg" and "fabry_perot2.jpg" and click "Open".
+    select "fabry-perot1.jpg" and "fabry-perot2.jpg" and click "Open".
 
 The selected image is displayed in the main window. We can zoom in and out by pressing
 the right mouse button and dragging the mouse up and down. We can also pan the image
@@ -78,7 +79,7 @@ by pressing the middle mouse button and dragging the mouse.
     the colormap in the vertical toolbar on the left of the visualization panel.
 
     Or, even better, you can change the default colormap in the DataLab settings
-    by selecting "Edit > Settings..." in the menu, or the |libre-gui-settings|
+    by selecting "File > Settings..." in the menu, or the |libre-gui-settings|
     button in the toolbar.
 
     .. figure:: ../../images/tutorials/fabry_perot/default_colormap.png
@@ -109,7 +110,7 @@ boolean operations (union, intersection, difference).
 
 .. figure:: ../../images/tutorials/fabry_perot/05a.png
 
-   The "Regions of interest" dialog opens. Click "Add ROI" and select
+   The "Regions of interest" dialog opens. Click "Graphical ROI" and select
    a circular ROI. Resize the predefined ROI by dragging the handles. Note that you
    may change the ROI radius while keeping its center fixed by pressing the "Ctrl" key.
    Click "OK" to close the dialog.
@@ -136,7 +137,7 @@ Once you are satisfied with the ROI position and size, click "OK" to close the d
 A confirmation dialog opens to ask you to apply the ROI to the image, and confirm
 its parameters. Here you can also choose to invert the ROI mask (i.e., select the area
 outside the ROI instead of the area inside the ROI): we do not want to invert the ROI
-in this case, so we leave the "Invert ROI" checkbox unchecked, and click "OK". If you
+in this case, so we leave the "Inverse ROI logic" checkbox unchecked, and click "OK". If you
 want to obtain the exact results shown in this tutorial, make sure that the ROI parameters
 are the same as in the figure.
 
@@ -155,7 +156,7 @@ binary mask, i.e., image data is represented as a NumPy masked array.
 Now, let's detect the contours in the area inside the ROI and fit them to circles. To
 do that, we select the "Contour detection" tool in the "Analysis" menu. The contour
 parameters dialog opens: we select the shape "Circle" and click "OK". Now you will see
-a "Results" dialog opening, that displays the fitted circle parameters. Click "OK" to
+a "Results" dialog opening, that displays the fitted circle parameters. Click "Close" to
 close the dialog. The fitted circles are displayed on the image.
 
 .. figure:: ../../images/tutorials/fabry_perot/08.png
@@ -176,11 +177,8 @@ close the dialog. The fitted circles are displayed on the image.
 
 .. note::
 
-    If you want to show the analysis results again, you can select the "Show Results"
-    |show_results| button in the "Analysis" menu, or the "Results" |show_results|
-    button, in the Analysis panel located below the image list:
-
-    .. image:: ../../images/tutorials/fabry_perot/12.png
+    If you want to show the analysis results again, you can select the "Show results..."
+    |show_results| entry in the "Analysis" menu.
 
 .. |show_results| image:: ../../images/icons/show_results.svg
     :width: 24px
@@ -188,10 +186,12 @@ close the dialog. The fitted circles are displayed on the image.
     :class: dark-light no-scaled-link
 
 The images (or signals) can also be displayed in a separate window, by clicking on
-the "View in a new window" entry in the "View" menu (or the |new_window| button in
-the toolbar). This is useful to compare images or signals side by side, and allows
-you to add annotations (cursors, labels, shapes, etc.) to the image or signal: the
-annotations are stored in the metadata of the image or signal, and saved together
+the "View in a new window..." entry in the "View" menu (or the |new_window| button in
+the toolbar). This is useful to compare images or signals side by side. To add
+annotations (cursors, labels, shapes, etc.) to the image or signal, click on the
+"Annotations" button of this window to show the annotation tools, or open the window
+directly with the "Edit annotations..." entry of the "View" menu: the annotations are
+stored with the image or signal (separately from its metadata), and saved together
 with the data when the workspace is saved.
 
 .. |new_window| image:: ../../../datalab/data/icons/view/new_window.svg
@@ -202,9 +202,9 @@ with the data when the workspace is saved.
 .. figure:: ../../images/tutorials/fabry_perot/13.png
 
    The image displayed in a separate window. The ROI and the fitted circles are
-   also displayed. Annotations can be added to the image by clicking on the buttons
-   at the bottom of the window. The annotations are stored in the metadata of the
-   image, and saved together with the image data when the workspace is saved.
+   also displayed. Annotations can be added to the image with the annotation tools
+   shown at the bottom of the window by the "Annotations" button. The annotations
+   are saved together with the image data when the workspace is saved.
    Click on "OK" to close the window.
 
 .. figure:: ../../images/tutorials/fabry_perot/14.png
@@ -219,17 +219,19 @@ If you want to take a closer look at the metadata, you can open the "Metadata" d
 
 .. figure:: ../../images/tutorials/fabry_perot/16.png
 
-    The "Metadata" dialog opens. Among other information, it displays the annotations
-    (in a JSON format), some style information (e.g. the colormap), and the ROI.
+    The "Metadata" dialog opens. Among other information, it displays some style
+    information (e.g. the colormap) and the ROI.
 
-Now, let's delete the image metadata (including the annotations) to clean up the image.
-Select the "Delete object metadata..." entry in the "Edit" menu, or the |metadata_delete|
-button in the toolbar, and answer "No" to the confirmation dialog to keep the ROI and
-delete the rest of the metadata.
+Now, let's delete the image metadata to clean up the image.
+Select the "Delete object metadata" entry in the "Edit > Metadata" menu, or the
+|metadata_delete| button in the toolbar, and answer "No" to the confirmation dialog
+to keep the ROI and delete the rest of the metadata. This does not delete the
+annotations: to delete them, select the "Delete annotations" entry in the
+"Edit > Annotations" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/17.png
 
-   Select the "Delete object metadata" entry in the "Edit" menu.
+   Select the "Delete object metadata" entry in the "Edit > Metadata" menu.
 
 .. |metadata_delete| image:: ../../../datalab/data/icons/edit/metadata_delete.svg
     :width: 24px
@@ -246,7 +248,7 @@ ROI from the first image to the second image. The best way to do that is to use
 the copy/paste option present in the "ROI" menu, or the |roi_copy| and |roi_paste|
 buttons in the toolbar: select the first image, then click on the "Copy" entry in
 the "ROI" menu (or the |roi_copy| button in the toolbar), then select the second image,
-and click on the "Paste ROI" entry in the "ROI" menu (or the |roi_paste| button in the
+and click on the "Paste" entry in the "ROI" menu (or the |roi_paste| button in the
 toolbar).
 
 .. note::
@@ -278,7 +280,7 @@ toolbar).
 Select the "Contour detection" tool in the "Analysis" menu, with the same
 parameters as before (shape "Circle"). On this image, there are two fringes,
 so four circles are fitted. The "Results" dialog opens and displays the
-fitted circle parameters. Click "OK".
+fitted circle parameters. Click "Close".
 
 .. figure:: ../../images/tutorials/fabry_perot/22.png
 
@@ -299,7 +301,7 @@ Extract intensity profiles along the X axis
     extraction), we will extract the intensity profile along the X axis
     at the center of the image. In a real application, you would probably want to
     extract the **radial intensity profile** instead, which can be done using
-    the "Radial profile" entry in the "Analysis > Intensity profiles" menu: this
+    the "Radial profile extraction..." entry in the "Analysis > Intensity profiles" menu: this
     would be more relevant and straightforward to analyze Fabry-Perot fringes.
 
 To extract the intensity profile along the X axis, we have two options:
@@ -321,15 +323,15 @@ Let's try the first option: select the "Line profile..." entry |profile|.
 This is the most straightforward way to extract a profile from an image, and it
 corresponds to the ``calc("line_profile")`` computation feature of DataLab's API
 (so it can be used in a script, a plugin or a macro). Select the "Line profile..."
-entry |profile| in the "Operations" menu and the "Line profile" dialog will open, letting you
+entry |profile| in the "Analysis > Intensity profiles" menu and the "Line profile" dialog will open, letting you
 select the profile row (for a horizontal profile) or column (for a vertical profile)
 on the image.
 You can also enter the Y coordinate of the row (or the X coordinate of the column)
-directly by clicking on "parameters..." in the "Line profile" dialog.
+directly by clicking on "Edit profile parameters" in the "Line profile" dialog.
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
 
-    Select the "Line profile..." entry |profile| in the "Operations" menu.
+    Select the "Line profile..." entry |profile| in the "Analysis > Intensity profiles" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/25.png
 
@@ -347,15 +349,14 @@ panel to display the profile.
     this panel to display the profile.
 
 If you want to do some measurements on the profile, or add annotations, you can
-open the signal in a separate window, by clicking on the "View in a new window"
+open the signal in a separate window, by clicking on the "View in a new window..."
 entry in the "View" menu (or the |new_window| button in the toolbar).
 
 .. figure:: ../../images/tutorials/fabry_perot/27.png
 
     The signal is displayed in a separate window. Here, we added vertical cursors
-    and a text label. As for the images, the annotations are stored
-    in the metadata of the signal and saved together with the signal data when the workspace
-    is saved. Click on "OK" to close the window.
+    and a text label. As for the images, the annotations are saved together with the
+    signal data when the workspace is saved. Click on "OK" to close the window.
 
 Now, let's try the second option for extracting the intensity profile along the X axis,
 using the "Cross section" tool |cross_section| in the vertical toolbar on the
@@ -403,7 +404,7 @@ the annotations.
     :height: 24px
     :class: dark-light no-scaled-link
 
-If you want to load the workspace again, you can use the "File > Open HDF5 file..."
+If you want to load the workspace again, you can use the "File > Open HDF5 files..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.

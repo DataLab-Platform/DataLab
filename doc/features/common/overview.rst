@@ -13,7 +13,7 @@ Basic concepts
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
 
-- The left area contains the **Signals** and **Images** data tabs, which list
+- The left area contains the **Signal Panel** and **Image Panel** tabs, which list
   the data sets currently loaded in each panel. Clicking a tab switches the
   main window to the corresponding panel, as well as the menu and toolbar
   contents. Below the list of data sets, a **Properties** view shows
@@ -105,9 +105,11 @@ History Panel
 ^^^^^^^^^^^^^
 
 The :ref:`historypanel` is an additional dockable panel that records signal
-and image actions in a shared active session. It supports replay, step-by-step
-replay, duplication, and compatibility diagnostics. Sessions may be saved in
-standalone ``.dlhist`` files or with the workspace in HDF5 format.
+and image actions in a shared active session, while its **Record mode** is
+enabled (by default, this mode is disabled when DataLab starts). It supports
+replay, step-by-step replay, duplication, and compatibility diagnostics.
+Sessions may be saved in standalone ``.dlhist`` files or with the workspace in
+HDF5 format.
 
 Internal data model and workspace
 ---------------------------------
@@ -133,18 +135,18 @@ Loading and saving the workspace
 
 The following actions are available to manage the workspace from the **File** menu:
 
-- **Open HDF5 file**: load a workspace from an HDF5 file.
+- **Open HDF5 files...**: load a workspace from one or more HDF5 files.
 
-- **Save to HDF5 file**: save the current workspace to an HDF5 file.
+- **Save to HDF5 file...**: save the current workspace to an HDF5 file.
 
-- **Browse HDF5 file**: open the :ref:`h5browser` to explore the content of an
+- **Browse HDF5 file...**: open the :ref:`h5browser` to explore the content of an
   HDF5 file and import data sets into the workspace.
 
 .. note::
 
     Data sets may also be saved or loaded individually, using data formats
     such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the
-    list of supported formats), or `.tiff` or `.dcm` for 2D images
+    list of supported formats), or `.tiff` or `.png` for 2D images
     (see :ref:`open_image` for the list of supported formats).
 
 Interactive object creation and processing
@@ -182,7 +184,7 @@ Interactive 1-to-1 processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Live preview before applying a processing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox,
 unchecked each time the dialog opens. Enable it to display a temporary result
@@ -217,7 +219,7 @@ Fields without two usable bounds remain text-only. Sliders alone never enable
 preview or automatic re-processing.
 
 Re-processing an existing result
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When applying a 1-to-1 processing operation that has configurable parameters (e.g.,
 Gaussian filter, threshold, morphological operations), DataLab stores the processing
@@ -230,11 +232,14 @@ metadata, enabling parameter adjustment and re-processing:
 5. Modify processing parameters (e.g., filter sigma value)
 6. Click **Apply** to re-process with updated parameters
 
-Normally, **Apply** creates a new result and history entry. In the History panel's
-edit mode it updates the existing result and recomputes dependent actions. The
-optional **Auto-recompute on edit** checkbox follows the same rules, waits for
-slider release and valid input, and does not apply edits from a previously
-selected object. This workflow is ideal for:
+**Apply** recomputes the result in place: the existing object is updated, without
+creating a new object or a new history entry, and the new execution is recorded in
+the provenance of the result (see :ref:`provenance`). The parameters of the
+corresponding History action are left unchanged: to edit them, replay the action
+with **Step-by-step** in the :ref:`historypanel`. The optional **Auto-recompute on
+edit** checkbox follows the same rules, waits for slider release and valid input,
+and does not apply edits from a previously selected object. This workflow is ideal
+for:
 
 - Iteratively tuning filter parameters while observing results in real time
 - Adjusting threshold values without creating multiple intermediate objects
@@ -258,21 +263,21 @@ selected object. This workflow is ideal for:
 Example workflow
 ^^^^^^^^^^^^^^^^
 
-Here's a typical workflow using interactive processing, with History edit mode enabled:
+Here's a typical workflow using interactive processing:
 
-1. **Create a test signal**: Create > Gaussian signal
+1. **Create a test signal**: Create > Gaussian
 
-   - Initial parameters: amplitude=1.0, mu=50, sigma=10
+   - Default parameters: A=1.0, μ=0, σ=1 (with x from -10 to 10)
 
-2. **Adjust creation parameters**: In the Creation tab, change sigma to 20, click Apply
+2. **Adjust creation parameters**: In the Creation tab, change σ to 2, click Apply
 
    - Signal is regenerated with new width
 
-3. **Apply Gaussian filter**: Processing > Noise reduction > Gaussian filter
+3. **Apply Gaussian filter**: Processing > Noise reduction > Gaussian filter...
 
-   - Initial sigma=2.0
+   - Default σ=1.0
 
-4. **Fine-tune filtering**: In the Processing tab, try sigma=1.0, then sigma=5.0
+4. **Fine-tune filtering**: In the Processing tab, try σ=3.0, then σ=5.0
 
    - Each Apply updates the filtered result
    - Compare different smoothing levels without creating multiple objects

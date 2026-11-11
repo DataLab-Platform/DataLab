@@ -27,7 +27,8 @@ the centroid, to detect peaks, to detect contours, and so on.
     In DataLab vocabulary, an "analysis" is a feature that computes a scalar
     result from an image. This result is stored as metadata, and thus attached
     to image. This is different from a "processing" which creates a new image
-    from an existing one.
+    from an existing one. The "Histogram", "Intensity profiles" and projection
+    features are exceptions: they create new signals from each selected image.
 
 Statistics
 ^^^^^^^^^^
@@ -131,8 +132,8 @@ Horizontal and vertical projections
 
 Compute horizontal and vertical projection profiles:
 
-- Horizontal projection: Sum the pixel values along each row (projection on the x-axis).
-- Vertical projection: Sum the pixel values along each column (projection on the y-axis).
+- Horizontal projection: Sum the pixel values along each column (projection on the x-axis).
+- Vertical projection: Sum the pixel values along each row (projection on the y-axis).
 
 Centroid
 ^^^^^^^^
@@ -150,10 +151,11 @@ with fallback mechanisms designed to handle pathological cases, such as:
 - off-center objects,
 - strong background noise.
 
-Internally, :py:func:`sigima.tools.image.get_centroid_auto` compares the
-Fourier result with two alternative estimators (a projected profile-based method
-:py:func:`sigima.tools.image.get_projected_profile_centroid` and a standard centroid
-from `scikit-image`), and selects the most consistent one.
+Internally, :py:func:`sigima.tools.image.get_centroid_auto` computes a reference
+centroid with a projected profile-based method
+(:py:func:`sigima.tools.image.get_projected_profile_centroid`), and selects, between
+the Fourier result and a standard centroid from `scikit-image`, the one which is the
+most consistent with this reference.
 
 This strategy ensures accurate and stable results across a wide range
 of image types — from clean laboratory data to noisy or partial acquisitions.
@@ -224,7 +226,8 @@ Blob detection (OpenCV)
 
     All detection features (2D peak detection, contour detection, circle Hough
     transform, and blob detection) support automatic ROI creation around detected
-    objects. This feature:
+    objects. Except for contour detection (whose ROIs follow the shape of each
+    detected contour, see :ref:`ref-to-contour-detection`), this feature:
 
     - Creates rectangular or circular ROIs around each detected feature
     - Automatically sizes ROIs based on minimum distance between detections
@@ -261,3 +264,10 @@ Plot results
 
 Plot the results of analyses performed on the selected images, with user-defined
 X and Y axes (e.g. plot the contour circle radius as a function of the image number).
+
+Delete results
+^^^^^^^^^^^^^^
+
+Delete analysis results of the selected images: this submenu lists the results
+(one entry per result, to delete it individually), followed by a
+"Delete all results..." entry.

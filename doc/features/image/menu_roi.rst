@@ -19,9 +19,9 @@ The Regions Of Interest (ROI) are image areas that are defined by the user to pe
 
 ROI are taken into account almost in all computing features in DataLab:
 
-- The "Operations" menu features are done only on the ROI if one is defined (except if the operation changes the data shape - like the resize operation - or the pixel size - like the binning operation).
+- The "Operations" menu features are done only on the ROI if one is defined.
 
-- The "Processing" menu actions are performed only on the ROI if one is defined (except if the destination signal data type is different from the source's, like in the Fourier analysis features or like the thresholding operations).
+- The "Processing" menu actions are performed only on the ROI if one is defined (except if the operation changes the data shape - like the resize operation - or the pixel size - like the binning operation, or if the destination signal data type is different from the source's, like in the Fourier analysis features or like the thresholding operations).
 
 - The "Analysis" menu actions are done only on the ROI if one is defined.
 
@@ -51,7 +51,7 @@ The "ROI" menu allows you to:
 
 - "Export" |roi_export|: export the defined ROIs to a file. This allows you to save the ROIs for later use or to share them with others.
 
-- "Remove all" |roi_delete|: remove all defined ROI for the selected images.
+- "Remove" |roi_delete|: remove a single ROI (one entry per ROI of the selected image) or all defined ROIs for the selected images ("Remove all").
 
 .. figure:: /images/shots/i_roi_dialog.png
 

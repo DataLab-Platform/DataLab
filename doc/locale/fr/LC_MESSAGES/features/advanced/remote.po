@@ -28,8 +28,8 @@ msgstr "XML-RPC reste disponible pour la compatibilité avec les intégrations e
 msgid "DataLab may be controlled remotely using the `XML-RPC`_ protocol which is natively supported by Python (and many other languages). Remote controlling allows to access DataLab main features from a separate process."
 msgstr "DataLab peut être contrôlé à distance en utilisant le protocole `XML-RPC`_ qui est nativement supporté par Python (et beaucoup d'autres langages). Le contrôle à distance permet d'accéder aux principales fonctionnalités de DataLab à partir d'un processus séparé."
 
-msgid "If you are looking for a lightweight alternative to remote control DataLab (i.e. without installing the whole DataLab package and its dependencies in your environment), use the :py:class:`sigima.client.SimpleRemoteProxy` class provided by the `Sigima`_ package (``pip install sigima``). It exposes the same XML-RPC entry points as the ``RemoteProxy`` class described below, with a minimal set of dependencies."
-msgstr "Si vous recherchez une alternative légère pour contrôler DataLab à distance (c'est-à-dire sans installer l'ensemble du package DataLab et ses dépendances dans votre environnement), utilisez la classe :py:class:`sigima.client.SimpleRemoteProxy` fournie par le package `Sigima`_ (``pip install sigima``). Elle expose les mêmes points d'entrée XML-RPC que la classe ``RemoteProxy`` décrite ci-dessous, avec un ensemble minimal de dépendances."
+msgid "If you are looking for a lightweight alternative to remote control DataLab (i.e. without installing the whole DataLab package and its dependencies in your environment), use the :py:class:`sigima.client.SimpleRemoteProxy` class provided by the `Sigima`_ package (``pip install sigima``). It exposes most of the XML-RPC entry points of the ``RemoteProxy`` class described below, with a minimal set of dependencies: only ``call_method``, ``remove_object``, ``export_capsule``, ``open_capsule``, ``start_webapi_server``, ``stop_webapi_server`` and ``get_webapi_status`` are missing."
+msgstr "Si vous recherchez une alternative légère pour contrôler DataLab à distance (c'est-à-dire sans installer l'ensemble du package DataLab et ses dépendances dans votre environnement), utilisez la classe :py:class:`sigima.client.SimpleRemoteProxy` fournie par le package `Sigima`_ (``pip install sigima``). Elle expose la plupart des points d'entrée XML-RPC de la classe ``RemoteProxy`` décrite ci-dessous, avec un ensemble minimal de dépendances : seuls ``call_method``, ``remove_object``, ``export_capsule``, ``open_capsule``, ``start_webapi_server``, ``stop_webapi_server`` et ``get_webapi_status`` sont absents."
 
 msgid "This class supersedes ``cdlclient.SimpleRemoteProxy``: the ``cdlclient`` package is deprecated and archived since DataLab 1.3. Its connection dialog is now provided by SigimaX (see :ref:`remote_connection_dialog` below)."
 msgstr "Cette classe remplace ``cdlclient.SimpleRemoteProxy`` : le package ``cdlclient`` est obsolète et archivé depuis DataLab 1.3. Sa boîte de dialogue de connexion est désormais fournie par SigimaX (voir :ref:`remote_connection_dialog` ci-dessous)."
@@ -55,11 +55,11 @@ msgstr "Les données (signaux et images) peuvent également être échangées en
 msgid "The remote client application may be written in any language that supports XML-RPC. For example, it is possible to write a remote client application in Python, Java, C++, C#, etc. The remote client application may be a graphical application or a command line application."
 msgstr "L'application cliente distante peut être écrite dans n'importe quel langage qui prend en charge XML-RPC. Par exemple, il est possible d'écrire une application cliente distante en Python, Java, C++, C#, etc. L'application cliente distante peut être une application graphique ou une application en ligne de commande."
 
-msgid "The remote client application may be run on the same computer as DataLab or on a different computer. In the latter case, the remote client application must know the IP address of the computer running DataLab."
-msgstr "L'application cliente distante peut être exécutée sur le même ordinateur que DataLab ou sur un ordinateur différent. Dans ce dernier cas, l'application cliente distante doit connaître l'adresse IP de l'ordinateur exécutant DataLab."
+msgid "The remote client application must run on the same computer as DataLab: the XML-RPC server only accepts connections from the local machine (``127.0.0.1``). To control DataLab from another computer, forward the XML-RPC port through a secure channel, such as an SSH tunnel."
+msgstr "L'application cliente distante doit s'exécuter sur le même ordinateur que DataLab : le serveur XML-RPC n'accepte que les connexions provenant de la machine locale (``127.0.0.1``). Pour contrôler DataLab depuis un autre ordinateur, redirigez le port XML-RPC via un canal sécurisé, tel qu'un tunnel SSH."
 
-msgid "The remote client application may be run before or after DataLab. In the latter case, the remote client application must try to connect to DataLab until it succeeds."
-msgstr "L'application cliente distante peut être exécutée avant ou après DataLab. Dans ce dernier cas, l'application cliente distante doit essayer de se connecter à DataLab jusqu'à ce qu'elle réussisse."
+msgid "The remote client application may be run before or after DataLab. In the former case, the remote client application must try to connect to DataLab until it succeeds."
+msgstr "L'application cliente distante peut être exécutée avant ou après DataLab. Dans le premier cas, l'application cliente distante doit essayer de se connecter à DataLab jusqu'à ce qu'elle réussisse."
 
 msgid "Supported features"
 msgstr "Fonctionnalités prises en charge"
@@ -67,11 +67,17 @@ msgstr "Fonctionnalités prises en charge"
 msgid "Supported features are the following:"
 msgstr "Les fonctionnalités prises en charge sont les suivantes :"
 
+msgid "Get DataLab version, raise or close its main window"
+msgstr "Obtenir la version de DataLab, mettre au premier plan ou fermer sa fenêtre principale"
+
 msgid "Switch to signal or image panel"
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-msgid "Remove all signals and images"
-msgstr "Supprimer tous les signaux et images"
+msgid "Toggle auto-refresh and the display of object titles"
+msgstr "Activer ou désactiver le rafraîchissement automatique et l'affichage des titres des objets"
+
+msgid "Remove all signals and images, or the current object"
+msgstr "Supprimer tous les signaux et images, ou l'objet courant"
 
 msgid "Save current session to a HDF5 file"
 msgstr "Enregistrer la session en cours dans un fichier HDF5"
@@ -82,20 +88,38 @@ msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
 msgid "Browse HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-msgid "Open a signal or an image from file"
-msgstr "Ouvrir un signal ou une image à partir d'un fichier"
+msgid "Export or open a workspace capsule"
+msgstr "Exporter ou ouvrir une capsule d'espace de travail"
 
-msgid "Add a signal"
-msgstr "Ajouter un signal"
+msgid "Open signals or images from files or from a directory"
+msgstr "Ouvrir des signaux ou des images à partir de fichiers ou d'un répertoire"
 
-msgid "Add an image"
-msgstr "Ajouter une image"
+msgid "Add a signal, an image, an object or a group, or replace an object"
+msgstr "Ajouter un signal, une image, un objet ou un groupe, ou remplacer un objet"
 
-msgid "Get object list"
-msgstr "Obtenir la liste des objets"
+msgid "Get object list, UUIDs, groups, current and selected objects"
+msgstr "Obtenir la liste des objets, les UUID, les groupes, les objets courants et sélectionnés"
+
+msgid "Select objects or groups"
+msgstr "Sélectionner des objets ou des groupes"
+
+msgid "Delete metadata, add annotations or a label with object title, get the shapes of an object"
+msgstr "Supprimer les métadonnées, ajouter des annotations ou une étiquette avec le titre de l'objet, obtenir les formes d'un objet"
 
 msgid "Run calculation with parameters"
 msgstr "Exécuter un calcul avec des paramètres"
+
+msgid "Import, run or stop a macro"
+msgstr "Importer, exécuter ou arrêter une macro"
+
+msgid "Call any public method of the main window or of a panel"
+msgstr "Appeler n'importe quelle méthode publique de la fenêtre principale ou d'un panneau"
+
+msgid "Start, stop or query the Web API server"
+msgstr "Démarrer, arrêter ou interroger le serveur de l'API Web"
+
+msgid "See the :ref:`remote_public_api` section below for the description of the corresponding methods."
+msgstr "Voir la section :ref:`remote_public_api` ci-dessous pour la description des méthodes correspondantes."
 
 msgid "The signal and image objects are described on this section: :ref:`ref-to-model`."
 msgstr "Les objets signal et image sont décrits dans cette section : :ref:`ref-to-model`."

@@ -17,7 +17,7 @@ DataLab menus change depending on the context. Since we are going to work with a
 spectrum, a 1D signal, we need to select the Signal Panel before proceeding.
 
 In a typical workflow, we would open DataLab and read the spectrum from a file using
-"File > Open...", the |fileopen_sig| button in the toolbar, or by dragging and
+"File > Open signal...", the |fileopen_sig| button in the toolbar, or by dragging and
 dropping the file into the panel on the right. However, for this tutorial,
 we will use the "Plugins > Test data > Load spectrum of paracetamol" feature to
 generate a test spectrum, which is convenient for demonstration purposes.
@@ -29,7 +29,7 @@ generate a test spectrum, which is convenient for demonstration purposes.
 
 .. figure:: ../../images/tutorials/spectrum/01.png
 
-   The "File > Open..." menu to open a spectrum file.
+   The "File > Open signal..." menu to open a spectrum file.
 
 .. figure:: ../../images/tutorials/spectrum/02.png
 
@@ -37,8 +37,8 @@ generate a test spectrum, which is convenient for demonstration purposes.
     test spectrum for this tutorial.
 
 Once opened, the spectrum is displayed in the main window. It is a 1D signal, so it is
-displayed as a curve. The horizontal axis is the energy axis, and the vertical axis
-is the intensity axis.
+displayed as a curve. The horizontal axis is the diffraction angle 2θ (in degrees),
+and the vertical axis is the intensity axis.
 
 .. figure:: ../../images/tutorials/spectrum/03.png
 
@@ -47,11 +47,11 @@ is the intensity axis.
 The signal is quite clean. However, to demonstrate DataLab's filtering capabilities,
 we will apply a Wiener filter to reduce any residual noise while
 preserving the spectral features. This is available under
-"Processing > Noise Reduction > Wiener filter".
+"Processing > Noise reduction > Wiener filter".
 
 .. figure:: ../../images/tutorials/spectrum/04.png
 
-    The "Processing > Noise Reduction > Wiener filter" menu option.
+    The "Processing > Noise reduction > Wiener filter" menu option.
 
 .. figure:: ../../images/tutorials/spectrum/05.png
 
@@ -61,12 +61,13 @@ Let's focus our analysis on one of the peaks of interest. To do that,
 we define a region of interest (ROI) around the feature we want to analyze
 and use the "ROI > Extract..." menu to extract it.
 The "Regions of interest" dialog box will be displayed. Select an area and click "OK".
-A confirmation window will appear—click "Yes" to extract the region of interest.
+A confirmation window ("Regions of Interest") will appear—click "OK" to extract the
+region of interest.
 A new signal containing the ROI will be created and displayed in the main window.
 
 .. figure:: ../../images/tutorials/spectrum/06.png
 
-    The "Operations > ROI extraction" menu.
+    The "ROI > Extract..." menu.
 
 .. figure:: ../../images/tutorials/spectrum/07.png
 
@@ -78,7 +79,9 @@ A new signal containing the ROI will be created and displayed in the main window
 
 .. figure:: ../../images/tutorials/spectrum/09.png
 
-    Open the model fitting window with "Processing > Fitting > Gaussian fit".
+    Fit a Gaussian model to the extracted peak with "Processing > Fitting > Gaussian
+    fit" (automatic fit, without dialog box; an interactive version is available in
+    the "Processing > Fitting > Interactive fitting" submenu).
 
 
 .. figure:: ../../images/tutorials/spectrum/11.png
@@ -177,7 +180,7 @@ Automatic peak detection
 
 We can use DataLab's "Multi-Gaussian fit" function to automatically identify
 and fit multiple peaks in the spectrum by selecting
-"Processing > Fitting > Multi-Gaussian fit" from the menu.
+"Processing > Fitting > Interactive fitting > Multi-Gaussian fit" from the menu.
 
 .. figure:: ../../images/tutorials/spectrum/16.png
 
@@ -204,13 +207,11 @@ attached to the signal.
 
 .. figure:: ../../images/tutorials/spectrum/19.png
 
-    Open the "Peak detection" window with "Analysis > Peak detection".
+    Open the "Peak detection" window with "Analysis > Peak detection...".
 
-.. figure:: ../../images/tutorials/spectrum/21.png
-
-    After adjusting the peak detection parameters (using the same dialog as
-    for the multi-Gaussian fit), click "OK". The detected peak positions are
-    stored as an XY-markers result and overlayed on the spectrum.
+After adjusting the peak detection parameters (using the same dialog as
+for the multi-Gaussian fit), click "OK". The detected peak positions are
+stored as an XY-markers result and overlayed on the spectrum.
 
 To rebuild the historical *sticks* signal — a delta function at each detected
 peak position — apply *Operations ▸ Create signal from markers table…* to the
@@ -234,7 +235,7 @@ visualization settings (such as curve colors).
     :height: 24px
     :class: dark-light no-scaled-link
 
-If you want to load the workspace again, you can use the "File > Open HDF5 file..."
+If you want to load the workspace again, you can use the "File > Open HDF5 files..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.

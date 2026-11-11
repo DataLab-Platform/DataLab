@@ -69,6 +69,7 @@ The buttons below the cards act on the object:
   read to know it);
 - **Verify computation** verifies the production of the object, like **Verify
   this step**.
+
 States and messages
 ^^^^^^^^^^^^^^^^^^^
 
@@ -135,14 +136,11 @@ provenance describes the last successful execution.
 The History action is the recipe, the provenance records each execution:
 
 - applying a processing again from the **Processing** tab, or an analysis from
-  the **Analysis** tab, is recorded in the provenance of the result;
-- in the History panel edit mode, the edited parameters also become those of
-  the History action, which is linked to this new execution. For a command
-  producing several results (e.g. several filters applied at once), only the
-  parameters of the edited result change in the action, and replaying the
-  action applies them to that result of every object it processed;
-- outside the edit mode, the History action is left unchanged: replaying it
-  applies its own parameters again.
+  the **Analysis** tab, is recorded in the provenance of the result, and leaves
+  the History action unchanged: replaying it applies its own parameters again;
+- replaying the action with **Step-by-step** in the History panel lets you edit
+  its parameters: the edited parameters become those of the History action, which
+  is linked to this new execution.
 
 Automatic provenance capture does not depend on the History panel's **Record**
 mode. Recording a recipe and recording a scientific execution are different
@@ -242,8 +240,8 @@ the reader never downloads code to guess their meaning.
 Sigima increases the version of an operation contract whenever a change of the
 computation changes its result, whatever the version of DataLab. Activities
 recorded with an earlier version of the contract are then refused explicitly
-(*unsupported contract*) instead of being replayed with a different result, and
-their processing cannot be applied again as recorded: compute the result again
+(*operation version not supported*) instead of being replayed with a different
+result, and their processing cannot be applied again as recorded: compute the result again
 to record it with the current version. The same applies to the versioned rules
 of the execution context, such as the selection of image pixels by regions of
 interest. See `Operation contracts and versions

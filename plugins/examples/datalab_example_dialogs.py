@@ -26,9 +26,9 @@ Available Dialog Methods
 
 **Message Dialogs:**
 
-- ``self.show_info(message, title=None)``: Information (blue icon)
-- ``self.show_warning(message, title=None)``: Warning (yellow icon)
-- ``self.show_error(message, title=None)``: Error (red icon)
+- ``self.show_info(message)``: Information (blue icon)
+- ``self.show_warning(message)``: Warning (yellow icon)
+- ``self.show_error(message)``: Error (red icon)
 
 **Question Dialogs:**
 
@@ -37,11 +37,11 @@ Available Dialog Methods
 
 **Parameter Dialogs:**
 
-- ``self.edit_new_signal_parameters(title=None, size=None, stype=None)``:
+- ``self.edit_new_signal_parameters(title=None, size=None)``:
   Returns ``NewSignalParam`` object or ``None`` if canceled
 
-- ``self.edit_new_image_parameters(title=None, shape=None, dtype=None,
-  hide_dtype=False, hide_type=False)``:
+- ``self.edit_new_image_parameters(title=None, shape=None, hide_height=False,
+  hide_width=False, hide_type=True, hide_dtype=False)``:
   Returns ``NewImageParam`` object or ``None`` if canceled
 
 **Remote Proxy Access:**
@@ -65,7 +65,7 @@ See Also
 --------
 
 - DataLab plugin documentation: https://datalab-platform.com/en/features/advanced/plugins.html
-- DataLab remote control API: https://datalab-platform.com/en/features/general/remote.html
+- DataLab remote control API: https://datalab-platform.com/en/features/advanced/remote.html
 - ``datalab_example_empty.py``: Basic plugin structure
 - ``datalab_example_imageproc.py``: Processing operations example
 """
@@ -135,10 +135,10 @@ class DialogMethodsExample(datalab.plugins.PluginBase):
 
         Parameter dialog options:
         - title: Default title for new image
-        - shape: Default (width, height) tuple
-        - dtype: Default NumPy dtype
+        - shape: Default (height, width) tuple
+        - hide_height, hide_width: Hide height or width
+        - hide_type: Hide image type selection (default: True)
         - hide_dtype: Hide dtype selection
-        - hide_type: Hide image type selection
         """
         # Ask user for image parameters
         newparam = self.edit_new_image_parameters(

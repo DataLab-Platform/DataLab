@@ -24,8 +24,8 @@ DataLab v0.20;DataLab v1.0
 **Computation function wrappers**;
 ``cdl.computation.image.Wrap11Func``;``sigima.proc.image.Wrap1to1Func``
 ``cdl.computation.signal.Wrap11Func``;``sigima.proc.signal.Wrap1to1Func``
-``cdl.computation.image.dst_11()``;``sigima.proc.image.dst_1to1()``
-``cdl.computation.signal.dst_11()``;``sigima.proc.signal.dst_1to1()``
+``cdl.computation.image.dst_11()``;``sigima.proc.base.dst_1_to_1()``
+``cdl.computation.signal.dst_11()``;``sigima.proc.base.dst_1_to_1()``
 **Processor methods** (`p` is a signal or image processor instance);
 ``p.compute_11(...)``;``p.compute_1_to_1(...)``
 ``p.compute_10(...)``;``p.compute_1_to_0(...)``
@@ -51,10 +51,10 @@ DataLab v0.20;DataLab v1.0
 ``edit_new_image_parameters(hide_image_type=True)``;``edit_new_image_parameters(hide_type=True)``
 ``edit_new_image_parameters(hide_image_height=True)``;``edit_new_image_parameters(hide_height=True)``
 **I/O functions**;
-``cdl.io.image.read_image()``;``sigima.io.image.read_image()``
-``cdl.io.image.write_image()``;``sigima.io.image.write_image()``
-``cdl.io.signal.read_signal()``;``sigima.io.signal.read_signal()``
-``cdl.io.signal.write_signal()``;``sigima.io.signal.write_signal()``
+``cdl.io.image.read_image()``;``sigima.io.read_image()``
+``cdl.io.image.write_image()``;``sigima.io.write_image()``
+``cdl.io.signal.read_signal()``;``sigima.io.read_signal()``
+``cdl.io.signal.write_signal()``;``sigima.io.write_signal()``
 **Enumerations**;
 ``cdl.obj.ImageDatatypes``;``sigima.objects.ImageDatatypes``
 ``cdl.obj.ImageTypes``;``sigima.objects.ImageTypes``

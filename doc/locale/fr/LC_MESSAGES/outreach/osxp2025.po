@@ -140,8 +140,8 @@ msgstr "La réalisation de ce logiciel ouvre la voie à de nouvelles application
 msgid "DataLab 1.0: Key Features and Architecture"
 msgstr "DataLab 1.0 : Fonctionnalités Clés et Architecture"
 
-msgid "This presentation will showcase the major advancements in DataLab 1.0:"
-msgstr "Cette présentation mettra en avant les avancées majeures de DataLab 1.0 :"
+msgid "This presentation showcased the major advancements in DataLab 1.0:"
+msgstr "Cette présentation a mis en avant les avancées majeures de DataLab 1.0 :"
 
 msgid "**Modular Architecture**"
 msgstr "**Architecture Modulaire**"
@@ -284,8 +284,8 @@ msgstr "DataLab 1.0 représente une évolution significative - passant d'une app
 msgid "The originally planned X-ray scene reconstruction project remains an excellent example of DataLab's capabilities in advanced industrial applications, demonstrating how the platform bridges the gap between research and industrial applications while combining scientific rigor, industrial robustness, and open-source collaboration."
 msgstr "Le projet de reconstruction de scènes radiographiées initialement prévu reste un excellent exemple des capacités de DataLab dans les applications industrielles avancées, démontrant comment la plateforme comble le fossé entre la recherche et les applications industrielles tout en combinant rigueur scientifique, robustesse industrielle et collaboration open-source."
 
-msgid "**Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future."
-msgstr "**Événement Passé** : Cette présentation a eu lieu le **11 décembre 2025**. Les documents de présentation et informations complémentaires pourront être ajoutés ici à l'avenir."
+msgid "**Past Event**: This presentation took place on **December 11, 2025**. Its video recording is available above."
+msgstr "**Événement passé** : Cette présentation a eu lieu le **11 décembre 2025**. Son enregistrement vidéo est disponible ci-dessus."
 
 msgid "Resources"
 msgstr "Ressources"
@@ -293,8 +293,8 @@ msgstr "Ressources"
 msgid "`Open Source Experience 2025 website <https://www.opensource-experience.com/>`_"
 msgstr "Site Web de l'Open Source Experience 2025 <https://www.opensource-experience.com/>"
 
-msgid "Talk details and schedule to be published closer to the event"
-msgstr "Les détails de la présentation et le calendrier seront publiés à l'approche de l'événement."
+msgid "`Video recording on YouTube <https://www.youtube.com/watch?v=0D4ffBJIc5Q>`_"
+msgstr "`Enregistrement vidéo sur YouTube <https://www.youtube.com/watch?v=0D4ffBJIc5Q>`_"
 
 msgid "For more information about DataLab's use in CEA projects, see:"
 msgstr "Pour plus d'informations sur l'utilisation de DataLab dans les projets CEA, voir :"

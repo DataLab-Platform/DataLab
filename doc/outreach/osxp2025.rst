@@ -82,7 +82,7 @@ In the field of non-destructive testing, the CEA entrusted CODRA with the specif
 DataLab 1.0: Key Features and Architecture
 -------------------------------------------
 
-This presentation will showcase the major advancements in DataLab 1.0:
+This presentation showcased the major advancements in DataLab 1.0:
 
 **Modular Architecture**
     The new architecture separates concerns into distinct, reusable components:
@@ -156,13 +156,13 @@ The originally planned X-ray scene reconstruction project remains an excellent e
 
 .. note::
 
-   **Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future.
+   **Past Event**: This presentation took place on **December 11, 2025**. Its video recording is available above.
 
 Resources
 ---------
 
 - `Open Source Experience 2025 website <https://www.opensource-experience.com/>`_
-- Talk details and schedule to be published closer to the event
+- `Video recording on YouTube <https://www.youtube.com/watch?v=0D4ffBJIc5Q>`_
 
 .. seealso::
 

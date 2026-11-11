@@ -50,9 +50,11 @@ full control over when analyses are refreshed.
 
 .. note::
 
-    This action is only available for images that have stored processing parameters
-    (created through processing operations) or stored analysis parameters (analysis
-    operations previously run on them).
+    This action is enabled as soon as an image or a group is selected, but it only
+    applies to images that have stored processing parameters (created through
+    processing operations) or stored analysis parameters (analysis operations
+    previously run on them). When none of the selected images has such parameters,
+    an information message is displayed.
 
 Select source objects
 ---------------------
@@ -69,8 +71,8 @@ for the current result.
 
 .. note::
 
-    This action is only available when exactly one image is selected and that image
-    has source object references.
+    This action is enabled when exactly one image is selected. When that image has
+    no source object references, an information message is displayed.
 
 Metadata
 --------
@@ -138,10 +140,10 @@ metadata to a file and then import it back later.
     :height: 24px
     :class: dark-light no-scaled-link
 
-Delete metadata
-^^^^^^^^^^^^^^^
+Delete object metadata
+^^^^^^^^^^^^^^^^^^^^^^
 
-When deleting metadata using the "Delete metadata" |metadata_delete| action in the
+When deleting metadata using the "Delete object metadata" |metadata_delete| action in the
 "Edit" menu, you will be prompted to confirm the deletion of Region of Interests (ROIs)
 if they are present in the metadata. After this eventual confirmation, the metadata
 will be deleted, meaning that analysis results, ROIs, and any other information
@@ -301,30 +303,29 @@ are not stored in the metadata of the image (but in an attribute of the image ob
 
 The "Edit" menu allows you to:
 
-- "Add object title to plot": this action will add a label on top of the image
-  with its title, which might be useful in combination with the "Distribute on a grid"
-  operation (see :ref:`ima-menu-processing`) to easily identify the images.
+- "Insert object title as annotation label": this action will add a label on top of
+  the image with its title, which might be useful in combination with the
+  "Distribute on a grid" operation (see :ref:`ima-menu-processing`) to easily
+  identify the images.
 
 - "Copy titles to clipboard" |copy_titles|: this action will copy the titles of the
   selected images to the clipboard, which might be useful to paste them in a text
   editor or in a spreadsheet.
 
-  Example of the content of the clipboard:
+  Example of the content of the clipboard (titles of processed images refer to
+  their sources by the first 8 characters of their unique identifier, prefixed by
+  "g" for groups):
 
   .. code-block:: text
 
-    g001:
-        s001: lorentz(A=1,σ=1,μ=0,y0=0)
-        s002: derivative(s001)
-        s003: wiener(s002)
-    g002: derivative(g001)
-        s004: derivative(s001)
-        s005: derivative(s002)
-        s006: derivative(s003)
-    g003: fft(g002)
-        s007: fft(s004)
-        s008: fft(s005)
-        s009: fft(s006)
+    Raw images
+        Gauss(a=10,μ=0,σ=1,x0=0,y0=0)
+        moving_median(9f53944b)|size=5, mode=nearest
+        fft(76e4ce1b)
+    log10(g9f72bd95)
+        log10(9f53944b)
+        log10(76e4ce1b)
+        log10(1462f722)
 
 .. |copy_titles| image:: ../../../datalab/data/icons/edit/copy_titles.svg
     :width: 24px
