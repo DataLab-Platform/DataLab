@@ -664,7 +664,7 @@ class AbstractDLControl(abc.ABC):
         """Get Web API server status.
 
         Returns:
-            Dictionary with "running", "url", and "token" keys.
+            Dictionary with "running", "url", "token" and "available" keys.
         """
 
     @abc.abstractmethod
@@ -1165,6 +1165,6 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
         """Get Web API server status.
 
         Returns:
-            Dictionary with "running", "url", and "token" keys.
+            Dictionary with "running", "url", "token" and "available" keys.
         """
         return self._datalab.get_webapi_status()

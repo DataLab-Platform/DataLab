@@ -370,29 +370,29 @@ msgstr "Si la méthode n'existe pas ou n'est pas publique"
 msgid "If the panel name is invalid"
 msgstr "Si le nom du panneau est invalide"
 
-msgid "Start the WebAPI server."
-msgstr "Démarrer le serveur WebAPI."
+msgid "Start the Web API server."
+msgstr "Démarrer le serveur de l'API Web."
 
 msgid "Host address to bind to. Defaults to \"127.0.0.1\"."
 msgstr "Adresse hôte à laquelle se lier. Par défaut \"127.0.0.1\"."
 
-msgid "Port number. Defaults to 8080."
-msgstr "Numéro de port. Par défaut 8080."
+msgid "Port number. Defaults to auto-detect available port."
+msgstr "Numéro de port. Par défaut, un port disponible est détecté automatiquement."
 
-msgid "Dictionary with server info including 'url' and 'token'."
-msgstr "Dictionnaire avec les informations du serveur incluant 'url' et 'token'."
+msgid "Dictionary with \"url\" and \"token\" keys."
+msgstr "Dictionnaire contenant les clés \"url\" et \"token\"."
 
-msgid "Stop the WebAPI server."
-msgstr "Arrêter le serveur WebAPI."
+msgid "If Web API dependencies not installed or server     already running."
+msgstr "Si les dépendances de l'API Web ne sont pas installées ou si le serveur est déjà en cours d'exécution."
 
-msgid "True if server was stopped, False if it wasn't running."
-msgstr "True si le serveur a été arrêté, False s'il n'était pas en cours d'exécution."
+msgid "Stop the Web API server."
+msgstr "Arrêter le serveur de l'API Web."
 
-msgid "Get the current status of the WebAPI server."
-msgstr "Obtenir l'état actuel du serveur WebAPI."
+msgid "Get Web API server status."
+msgstr "Obtenir l'état du serveur de l'API Web."
 
-msgid "Dictionary with status info including 'running', 'url', and 'port'."
-msgstr "Dictionnaire avec les informations d'état incluant 'running', 'url' et 'port'."
+msgid "Dictionary with \"running\", \"url\", \"token\" and \"available\" keys."
+msgstr "Dictionnaire contenant les clés \"running\", \"url\", \"token\" et \"available\"."
 
 msgid "Add group to DataLab."
 msgstr "Ajouter un groupe à DataLab."

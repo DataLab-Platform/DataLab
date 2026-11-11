@@ -672,7 +672,10 @@ def _ai_test_connection(
 class AISettings(gds.DataSet):
     """DataLab AI Assistant settings"""
 
-    enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
+    _prop_enabled = gds.ValueProp(True)
+    enabled = gds.BoolItem(_("Enable AI Assistant"), default=True).set_prop(
+        "display", store=_prop_enabled
+    )
     provider = gds.ChoiceItem(
         _("Provider"),
         _ai_provider_choices,
@@ -681,8 +684,10 @@ class AISettings(gds.DataSet):
             "Use 'mock' to test the AI assistant pipeline offline without "
             "any API key (scripted replies based on simple keywords)."
         ),
+    ).set_prop("display", active=_prop_enabled)
+    model = gds.StringItem(_("Model"), default="gpt-4o-mini").set_prop(
+        "display", active=_prop_enabled
     )
-    model = gds.StringItem(_("Model"), default="gpt-4o-mini")
     api_key = gds.StringItem(
         _("API key"),
         default="",
@@ -695,13 +700,13 @@ class AISettings(gds.DataSet):
             "OpenAI). This avoids writing the secret to disk and lets the "
             "same credential be shared with other tools."
         ),
-    )
+    ).set_prop("display", active=_prop_enabled)
     base_url = gds.StringItem(
         _("Base URL (optional)"),
         default="",
         notempty=False,
         help=_("Override for OpenAI-compatible endpoints. Leave empty for default."),
-    )
+    ).set_prop("display", active=_prop_enabled)
     load_preset = gds.ButtonItem(
         _("Load preset..."),
         _ai_load_preset,
@@ -711,7 +716,7 @@ class AISettings(gds.DataSet):
             "compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, "
             "vLLM)."
         ),
-    )
+    ).set_prop("display", active=_prop_enabled)
     test_connection = gds.ButtonItem(
         _("Test connection"),
         _ai_test_connection,
@@ -720,14 +725,16 @@ class AISettings(gds.DataSet):
             "Probe the configured endpoint (GET /models) to verify the URL, "
             "API key and network reachability. Does not consume any token."
         ),
-    )
+    ).set_prop("display", active=_prop_enabled)
     temperature = gds.FloatItem(
         _("Temperature"), default=0.2, min=0.0, max=2.0, step=0.1
-    )
-    timeout = gds.FloatItem(_("HTTP timeout (s)"), default=60.0, min=5.0, max=600.0)
+    ).set_prop("display", active=_prop_enabled)
+    timeout = gds.FloatItem(
+        _("HTTP timeout (s)"), default=60.0, min=5.0, max=600.0
+    ).set_prop("display", active=_prop_enabled)
     max_iterations = gds.IntItem(
         _("Max tool-call iterations"), default=8, min=1, max=64
-    )
+    ).set_prop("display", active=_prop_enabled)
     max_history_messages = gds.IntItem(
         _("Max history messages (0 = unlimited)"),
         default=0,
@@ -742,10 +749,10 @@ class AISettings(gds.DataSet):
             "the cap. The system prompt and the current user turn are "
             "always preserved."
         ),
-    )
+    ).set_prop("display", active=_prop_enabled)
     auto_approve_readonly = gds.BoolItem(
         _("Auto-approve read-only inspection tools"), default=True
-    )
+    ).set_prop("display", active=_prop_enabled)
     expose_macro_tool = gds.BoolItem(
         _("Allow AI to create and run macros (Python code)"),
         default=True,
@@ -757,7 +764,7 @@ class AISettings(gds.DataSet):
             "propose arbitrary code execution at all (the macro tool is then "
             "hidden from the model entirely)."
         ),
-    )
+    ).set_prop("display", active=_prop_enabled)
 
 
 # Names of all options exposed by :class:`AISettings`. Used to detect whether
