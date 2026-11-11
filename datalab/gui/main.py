@@ -853,7 +853,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Get Web API server status.
 
         Returns:
-            Dictionary with "running", "url", and "token" keys.
+            Dictionary with "running", "url", "token" and "available" keys.
         """
         if not WEBAPI_AVAILABLE:
             return {"running": False, "url": None, "token": None, "available": False}

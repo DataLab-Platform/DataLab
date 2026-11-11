@@ -16,6 +16,7 @@ import json
 import tempfile
 import threading
 import urllib.error
+import urllib.parse
 import urllib.request
 import xmlrpc.client
 from pathlib import Path
@@ -26,6 +27,7 @@ import pytest
 from sigima.objects import create_signal
 
 from datalab.tests import close_datalab_background, datalab_in_background_context
+from datalab.webapi.controller import DEFAULT_WEBAPI_PORT
 
 if TYPE_CHECKING:
     from datalab.control.proxy import RemoteProxy
@@ -135,7 +137,9 @@ def test_remote_webapi_server(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """The Web API server started by a remote client serves requests (Issue #403)
 
     Its requests timed out after 30 seconds: the server was created in the XML-RPC
-    server thread, which has no event loop, instead of the GUI thread.
+    server thread, which has no event loop, instead of the GUI thread. Without an
+    explicit port, it listens on the automatic port probed by DataLab-Kernel
+    instead of port 8080 (Issue #516).
 
     Args:
         tmp_path: Temporary directory
@@ -145,9 +149,12 @@ def test_remote_webapi_server(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     # not replace the one of a DataLab instance in use
     monkeypatch.setenv("APPDATA", str(tmp_path))
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    monkeypatch.delenv("DATALAB_WEBAPI_PORT", raising=False)
     with datalab_in_background_context() as proxy:
         info = proxy.start_webapi_server()
         try:
+            port = urllib.parse.urlparse(info["url"]).port
+            assert DEFAULT_WEBAPI_PORT <= port < DEFAULT_WEBAPI_PORT + 100
             assert proxy.get_webapi_status()["running"]
             request = urllib.request.Request(
                 f"{info['url']}/api/v1/calc",

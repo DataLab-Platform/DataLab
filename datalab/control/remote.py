@@ -888,7 +888,7 @@ class RemoteServer(QC.QThread):
         """Get Web API server status.
 
         Returns:
-            Dictionary with "running", "url", and "token" keys.
+            Dictionary with "running", "url", "token" and "available" keys.
         """
         self.result = None
         self.SIG_CALL_METHOD.emit("get_webapi_status", [], None, {})
@@ -1362,31 +1362,31 @@ class RemoteClient(BaseProxy):
     # === WebAPI Server Control Methods ===
 
     def start_webapi_server(
-        self, host: str = "127.0.0.1", port: int = 8080
-    ) -> dict[str, str | int]:
-        """Start the WebAPI server.
+        self, host: str | None = None, port: int | None = None
+    ) -> dict:
+        """Start the Web API server.
 
         Args:
             host: Host address to bind to. Defaults to "127.0.0.1".
-            port: Port number. Defaults to 8080.
+            port: Port number. Defaults to auto-detect available port.
 
         Returns:
-            Dictionary with server info including 'url' and 'token'.
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API dependencies not installed or server
+             already running.
         """
         return self._datalab.start_webapi_server(host, port)
 
-    def stop_webapi_server(self) -> bool:
-        """Stop the WebAPI server.
-
-        Returns:
-            True if server was stopped, False if it wasn't running.
-        """
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
         return self._datalab.stop_webapi_server()
 
-    def get_webapi_status(self) -> dict[str, str | int | bool]:
-        """Get the current status of the WebAPI server.
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
 
         Returns:
-            Dictionary with status info including 'running', 'url', and 'port'.
+            Dictionary with "running", "url", "token" and "available" keys.
         """
         return self._datalab.get_webapi_status()

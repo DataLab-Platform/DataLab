@@ -44,6 +44,9 @@ msgstr "**Paramètres de traitement** : le déplacement du curseur d'un paramèt
 msgid "**Image coordinates**: since DataLab 1.2.0, **Set uniform coordinates** was missing from **Processing > Axis transformation** in the Image panel, so this feature could no longer be run from the menus. It is available again, next to **Polynomial calibration** (fixes [Issue #515](https://github.com/DataLab-Platform/DataLab/issues/515))."
 msgstr "**Coordonnées d'image** : depuis DataLab 1.2.0, **Convertir en coordonnées uniformes** manquait dans **Traitement > Transformation des axes** du panneau Image, si bien que cette fonctionnalité ne pouvait plus être lancée depuis les menus. Elle est de nouveau disponible, à côté de l'**Étalonnage polynomial** (corrige [l'issue #515](https://github.com/DataLab-Platform/DataLab/issues/515))."
 
+msgid "**Web API**: starting the Web API server through the remote control (XML-RPC), e.g. with `RemoteProxy.start_webapi_server()`, used port 8080 instead of the automatic port (18080, or the next free one), so that DataLab-Kernel could not find the server automatically. Unless a port is given, the server now uses the automatic port, as when it is started from **File > Web API** (fixes [Issue #516](https://github.com/DataLab-Platform/DataLab/issues/516))."
+msgstr "**API Web** : le démarrage du serveur de l'API Web par le contrôle à distance (XML-RPC), par exemple avec `RemoteProxy.start_webapi_server()`, utilisait le port 8080 au lieu du port automatique (18080, ou le port libre suivant), si bien que DataLab-Kernel ne pouvait pas trouver le serveur automatiquement. Sauf si un port est indiqué, le serveur utilise désormais le port automatique, comme lorsqu'il est démarré depuis **Fichier > API Web** (corrige [l'issue #516](https://github.com/DataLab-Platform/DataLab/issues/516))."
+
 msgid "📖 Documentation since version 1.4.0"
 msgstr "📖 Documentation depuis la version 1.4.0"
 
