@@ -33,37 +33,23 @@ DataLab integrates seamlessly into your workflow thanks to three main operating 
     without any installation. See :ref:`ecosystem` to learn about the editions and choose
     the one that fits your needs.
 
-.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
-   render at ~22mm in the PDF -- way larger than in HTML. Define separate
-   substitutions per output: pixels for HTML, centimetres for LaTeX.
+.. The ``latex-icon`` class makes doc/conf.py size these images to 1cm in the
+   PDF, where ``64px`` would render far larger than in HTML.
 
-.. only:: html
+.. |appmode| image:: ../../resources/DataLab-app.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |appmode| image:: ../../resources/DataLab-app.svg
-        :width: 64px
-        :height: 64px
-        :class: dark-light no-scaled-link
+.. |libmode| image:: ../../resources/DataLab-lib.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |libmode| image:: ../../resources/DataLab-lib.svg
-        :width: 64px
-        :height: 64px
-        :class: dark-light no-scaled-link
-
-    .. |remotemode| image:: ../../resources/DataLab-remote.svg
-        :width: 64px
-        :height: 64px
-        :class: dark-light no-scaled-link
-
-.. only:: latex
-
-    .. |appmode| image:: ../../resources/DataLab-app.svg
-        :width: 1cm
-
-    .. |libmode| image:: ../../resources/DataLab-lib.svg
-        :width: 1cm
-
-    .. |remotemode| image:: ../../resources/DataLab-remote.svg
-        :width: 1cm
+.. |remotemode| image:: ../../resources/DataLab-remote.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link latex-icon
 
 DataLab leverages the power of Python and its scientific ecosystem, through the use of
 the following libraries:
