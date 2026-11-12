@@ -313,8 +313,11 @@ The following frequency-domain filters are available:
         the **Center frequency** :math:`f_{0}` with a standard deviation
         **σ** (both in cycles per pixel): the FFT of the image is multiplied by
         :math:`\exp\left(-\dfrac{1}{2}\left(\dfrac{f-f_{0}}{\sigma}\right)^{2}\right)`,
-        where :math:`f` is the radial frequency, and the real part of the
-        inverse FFT is returned.
+        where :math:`f` is the radial frequency. Depending on the
+        **Inverse FFT result** parameter, the real part (**Real part**, the
+        default) or the modulus (**Absolute value**) of the inverse FFT is
+        returned: for a real image, the modulus is the absolute value of the
+        real part.
 
 Thresholding
 ^^^^^^^^^^^^
