@@ -322,9 +322,11 @@ time the Web API server starts.
 
 .. warning::
 
-    While the localhost bypass is enabled (default), any software running on your
-    machine, including malicious software, can access your data without a token.
-    Disable it if you do not control all applications running on your machine.
+    While the Web API server is running with the localhost bypass enabled
+    (default), any software running on your machine, including malicious
+    software, and any web page open in your browser can access your data without
+    a token. Disable the bypass if you do not control all applications running on
+    your machine or if you browse untrusted websites while the server is running.
 
 .. warning::
 
