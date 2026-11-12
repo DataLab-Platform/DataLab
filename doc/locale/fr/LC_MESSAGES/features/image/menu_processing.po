@@ -451,8 +451,8 @@ msgstr "Filtre de Butterworth, basé sur `skimage.filters.butterworth <https://s
 msgid "Gaussian bandpass"
 msgstr "Passe-bande gaussien"
 
-msgid "Gaussian band-pass filter applied in the frequency domain, centered on the **Center frequency** :math:`f_{0}` with a standard deviation **σ** (both in cycles per pixel): the FFT of the image is multiplied by :math:`\\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{f-f_{0}}{\\sigma}\\right)^{2}\\right)`, where :math:`f` is the radial frequency, and the real part of the inverse FFT is returned."
-msgstr "Filtre passe-bande gaussien appliqué dans le domaine fréquentiel, centré sur la **Fréquence centrale** :math:`f_{0}` avec un écart-type **σ** (tous deux en cycles par pixel) : la FFT de l'image est multipliée par :math:`\\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{f-f_{0}}{\\sigma}\\right)^{2}\\right)`, où :math:`f` est la fréquence radiale, et la partie réelle de la FFT inverse est renvoyée."
+msgid "Gaussian band-pass filter applied in the frequency domain, centered on the **Center frequency** :math:`f_{0}` with a standard deviation **σ** (both in cycles per pixel): the FFT of the image is multiplied by :math:`\\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{f-f_{0}}{\\sigma}\\right)^{2}\\right)`, where :math:`f` is the radial frequency. Depending on the **Inverse FFT result** parameter, the real part (**Real part**, the default) or the modulus (**Absolute value**) of the inverse FFT is returned: for a real image, the modulus is the absolute value of the real part."
+msgstr "Filtre passe-bande gaussien appliqué dans le domaine fréquentiel, centré sur la **Fréquence centrale** :math:`f_{0}` avec un écart-type **σ** (tous deux en cycles par pixel) : la FFT de l'image est multipliée par :math:`\\exp\\left(-\\dfrac{1}{2}\\left(\\dfrac{f-f_{0}}{\\sigma}\\right)^{2}\\right)`, où :math:`f` est la fréquence radiale. Selon le paramètre **Résultat de la FFT inverse**, la partie réelle (**Partie réelle**, par défaut) ou le module (**Valeur absolue**) de la FFT inverse est renvoyé : pour une image réelle, le module est la valeur absolue de la partie réelle."
 
 msgid "Thresholding"
 msgstr "Seuillage"
