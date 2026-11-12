@@ -29,6 +29,7 @@
 * New tutorial, "From an idea to the plugin catalog": create a plugin in a single Python file, try it, then publish it in the DataLab plugin catalog, without any PyPI account
 * The roadmap is updated: the plugin template is delivered, data acquisition has started, and the milestones of versions 1.1 to 1.4 are listed
 * The documentation is corrected where it no longer matched the application ([Issue #519](https://github.com/DataLab-Platform/DataLab/issues/519)): menu paths and labels of the tutorials and feature pages, settings and their default values, formulas and results of several processing and analysis features, supported file formats, annotations (stored apart from metadata), the Web API, whose token is not required for local requests by default, the remote control, limited to the local machine, plugins targeting DataLab-Web, macros, installation commands (the conda-forge package is `datalab`; `[qt]` and `[opencv]` extras), and several examples that no longer worked
+* On the home page and the *Getting started* page, the logos of the funders and the icons of the three operating modes are shown again at their intended size, without a white background in the dark theme, and the logos of CEA, CODRA and NLnet link again to their websites instead of opening the image (fixes [Issue #521](https://github.com/DataLab-Platform/DataLab/issues/521))
 
 ### 🔧 Improvements since version 1.4.0 ###
 

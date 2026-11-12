@@ -43,6 +43,20 @@ def open_datalab_web_links_in_new_tab(app, doctree, docname):
             reference["rel"] = "noopener noreferrer"
 
 
+def size_latex_icons(app, doctree, docname):
+    """Size the images of the ``latex-icon`` class to 1cm in the LaTeX output.
+
+    Sphinx converts ``px`` to ``bp`` for LaTeX, so that an icon of ``64px`` in HTML
+    would render far larger in the PDF.
+    """
+    if app.builder.format != "latex":
+        return
+    for image in doctree.findall(nodes.image):
+        if "latex-icon" in image["classes"]:
+            image["width"] = "1cm"
+            image.attributes.pop("height", None)
+
+
 def compress_tutorials_data(app):
     """Compress tutorials data folders to zip files in doc/_download directory."""
     docpath = osp.abspath(osp.dirname(__file__))
@@ -81,6 +95,7 @@ def setup(app):
     """Setup function for Sphinx."""
     app.connect("builder-inited", compress_tutorials_data)
     app.connect("doctree-resolved", open_datalab_web_links_in_new_tab)
+    app.connect("doctree-resolved", size_latex_icons)
 
     # Exclude outreach directory from LaTeX/PDF builds
     def exclude_outreach_from_latex(app):
@@ -158,15 +173,10 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = []
 
-# The HTML/LaTeX builds define per-output image substitutions with the same
-# names (px for HTML, cm for LaTeX) inside `only::` blocks -- see
-# doc/index.rst and doc/intro/index.rst. docutils registers substitution
-# definitions at read time, before `only` filtering, so it flags them as
-# duplicates ("Duplicate substitution definition name"). They are harmless
-# (each builder only ever renders one definition); suppress the docutils
-# system messages so every build -- HTML, LaTeX and the `-W` gettext build --
-# stays clean.
-suppress_warnings = ["docutils"]
+# Never suppress "docutils" messages: they report reStructuredText errors. In
+# particular, do not define a substitution twice, even in separate `only::`
+# blocks: docutils keeps the last definition for every builder.
+suppress_warnings = []
 
 # Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
 # will use ``foo.<language>.png`` when available, falling back to ``foo.png``

@@ -127,40 +127,26 @@ DataLab has been funded, chronologically, by the following stakeholders:
     * - |nlnet_logo|
       - `NLnet Foundation <https://nlnet.nl>`_, as part of the NGI0 Commons Fund, backed by the European Commission, has funded the `redesign of DataLab's core architecture <https://nlnet.nl/project/DataLab/>`_.
 
-.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
-   render at ~22mm in the PDF -- way larger than in HTML. Define separate
-   substitutions per output: pixels for HTML, centimetres for LaTeX.
+.. The ``latex-icon`` class makes doc/conf.py size these images to 1cm in the
+   PDF, where ``64px`` would render far larger than in HTML.
 
-.. only:: html
+.. |cea_logo| image:: images/logos/cea.svg
+    :width: 64px
+    :height: 64px
+    :target: https://www.cea.fr
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |cea_logo| image:: images/logos/cea.svg
-        :width: 64px
-        :height: 64px
-        :target: https://www.cea.fr
-        :class: dark-light no-scaled-link
+.. |codra_logo| image:: images/logos/codra.svg
+    :width: 64px
+    :height: 64px
+    :target: https://codra.net
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |codra_logo| image:: images/logos/codra.svg
-        :width: 64px
-        :height: 64px
-        :target: https://codra.net
-        :class: dark-light no-scaled-link
-
-    .. |nlnet_logo| image:: images/logos/nlnet.svg
-        :width: 64px
-        :height: 64px
-        :target: https://nlnet.nl
-        :class: dark-light no-scaled-link
-
-.. only:: latex
-
-    .. |cea_logo| image:: images/logos/cea.svg
-        :width: 1cm
-
-    .. |codra_logo| image:: images/logos/codra.svg
-        :width: 1cm
-
-    .. |nlnet_logo| image:: images/logos/nlnet.svg
-        :width: 1cm
+.. |nlnet_logo| image:: images/logos/nlnet.svg
+    :width: 64px
+    :height: 64px
+    :target: https://nlnet.nl
+    :class: dark-light no-scaled-link latex-icon
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
