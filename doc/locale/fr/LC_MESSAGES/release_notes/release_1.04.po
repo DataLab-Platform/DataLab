@@ -80,6 +80,9 @@ msgstr "La documentation est corrigée là où elle ne correspondait plus à l'a
 msgid "On the home page and the *Getting started* page, the logos of the funders and the icons of the three operating modes are shown again at their intended size, without a white background in the dark theme, and the logos of CEA, CODRA and NLnet link again to their websites instead of opening the image (fixes [Issue #521](https://github.com/DataLab-Platform/DataLab/issues/521))"
 msgstr "Sur la page d'accueil et la page *Premiers pas*, les logos des financeurs et les icônes des trois modes de fonctionnement s'affichent de nouveau à leur taille prévue, sans fond blanc avec le thème sombre, et les logos du CEA, de CODRA et de NLnet renvoient de nouveau vers leurs sites web au lieu d'ouvrir l'image (corrige [l'issue #521](https://github.com/DataLab-Platform/DataLab/issues/521))"
 
+msgid "The Web API documentation and the tooltip of the **Web API localhost bypass** setting now warn that, while the Web API server is running with this setting enabled (default), any web page open in the browser, and not only local applications, can access the workspace without a token ([Issue #522](https://github.com/DataLab-Platform/DataLab/issues/522))"
+msgstr "La documentation de l'API Web et l'infobulle du paramètre **Contournement localhost de l'API Web** avertissent désormais que, tant que le serveur de l'API Web fonctionne avec ce paramètre activé (par défaut), toute page web ouverte dans le navigateur, et pas seulement les applications locales, peut accéder à l'espace de travail sans jeton ([issue #522](https://github.com/DataLab-Platform/DataLab/issues/522))"
+
 msgid "🔧 Improvements since version 1.4.0"
 msgstr "🔧 Améliorations depuis la version 1.4.0"
 
