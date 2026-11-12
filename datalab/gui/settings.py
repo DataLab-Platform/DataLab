@@ -73,6 +73,9 @@ class MainSettings(gds.DataSet):
             "When enabled (default), connections from localhost (127.0.0.1) to the "
             "<br>Web API do not require authentication. This simplifies notebook "
             "<br>integration when DataLab-Kernel runs on the same machine."
+            "<br>While the Web API server is running, any local application and any "
+            "<br>web page open in your browser can then access your data "
+            "without a token."
             "<br>Disable for stricter security if needed."
         ),
     )
