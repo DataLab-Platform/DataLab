@@ -726,7 +726,8 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 
 ## Branches, CI and Cross-Repository Changes
 
-- Pull requests target `develop`, while the default branch is `main`: `Closes #N` in a pull request does not close the issue when it is merged. Close the issue manually after merging.
+- Pull requests target `develop` (next minor or major version) or, for fixes of released code, `release` (current maintenance line; `main` if it does not exist), the fix being cherry-picked into `develop` afterwards (`doc/contributing/gitworkflow.rst`). The default branch is `main`: `Closes #N` in a pull request does not close the issue when it is merged. Close the issue manually after merging.
+- For pull requests into `release`, CI clones every dependency (Sigima, SigimaX, DataLab-Capsule, guidata, PlotPy) at its `release` branch, falling back to `main`/`master`.
 - For pull requests into `develop`, CI (`.github/workflows/test_pyqt5.yml`) clones Sigima, SigimaX and DataLab-Capsule on the branch named like the pull request branch, falling back to `develop`: give the branches of a cross-repository change identical names.
 - CI always clones guidata and PlotPy on their `develop` branch: merge guidata or PlotPy changes into their `develop` before a DataLab pull request relies on them.
 - Pull request CI never tests the standalone application: the PyInstaller build, the frozen plugin probe and the MSI smoke test run only in `.github/workflows/_build.yml`, called by `release.yml` (tags) or `release-dryrun.yml` (manual).
