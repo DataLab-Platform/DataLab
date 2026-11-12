@@ -313,12 +313,22 @@ class WorkspaceAdapter(QObject):
 
         Returns:
             True if object exists.
+
+        Raises:
+            ValueError: If multiple objects have the same title.
         """
-        try:
-            self.get_object(name)
+        self._ensure_main_window()
+
+        def do_exists() -> bool:
+            # A missing object is an answer, not a failed request: the lookup
+            # error must not reach the request context (shown in the status bar)
+            try:
+                self.find_object(name)
+            except KeyError:
+                return False
             return True
-        except KeyError:
-            return False
+
+        return self._executor.run_on_main_thread(do_exists)
 
     def get_object_panel(self, identifier: str) -> str | None:
         """Get the panel containing an object.
@@ -333,12 +343,13 @@ class WorkspaceAdapter(QObject):
         """
         self._ensure_main_window()
 
-        try:
-            return self._executor.run_on_main_thread(
-                lambda: self.find_object(identifier)[0]
-            )
-        except KeyError:
-            return None
+        def do_get_panel() -> str | None:
+            try:
+                return self.find_object(identifier)[0]
+            except KeyError:
+                return None
+
+        return self._executor.run_on_main_thread(do_get_panel)
 
     # =========================================================================
     # Write operations (must be marshaled to Qt main thread)
