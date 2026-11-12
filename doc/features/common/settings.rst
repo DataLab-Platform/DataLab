@@ -46,9 +46,9 @@ The General settings tab contains main window and general feature settings:
 
     .. note::
 
-        When this option is enabled, any application running on your local machine can
-        access the DataLab Web API without a token. Disable this option if you need
-        stricter security.
+        When this option is enabled, any application running on your local machine and
+        any web page open in your browser can access the DataLab Web API without a
+        token. Disable this option if you need stricter security.
 
 **Memory threshold**
     Set a threshold (in MB, default: 500) below which a warning is displayed before
