@@ -193,10 +193,22 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab a été présenté à <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 et à <a href='https://datalab-platform.com/fr/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
+    ann = (
+        "Retrouvez DataLab sur le stand CODRA à "
+        "<a href='https://datalab-platform.com/fr/outreach/compute2026.html'>"
+        "Compute! Paris 2026</a> (25–26 novembre) et en conférence à "
+        "<a href='https://datalab-platform.com/fr/outreach/osxp2026.html'>"
+        "OSXP 2026</a> (9 décembre)."
+    )
     catalog_link_name = "Catalogue de plugins"
 else:
-    ann = "DataLab has been presented at <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 and at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
+    ann = (
+        "Meet DataLab at the CODRA booth at "
+        "<a href='https://datalab-platform.com/en/outreach/compute2026.html'>"
+        "Compute! Paris 2026</a> (November 25–26) and at the "
+        "<a href='https://datalab-platform.com/en/outreach/osxp2026.html'>"
+        "OSXP 2026 talk</a> (December 9)."
+    )
     catalog_link_name = "Plugin catalog"
 html_theme_options = {
     "show_toc_level": 2,
