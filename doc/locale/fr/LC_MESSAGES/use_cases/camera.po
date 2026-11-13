@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Characterize scientific cameras and detectors from dark and flat frames: response, temporal noise, DSNU and PRNU maps, photon transfer curve, conversion gain, read noise, dark current and hot pixels -- with DataLab, the open-source signal and image analysis platform, and its Camera & Detector Characterization plugin."
+msgstr "Caractérisez des caméras et détecteurs scientifiques à partir d'images d'obscurité et de champ plat : réponse, bruit temporel, cartes DSNU et PRNU, courbe de transfert photonique, gain de conversion, bruit de lecture, courant d'obscurité et pixels chauds -- avec DataLab, la plateforme open-source d'analyse de signaux et d'images, et son plugin Camera & Detector Characterization."
+
+msgid "camera characterization software, detector characterization, photon transfer curve, PTC, conversion gain, read noise, dark current, hot pixels, DSNU, PRNU, flat field, dark frame, scientific camera, CMOS, CCD, open-source, DataLab"
+msgstr "logiciel de caractérisation de caméras, caractérisation de détecteurs, courbe de transfert photonique, PTC, gain de conversion, bruit de lecture, courant d'obscurité, pixels chauds, DSNU, PRNU, champ plat, image d'obscurité, caméra scientifique, CMOS, CCD, open-source, DataLab"
+
+msgid "DataLab for scientific camera characterization"
+msgstr "DataLab pour la caractérisation de caméras scientifiques"
+
+msgid "The problem"
+msgstr "Le problème"
+
+msgid "Before trusting the images of a scientific camera or detector, you need to know how it behaves in your own conditions: its response to light, its temporal noise, the non-uniformity of its pixels, its conversion gain and read noise, its dark current and its defective pixels. Datasheets give typical values, not those of your unit at your settings; ad hoc scripts take time to write and validate, and their results are hard to compare from one camera, one setting or one campaign to the next."
+msgstr "Avant de se fier aux images d'une caméra ou d'un détecteur scientifique, il faut savoir comment il se comporte dans vos propres conditions : sa réponse à la lumière, son bruit temporel, la non-uniformité de ses pixels, son gain de conversion et son bruit de lecture, son courant d'obscurité et ses pixels défectueux. Les fiches techniques donnent des valeurs typiques, pas celles de votre exemplaire avec vos réglages ; des scripts ad hoc prennent du temps à écrire et à valider, et leurs résultats sont difficiles à comparer d'une caméra, d'un réglage ou d'une campagne à l'autre."
+
+msgid "What DataLab does"
+msgstr "Ce que fait DataLab"
+
+msgid "The `Camera & Detector Characterization <https://github.com/DataLab-Platform/datalab-camera-characterization>`_ plugin adds complete characterization methods to DataLab, run on the dark and flat frames of your workspace:"
+msgstr "Le plugin `Camera & Detector Characterization <https://github.com/DataLab-Platform/datalab-camera-characterization>`_ ajoute à DataLab des méthodes de caractérisation complètes, exécutées sur les images d'obscurité et de champ plat de votre espace de travail :"
+
+msgid "**relative characterization** in digital numbers (DN): response curve, temporal noise, DSNU-like and PRNU-like maps, row and column profiles, candidate defective pixels,"
+msgstr "**caractérisation relative** en niveaux numériques (DN) : courbe de réponse, bruit temporel, cartes de type DSNU et PRNU, profils de lignes et de colonnes, pixels défectueux candidats,"
+
+msgid "**photon transfer curve**: conversion gain (e⁻/DN), read noise, saturation capacity and dynamic range,"
+msgstr "**courbe de transfert photonique** : gain de conversion (e⁻/DN), bruit de lecture, capacité de saturation et dynamique,"
+
+msgid "**dark current and hot pixels**, from a dark ramp,"
+msgstr "**courant d'obscurité et pixels chauds**, à partir d'une rampe de temps de pose dans l'obscurité,"
+
+msgid "results added to the workspace as signals, images and metrics tables, next to the frames they come from, ready for the processing and analysis features of DataLab and saved with them in the workspace,"
+msgstr "résultats ajoutés à l'espace de travail sous forme de signaux, d'images et de tableaux de métriques, à côté des images dont ils sont issus, prêts pour les fonctionnalités de traitement et d'analyse de DataLab et enregistrés avec elles dans l'espace de travail,"
+
+msgid "a **scientific camera simulator**, with a live view, which acquires dark and flat frames ready for the methods,"
+msgstr "un **simulateur de caméra scientifique**, avec visualisation en direct, qui acquiert des images d'obscurité et de champ plat prêtes pour les méthodes,"
+
+msgid "the methods and their examples are presented in the :ref:`applications_panel`, which tells whether the selected frames can be analyzed, and why not."
+msgstr "les méthodes et leurs exemples sont présentés dans le :ref:`applications_panel`, qui indique si les images sélectionnées peuvent être analysées, et sinon pourquoi."
+
+msgid "Relative PRNU-like map computed from the quickstart campaign of the Camera & Detector Characterization plugin in DataLab."
+msgstr "Carte relative de type PRNU calculée à partir de la campagne de démarrage rapide du plugin Camera & Detector Characterization dans DataLab."
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "The plugin is an official plugin of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, for DataLab Desktop and DataLab-Web, at the Alpha stage: its methods are validated on synthetic data with known truth, and do not claim compliance with the EMVA 1288 standard."
+msgstr "Ce plugin est un plugin officiel du `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, pour DataLab Desktop et DataLab-Web, au stade Alpha : ses méthodes sont validées sur des données synthétiques à vérité connue, et ne revendiquent pas la conformité à la norme EMVA 1288."
+
+msgid "Try it"
+msgstr "Essayer"
+
+msgid ":octicon:`rocket;1em;sd-text-info` **No install:** open `DataLab-Web with the quickstart campaign loaded and the camera characterization method selected <https://datalab-platform.com/web/?plugin=org.datalab.camera-characterization&pluginVersion=0.2.1&recipe=org.datalab.camera-characterization:relative-dn-characterization&recipeVersion=1.1.0&example=quickstart>`_ in your browser -- your data never leaves your machine."
+msgstr ":octicon:`rocket;1em;sd-text-info` **Sans installation :** ouvrez `DataLab-Web avec la campagne de démarrage rapide chargée et la méthode de caractérisation de caméra sélectionnée <https://datalab-platform.com/web/?plugin=org.datalab.camera-characterization&pluginVersion=0.2.1&recipe=org.datalab.camera-characterization:relative-dn-characterization&recipeVersion=1.1.0&example=quickstart>`_ dans votre navigateur -- vos données ne quittent jamais votre machine."
+
+msgid ":octicon:`package;1em;sd-text-info` **In DataLab Desktop:** install the plugin from the **Catalog** tab of **Plugins > Configure plugins...** (see :ref:`plugin_catalog`), then click its tile on the :ref:`welcome_page`."
+msgstr ":octicon:`package;1em;sd-text-info` **Dans DataLab Desktop :** installez le plugin depuis l'onglet **Catalogue** de **Plugins > Configurer les plugins...** (voir :ref:`plugin_catalog`), puis cliquez sur sa tuile de la :ref:`welcome_page`."
+
+msgid ":octicon:`book;1em;sd-text-info` **Plugin documentation:** `getting started and methods <https://github.com/DataLab-Platform/datalab-camera-characterization/blob/develop/doc/README.md>`_."
+msgstr ":octicon:`book;1em;sd-text-info` **Documentation du plugin :** `prise en main et méthodes <https://github.com/DataLab-Platform/datalab-camera-characterization/blob/develop/doc/README.md>`_ (en anglais)."
+
+msgid ":octicon:`download;1em;sd-text-info` Or :ref:`install the desktop application <installation>`."
+msgstr ":octicon:`download;1em;sd-text-info` Ou :ref:`installez l'application de bureau <installation>`."
+

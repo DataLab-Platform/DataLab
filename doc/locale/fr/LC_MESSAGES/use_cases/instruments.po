@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Connect DataLab to your instruments with an instrument plugin: live view next to the instrument settings, acquisition of signals and images into the workspace with their origin, ready for processing -- illustrated by the TANGO Instruments example plugin, with simulated devices to try it without hardware."
+msgstr "Connectez DataLab à vos instruments avec un plugin d'instrument : visualisation en direct à côté des réglages de l'instrument, acquisition de signaux et d'images dans l'espace de travail avec leur origine, prêts pour le traitement -- illustré par le plugin d'exemple TANGO Instruments, avec des équipements simulés pour l'essayer sans matériel."
+
+msgid "instrument control software, data acquisition software, laboratory instrument, live view, oscilloscope, camera, TANGO, PyTango, device server, control system, instrument plugin, acquisition metadata, open-source, DataLab"
+msgstr "logiciel de pilotage d'instruments, logiciel d'acquisition de données, instrument de laboratoire, visualisation en direct, oscilloscope, caméra, TANGO, PyTango, serveur d'équipements, système de contrôle-commande, plugin d'instrument, métadonnées d'acquisition, open-source, DataLab"
+
+msgid "DataLab for instrument control and data acquisition"
+msgstr "DataLab pour le pilotage d'instruments et l'acquisition de données"
+
+msgid "The problem"
+msgstr "Le problème"
+
+msgid "On a test bench or a facility, data usually go from the instrument to its vendor software, then to files, then to the analysis tool: there is no live link between what the instrument measures and what you analyze, and the acquisition context -- which device, which setting, when -- is easily lost along the way. Writing a dedicated acquisition application for each instrument, with its own display and analysis, is expensive."
+msgstr "Sur un banc d'essai ou une installation, les données passent généralement de l'instrument à son logiciel constructeur, puis à des fichiers, puis à l'outil d'analyse : il n'y a pas de lien direct entre ce que mesure l'instrument et ce que vous analysez, et le contexte d'acquisition -- quel équipement, quel réglage, à quel moment -- se perd facilement en chemin. Développer une application d'acquisition dédiée à chaque instrument, avec son propre affichage et ses propres analyses, est coûteux."
+
+msgid "What DataLab does"
+msgstr "Ce que fait DataLab"
+
+msgid "A DataLab plugin may provide **instruments**: the plugin describes the instrument settings and how to read or control the device, and DataLab provides the user interface (see :ref:`plugins_instruments`):"
+msgstr "Un plugin DataLab peut fournir des **instruments** : le plugin décrit les réglages de l'instrument et la façon de lire ou de piloter l'équipement, et DataLab fournit l'interface utilisateur (voir :ref:`plugins_instruments`) :"
+
+msgid "a window with a **live view** of the instrument data (signals or image) next to its **settings**, refreshed when the settings change or continuously in **Live** mode,"
+msgstr "une fenêtre avec une **visualisation en direct** des données de l'instrument (signaux ou image) à côté de ses **réglages**, actualisée quand les réglages changent ou en continu en mode **En direct**,"
+
+msgid "**Acquire** adds the acquired signals or images to the workspace, in a new group or in the current one, selected and ready for the processing, analysis and application methods of DataLab,"
+msgstr "**Acquérir** ajoute les signaux ou images acquis à l'espace de travail, dans un nouveau groupe ou dans le groupe courant, sélectionnés et prêts pour les traitements, les analyses et les méthodes d'application de DataLab,"
+
+msgid "the instrument is called outside the user interface thread: a slow or unreachable device does not freeze DataLab, and it is released when the window closes,"
+msgstr "l'instrument est appelé en dehors du thread de l'interface utilisateur : un équipement lent ou injoignable ne bloque pas DataLab, et il est libéré à la fermeture de la fenêtre,"
+
+msgid "the plugin may record the origin of each acquired object (device, settings, time) in its metadata, which is saved with the workspace."
+msgstr "le plugin peut enregistrer l'origine de chaque objet acquis (équipement, réglages, date) dans ses métadonnées, enregistrées avec l'espace de travail."
+
+msgid "The `TANGO Instruments <https://github.com/DataLab-Platform/datalab-tango>`_ example plugin shows this approach with the devices of the `TANGO <https://www.tango-controls.org/>`_ control system, used by many large research facilities:"
+msgstr "Le plugin d'exemple `TANGO Instruments <https://github.com/DataLab-Platform/datalab-tango>`_ illustre cette approche avec les équipements du système de contrôle-commande `TANGO <https://www.tango-controls.org/>`_, utilisé par de nombreuses grandes installations de recherche :"
+
+msgid "a device attribute is shown live, a spectrum as a signal, an image as an image, with the units and axis calibrations given by a JSON **device profile**, which holds the site-specific values (device name, calibrations, commands),"
+msgstr "un attribut d'équipement est affiché en direct, un spectre sous forme de signal, une image sous forme d'image, avec les unités et les étalonnages d'axes donnés par un **profil d'équipement** JSON, qui contient les valeurs propres au site (nom de l'équipement, étalonnages, commandes),"
+
+msgid "**Acquire** copies the last received value, runs the **trigger command** of the profile and takes the value it measured, or takes a series of the next received values,"
+msgstr "**Acquérir** copie la dernière valeur reçue, exécute la **commande de déclenchement** du profil et prend la valeur qu'elle a mesurée, ou prend une série des prochaines valeurs reçues,"
+
+msgid "each acquired object records its origin (device, attribute, times, quality, profile and trigger): a saved workspace reopens without the device nor the plugin,"
+msgstr "chaque objet acquis enregistre son origine (équipement, attribut, dates, qualité, profil et déclenchement) : un espace de travail enregistré se rouvre sans l'équipement ni le plugin,"
+
+msgid "a simulated oscilloscope and a simulated camera let you try it without hardware: the **Simulated TANGO devices...** tool serves them with PyTango on your computer while its window is open, without any command line, and stops them when the window closes."
+msgstr "un oscilloscope simulé et une caméra simulée permettent de l'essayer sans matériel : l'outil **Simulated TANGO devices...** les sert avec PyTango sur votre ordinateur tant que sa fenêtre est ouverte, sans aucune ligne de commande, et les arrête à la fermeture de la fenêtre."
+
+msgid "The simulators of the :ref:`camera <use_case_camera>` and :ref:`pulse <use_case_pulse>` characterization plugins are instruments of the same kind. Acquisition software may also send its data to DataLab, with the :ref:`remote control <ref-to-remote-control>` (XML-RPC) or the :ref:`Web API <ref-to-webapi>` (HTTP/JSON)."
+msgstr "Les simulateurs des plugins de caractérisation de :ref:`caméras <use_case_camera>` et d':ref:`impulsions <use_case_pulse>` sont des instruments du même type. Un logiciel d'acquisition peut aussi envoyer ses données à DataLab, avec le :ref:`contrôle à distance <ref-to-remote-control>` (XML-RPC) ou l':ref:`API Web <ref-to-webapi>` (HTTP/JSON)."
+
+msgid "Live view of the simulated oscilloscope in the window of the **Simulated TANGO devices...** tool of the TANGO Instruments plugin in DataLab."
+msgstr "Visualisation en direct de l'oscilloscope simulé dans la fenêtre de l'outil **Simulated TANGO devices...** du plugin TANGO Instruments dans DataLab."
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "TANGO Instruments is an official example plugin of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_: it is a demonstration, not a finished or supported feature, and has been validated with simulated devices only. It requires PyTango in the Python environment of DataLab: the standalone application and DataLab-Web, which cannot reach TANGO devices, are not supported."
+msgstr "TANGO Instruments est un plugin d'exemple officiel du `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_ : c'est une démonstration, pas une fonctionnalité finalisée ou maintenue, et il n'a été validé qu'avec des équipements simulés. Il nécessite PyTango dans l'environnement Python de DataLab : l'application autonome et DataLab-Web, qui ne peut pas joindre des équipements TANGO, ne sont pas pris en charge."
+
+msgid "Try it"
+msgstr "Essayer"
+
+msgid ":octicon:`package;1em;sd-text-info` **In DataLab:** install PyTango in the Python environment of DataLab (e.g. ``pip install \"pytango>=9.5.1\"``), then the plugin from the **Catalog** tab of **Plugins > Configure plugins...** (see :ref:`plugin_catalog`)."
+msgstr ":octicon:`package;1em;sd-text-info` **Dans DataLab :** installez PyTango dans l'environnement Python de DataLab (par exemple ``pip install \"pytango>=9.5.1\"``), puis le plugin depuis l'onglet **Catalogue** de **Plugins > Configurer les plugins...** (voir :ref:`plugin_catalog`)."
+
+msgid ":octicon:`beaker;1em;sd-text-info` **Without hardware:** open **Simulated TANGO devices...** from the :ref:`applications_panel` or from the plugin's submenu of the **Plugins** menu, choose the simulated oscilloscope or camera, then click **Acquire**. To serve the same devices to another TANGO client, run ``python -m datalab_tango.simulation profiles`` in this Python environment."
+msgstr ":octicon:`beaker;1em;sd-text-info` **Sans matériel :** ouvrez **Simulated TANGO devices...** depuis le :ref:`applications_panel` ou depuis le sous-menu du plugin dans le menu **Plugins**, choisissez l'oscilloscope ou la caméra simulés, puis cliquez sur **Acquérir**. Pour servir les mêmes équipements à un autre client TANGO, exécutez ``python -m datalab_tango.simulation profiles`` dans cet environnement Python."
+
+msgid ":octicon:`book;1em;sd-text-info` **Plugin documentation:** `device profiles, acquisition modes and simulated devices <https://github.com/DataLab-Platform/datalab-tango/blob/v0.1.1/README.md>`_."
+msgstr ":octicon:`book;1em;sd-text-info` **Documentation du plugin :** `profils d'équipements, modes d'acquisition et équipements simulés <https://github.com/DataLab-Platform/datalab-tango/blob/v0.1.1/README.md>`_ (en anglais)."
+
+msgid ":octicon:`tools;1em;sd-text-info` **Your own instruments:** see :ref:`plugins_instruments` and :ref:`tutorial_plugin_catalog`."
+msgstr ":octicon:`tools;1em;sd-text-info` **Vos propres instruments :** voir :ref:`plugins_instruments` et :ref:`tutorial_plugin_catalog`."
+

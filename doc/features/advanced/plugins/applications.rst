@@ -252,6 +252,8 @@ DataLab lists each tool in two places: in the **Tools** section of the :ref:`app
 
 The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and the tool methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. :meth:`datalab.plugins.PluginBase.assess_tool` returns the reason why a tool cannot be opened for the current selection, or ``None``.
 
+.. _plugins_instruments:
+
 Instruments
 ~~~~~~~~~~~
 
