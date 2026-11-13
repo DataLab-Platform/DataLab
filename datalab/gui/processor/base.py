@@ -124,6 +124,11 @@ class ProcessingParameters:
             Dictionary representation of ProcessingParameters, ignoring None values.
         """
         pp_dict = {k: v for k, v in asdict(self).items() if v is not None}
+        origin = pp_dict.get("plugin_origin")
+        if isinstance(origin, dict):
+            # Origins recorded by older versions may hold None values, which
+            # workspaces cannot store
+            pp_dict["plugin_origin"] = _without_none(origin)
         param = pp_dict.pop("param", None)
         if param is not None:
             if isinstance(param, list):
@@ -797,7 +802,8 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
 
     Returns:
         A dict ``{"plugin_class", "module", "directory", "version"}`` if the
-        function originates from a plugin, otherwise ``None``.
+        function originates from a plugin (without the keys whose value is
+        unknown), otherwise ``None``.
     """
     # Build a list of candidate functions to inspect, starting with the
     # innermost wrapped function so that plugin origins are detected even
@@ -850,13 +856,24 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
             directory = osp.basename(osp.dirname(inspect.getfile(origin_candidate)))
         except (TypeError, OSError):
             pass
-        return {
-            "plugin_class": None,
-            "module": module_name,
-            "directory": directory,
-            "version": None,
-        }
+        # Unknown values are omitted: workspaces cannot store None values
+        return _without_none({"module": module_name, "directory": directory})
     return None
+
+
+def _without_none(origin: dict[str, Any]) -> dict[str, Any]:
+    """Return an origin descriptor without its unknown (None) values."""
+    return {key: value for key, value in origin.items() if value is not None}
+
+
+def _function_module(func: Callable) -> str:
+    """Return the module of a computation function, unwrapping Sigima wrappers."""
+    inner = getattr(func, "__wrapped__", None) or getattr(func, "func", None)
+    for candidate in (inner, func):
+        module = getattr(candidate, "__module__", "") if callable(candidate) else ""
+        if module and module.split(".", 1)[0] not in _BUILTIN_MODULE_PREFIXES:
+            return module
+    return getattr(func, "__module__", "") or ""
 
 
 def _plugin_origin_from_instance(plugin: Any, module_name: str) -> dict[str, Any]:
@@ -867,7 +884,8 @@ def _plugin_origin_from_instance(plugin: Any, module_name: str) -> dict[str, Any
         module_name: Module recorded as the origin of the computation.
 
     Returns:
-        A dict ``{"plugin_class", "module", "directory", "version"}``.
+        A dict ``{"plugin_class", "module", "directory", "version"}``, without
+        the keys whose value is unknown.
     """
     directory: str | None = None
     try:
@@ -878,16 +896,26 @@ def _plugin_origin_from_instance(plugin: Any, module_name: str) -> dict[str, Any
     info = getattr(plugin, "info", None)
     if info is not None:
         version = getattr(info, "version", None)
-    return {
-        "plugin_class": plugin.__class__.__name__,
-        "module": module_name,
-        "directory": directory,
-        "version": version,
-    }
+    return _without_none(
+        {
+            "plugin_class": plugin.__class__.__name__,
+            "module": module_name,
+            "directory": directory,
+            "version": version,
+        }
+    )
 
 
-def _owner_plugin_origin(owner_plugin_id: str) -> dict[str, Any] | None:
-    """Return the origin descriptor of the registered plugin owning a feature."""
+def _owner_plugin_origin(
+    owner_plugin_id: str, module_name: str | None = None
+) -> dict[str, Any] | None:
+    """Return the origin descriptor of the registered plugin owning a feature.
+
+    Args:
+        owner_plugin_id: ID of the plugin owning the feature.
+        module_name: Module of the computation function (default: module of
+         the plugin class).
+    """
     # Local import to avoid a circular dependency at module load time.
     from datalab.plugins import (  # pylint: disable=import-outside-toplevel
         PluginRegistry,
@@ -896,7 +924,9 @@ def _owner_plugin_origin(owner_plugin_id: str) -> dict[str, Any] | None:
     plugin = PluginRegistry.get_plugin(owner_plugin_id)
     if plugin is None:
         return None
-    return _plugin_origin_from_instance(plugin, plugin.__class__.__module__)
+    return _plugin_origin_from_instance(
+        plugin, module_name or plugin.__class__.__module__
+    )
 
 
 @dataclass
@@ -3599,10 +3629,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     f"plugin {feature.owner_plugin_id!r}."
                 )
             feature.owner_plugin_id = owner
+        if feature.plugin_origin is None and feature.owner_plugin_id is not None:
+            # The owner is known: do not guess it from the function module,
+            # which may be outside the module of the plugin class
+            module = None
+            if feature.function is not None:
+                module = _function_module(feature.function)
+            feature.plugin_origin = _owner_plugin_origin(
+                feature.owner_plugin_id, module
+            )
         if feature.function is not None and feature.plugin_origin is None:
             feature.plugin_origin = _detect_plugin_origin(feature.function)
-        if feature.plugin_origin is None and feature.owner_plugin_id is not None:
-            feature.plugin_origin = _owner_plugin_origin(feature.owner_plugin_id)
         feature.update_implicit_id()
 
         feature_id = feature.feature_id
