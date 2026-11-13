@@ -20,7 +20,7 @@ Main Branches
 ^^^^^^^^^^^^^
 
 - ``main``: Represents the stable, production-ready version of the project.
-- ``develop``: Used for ongoing development and integration of new features.
+- ``develop``: Prepares the next release, i.e. a patch release (e.g., 1.0.1) as long as it only contains fixes since the last release, or a minor or major release (e.g., 1.1.0) once new features are merged.
 
 Feature Branches
 ^^^^^^^^^^^^^^^^
@@ -34,41 +34,45 @@ Feature Branches
 Release Branch
 ^^^^^^^^^^^^^^
 
-- ``release``: Represents the current maintenance line for patch releases.
+- ``release``: Represents the current maintenance line for patch releases, when ``develop`` already contains changes for the next minor or major release.
 
-  - Created from ``main`` after a stable release when the first patch is needed.
+  - Created from ``main`` only when a patch release is needed while ``develop`` contains changes that must not be released yet.
   - Accepts ``fix/xxx`` and ``hotfix/xxx`` branch merges.
   - Merged back into ``main`` for each patch release tag (e.g., 1.0.1, 1.0.2).
-  - Reset or recreated when starting a new minor/major release cycle.
+  - Merged into ``develop`` after each patch release, so that its fixes reach ``develop`` without cherry-picking.
+  - Deleted when the next minor or major version is released.
 
 .. note::
 
-      The ``release`` branch is not versioned (no ``release/1.0.x``). It always
-      represents "the current maintenance line." When a new minor version is released
-      (e.g., 1.2.0), the old ``release`` branch is deleted and a new one is created
-      from the fresh tag when the first patch for 1.2.1 is needed.
+      The ``release`` branch is not versioned (no ``release/1.0.x``), and it does not
+      always exist. Without ``release`` branch, ``develop`` prepares the next patch
+      release: fixes and patch releases are made from ``develop``. When a new minor
+      version is released (e.g., 1.2.0), the ``release`` branch is deleted; a new one
+      is created from the fresh tag only if a patch for 1.2.1 is needed while
+      ``develop`` already contains changes for 1.3.0.
 
 Bug Fix Branches
 ^^^^^^^^^^^^^^^^
 
 - ``fix/xxx``: Used for general bug fixes that are not urgent.
 
-  - Created from ``develop`` (for next feature release) or ``release`` (for patch release).
+  - Created from ``develop``, or from ``release`` when this branch exists and the fix must be in the next patch release.
   - Merged back into the originating branch once completed.
   - Deleted after merging.
 
 - ``hotfix/xxx``: Used for urgent production-critical fixes.
 
-  - Created from ``release`` (if exists) or ``main`` (if no ``release`` branch yet).
-  - Merged back into ``release`` or ``main``.
-  - The fix is then cherry-picked into ``develop``.
+  - Created from ``release`` (if exists) or ``develop`` (if no ``release`` branch).
+  - Merged back into ``release`` or ``develop``.
+  - A fix merged into ``release`` reaches ``develop`` when ``release`` is merged into ``develop``.
   - Deleted after merging.
 
 .. note::
 
-      Hotfixes (high-priority fixes) will be integrated in the next maintenance
-      release (X.Y.Z -> Z+1), while fixes (low-priority fixes) will be integrated
-      in the next feature release (X.Y -> Y+1).
+      Hotfixes (high-priority fixes) will be integrated in the next patch release
+      (X.Y.Z -> Z+1). Fixes (low-priority fixes) will be integrated in the next
+      release prepared by ``develop``: a patch release, or a feature release
+      (X.Y -> Y+1) once ``develop`` contains new features.
 
 
 Documentation Branches
@@ -120,7 +124,7 @@ Workflow for New Features
 Workflow for Regular Bug Fixes
 ------------------------------
 
-For next feature release (target: ``develop``):
+For the next release prepared by ``develop`` (target: ``develop``):
 
 1. Create a bug fix branch from ``develop``:
 
@@ -144,7 +148,7 @@ For next feature release (target: ``develop``):
 
          git branch -d fix/bug_description
 
-For current maintenance release (target: ``release``):
+For the next patch release, when a ``release`` branch exists (target: ``release``):
 
 1. Create a bug fix branch from ``release``:
 
@@ -188,28 +192,28 @@ For current maintenance release (target: ``release``):
 Workflow for Critical Hotfixes
 ------------------------------
 
-1. Create a hotfix branch from ``release`` (or ``main`` if no ``release`` branch exists):
+1. Create a hotfix branch from ``release`` (or ``develop`` if no ``release`` branch exists):
 
    .. code-block:: sh
 
-         git checkout release  # or: git checkout main
+         git checkout release  # or: git checkout develop
          git checkout -b hotfix/critical_bug
 
 2. Apply the fix and commit changes.
 
-3. Merge the fix back into ``release`` (or ``main``):
+3. Merge the fix back into ``release`` (or ``develop``):
 
    .. code-block:: sh
 
-         git checkout release  # or: git checkout main
+         git checkout release  # or: git checkout develop
          git merge --no-ff hotfix/critical_bug
 
-4. Cherry-pick the fix into ``develop``:
+4. If the fix was merged into ``release``, merge ``release`` into ``develop``, at the latest after the patch release:
 
    .. code-block:: sh
 
          git checkout develop
-         git cherry-pick <commit_hash>
+         git merge --no-ff release
 
 5. Delete the hotfix branch:
 
@@ -220,12 +224,14 @@ Workflow for Critical Hotfixes
 .. warning::
 
       Do not merge ``fix/xxx`` or ``hotfix/xxx`` directly into ``main`` without following the workflow.
-      Ensure hotfixes are cherry-picked into ``develop`` to avoid losing fixes in future releases.
+      Ensure ``release`` is merged into ``develop`` to avoid losing fixes in future releases.
 
 Workflow for Patch Releases
 ----------------------------
 
 When ready to release a patch version (e.g., 1.0.1, 1.0.2):
+
+If no ``release`` branch exists, ``develop`` only contains fixes since the last release: release it with the workflow for minor/major releases below, using the patch version number. Otherwise, release the ``release`` branch:
 
 1. Ensure the ``release`` branch contains all desired fixes.
 
@@ -245,7 +251,12 @@ When ready to release a patch version (e.g., 1.0.1, 1.0.2):
 
 4. Pushing the tag starts the **Release** workflow, which checks the tag, runs the tests and builds the release files, then creates a draft GitHub release. Review the draft release and publish it: this uploads the package to PyPI and deploys the documentation. Never create a GitHub release by hand (see ``RELEASING.md`` at the root of the repository).
 
-5. Keep the ``release`` branch for additional patches in the same minor version series.
+5. Merge ``release`` into ``develop``, and keep the ``release`` branch for additional patches in the same minor version series:
+
+   .. code-block:: sh
+
+         git checkout develop
+         git merge --no-ff release
 
 Workflow for Minor/Major Releases
 ----------------------------------
@@ -275,7 +286,7 @@ When ready to release a new minor or major version (e.g., 1.1.0, 2.0.0):
          git branch -d release
          git push origin --delete release
 
-5. Create a new ``release`` branch from ``main`` when the first patch for 1.1.1 is needed:
+5. Create a new ``release`` branch from ``main`` only when a patch (e.g., 1.1.1) is needed while ``develop`` already contains changes for the next minor or major release:
 
    .. code-block:: sh
 
@@ -295,13 +306,15 @@ Best Practices
 
 - Avoid long-lived branches to minimize merge conflicts.
 
-- Ensure bug fixes in ``release`` or ``main`` are **always cherry-picked** to ``develop``.
+- Merge ``release`` into ``develop`` after each patch release: fixes reach ``develop`` without cherry-picking.
+
+- While ``develop`` prepares a patch release (no ``release`` branch), keep changes for the next minor or major release in their branches until the patch release, or create the ``release`` branch first.
 
 - Clearly differentiate between ``fix/xxx`` (non-urgent fixes) and ``hotfix/xxx`` (critical production fixes).
 
 - When creating the ``release`` branch, update release notes to indicate which version it targets (e.g., add a comment in the merge commit: "Create release branch for v1.0.x maintenance").
 
-- The ``release`` branch always represents the current maintenance line. To know which version it targets, check the most recent tag on ``main`` or the release notes.
+- When it exists, the ``release`` branch represents the current maintenance line. To know which version it targets, check the most recent tag on ``main`` or the release notes.
 
 Takeaway
 --------
@@ -309,7 +322,7 @@ Takeaway
 This workflow ensures a structured yet flexible development process while keeping
 ``main`` stable and ``develop`` always updated with the latest changes.
 
-The ``release`` branch provides a dedicated maintenance line for patch releases,
+When needed, the ``release`` branch provides a dedicated maintenance line for patch releases,
 allowing ``develop`` to proceed with new features without interference. This solves
 the problem of coordinating unreleased changes across the PlotPyStack ecosystem
 (DataLab, SigimaX, Sigima, PlotPy, guidata, PythonQwt) by providing a stable branch

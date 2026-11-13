@@ -62,7 +62,7 @@ gh label list --repo <owner/repo> --json name --jq ".[].name"
 
 - Local changes: when they belong to the change (e.g. "move the changes to a dedicated branch"), carry them to the new branch; otherwise keep them out of every commit.
 - Released or not: find the commit that introduced the defect or the feature and run `git tag --contains <commit>`. A fix of a change not released yet needs neither an issue nor a release note entry: propose this in the plan.
-- Base branch of a fix of released code: `release` when it exists (`git ls-remote --heads origin release`), else `main`, then a cherry-pick into `develop` (see [repositories.md](./references/repositories.md)). Never assume `develop` for a fix: state the base branch in the plan.
+- Base branch of a fix of released code: the "Fix base" column of [repositories.md](./references/repositories.md). In DataLab and Sigima, `develop`, or `release` when this branch exists (`git ls-remote --heads origin release`), with no cherry-pick into `develop`. State the base branch in the plan.
 - Check the open PRs and branches that could conflict with the change.
 
 ### 2. Plan: stop for approval

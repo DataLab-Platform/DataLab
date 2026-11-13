@@ -19,7 +19,7 @@ A release takes two steps, both run by [`.github/workflows/release.yml`](.github
    * set `__version__ = "X.Y.Z"` in `datalab/__init__.py`;
    * write the `## DataLab Version X.Y.Z ##` section of `doc/release_notes/release_X.YY.md` and its French translation: it becomes the description of the GitHub release, and the release is refused if it is missing;
    * optionally, check the build with the **Release (dry-run)** workflow (`release-dryrun.yml`, run by hand), which builds all the release files without publishing anything.
-2. Merge into `main` (`develop` for a minor or major version, `release` for a patch version).
+2. Merge into `main` the branch that prepares the version: `develop`, or `release` for a patch version when this branch exists (only while `develop` already contains changes for the next minor or major version).
 3. Tag `main` and push the tag (`-s` signs the tag, use `-a` otherwise):
 
    ```console

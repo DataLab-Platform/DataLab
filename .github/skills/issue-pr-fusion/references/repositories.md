@@ -8,8 +8,8 @@ Always pass `--repo <owner/repo>` to `gh`.
 
 | Folder | GitHub | Fix base | Feature base | Default branch | Release notes |
 | --- | --- | --- | --- | --- | --- |
-| `DataLab` | `DataLab-Platform/DataLab` | `release` (else `main`) | `develop` | `main` | `doc/release_notes/release_X.YY.md` + French `.po` |
-| `Sigima` | `DataLab-Platform/Sigima` | `release` (else `main`) | `develop` | `main` | `doc/release_notes/release_X.YY.md` + French `.po` |
+| `DataLab` | `DataLab-Platform/DataLab` | `develop` (`release` when it exists) | `develop` | `main` | `doc/release_notes/release_X.YY.md` + French `.po` |
+| `Sigima` | `DataLab-Platform/Sigima` | `develop` (`release` when it exists) | `develop` | `main` | `doc/release_notes/release_X.YY.md` + French `.po` |
 | `SigimaX` | `DataLab-Platform/SigimaX` | `develop` | `develop` | `main` | `doc/release_notes/release_X.YY.md` + French `.po` |
 | `DataLab-Capsule` | `DataLab-Platform/DataLab-Capsule` | `develop` | `develop` | `main` | `CHANGELOG.md` |
 | `DataLab-Web` | `DataLab-Platform/web` | `develop` | `develop` | `main` | `CHANGELOG.md` |
@@ -21,7 +21,7 @@ Always pass `--repo <owner/repo>` to `gh`.
 | `datalab-tango`, `datalab-synchrotron`, `datalab-camera-characterization`, `datalab-pulse-characterization` | `DataLab-Platform/<folder>` | `develop` | `develop` | `develop` | `CHANGELOG.md` |
 | `datalab-dynamic-demo` | `DataLab-Platform/datalab-dynamic-demo` | `main` | `main` | `main` | `CHANGELOG.md` |
 
-- Fixes of released code in DataLab and Sigima (`doc/contributing/gitworkflow.rst`, `RELEASING.md`): base the branch on `release`, the current maintenance line, or on `main` when `release` does not exist (`git ls-remote --heads origin release`); after the merge, cherry-pick the fix into `develop` (PR to `develop`). `develop` holds the next minor or major version. When `develop` holds nothing but fixes and documentation since the last release, the patch release may still be made from `develop`: ask before choosing `develop` as fix base.
+- Fixes of released code in DataLab and Sigima (`doc/contributing/gitworkflow.rst`, `RELEASING.md`): base the branch on `develop`, which prepares the next release, a patch release as long as it only contains fixes since the last release. A `release` branch exists only when a patch release is needed while `develop` already contains changes for the next minor or major version (`git ls-remote --heads origin release`): base the fix on `release` then; `release` is merged into `develop` after each patch release, so never cherry-pick the fix. While `develop` prepares a patch release, ask before merging into it a change for the next minor or major version: it may require creating `release` from `main` first.
 - When the PR base differs from the default branch (e.g. `develop` vs `main`), `Closes #N` does not close the issue at merge time: close it manually (step 10).
 - Milestone names vary between repositories (`v1.4.1`, `V1.2.0`, ...) and some stay open after the release: list the open ones and pick the next release, or ask.
 - Labels: `bug` for fixes, `enhancement` for features and improvements, `documentation` for documentation-only changes.
@@ -29,7 +29,7 @@ Always pass `--repo <owner/repo>` to `gh`.
 ## CI
 
 - DataLab, SigimaX, guidata and PlotPy test workflows run on pull requests targeting `develop`, `main`/`master` or `release` only. Sigima's `test.yml` runs on every pull request, stacked ones included. DataLab-Capsule tests also run on pushes to `feature/**` and `fix/**`.
-- DataLab CI for PRs targeting `release` clones every dependency at its `release` branch, falling back to `main`/`master`: a DataLab fix relying on a Sigima fix needs that fix in Sigima's `release` (or `main`) branch.
+- When a `release` branch exists, DataLab CI for PRs targeting it clones every dependency at its `release` branch, falling back to `main`/`master`: a DataLab fix relying on a Sigima fix needs that fix in Sigima's `release` (or `main`) branch.
 - DataLab CI (PRs targeting `develop`) clones Sigima, SigimaX and DataLab-Capsule at the branch named like the PR head branch, falling back to `develop`, and always clones guidata and PlotPy at `develop`. Hence:
   - Use identical branch names for a change spanning these repositories.
   - A guidata or PlotPy change must be in their `develop` branch before a DataLab PR relies on it.
