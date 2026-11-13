@@ -1147,15 +1147,19 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Add the plugin's tools to its submenu of the *Plugins* menu
 
         Each tool is listed in the panel of its object type (both panels when
-        it has none), after the plugin's own actions.
+        it has none), after the plugin's own actions. Tools declared with
+        ``menu=False`` are placed by the plugin itself.
         """
         title = plugin.info.name.replace("&", "&&")
         for panel in (self.signalpanel, self.imagepanel):
             tools = [
                 tool
                 for tool in plugin.get_tools()
-                if tool.object_type is None
-                or tool.object_type.value == panel.PANEL_STR_ID
+                if tool.menu
+                and (
+                    tool.object_type is None
+                    or tool.object_type.value == panel.PANEL_STR_ID
+                )
             ]
             if not tools:
                 continue

@@ -56,6 +56,10 @@ class PluginTool:
          tool is listed in the menu of that panel (``None``: both panels)
         selection: selection needed to open the tool, counting objects of
          ``object_type`` only
+        menu: if False, DataLab does not add the tool to the plugin's submenu
+         of the *Plugins* menu (e.g. because the plugin already places it in
+         one of its own submenus); it is still listed in the Applications
+         catalog
     """
 
     id: str
@@ -66,6 +70,7 @@ class PluginTool:
     instrument: str | None = None
     object_type: RecipeObjectType | None = None
     selection: ToolSelection = ToolSelection.NONE
+    menu: bool = True
 
     def __post_init__(self) -> None:
         """Validate identity, opening method, selection, and icon resource."""
@@ -92,6 +97,8 @@ class PluginTool:
         if self.object_type is not None:
             object.__setattr__(self, "object_type", RecipeObjectType(self.object_type))
         object.__setattr__(self, "selection", ToolSelection(self.selection))
+        if not isinstance(self.menu, bool):
+            raise TypeError("Plugin tool menu flag must be a boolean")
 
 
 def tool_accepts_selection(

@@ -895,6 +895,9 @@ msgstr "type des objets sur lesquels l'outil travaille ou qu'il crée ; l'outil 
 msgid "selection needed to open the tool, counting objects of ``object_type`` only"
 msgstr "sélection nécessaire pour ouvrir l'outil, en ne comptant que les objets de type ``object_type``"
 
+msgid "if False, DataLab does not add the tool to the plugin's submenu of the *Plugins* menu (e.g. because the plugin already places it in one of its own submenus); it is still listed in the Applications catalog"
+msgstr "si False, DataLab n'ajoute pas l'outil au sous-menu du plugin du menu *Plugins* (par exemple parce que le plugin le place déjà dans l'un de ses propres sous-menus) ; il reste listé dans le catalogue des applications"
+
 msgid "Selection a tool needs to be opened (names follow DataLab's conditions)."
 msgstr "Sélection nécessaire à l'ouverture d'un outil (les noms suivent les conditions de DataLab)."
 
@@ -1020,4 +1023,3 @@ msgstr "Valide, exécute et valide de manière transactionnelle une recette sur 
 
 msgid "Validate, execute, and atomically commit one recipe invocation."
 msgstr "Valide, exécute et valide de manière atomique un appel de recette."
-
