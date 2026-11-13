@@ -323,6 +323,48 @@ def test_welcome_page_stacks_columns_and_footer() -> None:
             assert page.footer_layout.direction() == direction
 
 
+def test_tiles_elide_long_texts(monkeypatch) -> None:
+    """Tiles have the same height; long texts are elided and shown in a tooltip"""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    short = welcome.WelcomeEntry("libre-gui-plugin.svg", "Short", "Text.", tile=True)
+    long_description = " ".join(["Analyze repeated pulse acquisitions"] * 8)
+    long = welcome.WelcomeEntry(
+        "libre-gui-plugin.svg",
+        "Pulse & Transient Characterization of very long titles",
+        long_description,
+        tile=True,
+    )
+    shown: list[str] = []
+    monkeypatch.setattr(
+        QW.QToolTip, "showText", lambda _pos, text, *_args: shown.append(text)
+    )
+    try:
+        for tile in (short, long):
+            tile.show()
+        QW.QApplication.processEvents()
+        assert short.sizeHint().height() == long.sizeHint().height()
+        assert not short.is_elided() and long.is_elided()
+        # The description follows the header: no gap after a one-line title
+        assert short.title_label.height() < long.title_label.height()
+        assert short.description_label.y() == long.description_label.y()
+        assert short.title_label.text().count("\n") == 0
+        assert long.title_label.text().count("\n") == welcome.TILE_TITLE_LINES - 1
+        text = long.description_label.text()
+        assert text.count("\n") == welcome.TILE_DESCRIPTION_LINES - 1
+        assert text.endswith("\u2026")
+        assert long.full_title().startswith("Pulse & Transient")
+        event = QG.QHelpEvent(QC.QEvent.ToolTip, QC.QPoint(5, 5), QC.QPoint(5, 5))
+        long.event(event)
+        assert shown and long_description in shown[0]
+        shown.clear()
+        short.event(event)
+        assert not shown
+        assert qt_app is not None
+    finally:
+        short.deleteLater()
+        long.deleteLater()
+
+
 def test_tile_grid_wraps_and_overflows() -> None:
     """Tiles wrap to the width, an overflow tile replaces those left out"""
     qt_app = QW.QApplication.instance() or QW.QApplication([])
@@ -347,25 +389,30 @@ def test_tile_grid_wraps_and_overflows() -> None:
         assert grid.columns == 1
         assert grid.placed == [tiles[0], overflow]
         assert position(overflow) == (1, 0)
-        assert overflow.title_label.text() == overflow_title(2)
+        assert overflow.full_title() == overflow_title(2)
         grid.arrange(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING)
         assert grid.columns == 3
         assert grid.placed == tiles[:3]
         assert position(tiles[2]) == (0, 2)
         assert overflow.isHidden() and not tiles[2].isHidden()
+        # Tiles share the extra width, keeping the grid aligned on both sides
+        assert tiles[0].width() == welcome.TILE_WIDTH
+        grid.arrange(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING + 30)
+        assert grid.columns == 3
+        assert tiles[0].width() == overflow.width() == welcome.TILE_WIDTH + 10
 
         grid.resize(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING, 100)
         grid.set_order([[tile] for tile in tiles], max_rows=2)
         assert grid.placed == [*tiles[:5], overflow]
         assert position(overflow) == (1, 2)
-        assert overflow.title_label.text() == overflow_title(3)
+        assert overflow.full_title() == overflow_title(3)
         assert all(tile.isHidden() for tile in tiles[5:])
         grid.set_order([[tile] for tile in reversed(tiles)], max_rows=1)
         assert grid.placed == [tiles[7], tiles[6], overflow]
-        assert overflow.title_label.text() == overflow_title(6)
+        assert overflow.full_title() == overflow_title(6)
         grid.arrange(welcome.TILE_WIDTH)
         assert grid.placed == [overflow]
-        assert overflow.title_label.text() == overflow_title(8)
+        assert overflow.full_title() == overflow_title(8)
 
         grid.set_tiles([])
         assert grid.placed == [] and overflow.isHidden()
@@ -535,7 +582,7 @@ def test_welcome_page_application_plugin_lifecycle() -> None:
             page = win.welcomepanel
             page.refresh_application_tiles()
             entry = page.application_tiles[plugin_id]
-            assert entry.title_label.text() == "Welcome tiles application"
+            assert entry.full_title() == "Welcome tiles application"
 
             entry.SIG_CLICKED.emit()
             QW.QApplication.processEvents()

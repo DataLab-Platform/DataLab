@@ -2859,6 +2859,12 @@ msgstr "%s a été désinstallé."
 msgid "Do you want to reload plugins now?"
 msgstr "Voulez-vous recharger les plugins maintenant ?"
 
+msgid "Restore defaults"
+msgstr "Valeurs par défaut"
+
+msgid "Set the settings of the instrument back to their default values"
+msgstr "Rétablir les valeurs par défaut des réglages de l'instrument"
+
 msgid "Live"
 msgstr "En direct"
 
