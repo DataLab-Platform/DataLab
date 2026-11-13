@@ -5,8 +5,10 @@
 import os
 import os.path as osp
 import sys
+import tempfile
 import warnings
 import zipfile
+import zlib
 
 import guidata.config as gcfg
 from docutils import nodes
@@ -89,6 +91,25 @@ def compress_tutorials_data(app):
                 print(f"Created: {zip_filename}")
     except Exception as exc:
         print(f"Warning: failed to compress tutorials: {exc}")
+
+
+def get_empty_intersphinx_inventory() -> str:
+    """Return the path of an empty intersphinx inventory, created if needed.
+
+    Used as the fallback location of every intersphinx inventory: when an inventory
+    cannot be fetched (e.g. network failure), Sphinx then only logs it, instead of
+    emitting a warning which fails strict builds (``-W``), and the references to
+    that project are left unresolved.
+    """
+    path = osp.join(tempfile.gettempdir(), "datalab-doc-empty-objects.inv")
+    if not osp.isfile(path):
+        with open(path, "wb") as file:
+            file.write(
+                b"# Sphinx inventory version 2\n# Project: none\n# Version: 0\n"
+                b"# The remainder of this file is compressed using zlib.\n"
+                + zlib.compress(b"")
+            )
+    return path
 
 
 def setup(app):
@@ -268,18 +289,23 @@ autodoc_default_options = {
 }
 
 # -- Options for intersphinx extension ---------------------------------------
+# An unreachable inventory must not fail strict builds: see
+# `get_empty_intersphinx_inventory`.
+intersphinx_fallback = (None, get_empty_intersphinx_inventory())
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
-    "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", None),
-    "numpy": ("https://numpy.org/doc/stable/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
-    "scikit-image": ("https://scikit-image.org/docs/stable/", None),
-    "h5py": ("https://docs.h5py.org/en/stable/", None),
-    "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
-    "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
-    "sigima": ("https://sigima.readthedocs.io/en/latest/", None),
-    "sigimax": ("https://sigimax.readthedocs.io/en/latest/", None),
+    "python": ("https://docs.python.org/3", intersphinx_fallback),
+    "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", intersphinx_fallback),
+    "numpy": ("https://numpy.org/doc/stable/", intersphinx_fallback),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", intersphinx_fallback),
+    "scikit-image": ("https://scikit-image.org/docs/stable/", intersphinx_fallback),
+    "h5py": ("https://docs.h5py.org/en/stable/", intersphinx_fallback),
+    "guidata": ("https://guidata.readthedocs.io/en/latest/", intersphinx_fallback),
+    "plotpy": ("https://plotpy.readthedocs.io/en/latest/", intersphinx_fallback),
+    "sigima": ("https://sigima.readthedocs.io/en/latest/", intersphinx_fallback),
+    "sigimax": ("https://sigimax.readthedocs.io/en/latest/", intersphinx_fallback),
 }
+# Do not wait indefinitely for an unresponsive server
+intersphinx_timeout = 30
 
 # -- Latex macros for math in docstrings -------------------------------------
 macros = {
