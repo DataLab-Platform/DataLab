@@ -9,7 +9,7 @@ Plugins
 
 DataLab supports a robust plugin architecture, allowing users to extend the application’s features without modifying its core. Plugins can introduce new processing tools, data import/export formats, or custom GUI elements — all seamlessly integrated into the platform.
 
-A plugin is Python code loaded by DataLab: a single ``datalab_<name>.py`` file, or a package distributed as a wheel. Application plugins, for example for the characterization of cameras or of pulsed signals, add complete workflows to the **Applications** panel and to the welcome page.
+A plugin is Python code loaded by DataLab: a single ``datalab_<name>.py`` file, or a package distributed as a wheel. Application plugins, for example for the characterization of cameras or of pulsed signals, or for the analysis of X-ray radiographs, add complete workflows to the **Applications** panel and to the welcome page.
 
 .. _plugin_catalog_overview:
 

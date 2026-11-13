@@ -4,8 +4,8 @@ Use cases
 =========
 
 .. meta::
-    :description: What DataLab is used for: spectroscopy, laser beam analysis and photonics, non-destructive testing. Real-world signal and image processing workflows, without writing an application.
-    :keywords: DataLab, use cases, spectroscopy, laser beam profiling, photonics, non-destructive testing, defect detection, signal processing, image processing
+    :description: What DataLab is used for: spectroscopy, laser beam analysis and photonics, non-destructive testing, scientific camera characterization, transient and pulsed signals, instrument control and data acquisition. Real-world signal and image processing workflows, without writing an application.
+    :keywords: DataLab, use cases, spectroscopy, laser beam profiling, photonics, non-destructive testing, defect detection, X-ray radiography, camera characterization, photon transfer curve, pulse analysis, transient signals, instrument control, data acquisition, TANGO, signal processing, image processing
 
 DataLab is used in research and industry to analyze data produced by scientific
 instruments -- cameras, digitizers, spectrometers -- in a single workspace, without
@@ -14,7 +14,9 @@ diagnostics of `CEA <https://www.cea.fr>`_'s Laser Megajoule facility, where it 
 used in production, and has since been applied to many other fields.
 
 The pages below show how DataLab addresses a concrete problem in each domain,
-with real data and a step-by-step tutorial.
+with demonstration data, step-by-step tutorials and, for complete workflows,
+application plugins of the `DataLab plugin catalog
+<https://datalab-platform.com/plugins/>`_.
 
 .. only:: html and not latex
 
@@ -37,7 +39,25 @@ with real data and a step-by-step tutorial.
             :link: ndt
             :link-type: doc
 
-            Automated detection of defects and particles on images
+            Automated detection of defects and particles on images, X-ray radiography
+
+        .. grid-item-card:: :octicon:`device-camera;1em;sd-text-info`  Camera characterization
+            :link: camera
+            :link-type: doc
+
+            Response, noise, photon transfer curve and dark current of scientific cameras
+
+        .. grid-item-card:: :octicon:`zap;1em;sd-text-info`  Transient & pulsed signals
+            :link: pulse
+            :link-type: doc
+
+            Pulse features, shot-to-shot stability, step response and timing
+
+        .. grid-item-card:: :octicon:`plug;1em;sd-text-info`  Instruments & acquisition
+            :link: instruments
+            :link-type: doc
+
+            Live view and acquisition of instrument data, e.g. TANGO devices
 
 .. toctree::
    :maxdepth: 1
@@ -46,3 +66,6 @@ with real data and a step-by-step tutorial.
    spectroscopy
    photonics
    ndt
+   camera
+   pulse
+   instruments

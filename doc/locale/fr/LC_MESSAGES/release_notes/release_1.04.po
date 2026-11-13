@@ -80,6 +80,9 @@ msgstr "La documentation des plugins est réorganisée en une page de présentat
 msgid "New tutorial, \"From an idea to the plugin catalog\": create a plugin in a single Python file, try it, then publish it in the DataLab plugin catalog, without any PyPI account"
 msgstr "Nouveau tutoriel, « De l'idée au catalogue de plugins » : créer un plugin en un seul fichier Python, l'essayer, puis le publier dans le catalogue de plugins DataLab, sans aucun compte PyPI"
 
+msgid "New use case pages present the characterization of scientific cameras, the analysis of transient and pulsed signals, and instrument control and data acquisition, with the Camera & Detector Characterization, Pulse & Transient Characterization and TANGO Instruments plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/); the non-destructive testing page now presents the X-ray Radiography & NDT plugin, also cited as an example in the plugin documentation ([Issue #542](https://github.com/DataLab-Platform/DataLab/issues/542))"
+msgstr "De nouvelles pages de cas d'usage présentent la caractérisation de caméras scientifiques, l'analyse de signaux transitoires et impulsionnels, ainsi que le pilotage d'instruments et l'acquisition de données, avec les plugins Camera & Detector Characterization, Pulse & Transient Characterization et TANGO Instruments du [catalogue de plugins DataLab](https://datalab-platform.com/plugins/) ; la page sur le contrôle non destructif présente désormais le plugin X-ray Radiography & NDT, également cité en exemple dans la documentation des plugins ([issue #542](https://github.com/DataLab-Platform/DataLab/issues/542))"
+
 msgid "The roadmap is updated: the plugin template is delivered, data acquisition has started, and the milestones of versions 1.1 to 1.4 are listed"
 msgstr "La feuille de route est mise à jour : le modèle de plugin est livré, l'acquisition de données est amorcée, et les jalons des versions 1.1 à 1.4 sont listés"
 

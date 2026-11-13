@@ -74,6 +74,24 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
             Automated defect detection
 
+        .. grid-item-card:: :octicon:`device-camera;1em;sd-text-info`  Camera characterization
+            :link: use_cases/camera
+            :link-type: doc
+
+            Noise, photon transfer and dark current
+
+        .. grid-item-card:: :octicon:`zap;1em;sd-text-info`  Transient & pulsed signals
+            :link: use_cases/pulse
+            :link-type: doc
+
+            Pulse features and shot-to-shot stability
+
+        .. grid-item-card:: :octicon:`plug;1em;sd-text-info`  Instruments & acquisition
+            :link: use_cases/instruments
+            :link-type: doc
+
+            Live view and acquisition with plugins
+
 .. only:: html and not latex
 
     **Extend DataLab with plugins:** add processing features, file formats or complete

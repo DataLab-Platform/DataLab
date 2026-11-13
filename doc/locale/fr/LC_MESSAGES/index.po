@@ -75,6 +75,24 @@ msgstr "Contrôle non destructif"
 msgid "Automated defect detection"
 msgstr "Détection automatisée de défauts"
 
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-device-camera sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M15 3c.55 0 1 .45 1 1v9c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1 0-.55.45-1 1-1h4c.55 0 1 .45 1 1Zm-4.5 9c1.94 0 3.5-1.56 3.5-3.5S12.44 5 10.5 5 7 6.56 7 8.5 8.56 12 10.5 12ZM13 8.5c0 1.38-1.13 2.5-2.5 2.5S8 9.87 8 8.5 9.13 6 10.5 6 13 7.13 13 8.5ZM6 5V4H2v1Z\"></path></svg>  Camera characterization"
+msgstr "Caractérisation de caméras"
+
+msgid "Noise, photon transfer and dark current"
+msgstr "Bruit, transfert photonique et courant d'obscurité"
+
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-zap sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.249 1.249 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429Zm1.047 1.074L3.286 8.571A.25.25 0 0 0 3.462 9H6.75a.75.75 0 0 1 .694 1.034l-1.713 4.188 6.982-6.793A.25.25 0 0 0 12.538 7H9.25a.75.75 0 0 1-.683-1.06l2.008-4.418.003-.006a.036.036 0 0 0-.004-.009l-.006-.006-.008-.001c-.003 0-.006.002-.009.004Z\"></path></svg>  Transient & pulsed signals"
+msgstr "Signaux transitoires et impulsionnels"
+
+msgid "Pulse features and shot-to-shot stability"
+msgstr "Caractéristiques d'impulsions et stabilité tir à tir"
+
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-plug sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M4 8H2.5a1 1 0 0 0-1 1v5.25a.75.75 0 0 1-1.5 0V9a2.5 2.5 0 0 1 2.5-2.5H4V5.133a1.75 1.75 0 0 1 1.533-1.737l2.831-.353.76-.913c.332-.4.825-.63 1.344-.63h.782c.966 0 1.75.784 1.75 1.75V4h2.25a.75.75 0 0 1 0 1.5H13v4h2.25a.75.75 0 0 1 0 1.5H13v.75a1.75 1.75 0 0 1-1.75 1.75h-.782c-.519 0-1.012-.23-1.344-.63l-.761-.912-2.83-.354A1.75 1.75 0 0 1 4 9.867Zm6.276-4.91-.95 1.14a.753.753 0 0 1-.483.265l-3.124.39a.25.25 0 0 0-.219.248v4.734c0 .126.094.233.219.249l3.124.39a.752.752 0 0 1 .483.264l.95 1.14a.25.25 0 0 0 .192.09h.782a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25h-.782a.25.25 0 0 0-.192.09Z\"></path></svg>  Instruments & acquisition"
+msgstr "Instruments et acquisition"
+
+msgid "Live view and acquisition with plugins"
+msgstr "Visualisation en direct et acquisition avec des plugins"
+
 msgid "**Extend DataLab with plugins:** add processing features, file formats or complete applications, from the DataLab team, from the community... or your own."
 msgstr "**Étendez DataLab avec des plugins :** ajoutez des traitements, des formats de fichiers ou des applications complètes, de l'équipe DataLab, de la communauté... ou les vôtres."
 
