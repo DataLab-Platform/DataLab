@@ -1,0 +1,52 @@
+# Build the documentation strictly: any Sphinx or docutils warning fails the job.
+#
+# Called by `ci.yml` for the pushes and pull requests changing the documentation
+# or the documented code. Can also be started manually.
+#
+# Unreachable intersphinx inventories do not fail the build: see
+# `get_empty_intersphinx_inventory` in `doc/conf.py`.
+
+name: Build the documentation
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DISPLAY: ':99.0'
+
+    steps:
+    - uses: actions/checkout@v7
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v7
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      uses: ./.github/actions/install-dependencies
+      with:
+        qt-binding: PyQt5
+        extras: doc
+    - name: Make Sigima sources available to the documentation
+      # Some pages quote Sigima sources from `../Sigima`, the sibling checkout of
+      # the development workspace: link the installed package if not cloned.
+      run: |
+        if [ ! -d ../Sigima ]; then
+          SITE=$(python -c "import sigima, os; print(os.path.dirname(os.path.dirname(sigima.__file__)))")
+          ln -snf "$SITE" ../Sigima
+        fi
+        ls -l ../Sigima/sigima/tools/image/detection.py
+    - name: Extract translatable messages (gettext)
+      run: python -m sphinx build doc build/gettext -b gettext -W --keep-going
+    - name: Compile documentation translations
+      run: python -m sphinx_intl build -d doc/locale
+    - name: Build HTML documentation (English)
+      run: python -m sphinx build doc build/doc/en -b html -D language=en -W --keep-going
+    - name: Build HTML documentation (French)
+      run: python -m sphinx build doc build/doc/fr -b html -D language=fr -W --keep-going

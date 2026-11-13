@@ -29,6 +29,7 @@ Always pass `--repo <owner/repo>` to `gh`.
 ## CI
 
 - DataLab, SigimaX, guidata and PlotPy test workflows run on pull requests targeting `develop`, `main`/`master` or `release` only. Sigima's `test.yml` runs on every pull request, stacked ones included. DataLab-Capsule tests also run on pushes to `feature/**` and `fix/**`.
+- DataLab CI (`ci.yml`) only runs the jobs needed by the changed files (`scripts/ci_changes.py`): a documentation-only PR runs the strict documentation build but no tests, a PR only changing `.github/` (except the CI definition), `.vscode/` or root Markdown files runs neither (only the `changes` job), and a code change runs both. Skipped jobs count as passed for the green status.
 - When a `release` branch exists, DataLab CI for PRs targeting it clones every dependency at its `release` branch, falling back to `main`/`master`: a DataLab fix relying on a Sigima fix needs that fix in Sigima's `release` (or `main`) branch.
 - DataLab CI (PRs targeting `develop`) clones Sigima, SigimaX and DataLab-Capsule at the branch named like the PR head branch, falling back to `develop`, and always clones guidata and PlotPy at `develop`. Hence:
   - Use identical branch names for a change spanning these repositories.
