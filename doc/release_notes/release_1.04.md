@@ -21,6 +21,7 @@
 * **Web API**: when required components could not be imported, the menu and remote control suggested installing a nonexistent extra. They now name the required dependencies and explain how to check or repair the installation using its original method or package manager; pip users can run `python -m pip check` to check dependency requirements (fixes [Issue #525](https://github.com/DataLab-Platform/DataLab/issues/525)).
 * **Web API**: each object added through the Web API, e.g. from DataLab-Kernel or a Jupyter notebook, showed "Remote request failed: Object '...' not found" in the status bar, although the object was added. Checking that an object name is free is no longer reported as a failed request (fixes [Issue #528](https://github.com/DataLab-Platform/DataLab/issues/528)).
 * **Deleting objects**: deleting many objects at once, or clearing the workspace, froze DataLab for a long time when many curves were displayed (e.g. about 20 seconds for 600 signals). It now takes about one second (fixes [Issue #528](https://github.com/DataLab-Platform/DataLab/issues/528)).
+* **Plugins**: after running a processing feature of a plugin whose computation functions are not in the module of its plugin class, such as the plugins created with `datalab-plugin create --project`, saving the workspace to an HDF5 file failed with "cannot serialize None value in dict". These results are now saved, with the name and version of their plugin (fixes [Issue #543](https://github.com/DataLab-Platform/DataLab/issues/543)).
 
 ### 📖 Documentation since version 1.4.0 ###
 
