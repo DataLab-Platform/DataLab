@@ -23,8 +23,8 @@ msgstr "Plugins"
 msgid "DataLab supports a robust plugin architecture, allowing users to extend the application’s features without modifying its core. Plugins can introduce new processing tools, data import/export formats, or custom GUI elements — all seamlessly integrated into the platform."
 msgstr "DataLab prend en charge une architecture de plugin robuste, permettant aux utilisateurs d'étendre les fonctionnalités de l'application sans modifier son noyau. Les plugins peuvent introduire de nouveaux outils de traitement, des formats d'importation/exportation de données ou des éléments d'interface graphique personnalisés, le tout intégré de manière transparente dans la plateforme."
 
-msgid "A plugin is Python code loaded by DataLab: a single ``datalab_<name>.py`` file, or a package distributed as a wheel. Application plugins, for example for the characterization of cameras or of pulsed signals, add complete workflows to the **Applications** panel and to the welcome page."
-msgstr "Un plugin est du code Python chargé par DataLab : un simple fichier ``datalab_<name>.py``, ou un paquet distribué sous forme de wheel. Les plugins d'application, par exemple pour la caractérisation de caméras ou de signaux impulsionnels, ajoutent des chaînes de traitement complètes au panneau **Applications** et à la page d'accueil."
+msgid "A plugin is Python code loaded by DataLab: a single ``datalab_<name>.py`` file, or a package distributed as a wheel. Application plugins, for example for the characterization of cameras or of pulsed signals, or for the analysis of X-ray radiographs, add complete workflows to the **Applications** panel and to the welcome page."
+msgstr "Un plugin est du code Python chargé par DataLab : un simple fichier ``datalab_<name>.py``, ou un paquet distribué sous forme de wheel. Les plugins d'application, par exemple pour la caractérisation de caméras ou de signaux impulsionnels, ou pour l'analyse de radiographies X, ajoutent des chaînes de traitement complètes au panneau **Applications** et à la page d'accueil."
 
 msgid "Find plugins in the catalog"
 msgstr "Trouver des plugins dans le catalogue"
