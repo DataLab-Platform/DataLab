@@ -21,6 +21,7 @@ import functools
 import re
 import urllib.parse
 import webbrowser
+from html import escape
 from typing import TYPE_CHECKING, Callable
 
 from guidata.configtools import get_icon, get_pixmap
@@ -52,12 +53,15 @@ if TYPE_CHECKING:
 
 #: Width below which the two columns of the welcome page are stacked
 SINGLE_COLUMN_WIDTH = 720
-#: Width of an application tile
+#: Minimum width of an application tile (tiles share the width of the page)
 TILE_WIDTH = 200
 #: Spacing between application tiles
 TILE_SPACING = 12
 #: Size of an application tile icon
-TILE_ICON_SIZE = 48
+TILE_ICON_SIZE = 40
+#: Maximum number of lines of the title and of the description of a tile
+TILE_TITLE_LINES = 2
+TILE_DESCRIPTION_LINES = 3
 #: Size of an action entry icon
 ENTRY_ICON_SIZE = 24
 
@@ -93,6 +97,105 @@ def get_release_notes_url() -> str:
     major, minor = re.match(r"(\d+)\.(\d+)", datalab.__version__).groups()
     page = f"en/release_notes/release_{major}.{int(minor):02d}.html"
     return urllib.parse.urljoin(datalab.__docurl__, page)
+
+
+class ElidedLabel(QW.QLabel):
+    """Label wrapping its text on a limited number of lines, elided with "…"
+
+    Args:
+        text: full text
+        max_lines: maximum number of lines
+        parent: parent widget
+        fixed: if True, the label always takes the height of its maximum number
+         of lines, so that labels of the same font are aligned whatever their
+         text; otherwise, it takes the height of the lines it shows
+    """
+
+    def __init__(
+        self,
+        text: str,
+        max_lines: int,
+        parent: QW.QWidget | None = None,
+        fixed: bool = True,
+    ) -> None:
+        super().__init__(parent)
+        self.max_lines = max_lines
+        self.fixed = fixed
+        self.full_text = text
+        self.elided = False
+        self.setTextFormat(QC.Qt.PlainText)
+        self.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
+        self.setSizePolicy(QW.QSizePolicy.Ignored, QW.QSizePolicy.Fixed)
+        self.__set_line_count(max_lines)
+        self.__elide()
+
+    def set_full_text(self, text: str) -> None:
+        """Change the full text
+
+        Args:
+            text: new text
+        """
+        self.full_text = text
+        self.__elide()
+
+    def line_height(self, count: int) -> int:
+        """Return the height of a number of lines of the label font
+
+        Args:
+            count: number of lines
+
+        Returns:
+            Height in pixels
+        """
+        metrics = self.fontMetrics()
+        return metrics.lineSpacing() * (count - 1) + metrics.height()
+
+    def __set_line_count(self, count: int) -> None:
+        """Take the height of the maximum number of lines, or of ``count`` lines"""
+        self.setFixedHeight(self.line_height(self.max_lines if self.fixed else count))
+
+    def __elide(self) -> None:
+        """Wrap the text at the label width, eliding its last line if needed"""
+        width = self.contentsRect().width()
+        text = self.full_text
+        if width <= 0:
+            self.elided = False
+            self.setText(text)
+            return
+        layout = QG.QTextLayout(text, self.font())
+        option = QG.QTextOption()
+        option.setWrapMode(QG.QTextOption.WrapAtWordBoundaryOrAnywhere)
+        layout.setTextOption(option)
+        lines: list[tuple[int, int]] = []
+        layout.beginLayout()
+        while True:
+            line = layout.createLine()
+            if not line.isValid():
+                break
+            line.setLineWidth(width)
+            lines.append((line.textStart(), line.textLength()))
+        layout.endLayout()
+        self.elided = len(lines) > self.max_lines
+        if not self.elided:
+            self.setText("\n".join(text[s : s + n].rstrip() for s, n in lines))
+            self.__set_line_count(max(1, len(lines)))
+            return
+        kept = [text[s : s + n].rstrip() for s, n in lines[: self.max_lines - 1]]
+        last = text[lines[self.max_lines - 1][0] :].strip()
+        kept.append(self.fontMetrics().elidedText(last, QC.Qt.ElideRight, width))
+        self.setText("\n".join(kept))
+        self.__set_line_count(self.max_lines)
+
+    def changeEvent(self, event: QC.QEvent) -> None:  # pylint: disable=invalid-name
+        """Wrap the text again when the font changes"""
+        super().changeEvent(event)
+        if event.type() == QC.QEvent.FontChange:
+            self.__elide()
+
+    def resizeEvent(self, event: QG.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        """Wrap the text again for the new width"""
+        super().resizeEvent(event)
+        self.__elide()
 
 
 class WelcomeEntry(QW.QFrame):
@@ -144,23 +247,33 @@ class WelcomeEntry(QW.QFrame):
         icon_size = TILE_ICON_SIZE if tile else ENTRY_ICON_SIZE
         self.icon_label = QW.QLabel()
         self.icon_label.setPixmap(icon.pixmap(icon_size, icon_size))
-        self.title_label = QW.QLabel(title)
+        self.description = description
+        if tile:
+            self.title_label = ElidedLabel(title, TILE_TITLE_LINES, fixed=False)
+            description_label = ElidedLabel(description, TILE_DESCRIPTION_LINES)
+        else:
+            self.title_label = QW.QLabel(title)
+            description_label = QW.QLabel(description)
+            description_label.setWordWrap(True)
+        self.description_label = description_label
         font = self.title_label.font()
         font.setBold(True)
         self.title_label.setFont(font)
-        description_label = QW.QLabel(description)
-        description_label.setWordWrap(True)
 
-        text_layout = QW.QVBoxLayout()
-        text_layout.setSpacing(2)
-        text_layout.addWidget(self.title_label)
-        text_layout.addWidget(description_label)
         if tile:
-            self.title_label.setWordWrap(True)
+            # Header: icon, title (one or two lines, centered on the icon) and
+            # menu button, with the height of a two-line title so that every
+            # tile has the same height; the description follows the header
             self.setFixedWidth(TILE_WIDTH)
-            top_layout = QW.QHBoxLayout()
-            top_layout.addWidget(self.icon_label)
-            top_layout.addStretch(1)
+            header = QW.QWidget()
+            header.setFixedHeight(
+                max(TILE_ICON_SIZE, self.title_label.line_height(TILE_TITLE_LINES))
+            )
+            header_layout = QW.QHBoxLayout(header)
+            header_layout.setContentsMargins(0, 0, 0, 0)
+            header_layout.setSpacing(8)
+            header_layout.addWidget(self.icon_label, 0, QC.Qt.AlignVCenter)
+            header_layout.addWidget(self.title_label, 1, QC.Qt.AlignVCenter)
             if menu:
                 self.menu_button = QW.QToolButton()
                 self.menu_button.setText("\u2026")
@@ -173,14 +286,18 @@ class WelcomeEntry(QW.QFrame):
                 # The tile context menu key already gives keyboard access
                 self.menu_button.setFocusPolicy(QC.Qt.NoFocus)
                 self.menu_button.clicked.connect(self.__request_button_menu)
-                top_layout.addWidget(self.menu_button, 0, QC.Qt.AlignTop)
+                header_layout.addWidget(self.menu_button, 0, QC.Qt.AlignTop)
             layout = QW.QVBoxLayout(self)
             layout.setContentsMargins(12, 10, 12, 10)
-            layout.setSpacing(8)
-            layout.addLayout(top_layout)
-            layout.addLayout(text_layout)
+            layout.setSpacing(6)
+            layout.addWidget(header)
+            layout.addWidget(description_label)
             layout.addStretch(1)
         else:
+            text_layout = QW.QVBoxLayout()
+            text_layout.setSpacing(2)
+            text_layout.addWidget(self.title_label)
+            text_layout.addWidget(description_label)
             apply_subdued_color(description_label)
             layout = QW.QHBoxLayout(self)
             if card:
@@ -204,8 +321,38 @@ class WelcomeEntry(QW.QFrame):
         Args:
             title: new title
         """
-        self.title_label.setText(title)
+        if isinstance(self.title_label, ElidedLabel):
+            self.title_label.set_full_text(title)
+        else:
+            self.title_label.setText(title)
         self.setAccessibleName(title)
+
+    def full_title(self) -> str:
+        """Return the full title of the entry, even if it is elided"""
+        if isinstance(self.title_label, ElidedLabel):
+            return self.title_label.full_text
+        return self.title_label.text()
+
+    def is_elided(self) -> bool:
+        """Return True if the title or the description of a tile is elided"""
+        return any(
+            isinstance(label, ElidedLabel) and label.elided
+            for label in (self.title_label, self.description_label)
+        )
+
+    def event(self, event: QC.QEvent) -> bool:
+        """Show the full title and description of an elided tile in a tooltip"""
+        if event.type() == QC.QEvent.ToolTip and not self.toolTip():
+            if self.is_elided():
+                text = f"<b>{escape(self.full_title())}</b>"
+                if self.description:
+                    text += f"<br>{escape(self.description)}"
+                QW.QToolTip.showText(event.globalPos(), text, self)
+            else:
+                QW.QToolTip.hideText()
+                event.ignore()
+            return True
+        return super().event(event)
 
     def __request_button_menu(self) -> None:
         """Request the menu of actions below the menu button"""
@@ -320,10 +467,16 @@ class TileGrid(QW.QWidget):
     def arrange(self, width: int) -> None:
         """Place the tiles on as many columns as the width allows
 
+        The tiles share the whole width, so that the grid is aligned on both
+        sides with the sections below it.
+
         Args:
             width: available width
         """
         columns = max(1, (width + TILE_SPACING) // (TILE_WIDTH + TILE_SPACING))
+        tile_width = max(TILE_WIDTH, (width - (columns - 1) * TILE_SPACING) // columns)
+        for tile in (*self.tiles, self.overflow_tile):
+            tile.setFixedWidth(tile_width)
         if columns == self.columns:
             return
         self.columns = columns
