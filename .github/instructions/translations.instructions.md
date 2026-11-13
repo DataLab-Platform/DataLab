@@ -9,9 +9,7 @@ applyTo: "**/*.po,doc/**/*.rst"
   identifiers (for example `roi_copy`), icon-only strings, and platform badges
   whose text is unchanged. Do not copy `msgid` into `msgstr` just for completeness.
 - For translatable text containing `:octicon:`, check the original reST context:
-  - Inside a `.. grid-item-card::` directive, especially its title, translate
-    the text **without the icon**.
-    Do not retain or reintroduce `:octicon:` roles or generated SVG in `msgstr`.
+  - Inside a `.. grid-item-card::` title, translate the text **and preserve the original `:octicon:` role exactly**, including its name, arguments, and position. Recover the role from the reST source when `msgid` contains generated SVG. Never copy generated SVG into `msgstr`: Sphinx renders it as escaped text, not as an icon.
   - Outside `.. grid-item-card::` directives (headings, paragraphs, lists, dropdowns,
     etc.), translate the text **and preserve the icon role exactly**, including
     its name, arguments, and position.
@@ -20,6 +18,4 @@ applyTo: "**/*.po,doc/**/*.rst"
   reST source, not from the PO spelling alone. Keep `msgid` unchanged.
 - Never remove icons from all translations indiscriminately. Existing catalogs
   may contain exceptions to this convention; verify them against the sources.
-- After updating catalogs, compile them and build the French documentation.
-  Check one translated card title and one translated heading or paragraph:
-  the card translation is text-only; the non-card translation retains its icon.
+- After updating catalogs, compile them and build the French documentation. Check one translated card title and one translated heading or paragraph: both translations retain their icons, with no escaped SVG or literal role markup in the rendered output.

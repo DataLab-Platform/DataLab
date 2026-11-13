@@ -87,7 +87,7 @@ msgid "Members of the platform"
 msgstr "Les membres de la plateforme"
 
 msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-device-desktop sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M14.25 1c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 14.25 12h-3.727c.099 1.041.52 1.872 1.292 2.757A.752.752 0 0 1 11.25 16h-6.5a.75.75 0 0 1-.565-1.243c.772-.885 1.192-1.716 1.292-2.757H1.75A1.75 1.75 0 0 1 0 10.25v-7.5C0 1.784.784 1 1.75 1ZM1.75 2.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25ZM9.018 12H6.982a5.72 5.72 0 0 1-.765 2.5h3.566a5.72 5.72 0 0 1-.765-2.5Z\"></path></svg>  DataLab (desktop)"
-msgstr "DataLab (application de bureau)"
+msgstr ":octicon:`device-desktop;1em;sd-text-info`  DataLab (application de bureau)"
 
 msgid "The reference application, with a native Qt graphical user interface and the full PlotPyStack interactive visualization. Runs locally on Windows, Linux and macOS."
 msgstr "L'application de référence, dotée d'une interface graphique Qt native et de la visualisation interactive complète de PlotPyStack. S'exécute localement sous Windows, Linux et macOS."
@@ -123,7 +123,7 @@ msgid "The provenance of the workspace and the open RO-Crate ``.dlcapsule`` caps
 msgstr "La provenance de l'espace de travail et les capsules RO-Crate ouvertes ``.dlcapsule``, partagées par l'application de bureau et DataLab-Web : échangez, comparez et vérifiez des espaces de travail avec la provenance de leurs traitements (voir :ref:`capsules`). Parcourez le `projet sur GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__."
 
 msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-package sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z\"></path></svg>  DataLab plugin catalog"
-msgstr "Catalogue de plugins DataLab"
+msgstr ":octicon:`package;1em;sd-text-info`  Catalogue de plugins DataLab"
 
 msgid "The plugins of the DataLab team and of the community, checked automatically and installable in one click from the desktop application, some of them also available in DataLab-Web. Browse the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, or publish your own plugin (see :ref:`tutorial_plugin_catalog`)."
 msgstr "Les plugins de l'équipe DataLab et de la communauté, vérifiés automatiquement et installables en un clic depuis l'application de bureau, certains étant aussi disponibles dans DataLab-Web. Parcourez le `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, ou publiez votre propre plugin (voir :ref:`tutorial_plugin_catalog`)."

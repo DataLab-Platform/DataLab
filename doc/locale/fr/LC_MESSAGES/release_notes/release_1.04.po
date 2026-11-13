@@ -74,6 +74,9 @@ msgstr "**Outils de développement** : les tâches VS Code du dépôt source ind
 msgid "📖 Documentation since version 1.4.0"
 msgstr "📖 Documentation depuis la version 1.4.0"
 
+msgid "Translated card titles in the French documentation now show the same icons as their English counterparts, on the home page and the main section pages (fixes [Issue #536](https://github.com/DataLab-Platform/DataLab/issues/536))."
+msgstr "Les titres traduits des cartes de la documentation française affichent désormais les mêmes icônes que leurs équivalents anglais, sur la page d'accueil et les principales pages de section (corrige [l'issue #536](https://github.com/DataLab-Platform/DataLab/issues/536))."
+
 msgid "The [DataLab plugin catalog](https://datalab-platform.com/plugins/) is now presented on the home page, in the navigation bar and in the pages describing the platform, its key features and how to contribute"
 msgstr "Le [catalogue de plugins DataLab](https://datalab-platform.com/plugins/) est désormais présenté sur la page d'accueil, dans la barre de navigation et dans les pages décrivant la plateforme, ses principales fonctionnalités et la manière de contribuer"
 
