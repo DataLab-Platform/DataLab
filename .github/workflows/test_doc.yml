@@ -50,3 +50,5 @@ jobs:
       run: python -m sphinx build doc build/doc/en -b html -D language=en -W --keep-going
     - name: Build HTML documentation (French)
       run: python -m sphinx build doc build/doc/fr -b html -D language=fr -W --keep-going
+    - name: Check translated card icons
+      run: python doc/check_card_icons.py build/doc/en build/doc/fr

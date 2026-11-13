@@ -56,37 +56,37 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
     .. grid:: 1 1 3 3
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`pulse;1em;sd-text-info`  Spectroscopy
+        .. grid-item-card:: |card-icon-pulse|  Spectroscopy
             :link: use_cases/spectroscopy
             :link-type: doc
 
             Baseline correction and peak fitting
 
-        .. grid-item-card:: :octicon:`sun;1em;sd-text-info`  Photonics & lasers
+        .. grid-item-card:: |card-icon-sun|  Photonics & lasers
             :link: use_cases/photonics
             :link-type: doc
 
             Beam profiling and interferograms
 
-        .. grid-item-card:: :octicon:`search;1em;sd-text-info`  Non-destructive testing
+        .. grid-item-card:: |card-icon-search|  Non-destructive testing
             :link: use_cases/ndt
             :link-type: doc
 
             Automated defect detection
 
-        .. grid-item-card:: :octicon:`device-camera;1em;sd-text-info`  Camera characterization
+        .. grid-item-card:: |card-icon-device-camera|  Camera characterization
             :link: use_cases/camera
             :link-type: doc
 
             Noise, photon transfer and dark current
 
-        .. grid-item-card:: :octicon:`zap;1em;sd-text-info`  Transient & pulsed signals
+        .. grid-item-card:: |card-icon-zap|  Transient & pulsed signals
             :link: use_cases/pulse
             :link-type: doc
 
             Pulse features and shot-to-shot stability
 
-        .. grid-item-card:: :octicon:`plug;1em;sd-text-info`  Instruments & acquisition
+        .. grid-item-card:: |card-icon-plug|  Instruments & acquisition
             :link: use_cases/instruments
             :link-type: doc
 
@@ -100,12 +100,12 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
     .. grid:: 1 1 2 2
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  Plugin catalog
+        .. grid-item-card:: |card-icon-package|  Plugin catalog
             :link: https://datalab-platform.com/plugins/
 
             Browse and install official and community plugins
 
-        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Create your own plugin
+        .. grid-item-card:: |card-icon-rocket|  Create your own plugin
             :link: tutorial_plugin_catalog
             :link-type: ref
 
@@ -234,3 +234,5 @@ and scientific dialogs (see :ref:`ecosystem`).
 .. _PlotPyStack: https://github.com/PlotPyStack
 .. _CODRA: https://codra.net/
 .. _Pierre Raybaut: https://github.com/PierreRaybaut/
+
+.. include:: /_card_icons.txt

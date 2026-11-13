@@ -25,12 +25,12 @@ To install a plugin of the catalog, open **Plugins > Configure plugins...** in D
     .. grid:: 1 1 2 2
         :gutter: 2
 
-        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  Browse the plugin catalog
+        .. grid-item-card:: |card-icon-package|  Browse the plugin catalog
             :link: https://datalab-platform.com/plugins/
 
             Official and community plugins, ready to install
 
-        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Create your own plugin
+        .. grid-item-card:: |card-icon-rocket|  Create your own plugin
             :link: tutorial_plugin_catalog
             :link-type: ref
 
@@ -46,31 +46,31 @@ Plugin documentation
     .. grid:: 1 1 2 2
         :gutter: 2
 
-        .. grid-item-card:: :octicon:`plug;1em;sd-text-info`  Installing and managing plugins
+        .. grid-item-card:: |card-icon-plug|  Installing and managing plugins
             :link: plugins/using
             :link-type: doc
 
             Plugin locations, installation from the catalog or from a file, plugin configuration
 
-        .. grid-item-card:: :octicon:`organization;1em;sd-text-info`  Deploying plugins in an organization
+        .. grid-item-card:: |card-icon-organization|  Deploying plugins in an organization
             :link: plugins/deploying
             :link-type: doc
 
             Local plugin catalogs, additional dependencies and offline deployment
 
-        .. grid-item-card:: :octicon:`code;1em;sd-text-info`  Developing plugins
+        .. grid-item-card:: |card-icon-code|  Developing plugins
             :link: plugins/developing
             :link-type: doc
 
             Quick start, plugin generator, plugin API, examples and publication in the catalog
 
-        .. grid-item-card:: :octicon:`apps;1em;sd-text-info`  Application plugins
+        .. grid-item-card:: |card-icon-apps|  Application plugins
             :link: plugins/applications
             :link-type: doc
 
             Headless recipes, packaged examples, tools, instruments and welcome page tiles
 
-        .. grid-item-card:: :octicon:`book;1em;sd-text-info`  Public API
+        .. grid-item-card:: |card-icon-book|  Public API
             :link: plugins/api
             :link-type: doc
 
@@ -95,3 +95,5 @@ Plugin documentation
     plugins/developing
     plugins/applications
     plugins/api
+
+.. include:: /_card_icons.txt

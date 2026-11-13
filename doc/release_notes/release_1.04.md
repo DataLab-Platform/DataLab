@@ -26,6 +26,7 @@
 
 ### 📖 Documentation since version 1.4.0 ###
 
+* Translated card titles in the French documentation now show the same icons as their English counterparts, on the home page and the main section pages (fixes [Issue #536](https://github.com/DataLab-Platform/DataLab/issues/536)).
 * The [DataLab plugin catalog](https://datalab-platform.com/plugins/) is now presented on the home page, in the navigation bar and in the pages describing the platform, its key features and how to contribute
 * The plugin documentation is reorganized into an overview page and dedicated pages for installing and managing plugins, deploying them in an organization, developing them, application plugins and the public API; the development page starts with a quick start, "Your first plugin in five minutes", and presents the plugins of the catalog as examples
 * New tutorial, "From an idea to the plugin catalog": create a plugin in a single Python file, try it, then publish it in the DataLab plugin catalog, without any PyPI account
