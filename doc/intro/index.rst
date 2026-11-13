@@ -68,37 +68,37 @@ the following libraries:
     .. grid:: 2 2 4 4
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  Installation
+        .. grid-item-card:: |card-icon-package|  Installation
             :link: installation
             :link-type: doc
 
             How to install DataLab on your computer
 
-        .. grid-item-card:: :octicon:`download;1em;sd-text-info`  Offline Installation
+        .. grid-item-card:: |card-icon-download|  Offline Installation
             :link: installation_offline
             :link-type: doc
 
             Install DataLab without internet access
 
-        .. grid-item-card:: :octicon:`gift;1em;sd-text-info`  Introduction
+        .. grid-item-card:: |card-icon-gift|  Introduction
             :link: introduction
             :link-type: doc
 
             Use cases and key strengths of DataLab
 
-        .. grid-item-card:: :octicon:`star;1em;sd-text-info`  Key features
+        .. grid-item-card:: |card-icon-star|  Key features
             :link: keyfeatures
             :link-type: doc
 
             Feature matrix of DataLab
 
-        .. grid-item-card:: :octicon:`mortar-board;1em;sd-text-info`  Tutorials
+        .. grid-item-card:: |card-icon-mortar-board|  Tutorials
             :link: tutorials/index
             :link-type: doc
 
             Tutorials to learn how to use DataLab
 
-        .. grid-item-card:: :octicon:`browser;1em;sd-text-info`  Editions
+        .. grid-item-card:: |card-icon-browser|  Editions
             :link: ecosystem
             :link-type: doc
 
@@ -114,3 +114,5 @@ the following libraries:
    ecosystem
    keyfeatures
    tutorials/index
+
+.. include:: /_card_icons.txt

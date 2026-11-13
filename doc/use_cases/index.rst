@@ -23,37 +23,37 @@ application plugins of the `DataLab plugin catalog
     .. grid:: 1 1 3 3
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`pulse;1em;sd-text-info`  Spectroscopy
+        .. grid-item-card:: |card-icon-pulse|  Spectroscopy
             :link: spectroscopy
             :link-type: doc
 
             Denoising, baseline correction and peak fitting on spectra
 
-        .. grid-item-card:: :octicon:`sun;1em;sd-text-info`  Photonics & lasers
+        .. grid-item-card:: |card-icon-sun|  Photonics & lasers
             :link: photonics
             :link-type: doc
 
             Beam profiling and interferogram analysis from camera images
 
-        .. grid-item-card:: :octicon:`search;1em;sd-text-info`  Non-destructive testing
+        .. grid-item-card:: |card-icon-search|  Non-destructive testing
             :link: ndt
             :link-type: doc
 
             Automated detection of defects and particles on images, X-ray radiography
 
-        .. grid-item-card:: :octicon:`device-camera;1em;sd-text-info`  Camera characterization
+        .. grid-item-card:: |card-icon-device-camera|  Camera characterization
             :link: camera
             :link-type: doc
 
             Response, noise, photon transfer curve and dark current of scientific cameras
 
-        .. grid-item-card:: :octicon:`zap;1em;sd-text-info`  Transient & pulsed signals
+        .. grid-item-card:: |card-icon-zap|  Transient & pulsed signals
             :link: pulse
             :link-type: doc
 
             Pulse features, shot-to-shot stability, step response and timing
 
-        .. grid-item-card:: :octicon:`plug;1em;sd-text-info`  Instruments & acquisition
+        .. grid-item-card:: |card-icon-plug|  Instruments & acquisition
             :link: instruments
             :link-type: doc
 
@@ -69,3 +69,5 @@ application plugins of the `DataLab plugin catalog
    camera
    pulse
    instruments
+
+.. include:: /_card_icons.txt

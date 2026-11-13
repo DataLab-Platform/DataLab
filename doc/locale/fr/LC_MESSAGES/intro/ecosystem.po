@@ -86,44 +86,44 @@ msgstr "Ce site de documentation est, avant tout, la documentation de l'**applic
 msgid "Members of the platform"
 msgstr "Les membres de la plateforme"
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-device-desktop sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M14.25 1c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 14.25 12h-3.727c.099 1.041.52 1.872 1.292 2.757A.752.752 0 0 1 11.25 16h-6.5a.75.75 0 0 1-.565-1.243c.772-.885 1.192-1.716 1.292-2.757H1.75A1.75 1.75 0 0 1 0 10.25v-7.5C0 1.784.784 1 1.75 1ZM1.75 2.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25ZM9.018 12H6.982a5.72 5.72 0 0 1-.765 2.5h3.566a5.72 5.72 0 0 1-.765-2.5Z\"></path></svg>  DataLab (desktop)"
-msgstr ":octicon:`device-desktop;1em;sd-text-info`  DataLab (application de bureau)"
+msgid "card-icon-device-desktop  DataLab (desktop)"
+msgstr "|card-icon-device-desktop|  DataLab (application de bureau)"
 
 msgid "The reference application, with a native Qt graphical user interface and the full PlotPyStack interactive visualization. Runs locally on Windows, Linux and macOS."
 msgstr "L'application de référence, dotée d'une interface graphique Qt native et de la visualisation interactive complète de PlotPyStack. S'exécute localement sous Windows, Linux et macOS."
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-browser sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25ZM14.5 6h-13v7.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25Zm-6-3.5v2h6V2.75a.25.25 0 0 0-.25-.25ZM5 2.5v2h2v-2Zm-3.25 0a.25.25 0 0 0-.25.25V4.5h2v-2Z\"></path></svg>  DataLab-Web"
+msgid "card-icon-browser  DataLab-Web"
 msgstr ""
 
 msgid "The same platform, running entirely inside your browser via WebAssembly. Zero install, your data never leaves your machine. Try it at `datalab-platform.com/web <https://datalab-platform.com/web/>`_ or browse the `project on GitHub <https://github.com/DataLab-Platform/web>`__."
 msgstr "La même plateforme, s'exécutant entièrement dans votre navigateur via WebAssembly. Aucune installation, vos données ne quittent jamais votre machine. Essayez-la sur `datalab-platform.com/web <https://datalab-platform.com/web/>`_ ou parcourez le `projet sur GitHub <https://github.com/DataLab-Platform/web>`__."
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-terminal sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z\"></path></svg>  DataLab-Kernel"
+msgid "card-icon-terminal  DataLab-Kernel"
 msgstr ""
 
 msgid "A Jupyter kernel for notebook-driven workflows: live-synchronized with a running desktop session, or fully standalone — notebooks run unchanged with or without DataLab, including in JupyterLite. See the `DataLab-Kernel documentation <https://datalab-kernel.readthedocs.io/>`_."
 msgstr "Un noyau Jupyter pour les flux de travail pilotés par notebook : synchronisé en direct avec une session de bureau en cours d'exécution, ou totalement autonome — les notebooks s'exécutent à l'identique avec ou sans DataLab, y compris dans JupyterLite. Voir la `documentation DataLab-Kernel <https://datalab-kernel.readthedocs.io/>`_."
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-cpu sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M6.5.75V2h3V.75a.75.75 0 0 1 1.5 0V2h1.25c.966 0 1.75.784 1.75 1.75V5h1.25a.75.75 0 0 1 0 1.5H14v3h1.25a.75.75 0 0 1 0 1.5H14v1.25A1.75 1.75 0 0 1 12.25 14H11v1.25a.75.75 0 0 1-1.5 0V14h-3v1.25a.75.75 0 0 1-1.5 0V14H3.75A1.75 1.75 0 0 1 2 12.25V11H.75a.75.75 0 0 1 0-1.5H2v-3H.75a.75.75 0 0 1 0-1.5H2V3.75C2 2.784 2.784 2 3.75 2H5V.75a.75.75 0 0 1 1.5 0Zm5.75 11.75a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25ZM5.75 5h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5A.75.75 0 0 1 5.75 5Zm.75 4.5h3v-3h-3Z\"></path></svg>  Sigima"
+msgid "card-icon-cpu  Sigima"
 msgstr ""
 
 msgid "The open-source computation engine that powers every edition. See the `Sigima documentation <https://sigima.readthedocs.io/>`_."
 msgstr "Le moteur de calcul open source qui propulse chaque édition. Voir la `documentation Sigima <https://sigima.readthedocs.io/>`_."
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-stack sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M7.122.392a1.75 1.75 0 0 1 1.756 0l5.003 2.902c.83.481.83 1.68 0 2.162L8.878 8.358a1.75 1.75 0 0 1-1.756 0L2.119 5.456a1.251 1.251 0 0 1 0-2.162ZM8.125 1.69a.248.248 0 0 0-.25 0l-4.63 2.685 4.63 2.685a.248.248 0 0 0 .25 0l4.63-2.685ZM1.601 7.789a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0L1.874 8.814A.75.75 0 0 1 1.6 7.789Zm0 3.5a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0l-5.248-3.044a.75.75 0 0 1-.273-1.025Z\"></path></svg>  SigimaX"
+msgid "card-icon-stack  SigimaX"
 msgstr ""
 
 msgid "The Qt application framework extracted from DataLab: main window skeleton, configuration system, plot docks, HDF5 workspace and scientific dialogs — the foundation of the desktop application, reusable for your own Qt application. See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_."
 msgstr "Le framework applicatif Qt extrait de DataLab : squelette de fenêtre principale, système de configuration, docks de tracé, espace de travail HDF5 et boîtes de dialogue scientifiques — la fondation de l'application de bureau, réutilisable pour votre propre application Qt. Voir la `documentation de SigimaX <https://sigimax.readthedocs.io/>`_."
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-file-zip sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M3.5 1.75v11.5c0 .09.048.173.126.217a.75.75 0 0 1-.752 1.298A1.748 1.748 0 0 1 2 13.25V1.75C2 .784 2.784 0 3.75 0h5.586c.464 0 .909.185 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 12.25 15h-.5a.75.75 0 0 1 0-1.5h.5a.25.25 0 0 0 .25-.25V4.664a.25.25 0 0 0-.073-.177L9.513 1.573a.25.25 0 0 0-.177-.073H7.25a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5h-3a.25.25 0 0 0-.25.25Zm3.75 8.75h.5c.966 0 1.75.784 1.75 1.75v3a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1-.75-.75v-3c0-.966.784-1.75 1.75-1.75ZM6 5.25a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 6 5.25Zm.75 2.25h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM8 6.75A.75.75 0 0 1 8.75 6h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 8 6.75ZM8.75 3h.5a.75.75 0 0 1 0 1.5h-.5a.75.75 0 0 1 0-1.5ZM8 9.75A.75.75 0 0 1 8.75 9h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 8 9.75Zm-1 2.5v2.25h1v-2.25a.25.25 0 0 0-.25-.25h-.5a.25.25 0 0 0-.25.25Z\"></path></svg>  DataLab-Capsule"
+msgid "card-icon-file-zip  DataLab-Capsule"
 msgstr ""
 
 msgid "The provenance of the workspace and the open RO-Crate ``.dlcapsule`` capsules, shared by the desktop application and DataLab-Web: exchange, compare and verify workspaces with the provenance of their processing (see :ref:`capsules`). Browse the `project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__."
 msgstr "La provenance de l'espace de travail et les capsules RO-Crate ouvertes ``.dlcapsule``, partagées par l'application de bureau et DataLab-Web : échangez, comparez et vérifiez des espaces de travail avec la provenance de leurs traitements (voir :ref:`capsules`). Parcourez le `projet sur GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__."
 
-msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-package sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.201.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0ZM7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.248.248 0 0 0-.25 0ZM2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z\"></path></svg>  DataLab plugin catalog"
-msgstr ":octicon:`package;1em;sd-text-info`  Catalogue de plugins DataLab"
+msgid "card-icon-package  DataLab plugin catalog"
+msgstr "|card-icon-package|  Catalogue de plugins DataLab"
 
 msgid "The plugins of the DataLab team and of the community, checked automatically and installable in one click from the desktop application, some of them also available in DataLab-Web. Browse the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, or publish your own plugin (see :ref:`tutorial_plugin_catalog`)."
 msgstr "Les plugins de l'équipe DataLab et de la communauté, vérifiés automatiquement et installables en un clic depuis l'application de bureau, certains étant aussi disponibles dans DataLab-Web. Parcourez le `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, ou publiez votre propre plugin (voir :ref:`tutorial_plugin_catalog`)."

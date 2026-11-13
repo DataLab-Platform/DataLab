@@ -85,38 +85,38 @@ Members of the platform
     .. grid:: 1 1 2 2
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`device-desktop;1em;sd-text-info`  DataLab (desktop)
+        .. grid-item-card:: |card-icon-device-desktop|  DataLab (desktop)
 
             The reference application, with a native Qt graphical user interface and the full
             PlotPyStack interactive visualization. Runs locally on Windows, Linux and macOS.
 
-        .. grid-item-card:: :octicon:`browser;1em;sd-text-info`  DataLab-Web
+        .. grid-item-card:: |card-icon-browser|  DataLab-Web
 
             The same platform, running entirely inside your browser via WebAssembly. Zero
             install, your data never leaves your machine. Try it at
             `datalab-platform.com/web <https://datalab-platform.com/web/>`_ or browse the
             `project on GitHub <https://github.com/DataLab-Platform/web>`__.
 
-        .. grid-item-card:: :octicon:`terminal;1em;sd-text-info`  DataLab-Kernel
+        .. grid-item-card:: |card-icon-terminal|  DataLab-Kernel
 
             A Jupyter kernel for notebook-driven workflows: live-synchronized with a running
             desktop session, or fully standalone — notebooks run unchanged with or without
             DataLab, including in JupyterLite. See the
             `DataLab-Kernel documentation <https://datalab-kernel.readthedocs.io/>`_.
 
-        .. grid-item-card:: :octicon:`cpu;1em;sd-text-info`  Sigima
+        .. grid-item-card:: |card-icon-cpu|  Sigima
 
             The open-source computation engine that powers every edition. See the
             `Sigima documentation <https://sigima.readthedocs.io/>`_.
 
-        .. grid-item-card:: :octicon:`stack;1em;sd-text-info`  SigimaX
+        .. grid-item-card:: |card-icon-stack|  SigimaX
 
             The Qt application framework extracted from DataLab: main window skeleton,
             configuration system, plot docks, HDF5 workspace and scientific dialogs — the
             foundation of the desktop application, reusable for your own Qt application.
             See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_.
 
-        .. grid-item-card:: :octicon:`file-zip;1em;sd-text-info`  DataLab-Capsule
+        .. grid-item-card:: |card-icon-file-zip|  DataLab-Capsule
 
             The provenance of the workspace and the open RO-Crate ``.dlcapsule``
             capsules, shared by the desktop application and DataLab-Web: exchange,
@@ -124,7 +124,7 @@ Members of the platform
             :ref:`capsules`). Browse the
             `project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__.
 
-        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  DataLab plugin catalog
+        .. grid-item-card:: |card-icon-package|  DataLab plugin catalog
 
             The plugins of the DataLab team and of the community, checked automatically
             and installable in one click from the desktop application, some of them also
@@ -235,3 +235,5 @@ application can be opened in DataLab-Web, and vice versa.
 
     Plugins are largely portable between the desktop application and DataLab-Web, with a few
     constraints related to the browser runtime. See :ref:`plugins_web` for details.
+
+.. include:: /_card_icons.txt
