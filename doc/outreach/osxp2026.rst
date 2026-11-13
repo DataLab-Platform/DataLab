@@ -1,0 +1,22 @@
+Open Source Experience 2026
+===========================
+
+.. meta::
+    :description: DataLab Web presentation at Open Source Experience 2026 in Paris
+    :keywords: DataLab, DataLab Web, Open Source Experience, OSXP, 2026, Paris, AI assistant
+
+Pierre Raybaut will present **DataLab Web: open source scientific platform with
+a local AI assistant, 100% in-browser** at `Open Source Experience 2026
+<https://www.opensource-experience.com/fr/programme-2026>`_.
+
+The talk will include demonstrations of DataLab Web and its AI assistant, as
+well as feedback on practical constraints and NLnet funding.
+
+**Event Details**
+
+:Date: December 9, 2026
+:Time: 14:00–14:20
+:Location: Paris Expo Porte de Versailles, Hall 5.2, Paris, France
+:Room: Katherine Johnson
+:Track: Open AI, Models, Data and Sovereign Ecosystems
+:Format: Talk in French (20 minutes)

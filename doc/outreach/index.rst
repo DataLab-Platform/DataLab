@@ -5,12 +5,12 @@ Talks & Events
     :description: DataLab conference presentations and event participation
     :keywords: DataLab, conferences, presentations, talks, events, SciPy, PyData, Open Source Experience
 
-DataLab has been presented at various conferences and events to share its capabilities with the scientific and open-source communities. This section showcases our presence at major conferences.
+DataLab takes part in conferences and events to share its capabilities with the scientific and open-source communities. This section highlights past and upcoming events.
 
 Conference Presentations
 ------------------------
 
-Since its public release, DataLab has been introduced at several prestigious conferences in the scientific Python and open-source ecosystems:
+Discover our past and upcoming events in the scientific Python and open-source ecosystems:
 
 .. grid:: 1 1 2 2
     :gutter: 2
@@ -60,6 +60,24 @@ Since its public release, DataLab has been introduced at several prestigious con
 
         Automatic reconstruction of X-ray scenes with Python and DataLab
 
+    .. grid-item-card:: 🇫🇷 Compute! Paris 2026
+        :link: compute2026
+        :link-type: doc
+        :class-card: sd-border-2
+
+        **Paris, France - November 25–26, 2026**
+
+        Meet DataLab at the CODRA booth
+
+    .. grid-item-card:: 🇫🇷 Open Source Experience 2026
+        :link: osxp2026
+        :link-type: doc
+        :class-card: sd-border-2
+
+        **Paris, France - December 9, 2026**
+
+        DataLab Web: a browser-based platform with a local AI assistant
+
 .. toctree::
    :maxdepth: 2
    :hidden:
@@ -69,6 +87,8 @@ Since its public release, DataLab has been introduced at several prestigious con
    osxp2024
    osxp2025
    euroscipy2026
+   compute2026
+   osxp2026
 
 Why Present DataLab?
 --------------------

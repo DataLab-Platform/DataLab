@@ -298,3 +298,84 @@ def test_refresh_plot_batches_one_hundred_curves(
         assert item_notifications == [None]
         assert active_notifications == [None]
         assert replot_calls == [None]
+
+
+def test_object_model_remove_objects_renumbers_once() -> None:
+    """Bulk removal leaves the other objects in order, renumbered once."""
+    model = ObjectModel("gs")
+    first_group = model.add_group("First")
+    second_group = model.add_group("Second")
+    signals = [create_test_signal(f"Signal {index}") for index in range(6)]
+    model.add_objects(signals[:3], get_uuid(first_group))
+    model.add_objects(signals[3:], get_uuid(second_group))
+    renumbered: list[None] = []
+    reset_short_ids = model.reset_short_ids
+
+    def track_reset() -> None:
+        renumbered.append(None)
+        reset_short_ids()
+
+    model.reset_short_ids = track_reset
+    model.remove_objects([signals[4], signals[0], signals[1]])
+
+    assert model.get_all_objects() == [signals[2], signals[3], signals[5]]
+    assert [get_number(obj) for obj in model.get_all_objects()] == [1, 2, 3]
+    assert first_group.get_objects() == [signals[2]]
+    assert second_group.get_objects() == [signals[3], signals[5]]
+    # Once per group changed, then once for the model: not once per object
+    assert len(renumbered) == 3
+
+    with pytest.raises(KeyError):
+        model.remove_objects([signals[2], signals[0]])
+    assert model.get_all_objects() == [signals[2], signals[3], signals[5]]
+
+
+@pytest.mark.parametrize("removal", ["selection", "all"])
+def test_removing_many_plotted_objects_notifies_plot_once(removal: str) -> None:
+    """Removing many plotted curves at once refreshes the plot observers once.
+
+    Removing the curves one by one refreshed the item list of the plot once per
+    curve: clearing a workspace showing hundreds of curves froze DataLab.
+    """
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        panel = win.signalpanel
+        signals = tuple(create_test_signal(f"Signal {index}") for index in range(100))
+        panel.add_objects(signals, set_current=False)
+        panel.objview.select_objects(signals)
+        plot = panel.plothandler.plot
+        curves = [panel.plothandler.get(get_uuid(signal)) for signal in signals]
+        assert all(curve in plot.items for curve in curves)
+        item_notifications: list[None] = []
+        plot.SIG_ITEMS_CHANGED.connect(lambda _plot: item_notifications.append(None))
+
+        if removal == "selection":
+            panel.remove_object(force=True)
+        else:
+            panel.remove_all_objects()
+
+        assert len(panel) == 0 and len(panel.plothandler) == 0
+        # Only group items may stay in the tree (removing objects keeps groups)
+        assert all(item.parent() is None for item in panel.objview.iter_items())
+        assert not any(curve in plot.items for curve in curves)
+        assert len(item_notifications) == 1
+
+
+def test_removing_part_of_the_objects_keeps_the_others_plotted() -> None:
+    """Removing some selected objects keeps the other objects and their curves."""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        panel = win.signalpanel
+        signals = tuple(create_test_signal(f"Signal {index}") for index in range(10))
+        panel.add_objects(signals, set_current=False)
+        removed, kept = signals[2:8], signals[:2] + signals[8:]
+        panel.objview.select_objects(removed)
+
+        panel.remove_object(force=True)
+
+        assert panel.objmodel.get_all_objects() == list(kept)
+        assert [get_number(obj) for obj in kept] == [1, 2, 3, 4]
+        assert all(panel.objview.get_item_from_id(get_uuid(obj)) for obj in kept)
+        assert not any(panel.objview.get_item_from_id(get_uuid(o)) for o in removed)
+        assert all(panel.plothandler.get(get_uuid(obj)) is None for obj in removed)
+        panel.objview.select_objects(kept)
+        plot = panel.plothandler.plot
+        assert all(panel.plothandler.get(get_uuid(obj)) in plot.items for obj in kept)

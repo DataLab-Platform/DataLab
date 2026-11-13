@@ -2987,16 +2987,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         sel_groups = self.objview.get_sel_groups()
         sel_objects = self.objview.get_sel_objects(include_groups=True)
-        for obj in sorted(sel_objects, key=get_short_id, reverse=True):
+        sel_objects = sorted(sel_objects, key=get_short_id, reverse=True)
+        for obj in sel_objects:
             dlg_list: list[QW.QDialog] = []
             for dlg, obj_i in self.__separate_views.items():
                 if obj_i is obj:
                     dlg_list.append(dlg)
             for dlg in dlg_list:
                 dlg.done(QW.QDialog.DialogCode.Rejected)
-            self.plothandler.remove_item(get_uuid(obj))
-            self.objview.remove_item(get_uuid(obj), refresh=False)
-            self.objmodel.remove_object(obj)
+        # Bulk removal: the plot and the numbering are updated once, not per object
+        uuids = [get_uuid(obj) for obj in sel_objects]
+        self.plothandler.remove_items(uuids)
+        self.objview.remove_items(uuids, refresh=False)
+        self.objmodel.remove_objects(sel_objects)
         for group in sel_groups:
             self.objview.remove_item(get_uuid(group), refresh=False)
             self.objmodel.remove_group(group)

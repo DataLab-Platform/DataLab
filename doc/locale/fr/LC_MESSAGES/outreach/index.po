@@ -20,14 +20,14 @@ msgstr "DataLab, conférences, présentations, talks, événements, SciPy, PyDat
 msgid "Talks & Events"
 msgstr "Événements"
 
-msgid "DataLab has been presented at various conferences and events to share its capabilities with the scientific and open-source communities. This section showcases our presence at major conferences."
-msgstr "DataLab a été présenté lors de diverses conférences et événements pour partager ses capacités avec les communautés scientifique et open-source. Cette section met en avant notre présence lors de grandes conférences."
+msgid "DataLab takes part in conferences and events to share its capabilities with the scientific and open-source communities. This section highlights past and upcoming events."
+msgstr "DataLab participe à des conférences et événements pour partager ses capacités avec les communautés scientifique et open-source. Cette section présente les événements passés et à venir."
 
 msgid "Conference Presentations"
 msgstr "Présentations en conférence"
 
-msgid "Since its public release, DataLab has been introduced at several prestigious conferences in the scientific Python and open-source ecosystems:"
-msgstr "Depuis sa sortie publique, DataLab a été présenté lors de plusieurs conférences prestigieuses dans les écosystèmes Python scientifique et open-source :"
+msgid "Discover our past and upcoming events in the scientific Python and open-source ecosystems:"
+msgstr "Découvrez les événements passés et à venir dans les écosystèmes Python scientifique et open-source :"
 
 msgid "🇺🇸 SciPy 2024"
 msgstr "🇺🇸 SciPy 2024"
@@ -73,6 +73,24 @@ msgstr "**Cracovie, Pologne - Juillet 2026**"
 
 msgid "Automatic reconstruction of X-ray scenes with Python and DataLab"
 msgstr "Reconstruction automatique de scènes radiographiques avec Python et DataLab"
+
+msgid "🇫🇷 Compute! Paris 2026"
+msgstr ""
+
+msgid "**Paris, France - November 25–26, 2026**"
+msgstr "**Paris, France - 25 et 26 novembre 2026**"
+
+msgid "Meet DataLab at the CODRA booth"
+msgstr "Retrouvez DataLab sur le stand CODRA"
+
+msgid "🇫🇷 Open Source Experience 2026"
+msgstr ""
+
+msgid "**Paris, France - December 9, 2026**"
+msgstr "**Paris, France - 9 décembre 2026**"
+
+msgid "DataLab Web: a browser-based platform with a local AI assistant"
+msgstr "DataLab Web : une plateforme dans le navigateur avec un assistant IA local"
 
 msgid "Why Present DataLab?"
 msgstr "Pourquoi présenter DataLab ?"

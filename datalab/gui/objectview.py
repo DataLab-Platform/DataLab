@@ -573,13 +573,37 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Remove item"""
         item = self.get_item_from_id(oid)
         if item is not None:
-            with block_signals(widget=self, enable=not refresh):
-                if item.parent() is None:
-                    #  Group item: remove from tree
-                    self.takeTopLevelItem(self.indexOfTopLevelItem(item))
-                else:
-                    #  Object item: remove from parent
-                    item.parent().removeChild(item)
+            self.__remove_tree_item(item, refresh)
+
+    def remove_items(self, oids: Sequence[str], refresh: bool = True) -> None:
+        """Remove items, in this order (looking the items up once for all)
+
+        Args:
+            oids: UUIDs of the objects or groups (unknown UUIDs are ignored)
+            refresh: False to block the signals of the tree while removing
+        """
+        items: dict[str, QW.QTreeWidgetItem] = {}
+        for item in self.iter_items():
+            items.setdefault(item.data(0, QC.Qt.UserRole), item)
+        for oid in oids:
+            item = items.pop(oid, None)
+            if item is not None:
+                self.__remove_tree_item(item, refresh)
+
+    def __remove_tree_item(self, item: QW.QTreeWidgetItem, refresh: bool) -> None:
+        """Remove an item from the tree
+
+        Args:
+            item: Group or object item
+            refresh: False to block the signals of the tree while removing
+        """
+        with block_signals(widget=self, enable=not refresh):
+            if item.parent() is None:
+                #  Group item: remove from tree
+                self.takeTopLevelItem(self.indexOfTopLevelItem(item))
+            else:
+                #  Object item: remove from parent
+                item.parent().removeChild(item)
 
     def item_double_clicked(self, item: QW.QTreeWidgetItem) -> None:
         """Item was double-clicked: open a pop-up plot dialog"""
