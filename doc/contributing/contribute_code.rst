@@ -64,7 +64,7 @@ To update only the interface and a tutorial, or render previews outside the sour
     scripts\update_screenshots.bat --group interface spectrum
     scripts\update_screenshots.bat --group blobs --language en --output-dir build\screenshot-preview
 
-Available groups are ``interface`` (startup, settings and History), ``gallery`` (the existing demonstration scenes), ``fabry-perot``, ``spectrum`` and ``blobs``. All groups and both languages are selected by default. Tutorial figures remain shared English PNGs under ``doc/images/tutorials/``; interface figures are localized under ``doc/images/shots/``. The blob tutorial executes the example plugin with seeded random data; its plugin-directory figure uses illustrative paths rather than personal or temporary directories.
+Available groups are ``interface`` (startup, settings and History), ``gallery`` (the existing demonstration scenes), ``metadata`` (signal and image metadata dialogs), ``fabry-perot``, ``spectrum`` and ``blobs``. All groups and both languages are selected by default. Tutorial figures remain shared English PNGs under ``doc/images/tutorials/``; interface figures are localized under ``doc/images/shots/``. The blob tutorial executes the example plugin with seeded random data; its plugin-directory figure uses illustrative paths rather than personal or temporary directories.
 
 The scenarios are in ``datalab/tests/scenarios/tutorial_screenshots.py``. They check that annotations are stored separately from metadata, peak detection creates XY markers rather than another signal, and the blob detector's color filter is disabled. Generation stops on errors; the focused regression tests also check PNG output and protection of an existing configuration.
 

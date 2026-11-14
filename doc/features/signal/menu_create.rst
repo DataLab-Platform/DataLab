@@ -70,7 +70,7 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/sawtooth.svg
            :width: 30px
       - Sawtooth
-      - :math:`y = y_{0}+A \left( 2 \left( f x + \frac{\phi}{2\pi} - \left\lfloor f x + \frac{\phi}{2\pi} + \frac{1}{2} \right\rfloor \right) \right)`
+      - :math:`y = y_{0}+A \left(2(u-\lfloor u\rfloor)-1\right)`, where :math:`u=f x+\phi/(2\pi)`
     * - .. image:: ../../../datalab/data/icons/create/triangle.svg
            :width: 30px
       - Triangle
@@ -78,7 +78,7 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/square_wave.svg
            :width: 30px
       - Square
-      - :math:`y = y_0 + A \sgn\left( \sin\left( 2\pi f x + \phi \right) \right)`
+      - :math:`y = y_0 + A \begin{cases}1 & 0 \leq u-\lfloor u\rfloor < 1/2 \\ -1 & 1/2 \leq u-\lfloor u\rfloor < 1\end{cases}`, where :math:`u=f x+\phi/(2\pi)`
     * - .. image:: ../../../datalab/data/icons/create/sinc.svg
            :width: 30px
       - Cardinal sine
@@ -102,7 +102,7 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/pulse.svg
            :width: 30px
       - Pulse
-      - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
+      - :math:`y = y_{0}+A \left\{\begin{array}{ll}1 & \text{if } x_{0} \leq x \leq x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
     * - .. image:: ../../../datalab/data/icons/create/step_pulse.svg
            :width: 30px
       - Step Pulse

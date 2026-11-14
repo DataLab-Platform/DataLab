@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -167,14 +166,17 @@ msgstr ""
 msgid "Energy"
 msgstr "Energie"
 
-msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N}\\left|z_{0}[n]\\right|^2}}`"
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N-1}\\left|z_{0}[n]\\right|^2}}`"
 msgstr ""
 
 msgid "RMS"
 msgstr ""
 
-msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}\\left|z_{0}[n]\\right|^2}}`"
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N-1}\\left|z_{0}[n]\\right|^2}}`"
 msgstr ""
+
+msgid "Here :math:`N` is the number of pixels, indexed over the flattened image, assuming no NaNs. The implemented sum and mean ignore NaNs."
+msgstr "Ici :math:`N` est le nombre de pixels, indexés sur l'image aplatie, en supposant qu'elle ne contient pas de NaN. La somme et la moyenne utilisées ignorent les NaN."
 
 msgid "Clipping"
 msgstr "Ecrêtage"

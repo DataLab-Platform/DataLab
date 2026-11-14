@@ -5,7 +5,6 @@
 #
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -266,8 +265,8 @@ msgstr "Résultats des caractéristiques d'impulsions tels qu'affichés dans la 
 msgid "**Key Capabilities:**"
 msgstr "**Fonctionnalités clés :**"
 
-msgid "**Automated signal recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis"
-msgstr "**Reconnaissance automatique du signal** : Identifie de façon heuristique le type de signal (échelon, carré ou autre) pour une analyse optimale"
+msgid "**Automated signal recognition**: Heuristically identifies step or square signal type for analysis"
+msgstr "**Reconnaissance automatique du signal** : identifie de façon heuristique un signal en échelon ou carré pour l'analyse"
 
 msgid "**Polarity detection**: Automatically determines positive/negative pulse polarity using baseline comparison"
 msgstr "**Détection de polarité** : Détermine automatiquement la polarité positive/négative de l'impulsion en utilisant la comparaison de ligne de base"
@@ -330,8 +329,8 @@ msgstr "L'analyse calcule les caractéristiques d'impulsion suivantes :"
 msgid "Feature"
 msgstr "Caractéristique"
 
-msgid "Detected signal type (STEP, SQUARE, or OTHER)"
-msgstr "Type de signal détecté (ÉCHELON, CARRÉ ou AUTRE)"
+msgid "Detected signal type (STEP or SQUARE)"
+msgstr "Type de signal détecté (STEP ou SQUARE)"
 
 msgid "Polarity"
 msgstr "Polarité"
@@ -342,14 +341,14 @@ msgstr "Polarité du signal (+1 pour les impulsions positives, -1 pour les néga
 msgid "Amplitude"
 msgstr "Amplitude"
 
-msgid "Peak-to-peak amplitude of the pulse"
-msgstr "Amplitude crête-à-crête de l'impulsion"
+msgid "Absolute difference between the baseline and plateau means; for a square pulse, peak-to-peak is used as a fallback if polarity cannot be determined"
+msgstr "Différence absolue entre les moyennes de la ligne de base et du plateau ; pour une impulsion carrée, l'amplitude crête à crête est utilisée si la polarité ne peut pas être déterminée"
 
 msgid "Offset"
 msgstr "Décalage"
 
-msgid "DC offset (baseline level)"
-msgstr "Décalage DC (niveau de ligne de base)"
+msgid "Mean of the initial baseline, with its original sign in Sigima 1.4.1 or later"
+msgstr "Moyenne de la ligne de base initiale, avec son signe d'origine dans Sigima 1.4.1 ou ultérieur"
 
 msgid "Rise time"
 msgstr "Temps de montée"
@@ -395,8 +394,8 @@ msgstr "Plages de ligne de base"
 msgid "Extracted start and end baseline boundary coordinates"
 msgstr "Coordonnées des limites de ligne de base de début et de fin extraites"
 
-msgid "Results are displayed in a comprehensive table showing all extracted parameters, and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable and show as None. The feature works best with well-defined pulse signals that have clear baseline regions."
-msgstr "Les résultats sont affichés dans un tableau complet montrant tous les paramètres extraits, et sous forme d'annotations visuelles sur le tracé du signal. Pour les signaux d'échelon, les paramètres liés à la descente (fall_time, fwhm) ne sont pas applicables et s'affichent comme None. Cette fonctionnalité fonctionne au mieux avec des signaux d'impulsion bien définis qui ont des régions de ligne de base claires."
+msgid "Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions."
+msgstr "Les résultats sont affichés dans un tableau et sous forme d'annotations sur le tracé du signal. Pour les signaux en échelon, les paramètres liés à la descente (fall_time, fwhm) ne sont pas applicables ; les colonnes ne contenant que des valeurs indisponibles peuvent être omises. Cette fonctionnalité fonctionne au mieux avec des impulsions bien définies et des régions de ligne de base claires."
 
 msgid "Show results"
 msgstr "Afficher les résultats"

@@ -26,7 +26,10 @@ def weighted_average_denoise(values: np.ndarray) -> float:
     """
     central_pixel = values[len(values) // 2]
     differences = np.abs(values - central_pixel)
-    weights = np.exp(-differences / np.mean(differences))
+    mean_difference = np.mean(differences)
+    if mean_difference == 0:
+        return central_pixel
+    weights = np.exp(-differences / mean_difference)
     return np.average(values, weights=weights)
 
 

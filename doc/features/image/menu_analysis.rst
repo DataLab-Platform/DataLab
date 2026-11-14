@@ -163,8 +163,10 @@ of image types — from clean laboratory data to noisy or partial acquisitions.
 Minimum enclosing circle center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Compute the circle contour enclosing image values above
-a threshold level defined as the half-maximum value.
+With Sigima 1.4.1 or later, compute the smallest circle containing the physical
+centers of the pixels strictly above the midpoint of the image value range.
+The X and Y units must match. Earlier versions fit a contour and could leave
+selected pixel centers outside the circle.
 
 2D peak detection
 ^^^^^^^^^^^^^^^^^

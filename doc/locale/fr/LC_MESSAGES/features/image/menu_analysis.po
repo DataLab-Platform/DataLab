@@ -175,8 +175,8 @@ msgstr "Cette stratégie garantit des résultats précis et stables sur une larg
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-msgid "Compute the circle contour enclosing image values above a threshold level defined as the half-maximum value."
-msgstr "Calcule le contour circulaire entourant les valeurs de l'image au-delà d'un seuil (moitié du maximum de l'image)."
+msgid "With Sigima 1.4.1 or later, compute the smallest circle containing the physical centers of the pixels strictly above the midpoint of the image value range. The X and Y units must match. Earlier versions fit a contour and could leave selected pixel centers outside the circle."
+msgstr "Avec Sigima 1.4.1 ou ultérieur, calcule le plus petit cercle contenant les centres physiques des pixels strictement au-dessus du milieu de l'intervalle des valeurs de l'image. Les unités X et Y doivent être identiques. Les versions antérieures ajustaient un contour et pouvaient laisser des centres de pixels sélectionnés à l'extérieur du cercle."
 
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"

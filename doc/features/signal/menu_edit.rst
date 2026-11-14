@@ -110,7 +110,7 @@ This feature allows you to tranfer those information from one signal to another:
     or simply add the metadata keys that are not present in the destination signal.
 
 When pasting metadata, a dialog box allows you to select which metadata categories
-to keep from the clipboard:
+to keep from the clipboard. Annotations are copied and pasted separately:
 
 .. figure:: /images/shots/s_paste_metadata.png
 
