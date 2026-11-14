@@ -129,7 +129,12 @@ if TYPE_CHECKING:
 
 
 def remote_controlled(func):
-    """Decorator for remote-controlled methods"""
+    """Decorator for remote-controlled methods
+
+    The decorated method processes pending events before returning: do not call
+    it from a Qt event handler, which would then process events while Qt is
+    handling one (see issue #527).
+    """
 
     @functools.wraps(func)
     def method_wrapper(*args, **kwargs):
@@ -1921,6 +1926,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     @remote_controlled
     def get_current_panel(self) -> str:
         """Return current panel name
+
+        Returns:
+            Panel name (valid values: "signal", "image", "macro")
+        """
+        return self.current_panel_name()
+
+    def current_panel_name(self) -> str:
+        """Return current panel name, without processing pending events
+
+        Unlike :meth:`get_current_panel`, this may be called while Qt is
+        handling an event, e.g. from a show event (see issue #527).
 
         Returns:
             Panel name (valid values: "signal", "image", "macro")

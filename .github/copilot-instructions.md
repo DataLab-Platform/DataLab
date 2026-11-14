@@ -492,6 +492,13 @@ A `QWidget` without a parent is a top-level window: making it visible (`show()`,
 - `hide()` or `setVisible(False)` on a parentless widget is harmless; showing a child of a hidden widget is harmless too.
 - Cover widgets built hidden (startup, dialogs) with `datalab.tests.record_shown_windows()` and assert that no window is shown. `test_main_window_creation_shows_no_transient_window` (`datalab/tests/backbone/main_app_test.py`) guards the whole main window construction: when it fails, it names the class and code location of the flashing widget.
 
+### Reentrant Event Processing
+
+Methods of `DLMainWindow` decorated with `@remote_controlled` (e.g. `get_current_panel`) call `QApplication.processEvents()` before returning. Called from a Qt event handler (`showEvent`, `resizeEvent`, an event filter...), they process events while Qt is handling one: docking the Applications panel crashed Qt this way (issue #527).
+
+- Code that may run from an event handler (panels, plugin helpers such as `PluginBase.get_selected_objects`) uses methods that do not process events, e.g. `DLMainWindow.current_panel_name()` instead of `get_current_panel()`.
+- `datalab/tests/features/plugins/recipe_launcher_app_test.py` checks that assessing a recipe processes no pending event.
+
 ### Type Annotations
 
 **Always use** `from __future__ import annotations` for forward references:
