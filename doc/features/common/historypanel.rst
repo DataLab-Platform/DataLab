@@ -238,9 +238,9 @@ The toolbar at the top of the panel exposes the following actions:
 .. note::
 
   While a replay or recompute is in progress, History Panel commands are
-  unavailable: the toolbar actions are disabled, and tree interactions
+  unavailable: the action toolbar commands are disabled, and tree interactions
   (context menu, double-click, :kbd:`Del` key) are ignored until the run
-  completes.
+  completes. The record-mode control remains available.
 
 Tree view
 ---------
@@ -390,7 +390,7 @@ Auto-recompute
 .. note::
 
    When a result object is selected in the signal/image panel and it has
-   processing parameters (i.e. was produced by a 1-to-1 computation), a
+   editable processing parameters, a
    **Processing** tab appears in the Properties panel. Checking
    **Auto-recompute on edit** in that tab will re-run the computation
    automatically 300 ms after any parameter modification.

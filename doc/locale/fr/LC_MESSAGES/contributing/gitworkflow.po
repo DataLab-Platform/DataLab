@@ -16,8 +16,8 @@ msgstr "Workflow Git"
 msgid "This document describes the Git workflow used in the DataLab project, based on a ``main`` branch, a ``develop`` branch, and feature-specific branches. It also defines how bug fixes are managed."
 msgstr "Ce document décrit le workflow Git utilisé dans le projet DataLab, basé sur une branche ``main``, une branche ``develop`` et des branches spécifiques aux fonctionnalités. Il définit également comment les correctifs de bogues sont gérés."
 
-msgid "This workflow is a simplified version of the `Gitflow Workflow <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_. It has been adapted to suit the needs of the DataLab project at the current stage of development. In the near future, we may consider adopting a more complex workflow, e.g. by adding release branches."
-msgstr "Ce workflow est une version simplifiée du `Gitflow Workflow <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_. Il a été adapté pour répondre aux besoins du projet DataLab à l'étape actuelle de développement. À l'avenir, nous pourrions envisager d'adopter un workflow plus complexe, par exemple en ajoutant des branches de publication."
+msgid "This workflow is a simplified version of the `Gitflow Workflow <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_. It has been adapted to suit the needs of the DataLab project at the current stage of development. A release branch is created only when the maintenance and development lines must diverge."
+msgstr "Ce workflow est une version simplifiée du `Gitflow Workflow <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_. Il a été adapté aux besoins du projet DataLab à son stade actuel de développement. Une branche de publication n'est créée que lorsque les lignes de maintenance et de développement doivent diverger."
 
 msgid "Branching Model"
 msgstr "Modèle de branches"

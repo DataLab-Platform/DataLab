@@ -359,4 +359,4 @@ Declared tiles replace the default tile. The first one is the main tile of the p
 
 The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** panel.
 
-Welcome page tiles are specific to DataLab Desktop: DataLab-Web does not provide the ``datalab.plugins.tiles`` module, so the DataLab-Web class of a plugin cannot declare them.
+Welcome page tiles are specific to DataLab Desktop. DataLab-Web provides the ``datalab.plugins.tiles`` module for portable declarations, but ignores the tiles and reports a warning.

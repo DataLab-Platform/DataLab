@@ -306,8 +306,8 @@ msgstr "Téléchargez le code source depuis la `page PyPI <https://pypi.org/proj
 msgid "Unzip the archive,"
 msgstr "Décompressez l'archive,"
 
-msgid "Add the `datalab` directory to your PYTHONPATH (e.g., using the *PYTHONPATH Manager* in Spyder)."
-msgstr "Ajoutez le répertoire `datalab` à votre PYTHONPATH (par exemple, en utilisant le *Gestionnaire PYTHONPATH* dans Spyder)."
+msgid "Add the parent directory containing the `datalab` package to your PYTHONPATH (e.g., using the *PYTHONPATH Manager* in Spyder). Install the project's dependencies separately."
+msgstr "Ajoutez le répertoire parent contenant le paquet `datalab` à votre PYTHONPATH (par exemple avec le *Gestionnaire PYTHONPATH* de Spyder). Installez séparément les dépendances du projet."
 
 msgid "Even if you’ve installed `datalab` in your environment, you cannot run the full DataLab application directly from an IDE. You must launch DataLab via the command line or using the installer-created shortcut to properly test your plugin."
 msgstr "Même si vous avez installé `datalab` dans votre environnement, vous ne pouvez pas exécuter l'application DataLab complète directement depuis un IDE. Vous devez lancer DataLab via la ligne de commande ou en utilisant le raccourci créé par l'installateur pour tester correctement votre plugin."

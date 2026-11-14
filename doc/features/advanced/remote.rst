@@ -130,6 +130,13 @@ Here is a Python 2.7 reimplementation of this class:
 
 .. literalinclude:: ../../remotecontrol_py27.py
 
+Its automatic port discovery uses the configuration location of the
+Python-2-compatible guidata version. On macOS, or on Linux with a non-default
+``XDG_CONFIG_HOME``, that location can differ from the current DataLab
+configuration directory. In that case, read the port shown next to **XML-RPC**
+in DataLab's status bar and pass it explicitly as a string to
+``client.connect(port="28867")``, replacing ``28867`` with the actual port.
+
 .. _remote_connection_dialog:
 
 Connection dialog

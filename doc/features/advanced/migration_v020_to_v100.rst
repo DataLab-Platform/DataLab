@@ -596,6 +596,8 @@ This example shows how to compute signal bandwidth, which returns a segment geom
 
    # Compute -3dB bandwidth
    geometry = sigima.proc.signal.bandwidth_3db(obj)
+   if geometry is None:
+       raise ValueError("The signal has no suitable bandwidth crossings")
 
    # Access segment coordinates [x0, y0, x1, y1]
    x0, y0, x1, y1 = geometry.coords[0]
@@ -716,7 +718,7 @@ Some complex features still have dedicated methods:
    # automatically). To rebuild the legacy sticks signal, chain with
    # ``compute_markers_to_signal`` (or call ``run_feature("extract_peak_positions",
    # param)`` directly when no interactive dialog is needed):
-   proc.compute_peak_detection(param)        # interactive, XY-markers result
+   proc.compute_peak_detection()             # interactive, XY-markers result
    proc.compute_markers_to_signal()          # optional: rebuild sticks signal
 
 Testing your plugin

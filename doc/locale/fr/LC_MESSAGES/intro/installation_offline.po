@@ -30,8 +30,8 @@ msgstr "Installation hors ligne via pip"
 msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`"
 msgstr ""
 
-msgid "This method works on **any operating system** with **Python 3.10 to 3.14**. It assumes you have an online machine available to download packages, and a separate offline machine where DataLab will be installed."
-msgstr "Cette méthode fonctionne sur **tout système d'exploitation** avec **Python 3.10 à 3.14**. Elle suppose que vous disposez d'une machine en ligne pour télécharger les paquets, et d'une machine hors ligne distincte où DataLab sera installé."
+msgid "This method works on **any operating system** with **Python 3.10 to 3.14**. It assumes you have an online machine available to download packages, and a separate offline machine where DataLab will be installed. The commands below download wheels for the online machine's platform: use an online machine with the same operating system, architecture and compatible platform ABI as the offline machine."
+msgstr "Cette méthode fonctionne sur **tout système d'exploitation** avec **Python 3.10 à 3.14**. Elle suppose que vous disposez d'une machine en ligne pour télécharger les paquets, et d'une machine hors ligne distincte où DataLab sera installé. Les commandes ci-dessous téléchargent des wheels pour la plateforme de la machine en ligne : utilisez une machine ayant le même système d'exploitation, la même architecture et une ABI de plateforme compatible avec la machine hors ligne."
 
 msgid "Requirements"
 msgstr "Prérequis"
@@ -44,6 +44,9 @@ msgstr "GNU/Linux, Windows ou macOS"
 
 msgid "Python 3.10 to 3.14 installed with the **same minor version** (3.x) as the online machine"
 msgstr "Python 3.10 à 3.14 installé avec la **même version mineure** (3.x) que la machine en ligne"
+
+msgid "The same operating system and architecture, with a compatible platform ABI"
+msgstr "Le même système d'exploitation et la même architecture, avec une ABI de plateforme compatible"
 
 msgid "No assumptions regarding installed packages"
 msgstr "Aucune hypothèse concernant les paquets installés"
@@ -66,8 +69,8 @@ msgstr "Pour vérifier votre version de Python, exécutez :"
 msgid "Online machine"
 msgstr "Machine en ligne"
 
-msgid "Windows, Linux, or macOS"
-msgstr "Windows, Linux ou macOS"
+msgid "The same operating system and architecture as the offline machine, with a compatible platform ABI"
+msgstr "Le même système d'exploitation et la même architecture que la machine hors ligne, avec une ABI de plateforme compatible"
 
 msgid "Python with the **same minor version** as the offline machine"
 msgstr "Python avec la **même version mineure** que la machine hors ligne"
@@ -78,8 +81,8 @@ msgstr "``pip`` installé"
 msgid "Preparing packages (online machine)"
 msgstr "Préparation des paquets (machine en ligne)"
 
-msgid "Download all required **Wheel packages** for offline installation."
-msgstr "Téléchargez tous les **paquets Wheel** nécessaires pour l'installation hors ligne."
+msgid "Download all required **Wheel packages** for offline installation. ``pip download`` selects wheels compatible with the machine running it; a matching Python version alone is not enough for a different platform."
+msgstr "Téléchargez tous les **paquets wheel** nécessaires à l'installation hors ligne. ``pip download`` sélectionne les wheels compatibles avec la machine qui exécute la commande ; une version de Python identique ne suffit pas pour une plateforme différente."
 
 msgid "Create a folder for packages"
 msgstr "Créer un dossier pour les paquets"

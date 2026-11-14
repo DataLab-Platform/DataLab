@@ -14,9 +14,10 @@ To run DataLab from the command line, type the following::
 
     $ datalab
 
-To show help on command line usage, simply run::
+To show help on command line usage, run the module from a terminal. On Windows,
+the ``datalab`` GUI entry point may not display console output::
 
-    $ datalab --help
+    $ python -m datalab.app --help
     usage: app.py [-h] [-b path] [-v] [--reset] [--unattended] [--accept_dialogs]
                   [--screenshot] [--screenshot_path SCREENSHOT_PATH]
                   [--delay DELAY] [--xmlrpcport XMLRPCPORT]

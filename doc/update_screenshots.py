@@ -13,7 +13,16 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 ROOT = Path(__file__).resolve().parents[1]
-GROUPS = ("interface", "gallery", "metadata", "fabry-perot", "spectrum", "blobs")
+GROUPS = (
+    "interface",
+    "gallery",
+    "metadata",
+    "features",
+    "fabry-perot",
+    "spectrum",
+    "blobs",
+    "laser-beam",
+)
 
 
 def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> None:
@@ -43,7 +52,12 @@ def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> 
     execenv.unattended = True
     execenv.screenshot_path = str(output_dir / "shots")
     for group in groups:
-        if language != "en" and group not in ("interface", "gallery", "metadata"):
+        if language != "en" and group not in (
+            "interface",
+            "gallery",
+            "metadata",
+            "features",
+        ):
             continue
         reset()
         Conf.rpc_server_enabled.set(False)
@@ -99,11 +113,14 @@ def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> 
                             dialog.deleteLater()
                         if language == "en":
                             shutil.copyfile(localized, directory / f"{name}.png")
+        elif group == "features":
+            scenes.capture_feature_screenshots(output_dir / "shots", language)
         elif language == "en":
             capture = {
                 "fabry-perot": scenes.capture_fabry_perot,
                 "spectrum": scenes.capture_spectrum,
                 "blobs": scenes.capture_blobs,
+                "laser-beam": scenes.capture_laser_beam,
             }[group]
             capture(output_dir / "tutorials" / group.replace("-", "_"))
 
