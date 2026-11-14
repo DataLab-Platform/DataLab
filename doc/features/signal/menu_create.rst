@@ -143,6 +143,11 @@ Create a new signal from various models:
 For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
 above the baseline :math:`y_0`, expressed in the signal's Y unit.
 
+The cardinal sine uses the unnormalized definition
+:math:`\sinc(u) = \dfrac{\sin(u)}{u}`, with :math:`\sinc(0) = 1`, as the 2D sinc
+image: when :math:`\phi = 0`, its peak is at :math:`x = 0` and its first zeros
+are at :math:`x = \pm\dfrac{1}{2f}`.
+
 The blackbody signal is the spectral radiance per unit wavelength of a blackbody
 at temperature :math:`T`: wavelengths :math:`\lambda` are expressed in meters and
 the spectral radiance in W·sr⁻¹·m⁻³. These axis titles and units are set by
