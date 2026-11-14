@@ -369,14 +369,15 @@ Plugins and DataLab-Web
 
 :ref:`DataLab-Web <ecosystem>`, the browser-native edition of the platform, provides its own
 implementation of the :class:`datalab.plugins.PluginBase` API, which differs from the one of
-DataLab Desktop. A plugin targeting both editions therefore generally defines a distinct class
-for each of them:
+DataLab Desktop. A simple processing plugin using the shared API may run in both editions;
+plugins using host-specific features generally define a distinct class for each of them:
 
 - **One entry point per edition.** A wheel declares its Desktop class in the
   ``datalab.plugins`` entry-point group and its DataLab-Web class in the
   ``datalab.web_plugins`` group: the browser only imports the classes of the
-  ``datalab.web_plugins`` group. Both classes may share the host-independent code of the
-  plugin, such as the ``core`` and ``workflow`` layers of a project created by
+  ``datalab.web_plugins`` group. Both entry points may reference the same portable class or
+  distinct classes, which may share the host-independent code of the plugin, such as the
+  ``core`` and ``workflow`` layers of a project created by
   ``datalab-plugin create --project``, whose ``adapters/web.py`` module starts as
   unsupported, without Web entry point:
 
@@ -388,16 +389,14 @@ for each of them:
     [project.entry-points."datalab.web_plugins"]
     my_plugin = "my_package.adapters.web:MyWebPlugin"
 
-- **Desktop features not supported in the browser.** DataLab-Web does not support the
-  registration of processing features with ``register_computations()`` and ``action_for()``,
-  used by the plugin generator and by the processing plugin example, nor welcome page tiles
-  (``WELCOME_TILES``), recipe launchers (``RECIPE_LAUNCHERS``) and the Desktop methods running
-  recipes or opening examples (``start_recipe``, ``try_example``, ``open_example``, etc.). Such
-  a plugin may load in the browser without error, but without these features. A DataLab-Web
-  class declares its headless recipes, examples and tools (``RECIPES``, ``EXAMPLES`` and
-  ``TOOLS``), which DataLab-Web presents and runs itself. The support of the Desktop
-  registration model in the browser is tracked by `DataLab-Web issue #94
-  <https://github.com/DataLab-Platform/web/issues/94>`_.
+- **Processing registration and browser limitations.** DataLab-Web supports
+  ``register_computations()`` and ``action_for()`` for simple processing plugins, including
+  those created by the single-file plugin generator. Desktop welcome page tiles
+  (``WELCOME_TILES``) are ignored with a warning, and recipe launchers (``RECIPE_LAUNCHERS``)
+  prevent the plugin from loading. Desktop methods for recipes or examples (``start_recipe``,
+  ``try_example``, ``open_example``, etc.) are not available. A DataLab-Web class may declare
+  headless recipes, examples and tools (``RECIPES``, ``EXAMPLES`` and ``TOOLS``), which
+  DataLab-Web presents and runs itself.
 - **Asynchronous dialogs are specific to DataLab-Web.** In the browser, a dialog cannot block
   the event loop: DataLab-Web plugins use ``async`` action callbacks,
   ``await param.edit_async(self.main)`` and the ``*_async`` helpers of their base class (such as
