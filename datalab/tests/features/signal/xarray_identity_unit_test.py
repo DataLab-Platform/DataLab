@@ -15,6 +15,7 @@ import numpy as np
 import pytest
 import sigima.proc.signal as sips
 from sigima.objects import SignalObj, create_signal
+from sigima.proc.contracts import contract_for_function
 
 from datalab.config import Conf
 from datalab.objectmodel import get_uuid
@@ -93,3 +94,34 @@ def test_identical_grids_are_not_interpolated() -> None:
             )
         assert checked[0] is signals[0] and checked[1] is not other
         assert np.array_equal(checked[1].x, X_SOURCE)
+
+
+@pytest.mark.parametrize("answer", [False, None])
+def test_xy_mode_confirms_before_interpolating(monkeypatch, answer) -> None:
+    """X-Y keeps its interpolation confirmation and uses the overlap."""
+    contract = contract_for_function(sips.xy_mode)
+    assert contract is not None
+    if contract.contract_version < 2:
+        pytest.skip("X-Y overlap policy requires Sigima 1.4.1")
+    with app() as win, Conf.xarray_compat_behavior.context("ask"):
+        source = add(win, [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], "source")
+        operand = add(win, [1, 2, 3], [10, 20, 30], "operand")
+        processor = win.signalpanel.processor
+        confirmations = []
+
+        def confirm(_progress):
+            confirmations.append(True)
+            return answer
+
+        monkeypatch.setattr(processor, "_ask_x_interpolation", confirm)
+        win.signalpanel.objview.select_objects([get_uuid(source)])
+        before = set(win.signalpanel.objmodel.get_object_ids())
+        processor.compute_2_to_1(operand, "operand", sips.xy_mode, edit=False)
+        results = new_objects(win, before)
+        assert confirmations == [True]
+        if answer is None:
+            assert not results
+        else:
+            (result,) = results
+            np.testing.assert_array_equal(result.x, [1, 2, 3])
+            np.testing.assert_array_equal(result.y, [10, 20, 30])

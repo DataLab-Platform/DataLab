@@ -1190,8 +1190,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         """Prepare one execution of a contract that declares an X-alignment policy.
 
         Sigima applies the policy and records it with the global options read by
-        the computation. Historical policies (constant extension at the ends)
-        first ask the user, as before, when the grids differ.
+        the computation. Historical policies and X-Y mode first ask the user, as
+        before, when the grids differ.
 
         Args:
             contract: Operation contract.
@@ -1210,7 +1210,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             InterpolationRefused: If the user refused the interpolation.
         """
         if (
-            contract.x_alignment in _CONSENT_POLICIES
+            (
+                contract.x_alignment in _CONSENT_POLICIES
+                or contract.operation_id == "sigima.signal.xy_mode"
+            )
             and not consent.get("yes_to_all")
             and _grids_differ(inputs)
         ):

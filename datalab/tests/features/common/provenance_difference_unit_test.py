@@ -12,6 +12,7 @@ import numpy as np
 import pytest
 import sigima.proc.signal as sips
 from sigima.objects import SignalObj, create_signal
+from sigima.proc.contracts import contract_for_function
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
@@ -25,6 +26,34 @@ from datalab.tests.features.common.provenance_unit_test import (  # noqa: F401
 )
 
 HDF5_DIR = osp.join(osp.dirname(osp.dirname(__file__)), "hdf5")
+
+
+def test_xy_mode_records_and_replays_overlap() -> None:
+    """The recorded X-Y call replays on the original overlapping inputs."""
+    contract = contract_for_function(sips.xy_mode)
+    assert contract is not None
+    if contract.contract_version < 2:
+        pytest.skip("X-Y overlap policy requires Sigima 1.4.1")
+    with app() as win:
+        source = add(win, [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], "source")
+        operand = add(win, [1, 2, 3], [10, 20, 30], "operand")
+        win.signalpanel.objview.select_objects([get_uuid(source)])
+        win.signalpanel.processor.compute_2_to_1(operand, "operand", sips.xy_mode)
+        (activity,) = win.provenance.ledger.activities
+        assert activity["call"]["operation"] == {
+            "id": "sigima.signal.xy_mode",
+            "contract_version": 2,
+        }
+        assert activity["context"]["x_alignment"] == {
+            "rule": "sigima.signal.x_alignment.overlap_grid_linear",
+            "version": 1,
+        }
+        state = win.provenance.ledger.states[activity["outputs"][0]["state_id"]]
+        result = win.find_object_by_uuid(state["object_uuid"])
+        np.testing.assert_array_equal(result.x, [1, 2, 3])
+        np.testing.assert_array_equal(result.y, [10, 20, 30])
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert report["verdict"] == "exact", report
 
 
 def add(win, x, y, title: str, units=("s", "V")) -> SignalObj:
