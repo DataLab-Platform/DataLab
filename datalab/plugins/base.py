@@ -460,8 +460,10 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Return the objects selected in the current signal or image panel."""
         if self.main is None:
             raise RuntimeError("Plugin must be registered to access the selection")
+        # Called while Qt shows the Applications panel: processing events then
+        # may crash Qt (issue #527)
         panel = {"signal": self.signalpanel, "image": self.imagepanel}.get(
-            self.main.get_current_panel()
+            self.main.current_panel_name()
         )
         if panel is None:
             return []

@@ -250,6 +250,27 @@ def test_generic_interaction_lets_the_user_assign_ambiguous_inputs(
                 PluginRegistry.get_plugin_classes().remove(plugin_class)
 
 
+def test_assessing_a_recipe_does_not_process_pending_events(
+    recipe: RecipeDescriptor,
+) -> None:
+    """Assessing the selection processes no event: the Applications panel does it
+    while Qt shows it, e.g. while docking it, which then crashed (issue #527)."""
+    with datalab_test_app_context(console=False) as win:
+        plugin_class = _plugin_class(recipe)
+        plugin = plugin_class()
+        plugin.register(win)
+        try:
+            _add_and_select(win, _ramp(levels=3))
+            processed = []
+            QC.QTimer.singleShot(0, lambda: processed.append(True))
+            plugin.assess_recipe(recipe.recipe_id)
+            assert not processed
+        finally:
+            plugin.unregister()
+            if plugin_class in PluginRegistry.get_plugin_classes():
+                PluginRegistry.get_plugin_classes().remove(plugin_class)
+
+
 def test_trying_an_example_runs_its_recipe_with_example_values(
     monkeypatch: pytest.MonkeyPatch,
     recipe: RecipeDescriptor,

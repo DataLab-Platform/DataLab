@@ -927,7 +927,9 @@ def test_docked_applications_panel_keeps_its_size() -> None:
             qt_app.processEvents()
         assert not dock.isFloating()
         assert dock.width() == width
-        assert dock.minimumWidth() == 0
+        # Not held at the restored width: the minimum is that of the content,
+        # if the content has been laid out again meanwhile
+        assert dock.minimumWidth() < width
         assert Conf.applications_panel_docked_size.get() is None
 
 

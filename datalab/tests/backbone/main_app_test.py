@@ -22,7 +22,11 @@ from datalab.config import ensure_initialized
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.objectmodel import get_short_id, get_uuid
-from datalab.tests import datalab_test_app_context, record_shown_windows
+from datalab.tests import (
+    datalab_test_app_context,
+    destroy_closed_test_windows,
+    record_shown_windows,
+)
 from datalab.utils import qthelpers as qth
 
 
@@ -62,6 +66,23 @@ def test_calc_reports_feature_errors_without_trying_other_panels(monkeypatch):
         with pytest.raises(ValueError, match="feature failed"):
             win.calc("normalize", edit=False)
         assert image_calls == []
+
+
+def test_test_app_context_destroys_its_window_at_exit() -> None:
+    """The test context keeps its closed window until interpreter exit
+
+    The window, part of reference cycles, must be destroyed before the Qt
+    application (#556), but not when leaving the context: objects kept by the test,
+    such as a tree item iterator, still refer to its widgets.
+    """
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        iterator = QW.QTreeWidgetItemIterator(win.historypanel.tree)
+    assert any(widget is win for widget in QW.QApplication.topLevelWidgets())
+    del iterator
+    destroy_closed_test_windows()
+    assert not any(
+        isinstance(widget, DLMainWindow) for widget in QW.QApplication.topLevelWidgets()
+    )
 
 
 def test_main_app():
