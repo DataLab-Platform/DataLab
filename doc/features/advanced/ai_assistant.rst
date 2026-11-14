@@ -13,11 +13,11 @@ signals and images, and write and run Python macros on your behalf.
 
 .. warning::
 
-    The AI Assistant sends your messages — and, when you ask for it, information
-    about the objects of your workspace — to the configured provider. Nothing is
-    sent as long as the assistant is disabled or as long as you do not start a
-    conversation. Review the :ref:`ai-assistant-privacy` section before using a
-    remote provider on sensitive data.
+    The AI Assistant is optional. When you choose a remote provider, it receives
+    your messages and any workspace information you ask it to use. You can
+    instead choose a local model to keep this processing on your machine. Review
+    the :ref:`ai-assistant-privacy` section before using a remote provider on
+    sensitive data.
 
 Getting started
 ---------------

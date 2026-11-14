@@ -21,8 +21,8 @@ msgstr "Assistant IA"
 msgid "DataLab embeds an optional **AI Assistant**: a dockable chat panel connected to a Large Language Model (LLM) that can inspect your workspace, create and process signals and images, and write and run Python macros on your behalf."
 msgstr "DataLab intègre un **assistant IA** optionnel : un panneau de discussion ancrable, connecté à un grand modèle de langage (LLM), capable d'inspecter votre espace de travail, de créer et de traiter des signaux et des images, et d'écrire puis d'exécuter des macros Python à votre place."
 
-msgid "The AI Assistant sends your messages — and, when you ask for it, information about the objects of your workspace — to the configured provider. Nothing is sent as long as the assistant is disabled or as long as you do not start a conversation. Review the :ref:`ai-assistant-privacy` section before using a remote provider on sensitive data."
-msgstr "L'assistant IA transmet vos messages — et, lorsque vous le lui demandez, des informations sur les objets de votre espace de travail — au fournisseur configuré. Rien n'est envoyé tant que l'assistant est désactivé ou tant que vous n'avez pas démarré de conversation. Consultez la section :ref:`ai-assistant-privacy` avant d'utiliser un fournisseur distant sur des données sensibles."
+msgid "The AI Assistant is optional. When you choose a remote provider, it receives your messages and any workspace information you ask it to use. You can instead choose a local model to keep this processing on your machine. Review the :ref:`ai-assistant-privacy` section before using a remote provider on sensitive data."
+msgstr "L'assistant IA est optionnel. Lorsque vous choisissez un fournisseur distant, il reçoit vos messages et les informations de l'espace de travail que vous lui demandez d'utiliser. Vous pouvez aussi choisir un modèle local pour que ces traitements restent sur votre machine. Consultez la section :ref:`ai-assistant-privacy` avant d'utiliser un fournisseur distant sur des données sensibles."
 
 msgid "Getting started"
 msgstr "Premiers pas"
