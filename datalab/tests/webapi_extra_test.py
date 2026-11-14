@@ -208,6 +208,58 @@ def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
 
 
 @pytest.mark.usefixtures("qt_app")
+def test_workspace_adapter_overwrite_keeps_existing_object_if_add_fails() -> None:
+    """Keep the original workspace object when adding its replacement fails."""
+    original = _make_signal("Overwrite", n=10)
+    original_uuid = get_uuid(original)
+    original_y = original.y.copy()
+    signal_panel = make_panel([original])
+
+    def failing_add(_obj: DataObject) -> None:
+        raise ValueError("simulated insertion failure")
+
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, make_panel([])))
+
+    with pytest.raises(ValueError, match="Object 'Overwrite' already exists"):
+        adapter.add_object(_make_signal("Overwrite", n=20))
+    assert signal_panel.objmodel == [original]
+
+    signal_panel._add_object = failing_add  # pylint: disable=protected-access
+    with pytest.raises(ValueError, match="simulated insertion failure"):
+        adapter.add_object(_make_signal("Overwrite", n=20), overwrite=True)
+
+    assert signal_panel.objmodel == [original]
+    assert adapter.find_object(original_uuid)[2] is original
+    np.testing.assert_array_equal(original.y, original_y)
+    signal_panel.plothandler.remove_item.assert_not_called()
+    signal_panel.SIG_OBJECT_REMOVED.emit.assert_not_called()
+
+
+@pytest.mark.usefixtures("qt_app")
+def test_workspace_adapter_overwrite_replaces_existing_object() -> None:
+    """Successfully overwrite an object with a new object identity."""
+    original = _make_signal("Overwrite", n=10)
+    original_uuid = get_uuid(original)
+    signal_panel = make_panel([original])
+
+    def add_object(obj: DataObject) -> None:
+        signal_panel.objmodel.append(obj)
+
+    signal_panel._add_object = add_object  # pylint: disable=protected-access
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, make_panel([])))
+
+    adapter.add_object(_make_signal("Overwrite", n=20), overwrite=True)
+
+    assert len(signal_panel.objmodel) == 1
+    replacement = signal_panel.objmodel[0]
+    assert replacement.title == "Overwrite"
+    assert get_uuid(replacement) != original_uuid
+    assert replacement.y.shape == (20,)
+    assert original not in signal_panel.objmodel
+    signal_panel.SIG_OBJECT_REMOVED.emit.assert_called_once_with()
+
+
+@pytest.mark.usefixtures("qt_app")
 def test_workspace_adapter_calc_errors() -> None:
     """Only unknown computation functions are reported as such (HTTP 404).
 

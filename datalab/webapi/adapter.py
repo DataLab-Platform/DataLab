@@ -375,15 +375,22 @@ class WorkspaceAdapter(QObject):
         if obj_type not in ("SignalObj", "ImageObj"):
             raise TypeError(f"Unsupported object type: {obj_type}")
 
-        # Check if object exists
-        if self.object_exists(name):
-            if not overwrite:
-                raise ValueError(f"Object '{name}' already exists")
-            # Remove existing object first using the working remove method
-            self._remove_object_sync(name)
+        def do_add() -> None:
+            try:
+                existing_uuid = get_uuid(self.find_object(name)[2])
+            except KeyError:
+                existing_uuid = None
 
-        # Add the new object
-        self._add_object_sync(obj)
+            if existing_uuid is not None and not overwrite:
+                raise ValueError(f"Object '{name}' already exists")
+
+            # Add first: panel insertion is transactional, so a failed insert
+            # leaves the existing workspace object untouched.
+            self._add_object_sync(obj)
+            if existing_uuid is not None:
+                self._remove_object_sync(existing_uuid)
+
+        self._executor.run_on_main_thread(do_add)
 
     def _add_object_sync(self, obj: DataObject) -> None:
         """Add object (called from main thread or marshaled via executor).
