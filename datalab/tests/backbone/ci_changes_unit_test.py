@@ -73,6 +73,9 @@ def fixture_ci_changes():
         ),
         pytest.param(["pyproject.toml"], True, True, id="dependencies"),
         pytest.param(
+            ["doc/update_screenshots.py"], True, True, id="tested screenshot generator"
+        ),
+        pytest.param(
             ["plugins/examples/datalab_custom_func.py"], True, True, id="example plugin"
         ),
         pytest.param(

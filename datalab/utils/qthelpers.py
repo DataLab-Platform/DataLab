@@ -38,6 +38,7 @@ from sigimax.utils.qthelpers import (
 )
 
 from datalab.config import SHOTPATH
+from datalab.env import execenv
 
 __all__ = [
     "CallbackWorker",
@@ -195,7 +196,10 @@ def grab_save_window(
     name = f"{name}.{lang}"
 
     guidata_grab_save_window(
-        widget=widget, name=name, save_dir=SHOTPATH, add_timestamp=add_timestamp
+        widget=widget,
+        name=name,
+        save_dir=execenv.screenshot_path or SHOTPATH,
+        add_timestamp=add_timestamp,
     )
 
 
