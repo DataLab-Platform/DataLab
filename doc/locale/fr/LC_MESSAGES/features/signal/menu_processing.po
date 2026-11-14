@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -124,6 +123,9 @@ msgstr "Rééchantillonnant les deux signaux sur une grille X commune dans ce ch
 msgid "Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)"
 msgstr "Utilisant les valeurs Y rééchantillonnées comme coordonnées (Y du premier signal comme X, Y du second signal comme Y)"
 
+msgid "With Sigima 1.4.1 or later, the common grid is uniform, with the smaller of the two input point counts, and non-overlapping domains are rejected. Earlier Sigima versions may extend an operand beyond its original domain in DataLab."
+msgstr "Avec Sigima 1.4.1 ou ultérieur, la grille commune est uniforme et utilise le plus petit des nombres de points des deux signaux ; les domaines sans recouvrement sont refusés. Les versions antérieures de Sigima peuvent prolonger un opérande au-delà de son domaine d'origine dans DataLab."
+
 msgid "This is different from \"Replace X by other signal's Y\" as it performs interpolation to handle signals with different X arrays."
 msgstr "Ceci est différent de \"Remplacer X par le Y d'un autre signal\" car il effectue une interpolation pour gérer les signaux avec des tableaux X différents."
 
@@ -172,20 +174,23 @@ msgstr ":math:`y_{1}= \\dfrac{y_{0}'}{\\max\\left(y_{0}'\\right)}` avec :math:`y
 msgid "Area"
 msgstr "Aire"
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N}y_{0}[n]}`"
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N-1}y_{0}[n]}`"
 msgstr ""
 
 msgid "Energy"
 msgstr "Energie"
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\sum_{n=0}^{N}\\left|y_{0}[n]\\right|^2}}`"
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\sum_{n=0}^{N-1}\\left|y_{0}[n]\\right|^2}}`"
 msgstr ""
 
 msgid "RMS"
 msgstr ""
 
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}\\left|y_{0}[n]\\right|^2}}`"
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N-1}\\left|y_{0}[n]\\right|^2}}`"
 msgstr ""
+
+msgid "Here :math:`N` is the number of samples, assuming no NaNs. The implemented sum and mean ignore NaNs."
+msgstr "Ici :math:`N` est le nombre d'échantillons, en supposant qu'ils ne contiennent pas de NaN. La somme et la moyenne utilisées ignorent les NaN."
 
 msgid "Clipping"
 msgstr "Ecrêtage"
@@ -885,8 +890,8 @@ msgstr "Interpolation par spline cubique, utilisant la fonction `scipy.interpola
 msgid "Quadratic"
 msgstr "Quadratique"
 
-msgid "Quadratic interpolation, using using NumPy's `polyval <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_ function"
-msgstr "Interpolation quadratique, utilisant la fonction `polyval <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_ de NumPy."
+msgid "Piecewise quadratic interpolation using SciPy's `interp1d <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_ function with Sigima 1.4.1 or later; earlier versions fit a single quadratic polynomial"
+msgstr "Interpolation quadratique par morceaux avec la fonction `interp1d <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_ de SciPy et Sigima 1.4.1 ou ultérieur ; les versions antérieures ajustent un seul polynôme quadratique"
 
 msgid "Cubic"
 msgstr "Cubique"

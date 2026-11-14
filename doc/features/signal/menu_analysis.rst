@@ -229,7 +229,7 @@ This feature provides automated pulse characterization with intelligent signal t
 
 **Key Capabilities:**
 
-* **Automated signal recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis
+* **Automated signal recognition**: Heuristically identifies step or square signal type for analysis
 * **Polarity detection**: Automatically determines positive/negative pulse polarity using baseline comparison
 * **Comprehensive timing measurements**: Extracts rise time, fall time, FWHM, and timing parameters at specific amplitude fractions
 * **Baseline characterization**: Analyzes start and end baseline regions for accurate feature computation
@@ -267,13 +267,13 @@ The analysis computes the following pulse characteristics:
     * - Feature
       - Description
     * - Signal shape
-      - Detected signal type (STEP, SQUARE, or OTHER)
+      - Detected signal type (STEP or SQUARE)
     * - Polarity
       - Signal polarity (+1 for positive, -1 for negative pulses)
     * - Amplitude
-      - Peak-to-peak amplitude of the pulse
+      - Absolute difference between the baseline and plateau means; for a square pulse, peak-to-peak is used as a fallback if polarity cannot be determined
     * - Offset
-      - DC offset (baseline level)
+      - Mean of the initial baseline, with its original sign in Sigima 1.4.1 or later
     * - Rise time
       - Time from the lower to upper reference levels during rising edge
     * - Fall time
@@ -291,7 +291,7 @@ The analysis computes the following pulse characteristics:
 
 .. note::
 
-    Results are displayed in a comprehensive table showing all extracted parameters, and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable and show as None. The feature works best with well-defined pulse signals that have clear baseline regions.
+    Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions.
 
 Show results
 ^^^^^^^^^^^^

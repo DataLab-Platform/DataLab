@@ -68,7 +68,7 @@ def test_tutorial_screenshot_generator(
     output = tmp_path / "images"
     command = [sys.executable, str(script), "--output-dir", str(output)]
     if not all_groups:
-        command.extend(["--group", "interface", "fabry-perot", "spectrum"])
+        command.extend(["--group", "interface", "metadata", "fabry-perot", "spectrum"])
     result = subprocess.run(
         command,
         cwd=root,
@@ -91,7 +91,15 @@ def test_tutorial_screenshot_generator(
             image = QG.QImage(str(output / "tutorials" / tutorial / f"{name}.png"))
             assert not image.isNull(), (tutorial, name)
             assert image.width() >= 250 and image.height() >= 500
-    names = ["s_app_at_startup", "settings_main", "history_panel"]
+    names = [
+        "s_app_at_startup",
+        "settings_main",
+        "history_panel",
+        "s_add_metadata",
+        "i_add_metadata",
+        "s_paste_metadata",
+        "i_paste_metadata",
+    ]
     if all_groups:
         names.extend(["s_beautiful", "i_beautiful", "i_blob_detection_flower"])
     for language in ("en", "fr"):

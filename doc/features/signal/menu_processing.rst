@@ -88,6 +88,10 @@ This operation plots one signal as a function of another by:
 2. Resampling both signals onto a common X grid within that overlap
 3. Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)
 
+With Sigima 1.4.1 or later, the common grid is uniform, with the smaller of the
+two input point counts, and non-overlapping domains are rejected. Earlier Sigima
+versions may extend an operand beyond its original domain in DataLab.
+
 .. note::
 
   This is different from "Replace X by other signal's Y" as it performs interpolation to handle signals
@@ -130,11 +134,14 @@ by maximum, amplitude, sum, energy or RMS:
     * - Amplitude
       - :math:`y_{1}= \dfrac{y_{0}'}{\max\left(y_{0}'\right)}` with :math:`y_{0}'=y_{0}-\min\left(y_{0}\right)`
     * - Area
-      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N-1}y_{0}[n]}`
     * - Energy
-      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}\left|y_{0}[n]\right|^2}}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N-1}\left|y_{0}[n]\right|^2}}`
     * - RMS
-      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}\left|y_{0}[n]\right|^2}}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N-1}\left|y_{0}[n]\right|^2}}`
+
+Here :math:`N` is the number of samples, assuming no NaNs. The implemented
+sum and mean ignore NaNs.
 
 Clipping
 ~~~~~~~~
@@ -596,7 +603,7 @@ The following interpolation methods are available:
     * - Spline
       - Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_ function
     * - Quadratic
-      - Quadratic interpolation, using using NumPy's `polyval <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_ function
+      - Piecewise quadratic interpolation using SciPy's `interp1d <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_ function with Sigima 1.4.1 or later; earlier versions fit a single quadratic polynomial
     * - Cubic
       - Cubic interpolation, using using SciPy's `Akima1DInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_ class
     * - Barycentric

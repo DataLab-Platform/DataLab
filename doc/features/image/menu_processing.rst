@@ -121,9 +121,12 @@ by maximum, amplitude, sum, energy or RMS:
     * - Area
       - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
     * - Energy
-      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}\left|z_{0}[n]\right|^2}}`
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N-1}\left|z_{0}[n]\right|^2}}`
     * - RMS
-      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}\left|z_{0}[n]\right|^2}}`
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N-1}\left|z_{0}[n]\right|^2}}`
+
+Here :math:`N` is the number of pixels, indexed over the flattened image,
+assuming no NaNs. The implemented sum and mean ignore NaNs.
 
 Clipping
 ~~~~~~~~

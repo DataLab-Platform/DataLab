@@ -23,7 +23,8 @@ ROI are taken into account almost in all computing features in DataLab:
 
 - The "Processing" menu actions are performed only on the ROI if one is defined (except if the operation changes the number of points, like interpolation or resampling, or if the destination signal data type is different from the source's, like in the Fourier analysis features).
 
-- The "Analysis" menu actions are done only on the ROI if one is defined.
+- The "Analysis" menu actions generally analyze each ROI if defined. Statistics
+  also include a whole-signal row, identified by ROI index ``-1``.
 
 .. note::
 

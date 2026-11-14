@@ -16,8 +16,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from datalab.config import _
+import pytest
+
 from datalab.env import execenv
+from datalab.gui.panel import base
 from datalab.gui.panel.base import PasteMetadataParam
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.add_metadata_unit_test import (
@@ -47,14 +49,7 @@ def __paste_metadata_for_signals(win: DLMainWindow, screenshot: bool = False) ->
     panel.objview.select_objects([2, 3])
 
     # Create the Paste metadata dialog (same as production code in paste_metadata())
-    param = PasteMetadataParam(
-        _("Paste metadata"),
-        comment=_(
-            "Select what to keep from the clipboard.<br><br>"
-            "Result shapes and annotations, if kept, will be merged with "
-            "existing ones. <u>All other metadata will be replaced</u>."
-        ),
-    )
+    param = PasteMetadataParam.for_dialog()
 
     # Edit the parameter to show the dialog
     execenv.print("  Opening Paste metadata dialog...")
@@ -82,14 +77,7 @@ def __paste_metadata_for_images(win: DLMainWindow, screenshot: bool = False) -> 
     panel.objview.select_objects([2, 3])
 
     # Create the Paste metadata dialog (same as production code in paste_metadata())
-    param = PasteMetadataParam(
-        _("Paste metadata"),
-        comment=_(
-            "Select what to keep from the clipboard.<br><br>"
-            "Result shapes and annotations, if kept, will be merged with "
-            "existing ones. <u>All other metadata will be replaced</u>."
-        ),
-    )
+    param = PasteMetadataParam.for_dialog()
 
     # Edit the parameter to show the dialog
     execenv.print("  Opening Paste metadata dialog...")
@@ -109,6 +97,38 @@ def test_paste_metadata_for_images() -> None:
     """Test Paste metadata feature for images."""
     with datalab_test_app_context() as win:
         __paste_metadata_for_images(win)
+
+
+@pytest.mark.parametrize("panel_name", ["signalpanel", "imagepanel"])
+def test_metadata_dialog_and_annotation_clipboard(monkeypatch, panel_name: str) -> None:
+    """Metadata paste does not transfer annotations and says so in its dialog."""
+    with datalab_test_app_context() as win:
+        panel = getattr(win, panel_name)
+        objects = (
+            create_test_signals()
+            if panel_name == "signalpanel"
+            else create_test_images()
+        )
+        source, target = objects[:2]
+        source.set_annotations([{"type": "label", "text": "source"}])
+        target.set_annotations([{"type": "label", "text": "target"}])
+        panel.add_object(source)
+        panel.copy_metadata()
+        panel.copy_annotations()
+        panel.add_object(target)
+        comments = []
+
+        def accept(param, **_kwargs):
+            comments.append(param.get_comment())
+            return True
+
+        monkeypatch.setattr(base, "_", lambda text: text)
+        monkeypatch.setattr(PasteMetadataParam, "edit", accept)
+        panel.paste_metadata()
+        assert target.metadata["type"] == source.metadata["type"]
+        assert target.get_annotations() == [{"type": "label", "text": "target"}]
+        assert "annotations" in comments[0].lower()
+        assert "separately" in comments[0].lower()
 
 
 def paste_metadata_screenshots():

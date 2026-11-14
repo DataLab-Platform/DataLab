@@ -1727,6 +1727,19 @@ class PasteMetadataParam(gds.DataSet):
     keep_tables = gds.BoolItem(_("Table results"), default=False).set_pos(col=1)
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
+    @classmethod
+    def for_dialog(cls) -> PasteMetadataParam:
+        """Create parameters with the metadata paste dialog's explanation."""
+        return cls(
+            _("Paste metadata"),
+            comment=_(
+                "Select what to keep from the clipboard.<br><br>"
+                "Geometry and table results, if kept, will be merged with "
+                "existing results. <u>Other metadata with matching keys will "
+                "be replaced</u>. Annotations are copied and pasted separately."
+            ),
+        )
+
 
 class NonModalInfoDialog(QW.QMessageBox):
     """Non-modal information message box with selectable text.
@@ -2774,14 +2787,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""
         if param is None:
-            param = PasteMetadataParam(
-                _("Paste metadata"),
-                comment=_(
-                    "Select what to keep from the clipboard.<br><br>"
-                    "Result shapes and annotations, if kept, will be merged with "
-                    "existing ones. <u>All other metadata will be replaced</u>."
-                ),
-            )
+            param = PasteMetadataParam.for_dialog()
             if not param.edit(parent=self.parentWidget()):
                 return
         self.mainwindow.historypanel.add_ui_entry(

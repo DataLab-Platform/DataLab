@@ -6,13 +6,14 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 ROOT = Path(__file__).resolve().parents[1]
-GROUPS = ("interface", "gallery", "fabry-perot", "spectrum", "blobs")
+GROUPS = ("interface", "gallery", "metadata", "fabry-perot", "spectrum", "blobs")
 
 
 def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> None:
@@ -22,11 +23,17 @@ def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> 
     initialize(load_user_config=False)
 
     import guidata
+    from guidata.dataset.qtwidgets import DataSetEditDialog
     from qtpy import QtGui as QG
 
     from datalab.env import execenv
+    from datalab.gui.panel.base import AddMetadataParam, PasteMetadataParam
     from datalab.tests import datalab_test_app_context, destroy_closed_test_windows
     from datalab.tests.features.common import history_panel_app_test
+    from datalab.tests.features.common.add_metadata_unit_test import (
+        create_test_images,
+        create_test_signals,
+    )
     from datalab.tests.features.utilities import settings_unit_test
     from datalab.tests.scenarios import beautiful_app
     from datalab.tests.scenarios import tutorial_screenshots as scenes
@@ -36,7 +43,7 @@ def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> 
     execenv.unattended = True
     execenv.screenshot_path = str(output_dir / "shots")
     for group in groups:
-        if language != "en" and group not in ("interface", "gallery"):
+        if language != "en" and group not in ("interface", "gallery", "metadata"):
             continue
         reset()
         Conf.rpc_server_enabled.set(False)
@@ -61,6 +68,37 @@ def generate_screenshots(groups: list[str], output_dir: Path, language: str) -> 
         elif group == "gallery":
             beautiful_app.run_beautiful_scenario(screenshots=True)
             beautiful_app.run_blob_detection_on_flower_image(screenshots=True)
+        elif group == "metadata":
+            directory = output_dir / "shots"
+            with datalab_test_app_context(console=False, exec_loop=False) as win:
+                for prefix, objects, key, pattern in (
+                    ("s", create_test_signals(), "experiment_id", "EXP_{index:03d}"),
+                    (
+                        "i",
+                        create_test_images(),
+                        "sample_id",
+                        "SAMPLE_{index:04d}_{title:upper}",
+                    ),
+                ):
+                    add_param = AddMetadataParam(objects)
+                    add_param.metadata_key = key
+                    add_param.value_pattern = pattern
+                    add_param.conversion = "string"
+                    add_param.update_preview()
+                    for action, param, wordwrap in (
+                        ("add", add_param, False),
+                        ("paste", PasteMetadataParam.for_dialog(), True),
+                    ):
+                        name = f"{prefix}_{action}_metadata"
+                        localized = directory / f"{name}.{language}.png"
+                        dialog = DataSetEditDialog(param, parent=win, wordwrap=wordwrap)
+                        try:
+                            scenes.save_screenshot(dialog, localized)
+                        finally:
+                            dialog.close()
+                            dialog.deleteLater()
+                        if language == "en":
+                            shutil.copyfile(localized, directory / f"{name}.png")
         elif language == "en":
             capture = {
                 "fabry-perot": scenes.capture_fabry_perot,

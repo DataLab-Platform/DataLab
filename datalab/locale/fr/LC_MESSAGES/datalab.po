@@ -1673,8 +1673,8 @@ msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms e
 msgid "Duplicate object or group"
 msgstr "Dupliquer l'objet ou le groupe"
 
-msgid "Select what to keep from the clipboard.<br><br>Result shapes and annotations, if kept, will be merged with existing ones. <u>All other metadata will be replaced</u>."
-msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les formes graphiques et les annotations, si conservées, seront fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront remplacées</u>."
+msgid "Select what to keep from the clipboard.<br><br>Geometry and table results, if kept, will be merged with existing results. <u>Other metadata with matching keys will be replaced</u>. Annotations are copied and pasted separately."
+msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les résultats géométriques et les tableaux conservés seront fusionnés avec les résultats existants. <u>Les autres métadonnées de même clé seront remplacées</u>. Les annotations sont copiées et collées séparément."
 
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
