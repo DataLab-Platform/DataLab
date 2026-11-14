@@ -20,8 +20,8 @@ msgstr "La plateforme DataLab"
 msgid "When DataLab started in 2023, it was a single product: a desktop application. Since then, the same scientific core has grown into a small family of complementary tools — the **DataLab Platform**. This page clarifies the terminology and helps you choose the edition that best fits your needs."
 msgstr "Lorsque DataLab a vu le jour en 2023, il s'agissait d'un produit unique : une application de bureau. Depuis, le même cœur scientifique a donné naissance à une petite famille d'outils complémentaires — la **plateforme DataLab**. Cette page clarifie le vocabulaire et vous aide à choisir l'édition la mieux adaptée à vos besoins."
 
-msgid "The DataLab Platform: the desktop application, DataLab-Web and DataLab-Kernel are three access modes sharing the same Sigima computation engine and interoperable through HDF5 workspaces."
-msgstr "La plateforme DataLab : l'application de bureau, DataLab-Web et DataLab-Kernel sont trois modes d'accès partageant le même moteur de calcul Sigima et interopérables via des espaces de travail HDF5."
+msgid "The DataLab Platform brings together the desktop application, DataLab-Web and DataLab-Kernel around the Sigima computation engine. DataLab-Web can open and save HDF5 workspaces, but it does not preserve Desktop History, so round trips are not lossless."
+msgstr "La plateforme DataLab réunit l'application de bureau, DataLab-Web et DataLab-Kernel autour du moteur de calcul Sigima. DataLab-Web peut ouvrir et enregistrer des espaces de travail HDF5, mais ne conserve pas l'historique de l'application de bureau ; les allers-retours ne sont donc pas sans perte."
 
 msgid "The story behind this evolution — the extraction of the Sigima computation engine and the browser-native edition — is documented in the project reports and Architecture Decision Records published on the `DataLab wiki <https://github.com/DataLab-Platform/DataLab/wiki>`_."
 msgstr "L'histoire de cette évolution — l'extraction du moteur de calcul Sigima et l'édition native pour navigateur — est documentée dans les rapports de projet et les enregistrements de décisions d'architecture publiés sur le `wiki DataLab <https://github.com/DataLab-Platform/DataLab/wiki>`_."
@@ -53,8 +53,8 @@ msgstr "L'**application de bureau** de référence (basée sur Qt). Sauf indicat
 msgid "**DataLab-Web**"
 msgstr "**DataLab-Web**"
 
-msgid "The **browser-native** edition: the full platform running inside a web browser tab, with no installation. Try it at `datalab-platform.com/web <https://datalab-platform.com/web/>`_ -- `project on GitHub <https://github.com/DataLab-Platform/web>`__."
-msgstr "L'édition **native pour navigateur** : la plateforme complète s'exécutant dans un onglet de navigateur web, sans aucune installation. Essayez-la sur `datalab-platform.com/web <https://datalab-platform.com/web/>`_ -- `projet sur GitHub <https://github.com/DataLab-Platform/web>`__."
+msgid "The **browser-native** edition: a curated set of DataLab features running inside a web browser tab, with no installation. Try it at `datalab-platform.com/web <https://datalab-platform.com/web/>`_ -- `project on GitHub <https://github.com/DataLab-Platform/web>`__."
+msgstr "L'édition **native pour navigateur** : une sélection des fonctionnalités de DataLab s'exécute dans un onglet de navigateur, sans installation. Essayez-la sur `datalab-platform.com/web <https://datalab-platform.com/web/>`_ -- `projet sur GitHub <https://github.com/DataLab-Platform/web>`__."
 
 msgid "**DataLab-Kernel**"
 msgstr "**DataLab-Kernel**"
@@ -80,8 +80,8 @@ msgstr ""
 msgid "The **workspace provenance and capsule** package (``datalab-capsule``), used by both the desktop application and DataLab-Web: it records how results were obtained in the HDF5 workspace, and packages workspaces as open RO-Crate ``.dlcapsule`` archives to exchange, compare and verify them. Its library and command line do not require DataLab. `Project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__."
 msgstr "Le paquet de **provenance de l'espace de travail et de capsules** (``datalab-capsule``), utilisé à la fois par l'application de bureau et par DataLab-Web : il enregistre dans l'espace de travail HDF5 comment les résultats ont été obtenus, et empaquette les espaces de travail sous forme d'archives RO-Crate ouvertes ``.dlcapsule`` pour les échanger, les comparer et les vérifier. Sa bibliothèque et sa ligne de commande ne nécessitent pas DataLab. `Projet sur GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__."
 
-msgid "This documentation site is, first and foremost, the documentation of the **desktop application**. Everything that is shared across editions — the object model, the processing catalog, the parameters — is described here and applies to DataLab-Web as well. Only the differences specific to an edition are called out explicitly."
-msgstr "Ce site de documentation est, avant tout, la documentation de l'**application de bureau**. Tout ce qui est commun aux différentes éditions — le modèle objet, le catalogue de traitements, les paramètres — est décrit ici et s'applique également à DataLab-Web. Seules les différences propres à une édition sont signalées explicitement."
+msgid "This documentation site is, first and foremost, the documentation of the **desktop application**. Some core concepts and operations are shared across editions, but feature availability is not identical: DataLab-Web exposes a curated subset of Sigima processing operations. Edition-specific differences are called out explicitly."
+msgstr "Ce site de documentation est, avant tout, la documentation de l’**application de bureau**. Certains concepts et traitements essentiels sont communs aux différentes éditions, mais les fonctionnalités disponibles ne sont pas identiques : DataLab-Web n'expose qu'une sélection des opérations de traitement de Sigima. Les différences propres à chaque édition sont signalées explicitement."
 
 msgid "Members of the platform"
 msgstr "Les membres de la plateforme"
@@ -95,8 +95,8 @@ msgstr "L'application de référence, dotée d'une interface graphique Qt native
 msgid "card-icon-browser  DataLab-Web"
 msgstr ""
 
-msgid "The same platform, running entirely inside your browser via WebAssembly. Zero install, your data never leaves your machine. Try it at `datalab-platform.com/web <https://datalab-platform.com/web/>`_ or browse the `project on GitHub <https://github.com/DataLab-Platform/web>`__."
-msgstr "La même plateforme, s'exécutant entièrement dans votre navigateur via WebAssembly. Aucune installation, vos données ne quittent jamais votre machine. Essayez-la sur `datalab-platform.com/web <https://datalab-platform.com/web/>`_ ou parcourez le `projet sur GitHub <https://github.com/DataLab-Platform/web>`__."
+msgid "A curated set of DataLab features running in your browser via WebAssembly, with no DataLab server or installation required. Core processing stays in the browser. Try it at `datalab-platform.com/web <https://datalab-platform.com/web/>`_ or browse the `project on GitHub <https://github.com/DataLab-Platform/web>`__."
+msgstr "Une sélection des fonctionnalités de DataLab s'exécute dans votre navigateur via WebAssembly, sans serveur DataLab ni installation. Les traitements principaux s'effectuent dans le navigateur. Essayez-la sur `datalab-platform.com/web <https://datalab-platform.com/web/>`_ ou parcourez le `projet sur GitHub <https://github.com/DataLab-Platform/web>`__."
 
 msgid "card-icon-terminal  DataLab-Kernel"
 msgstr ""
@@ -152,26 +152,26 @@ msgstr "**Catalogue de plugins DataLab** — les plugins de l'équipe DataLab et
 msgid "Which one should I use?"
 msgstr "Lequel choisir ?"
 
-msgid "The desktop application and DataLab-Web are not competitors: they are two access modes to the *same* platform, and they can be used interchangeably (HDF5 workspaces are interoperable). A few rules of thumb:"
-msgstr "L'application de bureau et DataLab-Web ne sont pas concurrentes : ce sont deux modes d'accès à la *même* plateforme, et elles peuvent être utilisées indifféremment (les espaces de travail HDF5 sont interopérables). Quelques règles générales :"
+msgid "The desktop application and DataLab-Web are two access modes to the same platform and can exchange HDF5 workspaces, but they are not fully interchangeable. DataLab-Web does not preserve Desktop History when it opens and saves an HDF5 workspace, and its processing catalog is a curated subset. A few rules of thumb:"
+msgstr "L'application de bureau et DataLab-Web sont deux modes d'accès à la même plateforme et peuvent échanger des espaces de travail HDF5, mais elles ne sont pas entièrement interchangeables. DataLab-Web ne conserve pas l'historique de l'application de bureau lorsqu'il ouvre et enregistre un espace de travail HDF5, et ne propose qu'une sélection des traitements disponibles sur le bureau. Voici quelques règles générales :"
 
 msgid "**Use the desktop application** when you work on your own machine and want the richest, fastest experience, the full set of interactive PlotPy tools, native file access, and the ability to handle very large datasets limited only by your system RAM."
 msgstr "**Utilisez l'application de bureau** lorsque vous travaillez sur votre propre machine et souhaitez l'expérience la plus riche et la plus rapide, l'ensemble complet des outils interactifs PlotPy, un accès natif aux fichiers et la capacité de traiter de très grands jeux de données, limités uniquement par la mémoire vive de votre système."
 
-msgid "**Use DataLab-Web** when you cannot or do not want to install anything — for example on a shared or locked-down computer, on someone else's machine, or simply to give DataLab a quick try. Everything runs locally in the browser tab; no server, no account, no upload."
-msgstr "**Utilisez DataLab-Web** lorsque vous ne pouvez pas ou ne voulez rien installer — par exemple sur un ordinateur partagé ou verrouillé, sur la machine de quelqu'un d'autre, ou simplement pour essayer rapidement DataLab. Tout s'exécute localement dans l'onglet du navigateur ; aucun serveur, aucun compte, aucun téléversement."
+msgid "**Use DataLab-Web** when you cannot or do not want to install anything — for example on a shared or locked-down computer, on someone else's machine, or simply to give DataLab a quick try. Core processing runs locally in the browser without a DataLab server or account."
+msgstr "**Utilisez DataLab-Web** lorsque vous ne pouvez pas ou ne voulez rien installer — par exemple sur un ordinateur partagé ou verrouillé, sur la machine de quelqu'un d'autre, ou simplement pour essayer rapidement DataLab. Les traitements principaux s'exécutent localement dans le navigateur, sans serveur DataLab ni compte."
 
 msgid "**Use DataLab-Kernel** when your workflow is notebook-centric and you want DataLab's processing catalog available from a Jupyter notebook — for example to write reproducible analysis reports that can be replayed with or without DataLab. You can `try it online <https://notebook.link/github/DataLab-Platform/DataLab-Kernel/tree/main/notebooks/?path=/notebooks/datalab_kernel_quickstart.ipynb>`_ in a live JupyterLite environment, without installing anything."
 msgstr "**Utilisez DataLab-Kernel** lorsque votre flux de travail est centré sur les notebooks et que vous souhaitez disposer du catalogue de traitements de DataLab depuis un notebook Jupyter — par exemple pour rédiger des rapports d'analyse reproductibles, rejouables avec ou sans DataLab. Vous pouvez `l'essayer en ligne <https://notebook.link/github/DataLab-Platform/DataLab-Kernel/tree/main/notebooks/?path=/notebooks/datalab_kernel_quickstart.ipynb>`_ dans un environnement JupyterLite, sans rien installer."
 
-msgid "A common pattern is to use the desktop application on your personal workstation and DataLab-Web everywhere else, sharing work back and forth through HDF5 workspace files."
-msgstr "Un usage courant consiste à utiliser l'application de bureau sur votre poste de travail personnel et DataLab-Web partout ailleurs, en échangeant le travail dans les deux sens via des fichiers d'espace de travail HDF5."
+msgid "A common pattern is to use the desktop application on your personal workstation and DataLab-Web elsewhere, exchanging workspace data through HDF5 files. DataLab-Web does not preserve Desktop History, so round trips can lose that information."
+msgstr "Un usage courant consiste à utiliser l'application de bureau sur votre poste de travail personnel et DataLab-Web ailleurs, en échangeant les données de l'espace de travail via des fichiers HDF5. DataLab-Web ne conserve pas l'historique de l'application de bureau ; ces allers-retours peuvent donc entraîner sa perte."
 
 msgid "DataLab vs DataLab-Web"
 msgstr "DataLab et DataLab-Web"
 
-msgid "DataLab-Web shares the **computation engine** (Sigima) and the **processing catalog** with the desktop application: the very same Sigima code — not a port — runs on CPython (desktop) and on Pyodide (browser). With compatible versions of Sigima, the same inputs give identical results, or results within the tolerance declared by the contract of the operation. The differences are about the **runtime environment**, not about the science."
-msgstr "DataLab-Web partage le **moteur de calcul** (Sigima) et le **catalogue de traitements** avec l'application de bureau : c'est le même code Sigima — et non un portage — qui s'exécute sur CPython (bureau) et sur Pyodide (navigateur). Avec des versions compatibles de Sigima, les mêmes entrées donnent des résultats identiques, ou des résultats dans la tolérance déclarée par le contrat de l'opération. Les différences portent sur l'**environnement d'exécution**, non sur la science."
+msgid "DataLab-Web shares the **computation engine** (Sigima) with the desktop application and exposes a curated subset of its processing catalog. The very same Sigima code — not a port — runs on CPython (desktop) and on Pyodide (browser). For operations available in both editions, compatible versions of Sigima give identical results, or results within the tolerance declared by the operation contract. The available operations and runtime environment differ between editions."
+msgstr "DataLab-Web partage le **moteur de calcul** (Sigima) avec l'application de bureau, mais n'en expose qu'une sélection du catalogue de traitements. C'est le même code Sigima — et non un portage — qui s'exécute sur CPython (bureau) et sur Pyodide (navigateur). Pour les opérations disponibles dans les deux éditions, des versions compatibles de Sigima donnent des résultats identiques, ou dans la tolérance déclarée par le contrat de l'opération. Les opérations disponibles et l'environnement d'exécution diffèrent selon l'édition."
 
 msgid "Topic"
 msgstr "Sujet"
@@ -233,8 +233,8 @@ msgstr "Persistance"
 msgid "HDF5 and ``.dlcapsule`` files on disk"
 msgstr "Fichiers HDF5 et ``.dlcapsule`` sur disque"
 
-msgid "HDF5 and ``.dlcapsule`` download / upload (workspaces are interoperable)"
-msgstr "Téléchargement / téléversement HDF5 et ``.dlcapsule`` (espaces de travail interopérables)"
+msgid "HDF5 and ``.dlcapsule`` download / upload; Desktop History is not preserved when DataLab-Web opens and saves an HDF5 workspace"
+msgstr "Téléchargement / téléversement HDF5 et ``.dlcapsule`` ; l'historique de l'application de bureau n'est pas conservé lorsque DataLab-Web ouvre et enregistre un espace de travail HDF5"
 
 msgid "Memory"
 msgstr "Mémoire"
@@ -272,8 +272,8 @@ msgstr "XML-RPC et API Web FastAPI"
 msgid "In-browser proxy and optional ``postMessage`` SDK"
 msgstr "Proxy intégré au navigateur et SDK ``postMessage`` optionnel"
 
-msgid "What is **not** different: the object model (``SignalObj``, ``ImageObj``, ROIs, groups), the processing catalog discovered from Sigima, the auto-generated parameter dialogs, the HDF5 workspace format, and the provenance of the workspace and the ``.dlcapsule`` capsules, handled by DataLab-Capsule in both editions. A workspace saved in the desktop application can be opened in DataLab-Web, and vice versa."
-msgstr "Ce qui ne change **pas** : le modèle objet (``SignalObj``, ``ImageObj``, ROI, groupes), le catalogue de traitements découvert depuis Sigima, les boîtes de dialogue de paramètres générées automatiquement, le format d'espace de travail HDF5, ainsi que la provenance de l'espace de travail et les capsules ``.dlcapsule``, gérées par DataLab-Capsule dans les deux éditions. Un espace de travail enregistré dans l'application de bureau peut être ouvert dans DataLab-Web, et inversement."
+msgid "Both editions use the Sigima computation engine and can exchange HDF5 workspace files, but the features and information they preserve are not identical. DataLab-Web provides a curated subset of Sigima operations and does not preserve Desktop History when it opens and saves an HDF5 workspace. Check the edition-specific documentation before moving a workspace between them."
+msgstr "Les deux éditions utilisent le moteur de calcul Sigima et peuvent échanger des fichiers d'espace de travail HDF5, mais leurs fonctionnalités et les informations qu'elles préservent ne sont pas identiques. DataLab-Web offre une sélection des opérations de Sigima et ne conserve pas l'historique de l'application de bureau lorsqu'il ouvre et enregistre un espace de travail HDF5. Consultez la documentation propre à chaque édition avant de transférer un espace de travail."
 
 msgid "Plugins are largely portable between the desktop application and DataLab-Web, with a few constraints related to the browser runtime. See :ref:`plugins_web` for details."
 msgstr "Les plugins sont en grande partie portables entre l'application de bureau et DataLab-Web, avec quelques contraintes liées à l'environnement d'exécution du navigateur. Voir :ref:`plugins_web` pour plus de détails."

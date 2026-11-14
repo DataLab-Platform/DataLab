@@ -459,7 +459,7 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 - Start/Stop Web API Server
 - Copy Connection Info (URL + token)
 
-**Authentication**: Bearer token authentication for all endpoints except `/api/v1/status`.
+**Authentication**: Bearer token authentication is required for all endpoints except `/api/v1/status`, unless the Web API localhost bypass is enabled (default), in which case requests from localhost do not need a token.
 
 ## Coding Conventions
 
