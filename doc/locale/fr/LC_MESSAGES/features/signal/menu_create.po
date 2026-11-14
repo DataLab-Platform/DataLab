@@ -215,5 +215,9 @@ msgstr "Saisie manuelle des valeurs X et Y"
 msgid "For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height above the baseline :math:`y_0`, expressed in the signal's Y unit."
 msgstr "Pour les modèles gaussien, lorentzien et de Voigt, :math:`A` est la hauteur signée du pic au-dessus de la ligne de base :math:`y_0`, exprimée dans l'unité Y du signal."
 
+#, python-brace-format
+msgid "The cardinal sine uses the unnormalized definition :math:`\\sinc(u) = \\dfrac{\\sin(u)}{u}`, with :math:`\\sinc(0) = 1`, as the 2D sinc image: when :math:`\\phi = 0`, its peak is at :math:`x = 0` and its first zeros are at :math:`x = \\pm\\dfrac{1}{2f}`."
+msgstr "Le sinus cardinal utilise la définition non normalisée :math:`\\sinc(u) = \\dfrac{\\sin(u)}{u}`, avec :math:`\\sinc(0) = 1`, comme l'image sinus cardinal 2D : lorsque :math:`\\phi = 0`, son pic est en :math:`x = 0` et ses premiers zéros sont en :math:`x = \\pm\\dfrac{1}{2f}`."
+
 msgid "The blackbody signal is the spectral radiance per unit wavelength of a blackbody at temperature :math:`T`: wavelengths :math:`\\lambda` are expressed in meters and the spectral radiance in W·sr⁻¹·m⁻³. These axis titles and units are set by default, and may be changed in the creation dialog."
 msgstr "Le signal de corps noir est la luminance énergétique spectrale (par unité de longueur d'onde) d'un corps noir à la température :math:`T` : les longueurs d'onde :math:`\\lambda` sont exprimées en mètres et la luminance énergétique spectrale en W·sr⁻¹·m⁻³. Ces titres et unités d'axes sont définis par défaut et peuvent être modifiés dans la boîte de dialogue de création."

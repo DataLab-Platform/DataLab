@@ -73,6 +73,11 @@ Create a new image from various models
       - 2D sinc
       - :math:`z = A \cdot \mathrm{sinc}\left(\dfrac{\sqrt{(x-x_0)^2+(y-y_0)^2}}{\sigma}\right) + C`
 
+The 2D sinc uses the unnormalized definition
+:math:`\mathrm{sinc}(u) = \dfrac{\sin(u)}{u}`, with :math:`\mathrm{sinc}(0) = 1`,
+as the cardinal sine signal: it first vanishes at the distance
+:math:`\pi \sigma` from its center.
+
 The Gaussian, ramp, sinusoidal grating, ring pattern, Siemens star and
 2D sinc models are computed over a domain
 :math:`[x_{min}, x_{max}] \times [y_{min}, y_{max}]`. When the
