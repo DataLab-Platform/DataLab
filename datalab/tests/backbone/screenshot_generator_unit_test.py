@@ -46,10 +46,13 @@ def test_screenshot_save_failure(tmp_path: Path) -> None:
             widget.close()
 
 
+@pytest.mark.parametrize("all_groups", (False, True), ids=("core", "all-groups"))
 def test_tutorial_screenshot_generator(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, all_groups: bool
 ) -> None:
     """Render the actual tutorial workflows without touching an existing user INI."""
+    if all_groups:
+        pytest.importorskip("cv2", reason="Gallery and blobs require optional OpenCV")
     root = Path(__file__).resolve().parents[3]
     script = root / "doc" / "update_screenshots.py"
     if not script.is_file():
@@ -63,13 +66,11 @@ def test_tutorial_screenshot_generator(
     monkeypatch.setenv("HOME", str(home))
     monkeypatch.setenv("XDG_CONFIG_HOME", str(home))
     output = tmp_path / "images"
+    command = [sys.executable, str(script), "--output-dir", str(output)]
+    if not all_groups:
+        command.extend(["--group", "interface", "fabry-perot", "spectrum"])
     result = subprocess.run(
-        [
-            sys.executable,
-            str(script),
-            "--output-dir",
-            str(output),
-        ],
+        command,
         cwd=root,
         env=os.environ.copy(),
         capture_output=True,
@@ -82,22 +83,19 @@ def test_tutorial_screenshot_generator(
     expected = {
         "fabry_perot": ("13", "16", "24"),
         "spectrum": ("06", "09", "20", "21"),
-        "blobs": ("01", "02", "05", "11"),
     }
+    if all_groups:
+        expected["blobs"] = ("01", "02", "05", "11")
     for tutorial, names in expected.items():
         for name in names:
             image = QG.QImage(str(output / "tutorials" / tutorial / f"{name}.png"))
             assert not image.isNull(), (tutorial, name)
             assert image.width() >= 250 and image.height() >= 500
+    names = ["s_app_at_startup", "settings_main", "history_panel"]
+    if all_groups:
+        names.extend(["s_beautiful", "i_beautiful", "i_blob_detection_flower"])
     for language in ("en", "fr"):
-        for name in (
-            "s_app_at_startup",
-            "settings_main",
-            "history_panel",
-            "s_beautiful",
-            "i_beautiful",
-            "i_blob_detection_flower",
-        ):
+        for name in names:
             image = QG.QImage(str(output / "shots" / f"{name}.{language}.png"))
             assert not image.isNull(), (name, language)
             if name == "settings_main":
