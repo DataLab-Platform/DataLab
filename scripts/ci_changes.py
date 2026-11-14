@@ -40,6 +40,7 @@ CI_FILES = frozenset(
     }
 )
 CI_PREFIXES = (".github/actions/",)
+TEST_INPUT_FILES = frozenset({"doc/update_screenshots.py"})
 
 #: Files not used by the tests (other CI files excepted)
 NO_TEST_PREFIXES = ("doc/", ".github/", ".vscode/")
@@ -78,7 +79,7 @@ def is_ci_file(path: str) -> bool:
 
 def needs_tests(path: str) -> bool:
     """Return True if changing the file requires running the tests"""
-    if is_ci_file(path):
+    if is_ci_file(path) or path in TEST_INPUT_FILES:
         return True
     if path.startswith(NO_TEST_PREFIXES):
         return False

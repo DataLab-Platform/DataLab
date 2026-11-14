@@ -29,6 +29,7 @@
 
 ### 📖 Documentation since version 1.4.0 ###
 
+* Updated the Fabry-Pérot, spectrum and blob-detection tutorial screenshots, the startup page, settings and History panel to match the current interface. Maintainers can regenerate these figures with a single Qt-based script, without manual desktop captures or changes to personal preferences (fixes [Issue #520](https://github.com/DataLab-Platform/DataLab/issues/520)).
 * Translated card titles in the French documentation now show the same icons as their English counterparts, on the home page and the main section pages (fixes [Issue #536](https://github.com/DataLab-Platform/DataLab/issues/536)).
 * The [DataLab plugin catalog](https://datalab-platform.com/plugins/) is now presented on the home page, in the navigation bar and in the pages describing the platform, its key features and how to contribute
 * The plugin documentation is reorganized into an overview page and dedicated pages for installing and managing plugins, deploying them in an organization, developing them, application plugins and the public API; the development page starts with a quick start, "Your first plugin in five minutes", and presents the plugins of the catalog as examples

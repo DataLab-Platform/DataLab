@@ -213,6 +213,11 @@ After adjusting the peak detection parameters (using the same dialog as
 for the multi-Gaussian fit), click "OK". The detected peak positions are
 stored as an XY-markers result and overlayed on the spectrum.
 
+.. figure:: ../../images/tutorials/spectrum/20.png
+
+    The detected peak positions are shown as XY markers on the spectrum, with
+    their coordinates in the result label. No additional signal is created.
+
 To rebuild the historical *sticks* signal — a delta function at each detected
 peak position — apply *Operations ▸ Create signal from markers table…* to the
 spectrum: this creates a child signal whose samples are the ``(x, y)`` couples

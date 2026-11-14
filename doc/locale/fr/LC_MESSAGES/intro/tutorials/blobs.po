@@ -36,6 +36,9 @@ msgstr "Enregistrer l'espace de travail dans un fichier"
 msgid "First, we open DataLab. Plugins are loaded from plugin directories, which are listed in the \"Advanced\" tab of the plugin configuration dialog (\"Plugins > Configure plugins...\"). We can add a new plugin by copying/pasting the plugin file in one of these directories."
 msgstr "Tout d'abord, nous ouvrons DataLab. Les plugins sont chargés depuis des répertoires de plugins, qui sont listés dans l'onglet \"Avancé\" de la boîte de dialogue de configuration des plugins (\"Plugins > Configurer les plugins...\"). Nous pouvons ajouter un nouveau plugin en copiant/collant le fichier du plugin dans l'un de ces répertoires."
 
+msgid "The \"Advanced\" tab of \"Plugins > Configure plugins...\" lists the plugin directories (the paths shown here are examples)."
+msgstr "L'onglet \"Avancé\" de \"Plugins > Configurer les plugins...\" liste les répertoires de plugins (les chemins affichés ici sont des exemples)."
+
 msgid "The plugin system is described in the :ref:`about_plugins` section."
 msgstr "Le système de plugins est décrit dans la section :ref:`about_plugins`."
 
@@ -45,8 +48,8 @@ msgstr "Ajoutons le plugin `datalab_example_imageproc.py` à DataLab (c'est un p
 msgid "If we reload the plugins with \"Plugins > Reload plugins\" (or restart DataLab), we can see that the plugin is now available in the \"Plugins\" menu: there is a new \"Extract blobs (example)\" entry."
 msgstr "Si nous rechargeons les plugins avec \"Plugins > Recharger les plugins\" (ou si nous redémarrons DataLab), nous pouvons voir que le plugin est maintenant disponible dans le menu \"Plugins\" : il y a une nouvelle entrée \"Extract blobs (example)\"."
 
-msgid "The \"Plugins and I/O features\" tab of the \"Installation and configuration\" dialog (\"?\" menu) shows the list of available plugins."
-msgstr "L'onglet \"Plugins et fonctionnalités d'entrée/sortie\" de la boîte de dialogue \"Installation et configuration\" (menu \"?\") affiche la liste des plugins disponibles."
+msgid "The \"Installed plugins\" tab of \"Plugins > Configure plugins...\" shows the example plugin as active."
+msgstr "L'onglet \"Plugins installés\" de \"Plugins > Configurer les plugins...\" montre que le plugin d'exemple est actif."
 
 msgid "Let's click on \"Extract blobs (example) > Generate test image\""
 msgstr "Cliquons sur \"Extract blobs (example) > Generate test image\""

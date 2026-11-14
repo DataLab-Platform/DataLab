@@ -167,6 +167,9 @@ msgstr "Ouvrir la fenêtre \"Détection de pics\" avec \"Analyse > Détection de
 msgid "After adjusting the peak detection parameters (using the same dialog as for the multi-Gaussian fit), click \"OK\". The detected peak positions are stored as an XY-markers result and overlayed on the spectrum."
 msgstr "Après avoir ajusté les paramètres de détection des pics (en utilisant la même boîte de dialogue que pour l'ajustement multi-gaussien), cliquez sur \"OK\". Les positions des pics détectés sont stockées sous forme de résultat XY-markers et superposées au spectre."
 
+msgid "The detected peak positions are shown as XY markers on the spectrum, with their coordinates in the result label. No additional signal is created."
+msgstr "Les positions des pics détectés sont affichées sous forme de marqueurs XY sur le spectre, avec leurs coordonnées dans l'étiquette de résultat. Aucun signal supplémentaire n'est créé."
+
 msgid "To rebuild the historical *sticks* signal — a delta function at each detected peak position — apply *Operations ▸ Create signal from markers table…* to the spectrum: this creates a child signal whose samples are the ``(x, y)`` couples of the markers table, rendered as sticks."
 msgstr "Pour reconstruire le signal historique *sticks* — une fonction delta à chaque position de pic détectée — appliquez *Opérations ▸ Créer un signal à partir de la table des marqueurs…* au spectre : cela crée un signal enfant dont les échantillons sont les couples ``(x, y)`` de la table des marqueurs, rendus sous forme de bâtons."
 

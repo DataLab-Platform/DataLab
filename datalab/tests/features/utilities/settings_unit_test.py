@@ -93,7 +93,12 @@ def capture_settings_screenshots():
 
         # Create the dialog manually so we can access the tab widget
         dialog = DataSetGroupEditDialog(
-            instance=params, icon="", parent=None, apply=None, wordwrap=True, size=None
+            instance=params,
+            icon="",
+            parent=None,
+            apply=None,
+            wordwrap=True,
+            size=(900, 700),
         )
 
         # Find the main QTabWidget in the dialog

@@ -14,6 +14,9 @@ msgstr ""
 msgid "Version 1.4"
 msgstr "Version 1.4"
 
+msgid "Updated the Fabry-Pérot, spectrum and blob-detection tutorial screenshots, the startup page, settings and History panel to match the current interface. Maintainers can regenerate these figures with a single Qt-based script, without manual desktop captures or changes to personal preferences (fixes [Issue #520](https://github.com/DataLab-Platform/DataLab/issues/520))."
+msgstr "Les captures des tutoriels Fabry-Pérot, de traitement de spectre et de détection de taches, de la page d'accueil, des paramètres et du panneau Historique ont été mises à jour pour correspondre à l'interface actuelle. Les mainteneurs peuvent régénérer ces figures avec un seul script fondé sur Qt, sans captures manuelles du bureau ni modification des préférences personnelles (corrige [l'issue #520](https://github.com/DataLab-Platform/DataLab/issues/520))."
+
 msgid "DataLab Version 1.4.1"
 msgstr "DataLab Version 1.4.1"
 

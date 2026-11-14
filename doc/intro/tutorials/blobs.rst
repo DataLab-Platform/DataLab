@@ -21,6 +21,11 @@ in the "Advanced" tab of the plugin configuration dialog ("Plugins > Configure
 plugins..."). We can add a new plugin by copying/pasting the plugin file in one of
 these directories.
 
+.. figure:: ../../images/tutorials/blobs/01.png
+
+    The "Advanced" tab of "Plugins > Configure plugins..." lists the plugin
+    directories (the paths shown here are examples).
+
 .. seealso::
 
     The plugin system is described in the :ref:`about_plugins` section.
@@ -35,8 +40,8 @@ blobs (example)" entry.
 
 .. figure:: ../../images/tutorials/blobs/02.png
 
-    The "Plugins and I/O features" tab of the "Installation and configuration" dialog
-    ("?" menu) shows the list of available plugins.
+    The "Installed plugins" tab of "Plugins > Configure plugins..." shows the
+    example plugin as active.
 
 .. figure:: ../../images/tutorials/blobs/03.png
 
