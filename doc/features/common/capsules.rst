@@ -88,7 +88,7 @@ cited verification reports). The capsule itself is not changed.
 capsule (after confirmation when the workspace is not empty). It is available
 only for an intact capsule. A capsule exported later from this workspace is
 proposed as a revision of it. Opening a capsule is recorded in the History
-panel.
+panel when recording is enabled.
 
 For a referenced capsule, obtain the HDF5 file separately: its address is not
 downloaded automatically, and its size and fingerprint must match. A registry

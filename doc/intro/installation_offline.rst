@@ -23,6 +23,9 @@ Offline installation via pip
 This method works on **any operating system** with **Python 3.10 to 3.14**.
 It assumes you have an online machine available to download packages, and a separate
 offline machine where DataLab will be installed.
+The commands below download wheels for the online machine's platform: use an
+online machine with the same operating system, architecture and compatible
+platform ABI as the offline machine.
 
 Requirements
 ------------
@@ -32,6 +35,7 @@ Offline machine
 
 - GNU/Linux, Windows, or macOS
 - Python 3.10 to 3.14 installed with the **same minor version** (3.x) as the online machine
+- The same operating system and architecture, with a compatible platform ABI
 - No assumptions regarding installed packages
 
 .. important::
@@ -53,7 +57,7 @@ To check your Python version, run:
 Online machine
 ^^^^^^^^^^^^^^
 
-- Windows, Linux, or macOS
+- The same operating system and architecture as the offline machine, with a compatible platform ABI
 - Python with the **same minor version** as the offline machine
 - ``pip`` installed
 
@@ -61,6 +65,8 @@ Preparing packages (online machine)
 -----------------------------------
 
 Download all required **Wheel packages** for offline installation.
+``pip download`` selects wheels compatible with the machine running it; a
+matching Python version alone is not enough for a different platform.
 
 Create a folder for packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

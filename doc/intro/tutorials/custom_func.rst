@@ -363,7 +363,8 @@ Here is the plugin code:
     :linenos:
 
 To test it, we have to add the plugin script to one of the plugin directories that
-are discovered by DataLab at startup: you can find it under "File > Settings..."
+are discovered by DataLab at startup: configure them under
+"Plugins > Configure plugins... > Advanced"
 (see the :ref:`about_plugins` section for more details, or the :ref:`tutorial_blobs`
 for an example). We then reload plugins from the "Plugins" menu (or restart
 DataLab) and we can see that the plugin has been loaded.

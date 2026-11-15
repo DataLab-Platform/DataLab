@@ -389,6 +389,7 @@ class MyPlugin(PluginBase):
 ```python
 from datalab.control.proxy import RemoteProxy
 import numpy as np
+import sigima.params
 
 proxy = RemoteProxy()
 
@@ -677,7 +678,7 @@ menu_title = "Processing"  # Not translatable!
 
 **Examples**:
 - ✅ `difference` (subtract two signals): Compatible X arrays expected → `skip_xarray_compat=False`
-- ✅ `xy_mode` (swap X and Y): Uses Y as new X → `skip_xarray_compat=True`
+- ✅ `xy_mode` (use a second signal's Y as X): Default compatibility handling aligns the input signals.
 - ✅ `replace_x_by_other_y`: Takes Y from second signal as X → `skip_xarray_compat=True`
 
 ### Debugging Tips

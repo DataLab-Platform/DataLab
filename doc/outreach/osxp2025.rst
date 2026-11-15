@@ -42,7 +42,7 @@ DataLab 1.0 marks a major milestone in the evolution of the open-source scientif
 
 At the heart of this architectural shift lies a new object-oriented processing library, designed as part of the DataLab Core Architecture Redesign project funded by the NLnet Foundation. This library enables developers and domain experts to easily create their own data processing tools while reusing the same core components that power DataLab.
 
-The talk will highlight the key features of DataLab 1.0, including its redesigned architecture and new user-facing functionalities, and will demonstrate how it can serve both as a ready-to-use application and as a foundation for building domain-specific tools in scientific and industrial contexts.
+The talk highlighted the key features of DataLab 1.0, including its redesigned architecture and new user-facing functionalities, and demonstrated how it can serve both as a ready-to-use application and as a foundation for building domain-specific tools in scientific and industrial contexts.
 
 Watch the Full Presentation
 ---------------------------

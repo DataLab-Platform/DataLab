@@ -14,9 +14,6 @@ msgstr ""
 msgid "Version 1.4"
 msgstr "Version 1.4"
 
-msgid "Updated the Fabry-Pérot, spectrum and blob-detection tutorial screenshots, the startup page, settings and History panel to match the current interface. Maintainers can regenerate these figures with a single Qt-based script, without manual desktop captures or changes to personal preferences (fixes [Issue #520](https://github.com/DataLab-Platform/DataLab/issues/520))."
-msgstr "Les captures des tutoriels Fabry-Pérot, de traitement de spectre et de détection de taches, de la page d'accueil, des paramètres et du panneau Historique ont été mises à jour pour correspondre à l'interface actuelle. Les mainteneurs peuvent régénérer ces figures avec un seul script fondé sur Qt, sans captures manuelles du bureau ni modification des préférences personnelles (corrige [l'issue #520](https://github.com/DataLab-Platform/DataLab/issues/520))."
-
 msgid "DataLab Version 1.4.1"
 msgstr "DataLab Version 1.4.1"
 
@@ -56,8 +53,8 @@ msgstr "**Coordonnées d'image** : depuis DataLab 1.2.0, **Convertir en coordonn
 msgid "**Web API**: starting the Web API server through the remote control (XML-RPC), e.g. with `RemoteProxy.start_webapi_server()`, used port 8080 instead of the automatic port (18080, or the next free one), so that DataLab-Kernel could not find the server automatically. Unless a port is given, the server now uses the automatic port, as when it is started from **File > Web API** (fixes [Issue #516](https://github.com/DataLab-Platform/DataLab/issues/516))."
 msgstr "**API Web** : le démarrage du serveur de l'API Web par le contrôle à distance (XML-RPC), par exemple avec `RemoteProxy.start_webapi_server()`, utilisait le port 8080 au lieu du port automatique (18080, ou le port libre suivant), si bien que DataLab-Kernel ne pouvait pas trouver le serveur automatiquement. Sauf si un port est indiqué, le serveur utilise désormais le port automatique, comme lorsqu'il est démarré depuis **Fichier > API Web** (corrige [l'issue #516](https://github.com/DataLab-Platform/DataLab/issues/516))."
 
-msgid "**AI Assistant settings**: the fields of the **AI Assistant** tab of **File > Settings...** stayed editable when **Enable AI Assistant** was unchecked, as if they still had an effect. They are now inactive while the AI Assistant is disabled (fixes [Issue #517](https://github.com/DataLab-Platform/DataLab/issues/517))."
-msgstr "**Préférences de l'assistant IA** : les champs de l'onglet **Assistant IA** de **Fichier > Préférences...** restaient modifiables lorsque **Activer l'assistant IA** était décoché, comme s'ils avaient encore un effet. Ils sont désormais inactifs tant que l'assistant IA est désactivé (corrige [l'issue #517](https://github.com/DataLab-Platform/DataLab/issues/517))."
+msgid "**AI Assistant settings**: unchecking **Enable AI Assistant** now makes the other fields of the **AI Assistant** tab inactive. If the dialog opens with the assistant already disabled, the fields may initially remain editable; checking and unchecking the option refreshes them (partially fixes [Issue #517](https://github.com/DataLab-Platform/DataLab/issues/517))."
+msgstr "**Préférences de l'assistant IA** : décocher **Activer l'assistant IA** rend désormais inactifs les autres champs de l'onglet **Assistant IA**. Si la boîte de dialogue s'ouvre alors que l'assistant est déjà désactivé, les champs peuvent rester modifiables au départ ; cocher puis décocher l'option actualise leur état (corrige partiellement [l'issue #517](https://github.com/DataLab-Platform/DataLab/issues/517))."
 
 msgid "**Stability analysis**: **Overlapping Allan variance** was missing from **Processing > Stability analysis** in the Signal panel, so it could only be computed with the other methods, through **All stability features...**. It is now listed with the other variances (fixes [Issue #518](https://github.com/DataLab-Platform/DataLab/issues/518))."
 msgstr "**Analyse de stabilité** : **Variance d’Allan avec recouvrement** manquait dans **Traitement > Analyse de stabilité** du panneau Signal, si bien qu'elle ne pouvait être calculée qu'avec les autres méthodes, par **Toutes les analyses de stabilité...**. Elle figure désormais avec les autres variances (corrige [l'issue #518](https://github.com/DataLab-Platform/DataLab/issues/518))."
@@ -94,6 +91,12 @@ msgstr "**Outils de développement** : les tâches VS Code du dépôt source ind
 
 msgid "📖 Documentation since version 1.4.0"
 msgstr "📖 Documentation depuis la version 1.4.0"
+
+msgid "Corrected installation and remote-control instructions, descriptions of History and plugins, and tutorial screenshots so they reflect the current application (fixes [Issue #569](https://github.com/DataLab-Platform/DataLab/issues/569))."
+msgstr "Les instructions d'installation et de contrôle à distance, les descriptions de l'historique et des plugins et les captures de tutoriels ont été corrigées pour correspondre à l'application actuelle (corrige [l'issue #569](https://github.com/DataLab-Platform/DataLab/issues/569))."
+
+msgid "Updated the Fabry-Pérot, spectrum and blob-detection tutorial screenshots, the startup page, settings and History panel to match the current interface. Maintainers can regenerate these figures with a single Qt-based script, without manual desktop captures or changes to personal preferences (fixes [Issue #520](https://github.com/DataLab-Platform/DataLab/issues/520))."
+msgstr "Les captures des tutoriels Fabry-Pérot, de traitement de spectre et de détection de taches, de la page d'accueil, des paramètres et du panneau Historique ont été mises à jour pour correspondre à l'interface actuelle. Les mainteneurs peuvent régénérer ces figures avec un seul script fondé sur Qt, sans captures manuelles du bureau ni modification des préférences personnelles (corrige [l'issue #520](https://github.com/DataLab-Platform/DataLab/issues/520))."
 
 msgid "Translated card titles in the French documentation now show the same icons as their English counterparts, on the home page and the main section pages (fixes [Issue #536](https://github.com/DataLab-Platform/DataLab/issues/536))."
 msgstr "Les titres traduits des cartes de la documentation française affichent désormais les mêmes icônes que leurs équivalents anglais, sur la page d'accueil et les principales pages de section (corrige [l'issue #536](https://github.com/DataLab-Platform/DataLab/issues/536))."

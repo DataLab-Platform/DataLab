@@ -205,7 +205,8 @@ when switching between signal and image processing. Closing a dialog while a
 preview is still running stops that process; the next preview then performs a
 fresh startup. Reloading plugins also discards the cached preview process.
 
-**Cancel** discards the draft parameters and stops the preview. With one source,
+**Cancel** discards the draft parameters and stops the preview. With one
+individually selected source,
 **OK** reuses a completed, up-to-date preview once and publishes it through the
 normal processing path, including history. If the preview is still running or
 stale, or if several objects or groups are selected, DataLab runs the normal

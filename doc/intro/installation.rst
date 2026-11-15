@@ -280,7 +280,7 @@ command:
 
 .. code-block:: console
 
-    $ pip install git+https://github.com/DataLab-Platform/DataLab.git@develop
+    $ pip install "datalab-platform[qt] @ git+https://github.com/DataLab-Platform/DataLab.git@develop"
 
 Then, if at some point you want to upgrade to the latest version of DataLab,
 just run the same command with options to force the reinstall of the package

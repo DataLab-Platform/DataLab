@@ -25,8 +25,8 @@ msgstr "Exécuter DataLab"
 msgid "To run DataLab from the command line, type the following::"
 msgstr "Pour exécuter DataLab depuis la ligne de commande, taper la commande suivante::"
 
-msgid "To show help on command line usage, simply run::"
-msgstr "Pour afficher l'aide de l'utilisation en ligne de commande, taper simplement::"
+msgid "To show help on command line usage, run the module from a terminal. On Windows, the ``datalab`` GUI entry point may not display console output::"
+msgstr "Pour afficher l'aide sur la ligne de commande, exécutez le module depuis un terminal. Sous Windows, le point d'entrée graphique ``datalab`` peut ne pas afficher la sortie dans la console::"
 
 msgid "Open HDF5 file at startup"
 msgstr "Ouvrir un fichier HDF5 au démarrage"

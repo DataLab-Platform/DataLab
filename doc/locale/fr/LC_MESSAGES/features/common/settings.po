@@ -521,8 +521,11 @@ msgstr "Si le réglage est activé, le nom du fichier HDF5 est ajouté comme suf
 msgid "AI Assistant"
 msgstr "Assistant IA"
 
-msgid "The AI Assistant settings tab configures the built-in conversational assistant (see :ref:`ai_assistant`). All fields are inactive as long as **Enable AI Assistant** is unchecked."
-msgstr "L'onglet Assistant IA configure l'assistant conversationnel intégré (voir :ref:`ai_assistant`). Tous les champs sont inactifs tant que l'option **Activer l'assistant IA** n'est pas cochée."
+msgid "The AI Assistant settings tab configures the built-in conversational assistant (see :ref:`ai_assistant`). Unchecking **Enable AI Assistant** makes the other fields inactive. When the dialog opens with the assistant already disabled, the fields may initially remain editable; checking and unchecking the option refreshes their state."
+msgstr "L'onglet Assistant IA configure l'assistant conversationnel intégré (voir :ref:`ai_assistant`). Décocher **Activer l'assistant IA** rend les autres champs inactifs. Si la boîte de dialogue s'ouvre alors que l'assistant est déjà désactivé, les champs peuvent rester modifiables au départ ; cocher puis décocher l'option actualise leur état."
+
+msgid "The AI Assistant settings tab."
+msgstr "L'onglet des préférences de l'assistant IA."
 
 msgid "**Enable AI Assistant**"
 msgstr "**Activer l'assistant IA**"

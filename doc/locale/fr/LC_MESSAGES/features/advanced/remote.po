@@ -148,6 +148,9 @@ msgstr "Voici un exemple en Python 3 d'un script qui se connecte à une instance
 msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 
+msgid "Its automatic port discovery uses the configuration location of the Python-2-compatible guidata version. On macOS, or on Linux with a non-default ``XDG_CONFIG_HOME``, that location can differ from the current DataLab configuration directory. In that case, read the port shown next to **XML-RPC** in DataLab's status bar and pass it explicitly as a string to ``client.connect(port=\"28867\")``, replacing ``28867`` with the actual port."
+msgstr "La découverte automatique du port utilise l'emplacement de configuration de la version de guidata compatible avec Python 2. Sur macOS ou sous Linux avec une valeur non standard de ``XDG_CONFIG_HOME``, cet emplacement peut différer du répertoire de configuration actuel de DataLab. Dans ce cas, relevez le port affiché à côté de **XML-RPC** dans la barre d'état de DataLab et transmettez-le explicitement sous forme de chaîne à ``client.connect(port=\"28867\")``, en remplaçant ``28867`` par le port réel."
+
 msgid "Connection dialog"
 msgstr "Boîte de dialogue de connexion"
 

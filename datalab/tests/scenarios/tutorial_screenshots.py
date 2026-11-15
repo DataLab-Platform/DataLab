@@ -15,13 +15,17 @@ from uuid import NAMESPACE_URL, uuid5
 
 import numpy as np
 import sigima.enums
+import sigima.io
 import sigima.objects as sio
 import sigima.params as sip
+import sigima.proc.image as sipi
+import sigima.proc.signal as sips
 from guidata.dataset.qtwidgets import DataSetEditDialog
 from guidata.widgets.collectionseditor import CollectionsEditor
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima.tests import helpers
 from sigima.tests.data import create_paracetamol_signal, get_test_image
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
@@ -318,3 +322,221 @@ def capture_blobs(directory: Path) -> None:
                 plugin.unregister()
     finally:
         sys.modules.pop(module_name)
+
+
+def capture_laser_beam(directory: Path) -> None:
+    """Capture the results table, plot and calibration from the same measurements."""
+    paths = helpers.get_test_fnames("laser_beam/TEM00_z_*.jpg")
+    paths.sort(key=lambda path: int(path.split("_z_")[1].split(".")[0]))
+    with screenshot_app_context() as win:
+        panel = win.signalpanel
+        measurements = []
+        for path in paths:
+            image = sigima.io.read_image(path)
+            clipped = sipi.clip(image, sip.ClipParam.create(lower=35))
+            profile = sipi.radial_profile(
+                clipped, sipi.RadialProfileParam.create(center="centroid")
+            )
+            panel.add_object(profile)
+            panel.processor.run_feature("fwhm", sip.FWHMParam.create())
+            adapters = list(GeometryAdapter.iterate_from_obj(profile))
+            assert len(adapters) == 1
+            measurements.append(adapters[0].get_column_values("Δx")[0])
+        assert len(measurements) == 14
+        panel.objview.selectAll()
+
+        def capture_results(dialog: QW.QWidget) -> bool:
+            dialog.resize(750, 600)
+            save_screenshot(dialog, directory / "15.png")
+            dialog.close()
+            return True
+
+        with patch("datalab.adapters_metadata.common.exec_dialog", capture_results):
+            panel.show_results()
+        panel.plot_results(kind="one_curve_per_title", xaxis="indices", yaxis="Δx")
+        plotted = panel.objview.get_sel_objects()[0]
+        np.testing.assert_allclose(plotted.y, measurements)
+        save_screenshot(win, directory / "17.png")
+
+        panel.processor.run_feature(
+            "calibration", sips.XYCalibrateParam.create(axis="x", a=0.5, b=10.0)
+        )
+        calibrated = panel.objview.get_sel_objects()[0]
+        np.testing.assert_allclose(calibrated.x, 0.5 * plotted.x + 10.0)
+        np.testing.assert_allclose(calibrated.y, plotted.y)
+        calibrated.xlabel = "Position"
+        calibrated.xunit = "mm"
+        panel.refresh_plot("selected", update_items=True, force=True)
+        save_screenshot(win, directory / "18.png")
+
+
+def capture_feature_screenshots(directory: Path, language: str) -> None:
+    """Capture feature dialogs and results in the requested language."""
+    import guidata.config as gcfg
+    from sigima.tests.common.stat_unit_test import (
+        create_reference_image,
+        create_reference_signal,
+    )
+    from sigima.tests.data import create_multigaussian_image, create_peak_image
+    from sigima.tests.signal.pulse.pulse_unit_test import create_test_step_params
+    from sigimax.widgets.signalpeak import SignalPeakDetectionDialog
+
+    from datalab.gui.panel.base import SaveToDirectoryGUIParam
+    from datalab.gui.profiledialog import ProfileExtractionDialog
+    from datalab.tests.features.common.add_metadata_unit_test import (
+        create_test_images,
+        create_test_signals,
+    )
+
+    def capture(widget: QW.QWidget, name: str) -> None:
+        save_screenshot(widget, directory / f"{name}.{language}.png")
+
+    with screenshot_app_context() as win:
+        image = create_reference_image()
+        image.roi = sio.create_image_roi(
+            "rectangle", [[250, 250, 300, 300], [600, 500, 250, 250]]
+        )
+        for prefix, panel, obj in (
+            ("s", win.signalpanel, create_reference_signal()),
+            ("i", win.imagepanel, image),
+        ):
+            panel.add_object(obj)
+            panel.processor.run_feature("stats")
+
+            def capture_result(dialog: QW.QWidget) -> bool:
+                dialog.resize(1000, 400)
+                capture(dialog, f"{prefix}_stats")
+                dialog.close()
+                return True
+
+            with patch("datalab.adapters_metadata.common.exec_dialog", capture_result):
+                panel.show_results()
+
+            for mode, name in (("apply", "editor"), ("extract", "dialog")):
+
+                def capture_roi(dialog: QW.QWidget) -> bool:
+                    dialog.resize(1000, 750)
+                    capture(dialog, f"{prefix}_roi_{name}")
+                    dialog.close()
+                    return False
+
+                with patch("datalab.gui.panel.base.exec_dialog", capture_roi):
+                    panel.get_roi_editor_output(mode)
+
+            rng = np.random.default_rng(42)
+            if prefix == "s":
+                hist_source = sio.create_signal(
+                    "Normal noise", np.arange(10000), rng.normal(size=10000)
+                )
+            else:
+                hist_source = sio.create_image(
+                    "Normal noise", rng.normal(size=(256, 256))
+                )
+            panel.add_object(hist_source)
+            panel.processor.run_feature("histogram", sip.HistogramParam.create())
+            capture(win, f"{prefix}_histogram")
+
+        panel = win.signalpanel
+        sig = create_paracetamol_signal()
+        panel.add_object(sig)
+        dialog = SignalPeakDetectionDialog(sig, parent=win)
+        try:
+            dialog.resize(1000, 750)
+            capture(dialog, "s_peak_detection")
+        finally:
+            dialog.close()
+
+        sig = create_reference_signal()
+        sig.roi = None
+        panel.add_object(sig)
+        panel.processor.run_feature("fwhm", sip.FWHMParam.create())
+        capture(win, "s_fwhm")
+
+        sig = sio.create_signal_from_param(create_test_step_params())
+        panel.add_object(sig)
+        param = sip.PulseFeaturesParam()
+        param.update_from_obj(sig)
+        panel.processor.run_feature("extract_pulse_features", param)
+        capture(win, "s_pulse_features")
+
+        image = create_reference_image()
+        image.roi = None
+        win.imagepanel.add_object(image)
+        for mode, name, param in (
+            ("line", "i_profile", sip.LineProfileParam.create(x=512, y=512)),
+            (
+                "rectangle",
+                "i_profile_average",
+                sip.AverageProfileParam.create(x1=400, y1=400, x2=650, y2=650),
+            ),
+        ):
+            dialog = ProfileExtractionDialog(
+                mode, param, parent=win, add_initial_shape=True
+            )
+            try:
+                dialog.set_obj(image)
+                dialog.resize(1000, 750)
+                QW.QApplication.processEvents()
+                manager = dialog.get_manager()
+                manager.get_xcs_panel().cs_plot.update_plot(dialog.shape)
+                manager.get_ycs_panel().cs_plot.update_plot(dialog.shape)
+                capture(dialog, name)
+            finally:
+                dialog.close()
+
+        panel = win.imagepanel
+        image = create_multigaussian_image(
+            sio.NewImageParam.create(height=200, width=200)
+        )
+        image.set_metadata_option("colormap", "gray")
+        panel.add_object(image)
+        panel.processor.run_feature(
+            "contour_shape",
+            sip.ContourShapeParam.create(shape=sigima.enums.ContourShape.ELLIPSE),
+        )
+        assert list(GeometryAdapter.iterate_from_obj(image))
+        capture(win, "i_contour_test")
+
+        state = np.random.get_state()
+        try:
+            np.random.seed(42)
+            image = create_peak_image()
+        finally:
+            np.random.set_state(state)
+        panel.add_object(image)
+        panel.processor.compute_peak_detection(
+            sip.Peak2DDetectionParam.create(create_rois=True)
+        )
+        assert image.roi is not None and not image.roi.is_empty()
+        capture(win, "i_peak2d_test")
+
+        old_mode = gcfg.get_validation_mode()
+        gcfg.set_validation_mode(gcfg.ValidationMode.DISABLED)
+        try:
+            for prefix, objects, extensions, pattern, extension in (
+                (
+                    "s",
+                    create_test_signals(),
+                    ["csv", "txt", "h5sig"],
+                    "{index:03d}_{title}",
+                    ".csv",
+                ),
+                (
+                    "i",
+                    create_test_images(),
+                    ["h5ima", "tiff", "png", "jpg"],
+                    "{title}_{index:04d}",
+                    ".png",
+                ),
+            ):
+                param = SaveToDirectoryGUIParam(objects, extensions)
+                param.basename = pattern
+                param.extension = extension
+                param.update_preview()
+                dialog = DataSetEditDialog(param, parent=win, wordwrap=False)
+                try:
+                    capture(dialog, f"{prefix}_save_to_directory")
+                finally:
+                    dialog.close()
+        finally:
+            gcfg.set_validation_mode(old_mode)

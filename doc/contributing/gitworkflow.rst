@@ -11,7 +11,7 @@ It also defines how bug fixes are managed.
 
       This workflow is a simplified version of the `Gitflow Workflow <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`_.
       It has been adapted to suit the needs of the DataLab project at the current stage of development.
-      In the near future, we may consider adopting a more complex workflow, e.g. by adding release branches.
+      A release branch is created only when the maintenance and development lines must diverge.
 
 Branching Model
 ---------------
