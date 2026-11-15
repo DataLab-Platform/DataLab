@@ -105,7 +105,11 @@ from datalab.utils.qthelpers import (
     configure_menu_about_to_show,
     qt_handle_error_message,
 )
-from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
+from datalab.webapi import (
+    WEBAPI_AVAILABLE,
+    get_webapi_controller,
+    webapi_unavailable_message,
+)
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
 from datalab.widgets import status as dl_status
@@ -125,7 +129,12 @@ if TYPE_CHECKING:
 
 
 def remote_controlled(func):
-    """Decorator for remote-controlled methods"""
+    """Decorator for remote-controlled methods
+
+    The decorated method processes pending events before returning: do not call
+    it from a Qt event handler, which would then process events while Qt is
+    handling one (see issue #527).
+    """
 
     @functools.wraps(func)
     def method_wrapper(*args, **kwargs):
@@ -826,17 +835,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             Dictionary with "url" and "token" keys.
 
         Raises:
-            RuntimeError: If Web API deps not installed or server already running.
+            RuntimeError: If Web API imports are unavailable or the server is running.
         """
         if not WEBAPI_AVAILABLE:
-            raise RuntimeError(
-                "Web API dependencies not installed. "
-                "Install with: pip install datalab-platform[webapi]"
-            )
+            raise RuntimeError(webapi_unavailable_message())
 
-        controller = get_webapi_controller()
-        controller.set_main_window(self)
-        url, token = controller.start(host=host, port=port)
+        try:
+            controller = get_webapi_controller()
+            controller.set_main_window(self)
+            url, token = controller.start(host=host, port=port)
+        except ImportError as error:
+            raise RuntimeError(webapi_unavailable_message()) from error
         return {"url": url, "token": token}
 
     @remote_controlled
@@ -845,7 +854,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if not WEBAPI_AVAILABLE:
             return
 
-        controller = get_webapi_controller()
+        try:
+            controller = get_webapi_controller()
+        except ImportError:
+            return
         controller.stop()
 
     @remote_controlled
@@ -853,12 +865,15 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Get Web API server status.
 
         Returns:
-            Dictionary with "running", "url", and "token" keys.
+            Dictionary with "running", "url", "token" and "available" keys.
         """
         if not WEBAPI_AVAILABLE:
             return {"running": False, "url": None, "token": None, "available": False}
 
-        controller = get_webapi_controller()
+        try:
+            controller = get_webapi_controller()
+        except ImportError:
+            return {"running": False, "url": None, "token": None, "available": False}
         info = controller.get_connection_info()
         info["available"] = True
         return info
@@ -1137,15 +1152,19 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Add the plugin's tools to its submenu of the *Plugins* menu
 
         Each tool is listed in the panel of its object type (both panels when
-        it has none), after the plugin's own actions.
+        it has none), after the plugin's own actions. Tools declared with
+        ``menu=False`` are placed by the plugin itself.
         """
         title = plugin.info.name.replace("&", "&&")
         for panel in (self.signalpanel, self.imagepanel):
             tools = [
                 tool
                 for tool in plugin.get_tools()
-                if tool.object_type is None
-                or tool.object_type.value == panel.PANEL_STR_ID
+                if tool.menu
+                and (
+                    tool.object_type is None
+                    or tool.object_type.value == panel.PANEL_STR_ID
+                )
             ]
             if not tools:
                 continue
@@ -1262,6 +1281,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def __configure_plugins(self) -> None:
         """Open plugin configuration dialog"""
         dialog = PluginConfigDialog(self)
+        dialog.exec()
+
+    def show_plugin_catalog(self) -> None:
+        """Open the plugin configuration dialog on its Catalog tab"""
+        dialog = PluginConfigDialog(self)
+        dialog.show_catalog()
         dialog.exec()
 
     def show_applications(self, plugin_id: str | None = None) -> None:
@@ -1464,7 +1489,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             _("Settings..."),
             icon=get_icon("libre-gui-settings.svg"),
             tip=_("Open settings dialog"),
-            triggered=self.__edit_settings,
+            triggered=lambda: self.show_settings(),
         )
         self.capsule_action = create_action(
             self,
@@ -1901,6 +1926,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     @remote_controlled
     def get_current_panel(self) -> str:
         """Return current panel name
+
+        Returns:
+            Panel name (valid values: "signal", "image", "macro")
+        """
+        return self.current_panel_name()
+
+    def current_panel_name(self) -> str:
+        """Return current panel name, without processing pending events
+
+        Unlike :meth:`get_current_panel`, this may be called while Qt is
+        handling an event, e.g. from a show event (see issue #527).
 
         Returns:
             Panel name (valid values: "signal", "image", "macro")
@@ -2845,9 +2881,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     # Settings changes are intentionally dispatched in one place because each
     # option may trigger a specific live UI update or panel refresh.
-    def __edit_settings(self) -> None:  # pylint: disable=too-many-branches,too-many-statements
-        """Edit settings"""
-        changed_options = edit_settings(self)
+    def show_settings(self, tab: str | None = None) -> None:  # pylint: disable=too-many-branches,too-many-statements
+        """Show the settings dialog, then apply the changed settings
+
+        Args:
+            tab: Key of the settings tab to show first (e.g. "ai"), or None for
+             the first tab
+        """
+        changed_options = edit_settings(self, tab)
         sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
         refresh_signal_panel = refresh_image_panel = False

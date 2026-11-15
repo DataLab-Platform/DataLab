@@ -47,8 +47,8 @@ msgstr "Cette option vous permet d'afficher les signaux sélectionnés dans une 
 msgid "Annotations are used to add comments or labels to the data, and they can be used to highlight specific events or regions of interest."
 msgstr "Les annotations sont utilisées pour ajouter des commentaires ou des étiquettes aux données, et elles peuvent être utilisées pour mettre en évidence des événements spécifiques ou des régions d'intérêt."
 
-msgid "The annotations are saved in the metadata of the signal, so they are persistent and will be displayed every time you visualize the signal."
-msgstr "Les annotations sont enregistrées dans les métadonnées du signal, elles sont donc persistantes et seront affichées chaque fois que vous visualiserez le signal."
+msgid "The annotations are stored with the signal (separately from its metadata), so they are persistent and will be displayed every time you visualize the signal."
+msgstr "Les annotations sont enregistrées avec le signal (séparément de ses métadonnées), elles sont donc persistantes et seront affichées chaque fois que vous visualiserez le signal."
 
 msgid "Annotations may be added in the separate view."
 msgstr "Les annotations peuvent être ajoutées dans la vue séparée."
@@ -65,14 +65,14 @@ msgstr "Dans la nouvelle fenêtre, ajoutez des annotations en cliquant sur les b
 msgid "Eventually, customize the annotations by changing their properties (e.g., the text, the color, the position, etc.) using the \"Parameters\" option in the context menu of the annotations."
 msgstr "Personnalisez les annotations en modifiant leurs propriétés (par exemple, le texte, la couleur, la position, etc.) en utilisant l'option \"Paramètres\" dans le menu contextuel des annotations."
 
-msgid "When you are done, click on the \"OK\" button to save the annotations. This will close the window and the annotations will be saved in the metadata of the signal and will be displayed in the main window."
-msgstr "Quand vous avez terminé, cliquez sur le bouton \"OK\" pour enregistrer les annotations. Cela fermera la fenêtre et les annotations seront enregistrées dans les métadonnées du signal et seront affichées dans la fenêtre principale."
+msgid "When you are done, click on the \"OK\" button to save the annotations. This will close the window and the annotations will be saved with the signal and will be displayed in the main window."
+msgstr "Quand vous avez terminé, cliquez sur le bouton \"OK\" pour enregistrer les annotations. Cela fermera la fenêtre et les annotations seront enregistrées avec le signal et seront affichées dans la fenêtre principale."
 
-msgid "Annotations are now part of the signal metadata."
-msgstr "Les annotations font désormais partie des métadonnées du signal."
+msgid "Annotations are now displayed in the main window."
+msgstr "Les annotations sont désormais affichées dans la fenêtre principale."
 
-msgid "Annotations may be copied from a signal to another by using the \"copy/paste metadata\" features."
-msgstr "Les annotations peuvent être copiées d'un signal à un autre en utilisant les fonctionnalités \"copier/coller les métadonnées\"."
+msgid "Annotations may be copied from a signal to another by using the \"Copy annotations\" and \"Paste annotations\" actions of the \"Edit ▸ Annotations\" submenu (see :ref:`sig-menu-edit`)."
+msgstr "Les annotations peuvent être copiées d'un signal à un autre en utilisant les actions \"Copier les annotations\" et \"Coller les annotations\" du sous-menu \"Édition ▸ Annotations\" (voir :ref:`sig-menu-edit`)."
 
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
@@ -89,8 +89,8 @@ msgstr "Si désactivé, la visualisation n'est pas rafraîchie tant que vous ne 
 msgid "Even though the refresh algorithm is optimized, it may still take some time to refresh the plot view when the data changes, especially when the data set is large. Therefore, you may want to disable the auto-refresh feature when you are working with large data sets, and enable it again when you are done. This will avoid unnecessary refreshes."
 msgstr "Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
 
-msgid "Show only first selected signal"
-msgstr "Afficher seulement le premier signal sélectionné"
+msgid "Show first object only"
+msgstr "Afficher uniquement le premier objet"
 
 msgid "Toggle between showing all selected signals or only the first one."
 msgstr "Basculer entre l'affichage de tous les signaux sélectionnés ou seulement du premier."
@@ -148,4 +148,10 @@ msgstr "Cette entrée de menu supprime les couleurs et les styles de trait chois
 
 msgid "Workspaces and history files saved with DataLab 1.3 or earlier store the automatic style of each curve: when opening them, these styles are removed from the metadata of the signals, whose curves are assigned the current automatic styles. A color and a line style chosen at that time cannot be told apart from an automatic style when they are identical to one of them: they are removed as well. Files saved with later versions, as well as metadata imported from a file, are not converted."
 msgstr "Les espaces de travail et les fichiers d'historique enregistrés avec DataLab 1.3 ou une version antérieure contiennent le style automatique de chaque courbe : à leur ouverture, ces styles sont supprimés des métadonnées des signaux, dont les courbes reçoivent les styles automatiques actuels. Une couleur et un style de trait choisis à l'époque ne peuvent pas être distingués d'un style automatique lorsqu'ils lui sont identiques : ils sont également supprimés. Les fichiers enregistrés avec les versions ultérieures, ainsi que les métadonnées importées depuis un fichier, ne sont pas convertis."
+
+msgid "Panels and toolbars"
+msgstr "Panneaux et barres d'outils"
+
+msgid "The last entries of the \"View\" menu show or hide the panels of the main window: the \"Welcome\" page (see :ref:`welcome_page`), the \"Macro Panel\" (see :ref:`about_macros`), the \"History Panel\" (see :ref:`historypanel`), the \"AI Assistant\" (see :ref:`ai_assistant`), the \"Applications\" panel (see :ref:`applications_panel`), and the \"Signal View\" and \"Image View\" panels. They also show or hide the toolbars of the main window (\"Main Toolbar\", \"Signal Panel Toolbar\" and \"Image Panel Toolbar\")."
+msgstr "Les dernières entrées du menu \"Affichage\" affichent ou masquent les panneaux de la fenêtre principale : la page \"Accueil\" (voir :ref:`welcome_page`), le \"Gestionnaire de Macros\" (voir :ref:`about_macros`), le panneau \"Historique\" (voir :ref:`historypanel`), l'\"Assistant IA\" (voir :ref:`ai_assistant`), le panneau \"Applications\" (voir :ref:`applications_panel`), ainsi que les panneaux \"Vue Signal\" et \"Vue Image\". Elles affichent ou masquent également les barres d'outils de la fenêtre principale (\"Barre d'outils principale\", \"Barre d'outils du panneau Signal\" et \"Barre d'outils du panneau Image\")."
 

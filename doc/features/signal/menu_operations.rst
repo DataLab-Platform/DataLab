@@ -18,14 +18,24 @@ When the "Signal Panel" is selected, the menus and toolbars are updated to
 provide signal-related actions.
 
 The "Operations" menu allows you to perform various operations on the
-selected signals, such as arithmetic operations, peak detection, or
-convolution.
+selected signals, such as arithmetic operations, mathematical functions,
+statistics between signals, or convolution.
 
 Arithmetic
 ----------
 
-Evaluate a user-defined arithmetic expression on the selected signals.
-The expression can reference the signal's X and Y arrays as variables.
+The "Arithmetic" |arithmetic| action creates a new signal which is the result of
+an arithmetic operation between each selected signal and a second signal (selected
+in a dialog box):
+
+.. math::
+    y = (y_{1} \odot y_{2}) \times a + b
+
+where :math:`y_{1}` is the selected signal, :math:`y_{2}` is the second signal,
+:math:`\odot` is the **Operator** (:math:`+`, :math:`-`, :math:`\times` or
+:math:`/`), :math:`a` is the **Factor** and :math:`b` is the **Constant**.
+The **Operation** field shows the resulting expression. By default, the result
+is converted to the data type of the selected signal.
 
 .. |arithmetic| image:: ../../../datalab/data/icons/operations/arithmetic.svg
     :width: 24px
@@ -240,7 +250,7 @@ Create a new signal which is the result of a statistical operation on each point
     * - |standard_deviation| Standard Deviation
       - :math:`y_{M} = \sqrt{\dfrac{1}{M}\sum_{k=0}^{M-1}{(y_{k} - \bar{y})^{2}}}`
     * - |quadratic_difference| Quadratic Difference
-      - :math:`y_{2} = \sqrt{y_{1}^{2} - y_{0}^{2}}`
+      - :math:`y_{2} = \dfrac{y_{1} - y_{0}}{\sqrt{2}}`
 
 .. |average| image:: ../../../datalab/data/icons/operations/average.svg
     :width: 24px

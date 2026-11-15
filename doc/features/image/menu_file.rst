@@ -27,6 +27,11 @@ The "File" menu allows you to:
 
 - Edit DataLab preferences (see :ref:`settings`).
 
+- Start or stop the Web API server, copy its connection information, and check
+  its status (see :ref:`ref-to-webapi`).
+
+- Quit DataLab.
+
 .. _open_image:
 
 Open image
@@ -43,34 +48,45 @@ Create a new image from the following supported filetypes:
       - .png
     * - TIFF files
       - .tif, .tiff
-    * - 8-bit images
-      - .jpg, .gif
+    * - JPEG files
+      - .jpg, .jpeg
+    * - JPEG 2000 files
+      - .jp2
+    * - Bitmap images
+      - .bmp
     * - NumPy arrays
       - .npy
     * - MAT-Files
       - .mat
     * - Text files
       - .txt, .csv, .asc
+    * - HDF5 image files
+      - .h5ima
     * - Andor SIF files
       - .sif
     * - Princeton Instruments SPE files
       - .spe
     * - Opticks GEL files
       - .gel
-    * - Hammamatsu NDPI files
+    * - Hamamatsu NDPI files
       - .ndpi
     * - PCO Camera REC files
       - .rec
     * - SPIRICON files
       - .scor-data
-    * - FXD files
+    * - Thales Pixium FXD files
       - .fxd
-    * - Bitmap images
-      - .bmp
+    * - Dürr NDT XYZ files
+      - .xyz
     * - FT-Lab files
       - .ima
     * - Headerless RAW files
       - .raw
+
+.. note::
+
+    Thales Pixium FXD files, and the writing of Dürr NDT XYZ files, are supported
+    by the built-in image formats plugin (``datalab_imageformats``).
 
 When opening a headerless RAW file (``.raw``), DataLab displays a **RAW image import**
 dialog to describe its binary layout: pixel data type, image width and height, offset to
@@ -86,8 +102,11 @@ parameters to all of them or to set the parameters of each file individually.
     provided that the associated plugin(s) are installed (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_)
     and that the output NumPy array data type and shape are supported by DataLab.
 
-    To add a new file format, you may use the `imageio_formats` entry of DataLab configuration file.
-    This entry is a formatted like the `IMAGEIO_FORMATS` object which represents the natively supported formats:
+    To add a new file format, you may set the ``imageio_formats`` option of the
+    Sigima library (``sigima.config.options.imageio_formats``), for example from a
+    plugin. This option is formatted like the `IMAGEIO_FORMATS` object which
+    represents the natively supported formats (formats added this way can only be
+    opened, not saved):
 
     .. autodata:: sigima.config.IMAGEIO_FORMATS
 
@@ -99,8 +118,34 @@ Open multiple images from a specified directory.
 Save image
 ^^^^^^^^^^
 
-Save current image (see "Open image" supported filetypes; writing ``.raw`` files is not
-supported).
+Save current image to the following supported filetypes (the other file types listed
+in "Open image" can only be opened):
+
+.. list-table::
+    :header-rows: 1
+
+    * - File type
+      - Extensions
+    * - PNG files
+      - .png
+    * - TIFF files
+      - .tif, .tiff
+    * - JPEG files
+      - .jpg, .jpeg
+    * - JPEG 2000 files
+      - .jp2
+    * - Bitmap images
+      - .bmp
+    * - NumPy arrays
+      - .npy
+    * - MAT-Files
+      - .mat
+    * - Text files
+      - .txt, .csv, .asc
+    * - HDF5 image files
+      - .h5ima
+    * - Dürr NDT XYZ files
+      - .xyz
 
 After choosing the destination file, DataLab opens an **Export image** dialog tailored to
 the selected file format, with a live preview of the exported image (displayed in gray
@@ -128,17 +173,19 @@ and image format.
 When you select "Save to directory..." from the File menu, a dialog appears where you can:
 
 - **Directory**: Choose the target directory where images will be saved
-- **Filename pattern**: Define a pattern for the filenames using Python format strings
-- **File extension**: Select the output format (.png, .tiff, .h5ima, etc.)
+- **Basename pattern**: Define a pattern for the filenames using Python format strings
+  (the **Help** button describes the available placeholders)
+- **Extension**: Select the output format (.png, .tiff, .h5ima, etc.)
 - **Overwrite**: Choose whether to overwrite existing files
-- **Preview**: See the list of files that will be created (with object IDs)
+- **Preview**: See the list of files that will be created (each file name is
+  preceded by the group and the title of the corresponding image)
 
 The filename pattern supports the following placeholders:
 
 - ``{title}``: Image title
 - ``{index}``: 1-based index of the image in the selection (with zero-padding)
 - ``{count}``: Total number of selected images
-- ``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``, ``{zlabel}``, ``{zunit}``: Axis labels and units
+- ``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units
 - ``{metadata[key]}``: Access metadata values
 
 You can also use format modifiers, for example ``{index:03d}`` will format the index
@@ -177,11 +224,14 @@ The second step consists of configuring the import and previewing the result. Yo
 configure the following options:
 
 - **Delimiter**: The character used to separate the values in the text file.
+- **Decimal**: The decimal separator (point or comma).
 - **Comments**: The character used to indicate that the line is a comment and should be
   ignored.
 - **Rows to Skip**: The number of rows to skip at the beginning of the file.
-- **Maximum Number of Rows**: The maximum number of rows to import. If the file contains
+- **Max. nb of rows**: The maximum number of rows to import. If the file contains
   more rows, they will be ignored.
+- **Header**: The row containing the column names, if any (none, inferred from the
+  data, or first row).
 - **Transpose**: If checked, the rows and columns will be transposed.
 - **Data type**: The destination data type of the imported data.
 

@@ -19,8 +19,6 @@ data analysis and visualization platform.
     For a synthetic overview of the features of DataLab, please refer to the
     :ref:`key_features` page.
 
-.. _validation:
-
 Overview & Common features
 --------------------------
 
@@ -95,6 +93,8 @@ bottom-right of the DataLab main window.
    image/menu_view
    image/2d_peak_detection
    image/contour_detection
+
+.. _validation:
 
 Validation
 ----------

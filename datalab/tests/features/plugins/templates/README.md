@@ -12,6 +12,7 @@ Template files use the `.py.template` extension so that linters (Ruff, Pylint)
 skip them – they contain `{placeholders}` that are not valid Python.
 
 - **plugin_valid.py.template**: Basic valid plugin template with actions for both signal and image panels
+- **plugin_owned_processing.py.template**: Plugin registering an owned processing feature in `register_computations()`
 - **plugin_nested_menus.py.template**: Plugin with nested submenus (3 levels deep)
 - **plugin_with_dialogs.py.template**: Plugin demonstrating dialog methods (show_warning, show_error, etc.)
 - **plugin_many_actions.py.template**: Plugin with multiple actions in a dropdown menu
@@ -77,7 +78,7 @@ When creating a new template:
 1. Use `{placeholder}` syntax for values that will be replaced
 2. Avoid f-strings with placeholders (use variables instead)
 3. Document required placeholders in template comments
-4. Add corresponding test in `test_plugins.py`
+4. Add corresponding test in `plugins_app_test.py`
 5. Update this README
 
 ## Directory Structure
@@ -86,6 +87,7 @@ When creating a new template:
 datalab/tests/features/plugins/templates/
 ├── README.md                      # This file
 ├── plugin_valid.py.template                # Standard valid plugin
+├── plugin_owned_processing.py.template     # Owned processing feature
 ├── plugin_nested_menus.py.template         # Nested submenus
 ├── plugin_with_dialogs.py.template         # Dialog methods
 ├── plugin_many_actions.py.template         # Many dropdown actions

@@ -23,6 +23,9 @@ Offline installation via pip
 This method works on **any operating system** with **Python 3.10 to 3.14**.
 It assumes you have an online machine available to download packages, and a separate
 offline machine where DataLab will be installed.
+The commands below download wheels for the online machine's platform: use an
+online machine with the same operating system, architecture and compatible
+platform ABI as the offline machine.
 
 Requirements
 ------------
@@ -31,18 +34,19 @@ Offline machine
 ^^^^^^^^^^^^^^^
 
 - GNU/Linux, Windows, or macOS
-- Python 3.10 to 3.14 installed with the **same major version** as the online machine
+- Python 3.10 to 3.14 installed with the **same minor version** (3.x) as the online machine
+- The same operating system and architecture, with a compatible platform ABI
 - No assumptions regarding installed packages
 
 .. important::
 
     **Version compatibility is critical:**
 
-    - ✅ **Allowed:** Python 3.10.2 ↔ Python 3.10.11 (same major version)
-    - ❌ **Not allowed:** Python 3.10.x ↔ Python 3.11.x (different major versions)
+    - ✅ **Allowed:** Python 3.10.2 ↔ Python 3.10.11 (same minor version)
+    - ❌ **Not allowed:** Python 3.10.x ↔ Python 3.11.x (different minor versions)
 
-    SciPy, NumPy, and scikit-image are highly dependent on the Python major version.
-    Both machines must use the same major Python version for reliable offline installation.
+    SciPy, NumPy, and scikit-image are highly dependent on the Python minor version.
+    Both machines must use the same minor Python version for reliable offline installation.
 
 To check your Python version, run:
 
@@ -53,14 +57,16 @@ To check your Python version, run:
 Online machine
 ^^^^^^^^^^^^^^
 
-- Windows, Linux, or macOS
-- Python with the **same major version** as the offline machine
+- The same operating system and architecture as the offline machine, with a compatible platform ABI
+- Python with the **same minor version** as the offline machine
 - ``pip`` installed
 
 Preparing packages (online machine)
 -----------------------------------
 
 Download all required **Wheel packages** for offline installation.
+``pip download`` selects wheels compatible with the machine running it; a
+matching Python version alone is not enough for a different platform.
 
 Create a folder for packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,23 +96,31 @@ Download DataLab and dependencies
 
         .. code-block:: console
 
-            pip download datalab-platform --dest C:\datalab-offline
+            pip download "datalab-platform[qt]" --dest C:\datalab-offline
 
     .. tab-item:: GNU/Linux / macOS
 
         .. code-block:: console
 
-            pip download datalab-platform --dest ~/datalab-offline
+            pip download "datalab-platform[qt]" --dest ~/datalab-offline
 
 This command downloads:
 
 - ``datalab-platform``
 - ``sigima``
 - ``sigimax``
+- ``datalab-capsule``
 - ``plotpy``
 - ``guidata``
 - ``pythonqwt``
+- ``pyqt5`` (Qt bindings, installed by the ``qt`` extra)
 - ``numpy``, ``scipy``, ``scikit-image``, and other dependencies
+
+.. note::
+
+    The OpenCV blob detection feature requires the optional ``opencv`` extra:
+    to use it, replace ``datalab-platform[qt]`` by ``datalab-platform[qt,opencv]``
+    in the download and installation commands.
 
 Expected folder structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -119,9 +133,11 @@ After downloading, your folder should contain files similar to:
     ├─ datalab_platform‑1.x.x‑py3‑none‑any.whl
     ├─ sigima‑1.x.x‑py3‑none‑any.whl
     ├─ sigimax‑1.x.x‑py3‑none‑any.whl
+    ├─ datalab_capsule‑0.x.x‑py3‑none‑any.whl
     ├─ plotpy‑x.x.x‑py3‑none‑any.whl
     ├─ guidata‑3.x.x‑py3‑none‑any.whl
     ├─ pythonqwt‑x.x.x‑py3‑none‑any.whl
+    ├─ pyqt5‑5.x.x‑cp38‑abi3‑[platform].whl
     ├─ numpy‑...‑cp310‑cp310‑[platform].whl
     ├─ scipy‑...‑cp310‑cp310‑[platform].whl
     ├─ scikit_image‑...‑cp310‑cp310‑[platform].whl
@@ -168,7 +184,7 @@ Install DataLab offline
 
 .. code-block:: console
 
-    python -m pip install --no-index --find-links . datalab-platform
+    python -m pip install --no-index --find-links . "datalab-platform[qt]"
 
 The ``--no-index`` option tells pip not to connect to the internet, and
 ``--find-links .`` tells pip to look for packages in the current directory.
@@ -218,13 +234,13 @@ Install DataLab in the virtual environment
 
         .. code-block:: console
 
-            python -m pip install --no-index --find-links C:\datalab-offline datalab-platform
+            python -m pip install --no-index --find-links C:\datalab-offline "datalab-platform[qt]"
 
     .. tab-item:: GNU/Linux / macOS
 
         .. code-block:: console
 
-            python -m pip install --no-index --find-links ~/datalab-offline datalab-platform
+            python -m pip install --no-index --find-links ~/datalab-offline "datalab-platform[qt]"
 
 Launch DataLab
 ^^^^^^^^^^^^^^
@@ -244,14 +260,14 @@ installations as it provides a portable, self-contained Python environment.
 Prepare on online machine
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Download WinPython with the **same major Python version** as your target system
+1. Download WinPython with the **same minor Python version** as your target system
 2. Install WinPython
 3. Open the *WinPython Command Prompt*
 4. Download packages:
 
 .. code-block:: console
 
-    pip download datalab-platform --dest C:\datalab-offline
+    pip download "datalab-platform[qt]" --dest C:\datalab-offline
 
 Install on offline machine
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -263,7 +279,7 @@ Install on offline machine
 .. code-block:: console
 
     cd C:\datalab-offline
-    python -m pip install --no-index --find-links . datalab-platform
+    python -m pip install --no-index --find-links . "datalab-platform[qt]"
 
 Benefits of WinPython
 ^^^^^^^^^^^^^^^^^^^^^
@@ -282,7 +298,7 @@ The complete workflow in four steps:
 
    .. code-block:: console
 
-       pip download datalab-platform --dest /path/to/datalab-offline
+       pip download "datalab-platform[qt]" --dest /path/to/datalab-offline
 
 2. **Transfer:** Copy the ``datalab-offline`` folder to the offline machine
 
@@ -290,7 +306,7 @@ The complete workflow in four steps:
 
    .. code-block:: console
 
-       python -m pip install --no-index --find-links /path/to/datalab-offline datalab-platform
+       python -m pip install --no-index --find-links /path/to/datalab-offline "datalab-platform[qt]"
 
 4. **Verify:** Launch DataLab
 

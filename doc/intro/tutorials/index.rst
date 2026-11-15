@@ -53,4 +53,5 @@ on a specific aspect of the software and is intended to be self-contained.
    laser_beam
    history_panel
    custom_func
+   plugin_catalog
    work_with_spyder

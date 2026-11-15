@@ -16,6 +16,8 @@ from typing import Any, Generator
 
 import guidata.dataset as gds
 from guidata.dataset import restore_dataset, update_dataset
+from guidata.dataset.qtwidgets import DataSetGroupEditDialog
+from guidata.qthelpers import exec_dialog
 from plotpy.styles import BaseImageParam
 from qtpy import QtWidgets as QW
 
@@ -73,6 +75,9 @@ class MainSettings(gds.DataSet):
             "When enabled (default), connections from localhost (127.0.0.1) to the "
             "<br>Web API do not require authentication. This simplifies notebook "
             "<br>integration when DataLab-Kernel runs on the same machine."
+            "<br>While the Web API server is running, any local application and any "
+            "<br>web page open in your browser can then access your data "
+            "without a token."
             "<br>Disable for stricter security if needed."
         ),
     )
@@ -672,7 +677,6 @@ def _ai_test_connection(
 class AISettings(gds.DataSet):
     """DataLab AI Assistant settings"""
 
-    enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
     provider = gds.ChoiceItem(
         _("Provider"),
         _ai_provider_choices,
@@ -791,6 +795,26 @@ def conf_to_datasets(paramdict: dict[str, gds.DataSet]) -> None:
     for param, field_name, option in _iter_conf(paramdict):
         value = getattr(Conf, field_name).get()
         setattr(param, option, value)
+    _sync_display_stores(paramdict)
+
+
+def _sync_display_stores(paramdict: dict[str, gds.DataSet]) -> None:
+    """Set the stored values activating dataset items from the datasets' values.
+
+    A checkbox with a ``display.store`` property (e.g. "Use auto downsampling")
+    activates other items through a value shared by all instances of its dataset.
+    guidata before 3.17.3 only updates this value when the checkbox changes state
+    (PlotPyStack/guidata#158): a dialog opening with the box unchecked kept the
+    other items active.
+
+    Args:
+        paramdict: Datasets of the settings tabs
+    """
+    for param in paramdict.values():
+        for item in param.get_items():
+            store = item.get_prop("display", "store", None)
+            if store is not None:
+                store.set(param, item, item.get_value(param))
 
 
 def datasets_to_conf(paramdict: dict[str, gds.DataSet]) -> None:
@@ -863,11 +887,13 @@ def create_dataset_dict() -> dict[str, gds.DataSet]:
     return paramdict
 
 
-def edit_settings(parent: QW.QWidget) -> list[str]:
+def edit_settings(parent: QW.QWidget, tab: str | None = None) -> list[str]:
     """Edit DataLab settings
 
     Args:
         parent: Parent widget
+        tab: Key of the settings tab to show first (e.g. "ai"), or None for
+         the first tab
 
     Returns:
         List of changed option names
@@ -877,8 +903,11 @@ def edit_settings(parent: QW.QWidget) -> list[str]:
     all_values_before = get_all_values(paramdict)
 
     params = gds.DataSetGroup(paramdict.values(), title=_("Settings"))
+    dialog = DataSetGroupEditDialog(instance=params, parent=parent)
+    if tab is not None:
+        dialog.findChild(QW.QTabWidget).setCurrentIndex(list(paramdict).index(tab))
     changed_options = []
-    if params.edit(parent=parent):
+    if exec_dialog(dialog):
         after = get_restart_items_values(paramdict)
         if before != after:
             # List the options that were changed

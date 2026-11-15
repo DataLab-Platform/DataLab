@@ -14,9 +14,10 @@ To run DataLab from the command line, type the following::
 
     $ datalab
 
-To show help on command line usage, simply run::
+To show help on command line usage, run the module from a terminal. On Windows,
+the ``datalab`` GUI entry point may not display console output::
 
-    $ datalab --help
+    $ python -m datalab.app --help
     usage: app.py [-h] [-b path] [-v] [--reset] [--unattended] [--accept_dialogs]
                   [--screenshot] [--screenshot_path SCREENSHOT_PATH]
                   [--delay DELAY] [--xmlrpcport XMLRPCPORT]
@@ -104,12 +105,13 @@ Run technical validation tests
 -------------------------------
 
 .. note:: Technical validation tests are directly included in individual unit tests
-    and are disseminated throughout the code. The test functions including validation
-    tests are marked with the ``@pytest.mark.validation`` decorator.
+    of the `Sigima <https://sigima.readthedocs.io/>`_ library, which provides the
+    signal and image processing features of DataLab. The test functions including
+    validation tests are marked with the ``@pytest.mark.validation`` decorator.
 
 To execute DataLab technical validation tests, run the following::
 
-    $ pytest -m validation
+    $ pytest --pyargs sigima -m validation
 
 .. seealso:: See section :ref:`validation` for more information on DataLab's validation strategy.
 

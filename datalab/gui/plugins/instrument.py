@@ -201,6 +201,14 @@ class InstrumentWindow(QW.QDialog):
         self.status_label.setTextFormat(QC.Qt.PlainText)
         settings_layout.addWidget(self.status_label)
         commands = QW.QHBoxLayout()
+        self.defaults_button = QW.QPushButton(
+            get_icon("reset.svg"), _("Restore defaults")
+        )
+        self.defaults_button.setToolTip(
+            _("Set the settings of the instrument back to their default values")
+        )
+        self.defaults_button.clicked.connect(self.restore_defaults)
+        commands.addWidget(self.defaults_button)
         self.live_button = QW.QPushButton(get_icon("replay.svg"), _("Live"))
         self.live_button.setCheckable(True)
         self.live_button.setToolTip(_("Refresh the view continuously"))
@@ -389,6 +397,13 @@ class InstrumentWindow(QW.QDialog):
     def settings_changed(self) -> None:
         """Refresh the view shortly after the settings changed."""
         self._refresh_timer.start(self.REFRESH_DELAY)
+
+    def restore_defaults(self) -> None:
+        """Set the instrument settings back to their default values."""
+        self.instrument.settings.set_defaults()
+        self.edit_layout.update_widgets()
+        self.edit_layout.refresh_widgets()
+        self.settings_changed()
 
     def set_live(self, live: bool) -> None:
         """Start or stop refreshing the view continuously."""

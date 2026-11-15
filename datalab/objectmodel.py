@@ -36,7 +36,7 @@ a container for `SignalObj` and `ImageObj` instances.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 from uuid import uuid4
 
 from sigima import ImageObj, SignalObj
@@ -275,6 +275,15 @@ class ObjectGroup:
     def remove(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from group"""
         self.__objects.remove(get_uuid(obj))
+        self.model.reset_short_ids()
+
+    def remove_objects(self, uuids: Collection[str]) -> None:
+        """Remove objects from group, renumbering the objects once
+
+        Args:
+            uuids: UUIDs of the objects to remove (other UUIDs are ignored)
+        """
+        self.__objects[:] = [uuid for uuid in self.__objects if uuid not in uuids]
         self.model.reset_short_ids()
 
     def clear(self) -> None:
@@ -624,6 +633,30 @@ class ObjectModel:
             if obj in group:
                 group.remove(obj)
         del self._objects[get_uuid(obj)]
+        self.reset_short_ids()
+
+    def remove_objects(self, objects: Iterable[SignalObj | ImageObj]) -> None:
+        """Remove objects from model, renumbering the remaining objects once
+
+        Removing many objects one by one (see :meth:`remove_object`) would renumber
+        all the objects of the model after each removal.
+
+        Args:
+            objects: Objects to remove
+
+        Raises:
+            KeyError: If an object is not in the model (nothing is removed)
+        """
+        uuids = [get_uuid(obj) for obj in objects]
+        for uuid in uuids:
+            if uuid not in self._objects:
+                raise KeyError(uuid)
+        removed = set(uuids)
+        for group in self._groups:
+            if not removed.isdisjoint(group.get_object_ids()):
+                group.remove_objects(removed)
+        for uuid in removed:
+            del self._objects[uuid]
         self.reset_short_ids()
 
     def get_object_from_number(self, number: int) -> SignalObj | ImageObj:

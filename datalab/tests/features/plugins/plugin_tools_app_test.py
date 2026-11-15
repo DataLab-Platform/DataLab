@@ -105,6 +105,13 @@ PLUGIN_SOURCE = textwrap.dedent(
                 object_type="image",
                 selection="at_least_one",
             ),
+            PluginTool(
+                id="placed",
+                title="Placed by the plugin...",
+                launcher="inspect_images",
+                object_type="image",
+                menu=False,
+            ),
         )
 
         def create_generator(self):
@@ -156,6 +163,9 @@ def test_plugin_tools_in_menus_and_instrument_window(
 
             win.set_current_panel("image")
             QW.QApplication.processEvents()
+            # Tools declared with menu=False are left to the plugin
+            assert list(_plugin_submenu_actions(win)) == ["Inspect images..."]
+            assert plugin.get_tool("placed").menu is False
             inspect_action = _plugin_submenu_actions(win)["Inspect images..."]
             assert not inspect_action.isEnabled()
             assert plugin.assess_tool("inspect") == "Select at least one image"

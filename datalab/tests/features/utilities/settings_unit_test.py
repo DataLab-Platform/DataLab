@@ -13,8 +13,10 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
 from datalab.env import execenv
+from datalab.gui import settings as settings_module
 from datalab.gui.settings import (
     ProcSettings,
+    ViewSettings,
     conf_to_datasets,
     create_dataset_dict,
     datasets_to_conf,
@@ -28,6 +30,42 @@ def test_edit_settings():
     with qt_app_context():
         changed = edit_settings(None)
         execenv.print(changed)
+
+
+def test_auto_downsampling_fields_inactive_when_loaded_disabled() -> None:
+    """Auto-downsampling fields are inactive as soon as disabled settings are loaded.
+
+    The value activating them is shared by all dialogs: it must follow the loaded
+    setting even when a previous dialog left it enabled, whatever the guidata
+    version.
+    """
+    original = Conf.sig_autodownsampling.get()
+    try:
+        for enabled in (False, True, False):
+            ViewSettings._prop_ads.set(None, None, not enabled)
+            Conf.sig_autodownsampling.set(enabled)
+            settings = create_dataset_dict()["view"]
+            assert settings.sig_autodownsampling is enabled
+            item = ViewSettings.sig_autodownsampling_maxpoints
+            active = item.get_prop_value("display", settings, "active", True)
+            assert bool(active) is enabled
+    finally:
+        Conf.sig_autodownsampling.set(original)
+
+
+def test_edit_settings_shows_requested_tab(monkeypatch) -> None:
+    """The settings dialog can open on a given tab, e.g. from the AI panel."""
+    shown = []
+
+    def fake_exec_dialog(dialog: QW.QDialog) -> int:
+        shown.append(dialog.findChild(QW.QTabWidget).currentIndex())
+        return 0
+
+    monkeypatch.setattr(settings_module, "exec_dialog", fake_exec_dialog)
+    with qt_app_context(exec_loop=False):
+        assert edit_settings(None, "ai") == []
+        assert edit_settings(None) == []
+    assert shown == [list(create_dataset_dict()).index("ai"), 0]
 
 
 def test_proc_history_policy_settings_round_trip() -> None:
@@ -76,7 +114,12 @@ def capture_settings_screenshots():
 
         # Create the dialog manually so we can access the tab widget
         dialog = DataSetGroupEditDialog(
-            instance=params, icon="", parent=None, apply=None, wordwrap=True, size=None
+            instance=params,
+            icon="",
+            parent=None,
+            apply=None,
+            wordwrap=True,
+            size=(900, 700),
         )
 
         # Find the main QTabWidget in the dialog

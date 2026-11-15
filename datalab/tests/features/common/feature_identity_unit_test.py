@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import dataclasses
 from collections import Counter
+from types import SimpleNamespace
+from unittest.mock import patch
 
 import numpy as np
 import sigima.params
@@ -13,7 +15,13 @@ import sigima.proc.signal as sips
 from sigima.objects import SignalObj, create_signal
 from sigima.proc.decorator import computation_function
 
-from datalab.gui.processor.base import BaseProcessor, ComputingFeature
+from datalab.config import Conf
+from datalab.gui.processor.base import (
+    BaseProcessor,
+    ComputingFeature,
+    ProcessingParameters,
+    extract_processing_parameters,
+)
 from datalab.tests import datalab_test_app_context
 
 PLUGIN_ORIGIN = {
@@ -28,6 +36,81 @@ PLUGIN_ORIGIN = {
 def normalize(src: SignalObj) -> SignalObj:
     """Plugin computation sharing a built-in feature identifier."""
     return src.copy()
+
+
+@computation_function()
+def layered_offset(src: SignalObj) -> SignalObj:
+    """Computation of a layered plugin, outside the module of its plugin class."""
+    dst = src.copy()
+    dst.y = dst.y + 1.0
+    return dst
+
+
+LAYERED_MODULE = "layered_plugin.workflow.computations"
+for _function in (layered_offset, getattr(layered_offset, "__wrapped__", None)):
+    if _function is not None:
+        _function.__module__ = LAYERED_MODULE
+
+
+class LayeredPlugin:
+    """Plugin class of a layered plugin project."""
+
+    info = SimpleNamespace(version="1.2.3")
+
+
+LayeredPlugin.__module__ = "layered_plugin.adapters.desktop"
+
+
+def test_layered_plugin_feature_origin_and_workspace(tmp_path) -> None:
+    """A feature of a layered plugin has the origin of its owner and can be saved.
+
+    Its function module is not under the module of the plugin class: the origin
+    used to be guessed as anonymous, with None values which made workspaces
+    impossible to save (issue #543).
+    """
+    plugin = LayeredPlugin()
+    owner = "org.example.layered"
+    with (
+        Conf.process_isolation_enabled.context(False),
+        datalab_test_app_context(console=False) as win,
+        patch("datalab.plugins.PluginRegistry.get_plugin", return_value=plugin),
+        patch("datalab.plugins.PluginRegistry.get_plugins", return_value=[plugin]),
+    ):
+        panel = win.signalpanel
+        processor = panel.processor
+        processor.add_feature(
+            ComputingFeature("1_to_1", function=layered_offset, title="Offset"),
+            owner=owner,
+        )
+        feature_id = f"{owner}:layered_offset"
+        origin = processor.get_feature(feature_id).plugin_origin
+        assert origin["plugin_class"] == "LayeredPlugin"
+        assert origin["module"] == LAYERED_MODULE
+        assert origin["version"] == "1.2.3"
+        assert None not in origin.values()
+
+        source = create_signal("Source", np.arange(10.0), np.arange(10.0))
+        panel.add_object(source)
+        panel.objview.select_objects([source])
+        processor.run_feature(feature_id)
+        result = panel[len(panel)]
+        assert extract_processing_parameters(result).plugin_origin == origin
+        filename = str(tmp_path / "layered.h5")
+        win.save_to_h5_file(filename)
+        win.load_h5_workspace([filename], reset_all=True)
+        reopened = extract_processing_parameters(panel[len(panel)])
+        assert reopened.func_name == feature_id
+        assert reopened.plugin_origin == origin
+
+
+def test_processing_parameters_drop_unknown_origin_values() -> None:
+    """Origins recorded with None values can still be stored in workspaces."""
+    parameters = ProcessingParameters(
+        "plugin:feature",
+        "1-to-1",
+        plugin_origin={"plugin_class": None, "module": "plugin", "version": None},
+    )
+    assert parameters.to_dict()["plugin_origin"] == {"module": "plugin"}
 
 
 def test_builtin_feature_ids_are_unique(monkeypatch) -> None:

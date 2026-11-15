@@ -76,8 +76,9 @@ versions of DataLab load unchanged.
 Recording and session lifecycle
 -------------------------------
 
-Actions are recorded only while **Record mode** is enabled. Turning record
-mode off preserves existing sessions but does not add new entries.
+Actions are recorded only while **Record mode** is enabled. By default, this mode
+is disabled when DataLab starts: nothing is recorded until it is enabled. Turning
+record mode off preserves existing sessions but does not add new entries.
 
 There is a single active recording session, shared by the Signals and Images
 panels. New actions from both panels are chained into that session (one is
@@ -186,8 +187,8 @@ The toolbar at the top of the panel exposes the following actions:
   bad result, edit its parameters, then replay to regenerate it). Actions
   whose source objects no longer exist are skipped with a warning, and a
   failed action blocks its downstream branch. Actions whose parameters were
-  changed (in step-by-step mode or from the **Processing** tab) are marked as
-  outdated; replaying recomputes them and, when parameters were edited, their
+  changed in step-by-step mode are marked as outdated; replaying recomputes
+  them and, when parameters were edited, their
   downstream dependent actions as well. Analysis actions replay by
   recomputing their results on the source objects: each analysis records
   which results it stored on the object (its *effects*), so replaying
@@ -237,9 +238,9 @@ The toolbar at the top of the panel exposes the following actions:
 .. note::
 
   While a replay or recompute is in progress, History Panel commands are
-  unavailable: the toolbar actions are disabled, and tree interactions
+  unavailable: the action toolbar commands are disabled, and tree interactions
   (context menu, double-click, :kbd:`Del` key) are ignored until the run
-  completes.
+  completes. The record-mode control remains available.
 
 Tree view
 ---------
@@ -389,7 +390,7 @@ Auto-recompute
 .. note::
 
    When a result object is selected in the signal/image panel and it has
-   processing parameters (i.e. was produced by a 1-to-1 computation), a
+   editable processing parameters, a
    **Processing** tab appears in the Properties panel. Checking
    **Auto-recompute on edit** in that tab will re-run the computation
    automatically 300 ms after any parameter modification.

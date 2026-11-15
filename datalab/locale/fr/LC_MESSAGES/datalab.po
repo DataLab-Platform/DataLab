@@ -47,6 +47,12 @@ msgstr "Historique…"
 msgid "Browse, load or delete past conversations."
 msgstr "Parcourir, charger ou supprimer les conversations passées."
 
+msgid "Settings…"
+msgstr "Préférences…"
+
+msgid "Open the AI Assistant tab of the settings (provider, model, API key…)."
+msgstr "Ouvrir l'onglet Assistant IA des préférences (fournisseur, modèle, clé d'API…)."
+
 msgid "Idle"
 msgstr "Inactif"
 
@@ -62,8 +68,8 @@ msgstr "Annuler la requête en cours (Échap)."
 msgid "Send"
 msgstr "Envoyer"
 
-msgid "AI Assistant ready. Configure your provider in the Edit > Preferences dialog (AI Assistant tab) before sending the first message."
-msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > Préférences (onglet Assistant IA) avant d'envoyer le premier message."
+msgid "AI Assistant ready. Configure your provider with the Settings… button (AI Assistant tab of File > Settings) before sending the first message. The provider is only contacted when you send a message or test the connection."
+msgstr "Assistant IA prêt. Configurez votre fournisseur avec le bouton Préférences… (onglet Assistant IA de Fichier > Préférences) avant d'envoyer le premier message. Le fournisseur n'est contacté que lorsque vous envoyez un message ou testez la connexion."
 
 msgid "You"
 msgstr "Vous"
@@ -126,11 +132,11 @@ msgstr ""
 msgid ""
 "No API key configured.\n"
 "\n"
-"Open the Edit > Preferences dialog (AI Assistant tab) to enter your provider credentials, or select the 'mock' provider for offline testing."
+"Click the Settings… button of the AI Assistant panel (AI Assistant tab of File > Settings) to enter your provider credentials, or select the 'mock' provider for offline testing."
 msgstr ""
 "Aucune clé d'API configurée.\n"
 "\n"
-"Ouvrez le menu Edition > Préférences (onglet Assistant IA) pour entrer les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
+"Cliquez sur le bouton Préférences… du panneau Assistant IA (onglet Assistant IA de Fichier > Préférences) pour entrer les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
 
 msgid "Conversation reset."
 msgstr "Conversation réinitialisée."
@@ -235,9 +241,6 @@ msgstr "Fichiers Markdown (*.md);;Tous les fichiers (*)"
 #, python-format
 msgid "Could not write file: %s"
 msgstr "Impossible d'écrire le fichier : %s"
-
-msgid "Enable AI Assistant"
-msgstr "Activer l'assistant IA"
 
 msgid "Provider"
 msgstr "Fournisseur"
@@ -1673,8 +1676,8 @@ msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms e
 msgid "Duplicate object or group"
 msgstr "Dupliquer l'objet ou le groupe"
 
-msgid "Select what to keep from the clipboard.<br><br>Result shapes and annotations, if kept, will be merged with existing ones. <u>All other metadata will be replaced</u>."
-msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les formes graphiques et les annotations, si conservées, seront fusionnées avec celles existantes. <u>Toutes les autres métadonnées seront remplacées</u>."
+msgid "Select what to keep from the clipboard.<br><br>Geometry and table results, if kept, will be merged with existing results. <u>Other metadata with matching keys will be replaced</u>. Annotations are copied and pasted separately."
+msgstr "Sélectionnez ce que vous souhaitez conserver dans le presse-papier.<br><br>Les résultats géométriques et les tableaux conservés seront fusionnés avec les résultats existants. <u>Les autres métadonnées de même clé seront remplacées</u>. Les annotations sont copiées et collées séparément."
 
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
@@ -2859,6 +2862,12 @@ msgstr "%s a été désinstallé."
 msgid "Do you want to reload plugins now?"
 msgstr "Voulez-vous recharger les plugins maintenant ?"
 
+msgid "Restore defaults"
+msgstr "Valeurs par défaut"
+
+msgid "Set the settings of the instrument back to their default values"
+msgstr "Rétablir les valeurs par défaut des réglages de l'instrument"
+
 msgid "Live"
 msgstr "En direct"
 
@@ -3912,8 +3921,8 @@ msgstr "Le serveur XML-RPC est utilisé pour communiquer avec des applications e
 msgid "Web API localhost bypass"
 msgstr "Contournement localhost de l'API Web"
 
-msgid "When enabled (default), connections from localhost (127.0.0.1) to the <br>Web API do not require authentication. This simplifies notebook <br>integration when DataLab-Kernel runs on the same machine.<br>Disable for stricter security if needed."
-msgstr "Lorsque cette option est activée (par défaut), les connexions depuis localhost (127.0.0.1) <br>vers l'API Web ne nécessitent pas d'authentification. Cela simplifie l'intégration <br>des notebooks lorsque DataLab-Kernel s'exécute sur la même machine.<br>Désactiver pour une sécurité plus stricte si nécessaire."
+msgid "When enabled (default), connections from localhost (127.0.0.1) to the <br>Web API do not require authentication. This simplifies notebook <br>integration when DataLab-Kernel runs on the same machine.<br>While the Web API server is running, any local application and any <br>web page open in your browser can then access your data without a token.<br>Disable for stricter security if needed."
+msgstr "Lorsque cette option est activée (par défaut), les connexions depuis localhost (127.0.0.1) <br>vers l'API Web ne nécessitent pas d'authentification. Cela simplifie l'intégration <br>des notebooks lorsque DataLab-Kernel s'exécute sur la même machine.<br>Tant que le serveur de l'API Web fonctionne, toute application locale et toute <br>page web ouverte dans votre navigateur peuvent alors accéder à vos données sans jeton.<br>Désactiver pour une sécurité plus stricte si nécessaire."
 
 msgid "Memory threshold"
 msgstr "Seuil de mémoire"
@@ -4540,18 +4549,15 @@ msgstr "Lancer la démo"
 msgid "Watch DataLab create, process and analyze signals and images."
 msgstr "Regardez DataLab créer, traiter et analyser des signaux et des images."
 
-msgid "Read the documentation"
-msgstr "Lire la documentation"
+msgid "Discover plugins..."
+msgstr "Découvrir des plugins..."
 
-msgid "Open the online user guide, tutorials and reference."
-msgstr "Ouvrez le guide utilisateur en ligne, les tutoriels et la référence."
+msgid "No application is installed yet: install applications and processing features from the DataLab plugin catalog."
+msgstr "Aucune application n'est encore installée : installez des applications et des traitements depuis le catalogue de plugins DataLab."
 
 #, python-format
 msgid "What's new in version %s"
 msgstr "Nouveautés de la version %s"
-
-msgid "Browse the release notes of this version."
-msgstr "Consultez les nouveautés et corrections de cette version."
 
 msgid "Image"
 msgstr "Image"
@@ -5000,8 +5006,11 @@ msgstr "Copier l'URL et le jeton dans le presse-papier"
 msgid "Status: Not running"
 msgstr "Statut : Non démarré"
 
-msgid "Web API unavailable (install datalab-platform[webapi])"
-msgstr "API Web non disponible (installer datalab-platform[webapi])"
+msgid "Web API unavailable (hover for details)"
+msgstr "API Web indisponible (survoler pour afficher les détails)"
+
+msgid "Web API is unavailable. FastAPI, Uvicorn and Pydantic are required dependencies. Check or repair your DataLab installation using the original installation method or package manager. For pip installations, run python -m pip check in DataLab's Python environment to check installed dependency requirements."
+msgstr "L'API Web est indisponible. FastAPI, Uvicorn et Pydantic sont des dépendances requises. Vérifiez ou réparez votre installation de DataLab à l'aide de la méthode d'installation ou du gestionnaire de paquets d'origine. Pour les installations avec pip, exécutez python -m pip check dans l'environnement Python de DataLab afin de vérifier les exigences des dépendances installées."
 
 msgid "Web API"
 msgstr "API Web"

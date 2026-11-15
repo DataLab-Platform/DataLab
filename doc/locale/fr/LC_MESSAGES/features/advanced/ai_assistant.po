@@ -21,14 +21,14 @@ msgstr "Assistant IA"
 msgid "DataLab embeds an optional **AI Assistant**: a dockable chat panel connected to a Large Language Model (LLM) that can inspect your workspace, create and process signals and images, and write and run Python macros on your behalf."
 msgstr "DataLab intègre un **assistant IA** optionnel : un panneau de discussion ancrable, connecté à un grand modèle de langage (LLM), capable d'inspecter votre espace de travail, de créer et de traiter des signaux et des images, et d'écrire puis d'exécuter des macros Python à votre place."
 
-msgid "The AI Assistant sends your messages — and, when you ask for it, information about the objects of your workspace — to the configured provider. Nothing is sent as long as the assistant is disabled or as long as you do not start a conversation. Review the :ref:`ai-assistant-privacy` section before using a remote provider on sensitive data."
-msgstr "L'assistant IA transmet vos messages — et, lorsque vous le lui demandez, des informations sur les objets de votre espace de travail — au fournisseur configuré. Rien n'est envoyé tant que l'assistant est désactivé ou tant que vous n'avez pas démarré de conversation. Consultez la section :ref:`ai-assistant-privacy` avant d'utiliser un fournisseur distant sur des données sensibles."
+msgid "The AI Assistant is optional. When you choose a remote provider, it receives your messages and any workspace information you ask it to use. You can instead choose a local model to keep this processing on your machine. Review the :ref:`ai-assistant-privacy` section before using a remote provider on sensitive data."
+msgstr "L'assistant IA est optionnel. Lorsque vous choisissez un fournisseur distant, il reçoit vos messages et les informations de l'espace de travail que vous lui demandez d'utiliser. Vous pouvez aussi choisir un modèle local pour que ces traitements restent sur votre machine. Consultez la section :ref:`ai-assistant-privacy` avant d'utiliser un fournisseur distant sur des données sensibles."
 
 msgid "Getting started"
 msgstr "Premiers pas"
 
-msgid "Open ``File > Settings``, go to the **AI Assistant** tab and enable the assistant (see :ref:`ai-assistant-settings` for the complete list of options)."
-msgstr "Ouvrez ``Fichier > Préférences``, allez dans l'onglet **Assistant IA** et activez l'assistant (voir :ref:`ai-assistant-settings` pour la liste complète des options)."
+msgid "Open ``File > Settings`` and go to the **AI Assistant** tab, or click the **Settings...** button of the AI Assistant panel (see :ref:`ai-assistant-settings` for the complete list of options)."
+msgstr "Ouvrez ``Fichier > Préférences`` et allez dans l'onglet **Assistant IA**, ou cliquez sur le bouton **Préférences...** du panneau Assistant IA (voir :ref:`ai-assistant-settings` pour la liste complète des options)."
 
 msgid "Choose a provider and a model, then set the API key — or, better, leave the field empty and export the provider's standard environment variable."
 msgstr "Choisissez un fournisseur et un modèle, puis renseignez la clé d'API — ou, de préférence, laissez le champ vide et définissez la variable d'environnement standard du fournisseur."
@@ -74,6 +74,9 @@ msgstr "**Nouvelle conversation** : démarrer une nouvelle conversation. La pré
 
 msgid "**History...**: browse past conversations, load, rename or delete them, and **export** one as a Markdown file. Conversations are stored in the DataLab user configuration directory."
 msgstr "**Historique...** : parcourir les conversations passées, les charger, les renommer ou les supprimer, et en **exporter** une au format Markdown. Les conversations sont stockées dans le répertoire de configuration utilisateur de DataLab."
+
+msgid "**Settings...**: open the **AI Assistant** tab of the settings dialog (provider, model, API key...)."
+msgstr "**Préférences...** : ouvrir l'onglet **Assistant IA** de la boîte de dialogue des préférences (fournisseur, modèle, clé d'API...)."
 
 msgid "**Send** / **Stop**: send the current message, or interrupt an ongoing request. Requests run in a background thread, so the interface stays responsive."
 msgstr "**Envoyer** / **Arrêter** : envoyer le message courant, ou interrompre une requête en cours. Les requêtes s'exécutent dans un fil d'exécution en arrière-plan, si bien que l'interface reste réactive."
@@ -203,6 +206,9 @@ msgstr "Chaque fois que l'assistant souhaite exécuter un outil modifiant l'espa
 
 msgid "Privacy and security"
 msgstr "Confidentialité et sécurité"
+
+msgid "**No request without your action**: the assistant contacts its provider only when you send a message in the panel, or when you click **Test connection** in the settings. Opening the panel or DataLab sends nothing. Note that with the ``openai`` provider, a key found in the ``OPENAI_API_KEY`` environment variable is used even if the *API key* field is empty."
+msgstr "**Aucune requête sans action de votre part** : l'assistant ne contacte son fournisseur que lorsque vous envoyez un message dans le panneau, ou lorsque vous cliquez sur **Tester la connexion** dans les préférences. L'ouverture du panneau ou de DataLab n'envoie rien. Notez qu'avec le fournisseur ``openai``, une clé trouvée dans la variable d'environnement ``OPENAI_API_KEY`` est utilisée même si le champ *Clé d'API* est vide."
 
 msgid "**No telemetry**: DataLab does not log or forward the content of your conversations anywhere else than to the provider you configured."
 msgstr "**Aucune télémétrie** : DataLab n'enregistre ni ne transmet le contenu de vos conversations ailleurs qu'au fournisseur que vous avez configuré."

@@ -13,7 +13,6 @@ outside DataLab (e.g. in Spyder).
 from sigima.client import SimpleRemoteProxy
 
 proxy = SimpleRemoteProxy()
-proxy.connect()
 
 # %% Visualizing 1D data from my work
 

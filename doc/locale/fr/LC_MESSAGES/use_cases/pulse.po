@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Analyze transient and pulsed signals from oscilloscopes and digitizers: pulse features, rise time, shot-to-shot stability, timing jitter, Allan deviation, step response, delay between channels and pulse-height spectra -- with DataLab, the open-source signal and image analysis platform, and its Pulse & Transient Characterization plugin."
+msgstr "Analysez des signaux transitoires et impulsionnels issus d'oscilloscopes et de numériseurs : caractéristiques d'impulsions, temps de montée, stabilité tir à tir, gigue temporelle, écart-type d'Allan, réponse indicielle, retard entre voies et spectres d'amplitude d'impulsions -- avec DataLab, la plateforme open-source d'analyse de signaux et d'images, et son plugin Pulse & Transient Characterization."
+
+msgid "pulse analysis software, transient analysis, oscilloscope data analysis, digitizer, rise time, FWHM, timing jitter, shot-to-shot stability, Allan deviation, step response, overshoot, settling time, channel delay, pulse-height spectrum, pulsed laser, open-source, DataLab"
+msgstr "logiciel d'analyse d'impulsions, analyse de transitoires, analyse de données d'oscilloscope, numériseur, temps de montée, largeur à mi-hauteur, gigue temporelle, stabilité tir à tir, écart-type d'Allan, réponse indicielle, dépassement, temps d'établissement, retard entre voies, spectre d'amplitude d'impulsions, laser impulsionnel, open-source, DataLab"
+
+msgid "DataLab for transient and pulsed signals"
+msgstr "DataLab pour les signaux transitoires et impulsionnels"
+
+msgid "The problem"
+msgstr "Le problème"
+
+msgid "Pulsed lasers, pulse generators, amplifiers, detectors and accelerators are characterized from transient signals recorded by oscilloscopes and digitizers, often over hundreds of shots: which shots are valid, what the representative pulse looks like, how much the timing jitters and the amplitude drifts, how fast a system responds to a step, what the delay between two channels is. Oscilloscope measurements describe one shot at a time, and campaign scripts must handle baselines, polarities, invalid shots and alignment before giving any number."
+msgstr "Lasers impulsionnels, générateurs d'impulsions, amplificateurs, détecteurs et accélérateurs se caractérisent à partir de signaux transitoires enregistrés par des oscilloscopes et des numériseurs, souvent sur des centaines de tirs : quels tirs sont valides, à quoi ressemble l'impulsion représentative, quelle est la gigue temporelle et la dérive de l'amplitude, à quelle vitesse un système répond à un échelon, quel est le retard entre deux voies. Les mesures d'un oscilloscope décrivent un tir à la fois, et les scripts de campagne doivent gérer lignes de base, polarités, tirs invalides et alignement avant de donner le moindre résultat."
+
+msgid "What DataLab does"
+msgstr "Ce que fait DataLab"
+
+msgid "DataLab analyzes transient signals out of the box:"
+msgstr "DataLab analyse les signaux transitoires sans extension :"
+
+msgid "**Analysis > Extract pulse features...** gives the amplitude, rise and fall times, FWHM and timing of step and square pulses (see :doc:`../features/signal/menu_analysis`),"
+msgstr "**Analyse > Extraire les caractéristiques d'une impulsion...** donne l'amplitude, les temps de montée et de descente, la largeur à mi-hauteur et les instants caractéristiques d'échelons et d'impulsions carrées (voir :doc:`../features/signal/menu_analysis`),"
+
+msgid "**Processing > Stability analysis** gives the Allan, Hadamard and total variances and the Allan and time deviations of a time series (see :doc:`../features/signal/menu_processing`)."
+msgstr "**Traitement > Analyse de stabilité** donne les variances d'Allan, de Hadamard et totale, ainsi que les écarts-types d'Allan et temporel d'une série temporelle (voir :doc:`../features/signal/menu_processing`)."
+
+msgid "The `Pulse & Transient Characterization <https://github.com/DataLab-Platform/datalab-pulse-characterization>`_ plugin adds complete methods for series of shots:"
+msgstr "Le plugin `Pulse & Transient Characterization <https://github.com/DataLab-Platform/datalab-pulse-characterization>`_ ajoute des méthodes complètes pour des séries de tirs :"
+
+msgid "**pulse campaign**: per-shot features and quality flags, raw and aligned mean pulses,"
+msgstr "**campagne d'impulsions** : caractéristiques et indicateurs de qualité de chaque tir, impulsions moyennes brute et alignée,"
+
+msgid "**shot-to-shot stability**: timing jitter, drifts, amplitude and energy stability, Allan deviation, regime changes,"
+msgstr "**stabilité tir à tir** : gigue temporelle, dérives, stabilité de l'amplitude et de l'énergie, écart-type d'Allan, changements de régime,"
+
+msgid "**step response**: rise time, overshoot, settling time, ringing and bandwidth,"
+msgstr "**réponse indicielle** : temps de montée, dépassement, temps d'établissement, oscillations et bande passante,"
+
+msgid "**delay between two channels**, with relative and common-mode jitter,"
+msgstr "**retard entre deux voies**, avec la gigue relative et la gigue de mode commun,"
+
+msgid "**pulse-height spectrum**: energy calibration and resolution of a detector,"
+msgstr "**spectre d'amplitude des impulsions** : étalonnage en énergie et résolution d'un détecteur,"
+
+msgid "an **oscilloscope simulator**, with a live view, which acquires laser pulses, amplifier steps or delayed pulse pairs ready for the methods."
+msgstr "un **simulateur d'oscilloscope**, avec visualisation en direct, qui acquiert des impulsions laser, des échelons d'amplificateur ou des paires d'impulsions retardées prêts pour les méthodes."
+
+msgid "Results are added to the workspace as signals and metrics tables, and the methods and their examples are presented in the :ref:`applications_panel`."
+msgstr "Les résultats sont ajoutés à l'espace de travail sous forme de signaux et de tableaux de métriques, et les méthodes et leurs exemples sont présentés dans le :ref:`applications_panel`."
+
+msgid "Amplitude versus shot, with its per-shot metrics table, computed from the 500-shot demonstration campaign of the Pulse & Transient Characterization plugin in DataLab."
+msgstr "Amplitude en fonction du tir, avec son tableau de métriques par tir, calculée à partir de la campagne de démonstration de 500 tirs du plugin Pulse & Transient Characterization dans DataLab."
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "The plugin is an official plugin of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, for DataLab Desktop and DataLab-Web, at the Alpha stage: its methods are validated on synthetic data with known truth, and do not claim compliance with a standard."
+msgstr "Ce plugin est un plugin officiel du `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_, pour DataLab Desktop et DataLab-Web, au stade Alpha : ses méthodes sont validées sur des données synthétiques à vérité connue, et ne revendiquent la conformité à aucune norme."
+
+msgid "Try it"
+msgstr "Essayer"
+
+msgid ":octicon:`rocket;1em;sd-text-info` **No install:** open `DataLab-Web with a 500-shot campaign and the pulse campaign method selected <https://datalab-platform.com/web/?plugin=org.datalab.pulse-characterization&pluginVersion=0.2.1&recipe=org.datalab.pulse-characterization:single-channel-campaign&recipeVersion=1.1.0&example=demo>`_ in your browser -- your data never leaves your machine."
+msgstr ":octicon:`rocket;1em;sd-text-info` **Sans installation :** ouvrez `DataLab-Web avec une campagne de 500 tirs et la méthode de campagne d'impulsions sélectionnée <https://datalab-platform.com/web/?plugin=org.datalab.pulse-characterization&pluginVersion=0.2.1&recipe=org.datalab.pulse-characterization:single-channel-campaign&recipeVersion=1.1.0&example=demo>`_ dans votre navigateur -- vos données ne quittent jamais votre machine."
+
+msgid ":octicon:`package;1em;sd-text-info` **In DataLab Desktop:** install the plugin from the **Catalog** tab of **Plugins > Configure plugins...** (see :ref:`plugin_catalog`), then click its tile on the :ref:`welcome_page`."
+msgstr ":octicon:`package;1em;sd-text-info` **Dans DataLab Desktop :** installez le plugin depuis l'onglet **Catalogue** de **Plugins > Configurer les plugins...** (voir :ref:`plugin_catalog`), puis cliquez sur sa tuile de la :ref:`welcome_page`."
+
+msgid ":octicon:`book;1em;sd-text-info` **Plugin documentation:** `getting started and methods <https://github.com/DataLab-Platform/datalab-pulse-characterization/blob/develop/doc/README.md>`_."
+msgstr ":octicon:`book;1em;sd-text-info` **Documentation du plugin :** `prise en main et méthodes <https://github.com/DataLab-Platform/datalab-pulse-characterization/blob/develop/doc/README.md>`_ (en anglais)."
+
+msgid ":octicon:`download;1em;sd-text-info` Or :ref:`install the desktop application <installation>`."
+msgstr ":octicon:`download;1em;sd-text-info` Ou :ref:`installez l'application de bureau <installation>`."
+

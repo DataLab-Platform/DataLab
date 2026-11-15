@@ -103,6 +103,32 @@ def test_slow_instrument_calls_are_serialized() -> None:
         main.deleteLater()
 
 
+def test_restore_defaults() -> None:
+    """The settings, and their editor, are set back to their default values."""
+    with qt_app_context():
+        main = QW.QWidget()
+        instrument = SlowInstrument()
+        instrument.release.set()
+        window = InstrumentWindow(main, instrument, "Slow instrument")
+        assert window.wait_until_idle()
+        instrument.settings.gain = 3.0
+        window.edit_layout.update_widgets()
+        previews = instrument.calls.count("preview")
+        window.restore_defaults()
+        assert instrument.settings.gain == 1.0
+        # The editor shows the default value: applying it keeps the default
+        assert window._apply_settings()  # pylint: disable=protected-access
+        assert instrument.settings.gain == 1.0
+        deadline = time.monotonic() + 10.0
+        while instrument.calls.count("preview") == previews:
+            assert time.monotonic() < deadline
+            QW.QApplication.processEvents()
+        assert window.wait_until_idle()
+        window.close()
+        assert window.wait_closed()
+        main.deleteLater()
+
+
 def test_close_waits_for_running_call() -> None:
     """The instrument is closed after its running call, and nothing follows."""
     with qt_app_context():

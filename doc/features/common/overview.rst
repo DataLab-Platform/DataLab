@@ -13,7 +13,7 @@ Basic concepts
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
 
-- The left area contains the **Signals** and **Images** data tabs, which list
+- The left area contains the **Signal Panel** and **Image Panel** tabs, which list
   the data sets currently loaded in each panel. Clicking a tab switches the
   main window to the corresponding panel, as well as the menu and toolbar
   contents. Below the list of data sets, a **Properties** view shows
@@ -56,10 +56,13 @@ A **Welcome** page is shown next to the signal and image views when DataLab star
   browse an HDF5 file, open a previously saved HDF5 workspace, or import text
   data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose
   between signals and images;
-- ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
-  online documentation, or browse the release notes of the running version.
+- ask the :ref:`ai_assistant`, take the guided tour, or run the demo.
 
-When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application shows its page in the :ref:`applications_panel`, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and shows the Applications panel. The "Browse all applications..." button also shows this panel, where the "…" menu of each application offers the same "Show on welcome page" and "Pin to the welcome page" options (see :ref:`about_plugins`).
+Links at the bottom of the page open the online documentation and the release notes of the running version.
+
+An **Applications** section at the top of the page gathers the application plugins. While no application is installed, it invites you to discover plugins: "Discover plugins..." opens the **Catalog** tab of the plugin configuration dialog, which lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, ready to install (see :ref:`about_plugins`). This section is hidden when third-party plugins are disabled.
+
+When application plugins are installed, the **Applications** section shows their tiles, and its "Discover plugins..." button still opens the plugin catalog: clicking the main tile of an application shows its page in the :ref:`applications_panel`, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and shows the Applications panel. The "Browse all applications..." button also shows this panel, where the "…" menu of each application offers the same "Show on welcome page" and "Pin to the welcome page" options (see :ref:`about_plugins`).
 
 The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or from the "View" menu; it is also reopened automatically when the current panel becomes empty. The "Show welcome page when the current panel is empty" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`).
 
@@ -102,9 +105,11 @@ History Panel
 ^^^^^^^^^^^^^
 
 The :ref:`historypanel` is an additional dockable panel that records signal
-and image actions in a shared active session. It supports replay, step-by-step
-replay, duplication, and compatibility diagnostics. Sessions may be saved in
-standalone ``.dlhist`` files or with the workspace in HDF5 format.
+and image actions in a shared active session, while its **Record mode** is
+enabled (by default, this mode is disabled when DataLab starts). It supports
+replay, step-by-step replay, duplication, and compatibility diagnostics.
+Sessions may be saved in standalone ``.dlhist`` files or with the workspace in
+HDF5 format.
 
 Internal data model and workspace
 ---------------------------------
@@ -130,18 +135,18 @@ Loading and saving the workspace
 
 The following actions are available to manage the workspace from the **File** menu:
 
-- **Open HDF5 file**: load a workspace from an HDF5 file.
+- **Open HDF5 files...**: load a workspace from one or more HDF5 files.
 
-- **Save to HDF5 file**: save the current workspace to an HDF5 file.
+- **Save to HDF5 file...**: save the current workspace to an HDF5 file.
 
-- **Browse HDF5 file**: open the :ref:`h5browser` to explore the content of an
+- **Browse HDF5 file...**: open the :ref:`h5browser` to explore the content of an
   HDF5 file and import data sets into the workspace.
 
 .. note::
 
     Data sets may also be saved or loaded individually, using data formats
     such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the
-    list of supported formats), or `.tiff` or `.dcm` for 2D images
+    list of supported formats), or `.tiff` or `.png` for 2D images
     (see :ref:`open_image` for the list of supported formats).
 
 Interactive object creation and processing
@@ -179,7 +184,7 @@ Interactive 1-to-1 processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Live preview before applying a processing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox,
 unchecked each time the dialog opens. Enable it to display a temporary result
@@ -200,7 +205,8 @@ when switching between signal and image processing. Closing a dialog while a
 preview is still running stops that process; the next preview then performs a
 fresh startup. Reloading plugins also discards the cached preview process.
 
-**Cancel** discards the draft parameters and stops the preview. With one source,
+**Cancel** discards the draft parameters and stops the preview. With one
+individually selected source,
 **OK** reuses a completed, up-to-date preview once and publishes it through the
 normal processing path, including history. If the preview is still running or
 stale, or if several objects or groups are selected, DataLab runs the normal
@@ -214,7 +220,7 @@ Fields without two usable bounds remain text-only. Sliders alone never enable
 preview or automatic re-processing.
 
 Re-processing an existing result
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When applying a 1-to-1 processing operation that has configurable parameters (e.g.,
 Gaussian filter, threshold, morphological operations), DataLab stores the processing
@@ -227,11 +233,14 @@ metadata, enabling parameter adjustment and re-processing:
 5. Modify processing parameters (e.g., filter sigma value)
 6. Click **Apply** to re-process with updated parameters
 
-Normally, **Apply** creates a new result and history entry. In the History panel's
-edit mode it updates the existing result and recomputes dependent actions. The
-optional **Auto-recompute on edit** checkbox follows the same rules, waits for
-slider release and valid input, and does not apply edits from a previously
-selected object. This workflow is ideal for:
+**Apply** recomputes the result in place: the existing object is updated, without
+creating a new object or a new history entry, and the new execution is recorded in
+the provenance of the result (see :ref:`provenance`). The parameters of the
+corresponding History action are left unchanged: to edit them, replay the action
+with **Step-by-step** in the :ref:`historypanel`. The optional **Auto-recompute on
+edit** checkbox follows the same rules, waits for slider release and valid input,
+and does not apply edits from a previously selected object. This workflow is ideal
+for:
 
 - Iteratively tuning filter parameters while observing results in real time
 - Adjusting threshold values without creating multiple intermediate objects
@@ -255,21 +264,21 @@ selected object. This workflow is ideal for:
 Example workflow
 ^^^^^^^^^^^^^^^^
 
-Here's a typical workflow using interactive processing, with History edit mode enabled:
+Here's a typical workflow using interactive processing:
 
-1. **Create a test signal**: Create > Gaussian signal
+1. **Create a test signal**: Create > Gaussian
 
-   - Initial parameters: amplitude=1.0, mu=50, sigma=10
+   - Default parameters: A=1.0, μ=0, σ=1 (with x from -10 to 10)
 
-2. **Adjust creation parameters**: In the Creation tab, change sigma to 20, click Apply
+2. **Adjust creation parameters**: In the Creation tab, change σ to 2, click Apply
 
    - Signal is regenerated with new width
 
-3. **Apply Gaussian filter**: Processing > Noise reduction > Gaussian filter
+3. **Apply Gaussian filter**: Processing > Noise reduction > Gaussian filter...
 
-   - Initial sigma=2.0
+   - Default σ=1.0
 
-4. **Fine-tune filtering**: In the Processing tab, try sigma=1.0, then sigma=5.0
+4. **Fine-tune filtering**: In the Processing tab, try σ=3.0, then σ=5.0
 
    - Each Apply updates the filtered result
    - Compare different smoothing levels without creating multiple objects

@@ -69,11 +69,13 @@ Descriptions:
 
     * - ``compute_n_to_1``
       - n objects ➝ 1 object
-      - n ➝ 1<br>n ➝ n (pairwise mode)
+      - | n ➝ 1
+        | n ➝ n (pairwise mode)
 
     * - ``compute_2_to_1``
       - 1 object + 1 operand ➝ 1 object
-      - k + 1 ➝ k<br>n + n ➝ n (pairwise mode)
+      - | k + 1 ➝ k
+        | n + n ➝ n (pairwise mode)
 
 These methods are for internal or advanced use (e.g. plugin or macro authors) and
 will evolve without backward compatibility guarantees.

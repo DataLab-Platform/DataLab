@@ -11,7 +11,7 @@ reliability of industrial-grade software. It is a versatile software that can be
 for a wide range of applications, from simple data analysis to complex signal processing
 and image analysis tasks.
 
-DataLab integrates seemlessly into your workflow thanks to three main operating modes:
+DataLab integrates seamlessly into your workflow thanks to three main operating modes:
 
 .. tabularcolumns:: |>{\centering\arraybackslash}m{1.2cm}|m{\dimexpr\linewidth-1.2cm-4\tabcolsep\relax}|
 .. list-table::
@@ -33,46 +33,33 @@ DataLab integrates seemlessly into your workflow thanks to three main operating 
     without any installation. See :ref:`ecosystem` to learn about the editions and choose
     the one that fits your needs.
 
-.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
-   render at ~22mm in the PDF -- way larger than in HTML. Define separate
-   substitutions per output: pixels for HTML, centimetres for LaTeX.
+.. The ``latex-icon`` class makes doc/conf.py size these images to 1cm in the
+   PDF, where ``64px`` would render far larger than in HTML.
 
-.. only:: html
+.. |appmode| image:: ../../resources/DataLab-app.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |appmode| image:: ../../resources/DataLab-app.svg
-        :width: 64px
-        :height: 64px
-        :class: dark-light no-scaled-link
+.. |libmode| image:: ../../resources/DataLab-lib.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |libmode| image:: ../../resources/DataLab-lib.svg
-        :width: 64px
-        :height: 64px
-        :class: dark-light no-scaled-link
-
-    .. |remotemode| image:: ../../resources/DataLab-remote.svg
-        :width: 64px
-        :height: 64px
-        :class: dark-light no-scaled-link
-
-.. only:: latex
-
-    .. |appmode| image:: ../../resources/DataLab-app.svg
-        :width: 1cm
-
-    .. |libmode| image:: ../../resources/DataLab-lib.svg
-        :width: 1cm
-
-    .. |remotemode| image:: ../../resources/DataLab-remote.svg
-        :width: 1cm
+.. |remotemode| image:: ../../resources/DataLab-remote.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link latex-icon
 
 DataLab leverages the power of Python and its scientific ecosystem, through the use of
 the following libraries:
 
 - `Sigima <https://github.com/DataLab-Platform/Sigima>`_ for signal and image processing (part of the DataLab Platform)
 - `SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ for the Qt application framework the desktop application is built upon (part of the DataLab Platform)
+- `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_ for the provenance of the workspace and the RO-Crate ``.dlcapsule`` workspace capsules (part of the DataLab Platform)
 - `NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)
 - `SciPy <https://www.scipy.org/>`_ for scientific computing (interpolation, special functions, etc.)
-- `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ for image processing
+- `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ (optional) for image processing
 - `PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ for wavelet transform
 - `PlotPyStack <https://github.com/PlotPyStack/>`_ for Qt-based interactive data visualization
 
@@ -81,37 +68,37 @@ the following libraries:
     .. grid:: 2 2 4 4
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`package;1em;sd-text-info`  Installation
+        .. grid-item-card:: |card-icon-package|  Installation
             :link: installation
             :link-type: doc
 
             How to install DataLab on your computer
 
-        .. grid-item-card:: :octicon:`download;1em;sd-text-info`  Offline Installation
+        .. grid-item-card:: |card-icon-download|  Offline Installation
             :link: installation_offline
             :link-type: doc
 
             Install DataLab without internet access
 
-        .. grid-item-card:: :octicon:`gift;1em;sd-text-info`  Introduction
+        .. grid-item-card:: |card-icon-gift|  Introduction
             :link: introduction
             :link-type: doc
 
             Use cases and key strengths of DataLab
 
-        .. grid-item-card:: :octicon:`star;1em;sd-text-info`  Key features
+        .. grid-item-card:: |card-icon-star|  Key features
             :link: keyfeatures
             :link-type: doc
 
             Feature matrix of DataLab
 
-        .. grid-item-card:: :octicon:`mortar-board;1em;sd-text-info`  Tutorials
+        .. grid-item-card:: |card-icon-mortar-board|  Tutorials
             :link: tutorials/index
             :link-type: doc
 
             Tutorials to learn how to use DataLab
 
-        .. grid-item-card:: :octicon:`browser;1em;sd-text-info`  Editions
+        .. grid-item-card:: |card-icon-browser|  Editions
             :link: ecosystem
             :link-type: doc
 
@@ -127,3 +114,5 @@ the following libraries:
    ecosystem
    keyfeatures
    tutorials/index
+
+.. include:: /_card_icons.txt

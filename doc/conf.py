@@ -5,8 +5,10 @@
 import os
 import os.path as osp
 import sys
+import tempfile
 import warnings
 import zipfile
+import zlib
 
 import guidata.config as gcfg
 from docutils import nodes
@@ -43,6 +45,20 @@ def open_datalab_web_links_in_new_tab(app, doctree, docname):
             reference["rel"] = "noopener noreferrer"
 
 
+def size_latex_icons(app, doctree, docname):
+    """Size the images of the ``latex-icon`` class to 1cm in the LaTeX output.
+
+    Sphinx converts ``px`` to ``bp`` for LaTeX, so that an icon of ``64px`` in HTML
+    would render far larger in the PDF.
+    """
+    if app.builder.format != "latex":
+        return
+    for image in doctree.findall(nodes.image):
+        if "latex-icon" in image["classes"]:
+            image["width"] = "1cm"
+            image.attributes.pop("height", None)
+
+
 def compress_tutorials_data(app):
     """Compress tutorials data folders to zip files in doc/_download directory."""
     docpath = osp.abspath(osp.dirname(__file__))
@@ -77,10 +93,30 @@ def compress_tutorials_data(app):
         print(f"Warning: failed to compress tutorials: {exc}")
 
 
+def get_empty_intersphinx_inventory() -> str:
+    """Return the path of an empty intersphinx inventory, created if needed.
+
+    Used as the fallback location of every intersphinx inventory: when an inventory
+    cannot be fetched (e.g. network failure), Sphinx then only logs it, instead of
+    emitting a warning which fails strict builds (``-W``), and the references to
+    that project are left unresolved.
+    """
+    path = osp.join(tempfile.gettempdir(), "datalab-doc-empty-objects.inv")
+    if not osp.isfile(path):
+        with open(path, "wb") as file:
+            file.write(
+                b"# Sphinx inventory version 2\n# Project: none\n# Version: 0\n"
+                b"# The remainder of this file is compressed using zlib.\n"
+                + zlib.compress(b"")
+            )
+    return path
+
+
 def setup(app):
     """Setup function for Sphinx."""
     app.connect("builder-inited", compress_tutorials_data)
     app.connect("doctree-resolved", open_datalab_web_links_in_new_tab)
+    app.connect("doctree-resolved", size_latex_icons)
 
     # Exclude outreach directory from LaTeX/PDF builds
     def exclude_outreach_from_latex(app):
@@ -158,15 +194,10 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = []
 
-# The HTML/LaTeX builds define per-output image substitutions with the same
-# names (px for HTML, cm for LaTeX) inside `only::` blocks -- see
-# doc/index.rst and doc/intro/index.rst. docutils registers substitution
-# definitions at read time, before `only` filtering, so it flags them as
-# duplicates ("Duplicate substitution definition name"). They are harmless
-# (each builder only ever renders one definition); suppress the docutils
-# system messages so every build -- HTML, LaTeX and the `-W` gettext build --
-# stays clean.
-suppress_warnings = ["docutils"]
+# Never suppress "docutils" messages: they report reStructuredText errors. In
+# particular, do not define a substitution twice, even in separate `only::`
+# blocks: docutils keeps the last definition for every builder.
+suppress_warnings = []
 
 # Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
 # will use ``foo.<language>.png`` when available, falling back to ``foo.png``
@@ -193,9 +224,23 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab a été présenté à <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 et à <a href='https://www.youtube.com/watch?v=0D4ffBJIc5Q&list=PLJjbbmRgu6RoVze2tajiPe3zJB5muBcuC'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
+    ann = (
+        "Retrouvez DataLab sur le stand CODRA à "
+        "<a href='https://datalab-platform.com/fr/outreach/compute2026.html'>"
+        "Compute! Paris 2026</a> (25–26 novembre) et en conférence à "
+        "<a href='https://datalab-platform.com/fr/outreach/osxp2026.html'>"
+        "OSXP 2026</a> (9 décembre)."
+    )
+    catalog_link_name = "Catalogue de plugins"
 else:
-    ann = "DataLab has been presented at <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 and at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
+    ann = (
+        "Meet DataLab at the CODRA booth at "
+        "<a href='https://datalab-platform.com/en/outreach/compute2026.html'>"
+        "Compute! Paris 2026</a> (November 25–26) and at the "
+        "<a href='https://datalab-platform.com/en/outreach/osxp2026.html'>"
+        "OSXP 2026 talk</a> (December 9)."
+    )
+    catalog_link_name = "Plugin catalog"
 html_theme_options = {
     "show_toc_level": 2,
     "navbar_persistent": ["search-button"],
@@ -204,6 +249,12 @@ html_theme_options = {
         "text": f"v{datalab.__version__}",
     },
     "icon_links": [
+        {
+            "name": catalog_link_name,
+            "url": "https://datalab-platform.com/plugins/",
+            "icon": "fa-solid fa-puzzle-piece",
+            "type": "fontawesome",
+        },
         {
             "name": "PyPI",
             "url": "https://pypi.org/project/datalab-platform",
@@ -238,18 +289,23 @@ autodoc_default_options = {
 }
 
 # -- Options for intersphinx extension ---------------------------------------
+# An unreachable inventory must not fail strict builds: see
+# `get_empty_intersphinx_inventory`.
+intersphinx_fallback = (None, get_empty_intersphinx_inventory())
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
-    "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", None),
-    "numpy": ("https://numpy.org/doc/stable/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
-    "scikit-image": ("https://scikit-image.org/docs/stable/", None),
-    "h5py": ("https://docs.h5py.org/en/stable/", None),
-    "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
-    "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
-    "sigima": ("https://sigima.readthedocs.io/en/latest/", None),
-    "sigimax": ("https://sigimax.readthedocs.io/en/latest/", None),
+    "python": ("https://docs.python.org/3", intersphinx_fallback),
+    "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", intersphinx_fallback),
+    "numpy": ("https://numpy.org/doc/stable/", intersphinx_fallback),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", intersphinx_fallback),
+    "scikit-image": ("https://scikit-image.org/docs/stable/", intersphinx_fallback),
+    "h5py": ("https://docs.h5py.org/en/stable/", intersphinx_fallback),
+    "guidata": ("https://guidata.readthedocs.io/en/latest/", intersphinx_fallback),
+    "plotpy": ("https://plotpy.readthedocs.io/en/latest/", intersphinx_fallback),
+    "sigima": ("https://sigima.readthedocs.io/en/latest/", intersphinx_fallback),
+    "sigimax": ("https://sigimax.readthedocs.io/en/latest/", intersphinx_fallback),
 }
+# Do not wait indefinitely for an unresponsive server
+intersphinx_timeout = 30
 
 # -- Latex macros for math in docstrings -------------------------------------
 macros = {

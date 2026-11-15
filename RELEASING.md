@@ -4,7 +4,7 @@
 
 A release takes two steps, both run by [`.github/workflows/release.yml`](.github/workflows/release.yml), which relies on the [release actions](https://github.com/DataLab-Platform/release-actions) shared by the DataLab Platform projects:
 
-1. **Prepare**: pushing a release tag checks the tag, runs the tests, builds the release files (wheel, sdist, French and English PDF documentation, smoke-tested MSI installer), attests their build provenance and creates a **draft** GitHub release with these files and their `SHA256SUMS`. Nothing is published at this stage.
+1. **Prepare**: pushing a release tag checks the tag, runs the tests, builds the release files (wheel, sdist, French and English PDF documentation, smoke-tested MSI installer), attests the build provenance of the wheel, the sdist and the MSI installer, and creates a **draft** GitHub release with these files and their `SHA256SUMS`. Nothing is published at this stage.
 2. **Publish**: when a maintainer publishes the draft release, its wheel and sdist are checked (checksums and attestations) and uploaded to PyPI, then the documentation is deployed to [datalab-platform.com](https://datalab-platform.com/). A release created by hand has none of these files, so nothing is published.
 
 ## One-time prerequisites
@@ -19,7 +19,7 @@ A release takes two steps, both run by [`.github/workflows/release.yml`](.github
    * set `__version__ = "X.Y.Z"` in `datalab/__init__.py`;
    * write the `## DataLab Version X.Y.Z ##` section of `doc/release_notes/release_X.YY.md` and its French translation: it becomes the description of the GitHub release, and the release is refused if it is missing;
    * optionally, check the build with the **Release (dry-run)** workflow (`release-dryrun.yml`, run by hand), which builds all the release files without publishing anything.
-2. Merge into `main` (`develop` for a minor or major version, `release` for a patch version).
+2. Merge into `main` the branch that prepares the version: `develop`, or `release` for a patch version when this branch exists (only while `develop` already contains changes for the next minor or major version).
 3. Tag `main` and push the tag (`-s` signs the tag, use `-a` otherwise):
 
    ```console

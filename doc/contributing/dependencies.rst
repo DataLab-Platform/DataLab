@@ -19,6 +19,7 @@ Among the optional dependencies, we have the following groups:
 
 - `qt`: Qt-based graphical user interface (currently, PyQt5).
 - `opencv`: computer vision tasks requiring OpenCV.
+- `exe`: building the stand-alone Windows executable with PyInstaller (pinned version), including OpenCV and PyQt5.
 - `dev`: development and testing (linters, formatters, etc.).
 - `doc`: building the documentation (Sphinx, etc.).
 - `test`: running the tests (pytest, etc.).

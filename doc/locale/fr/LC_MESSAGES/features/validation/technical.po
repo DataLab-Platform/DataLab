@@ -71,8 +71,8 @@ msgstr "Périmètre"
 msgid "The scope of technical validation in DataLab includes all compute functions that operate on DataLab's signal and image objects (i.e. :class:`sigima.objects.SignalObj` and :class:`sigima.objects.ImageObj`)."
 msgstr "Le périmètre de la validation technique dans DataLab inclut toutes les fonctions de calcul qui opèrent sur les objets de signal et d'image de DataLab (c'est-à-dire :class:`sigima.objects.SignalObj` et :class:`sigima.objects.ImageObj`)."
 
-msgid "This includes functions for (all functions are named ``compute_<function_name>``):"
-msgstr "Cela inclut des fonctions pour (toutes les fonctions sont nommées ``compute_<function_name>``) :"
+msgid "This includes functions for:"
+msgstr "Cela inclut les fonctions pour :"
 
 msgid "Signal processing (:mod:`sigima.proc.signal`)"
 msgstr "Le traitement du signal (:mod:`sigima.proc.signal`)"
@@ -98,8 +98,11 @@ msgstr "``test_signal_<function_name>`` pour les fonctions de calcul de signal"
 msgid "``test_image_<function_name>`` for image compute functions"
 msgstr "``test_image_<function_name>`` pour les fonctions de calcul d'image"
 
-msgid "The ``signal`` or ``image`` prefix is used to indicate the type of object that the function operates on. It may be omitted if the function operates exclusively on one type of object (e.g. ``test_adjust_gamma`` is the test function for the ``compute_adjust_gamma`` function, which operates on images)."
-msgstr "Le préfixe ``signal`` ou ``image`` est utilisé pour indiquer le type d'objet sur lequel la fonction opère. Il peut être omis si la fonction opère exclusivement sur un type d'objet (par exemple, ``test_adjust_gamma`` est la fonction de test pour la fonction ``compute_adjust_gamma``, qui opère sur des images)."
+msgid "The ``sig``/``s`` and ``ima``/``i`` short prefixes, and the ``_unit`` and ``_validation`` suffixes, are also accepted (e.g. ``test_sig_<function_name>_unit``)."
+msgstr "Les préfixes courts ``sig``/``s`` et ``ima``/``i``, ainsi que les suffixes ``_unit`` et ``_validation``, sont également acceptés (par exemple ``test_sig_<function_name>_unit``)."
+
+msgid "The ``signal`` or ``image`` prefix is used to indicate the type of object that the function operates on. It may be omitted if the function operates exclusively on one type of object (e.g. ``test_adjust_gamma`` is the test function for the ``adjust_gamma`` function, which operates on images)."
+msgstr "Le préfixe ``signal`` ou ``image`` est utilisé pour indiquer le type d'objet sur lequel la fonction opère. Il peut être omis si la fonction opère exclusivement sur un type d'objet (par exemple, ``test_adjust_gamma`` est la fonction de test pour la fonction ``adjust_gamma``, qui opère sur des images)."
 
 msgid "The test function should be marked with the ``@pytest.mark.validation`` decorator."
 msgstr "La fonction de test doit être marquée avec le décorateur ``@pytest.mark.validation``."

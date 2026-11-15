@@ -56,23 +56,66 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
     .. grid:: 1 1 3 3
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`pulse;1em;sd-text-info`  Spectroscopy
+        .. grid-item-card:: |card-icon-pulse|  Spectroscopy
             :link: use_cases/spectroscopy
             :link-type: doc
 
             Baseline correction and peak fitting
 
-        .. grid-item-card:: :octicon:`sun;1em;sd-text-info`  Photonics & lasers
+        .. grid-item-card:: |card-icon-sun|  Photonics & lasers
             :link: use_cases/photonics
             :link-type: doc
 
             Beam profiling and interferograms
 
-        .. grid-item-card:: :octicon:`search;1em;sd-text-info`  Non-destructive testing
+        .. grid-item-card:: |card-icon-search|  Non-destructive testing
             :link: use_cases/ndt
             :link-type: doc
 
             Automated defect detection
+
+        .. grid-item-card:: |card-icon-device-camera|  Camera characterization
+            :link: use_cases/camera
+            :link-type: doc
+
+            Noise, photon transfer and dark current
+
+        .. grid-item-card:: |card-icon-zap|  Transient & pulsed signals
+            :link: use_cases/pulse
+            :link-type: doc
+
+            Pulse features and shot-to-shot stability
+
+        .. grid-item-card:: |card-icon-plug|  Instruments & acquisition
+            :link: use_cases/instruments
+            :link-type: doc
+
+            Live view and acquisition with plugins
+
+.. only:: html and not latex
+
+    **Extend DataLab with plugins:** add processing features, file formats or complete
+    applications, from the DataLab team, from the community... or your own.
+
+    .. grid:: 1 1 2 2
+        :gutter: 1 2 3 4
+
+        .. grid-item-card:: |card-icon-package|  Plugin catalog
+            :link: https://datalab-platform.com/plugins/
+
+            Browse and install official and community plugins
+
+        .. grid-item-card:: |card-icon-rocket|  Create your own plugin
+            :link: tutorial_plugin_catalog
+            :link-type: ref
+
+            From an idea to the plugin catalog: a single Python file is enough
+
+.. only:: latex and not html
+
+    DataLab can be extended with plugins: browse the `DataLab plugin catalog
+    <https://datalab-platform.com/plugins/>`_, or create your own plugin (see
+    :ref:`tutorial_plugin_catalog`).
 
 
 .. only:: html and not latex
@@ -83,6 +126,7 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
         installation, tutorials and first use cases.
 
         **Explore the documentation:** :doc:`Features <features/index>` ·
+        :doc:`Plugins <features/advanced/plugins>` ·
         :doc:`Contributing <contributing/index>` ·
         :doc:`Talks & events <outreach/index>`
 
@@ -101,40 +145,26 @@ DataLab has been funded, chronologically, by the following stakeholders:
     * - |nlnet_logo|
       - `NLnet Foundation <https://nlnet.nl>`_, as part of the NGI0 Commons Fund, backed by the European Commission, has funded the `redesign of DataLab's core architecture <https://nlnet.nl/project/DataLab/>`_.
 
-.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
-   render at ~22mm in the PDF -- way larger than in HTML. Define separate
-   substitutions per output: pixels for HTML, centimetres for LaTeX.
+.. The ``latex-icon`` class makes doc/conf.py size these images to 1cm in the
+   PDF, where ``64px`` would render far larger than in HTML.
 
-.. only:: html
+.. |cea_logo| image:: images/logos/cea.svg
+    :width: 64px
+    :height: 64px
+    :target: https://www.cea.fr
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |cea_logo| image:: images/logos/cea.svg
-        :width: 64px
-        :height: 64px
-        :target: https://www.cea.fr
-        :class: dark-light no-scaled-link
+.. |codra_logo| image:: images/logos/codra.svg
+    :width: 64px
+    :height: 64px
+    :target: https://codra.net
+    :class: dark-light no-scaled-link latex-icon
 
-    .. |codra_logo| image:: images/logos/codra.svg
-        :width: 64px
-        :height: 64px
-        :target: https://codra.net
-        :class: dark-light no-scaled-link
-
-    .. |nlnet_logo| image:: images/logos/nlnet.svg
-        :width: 64px
-        :height: 64px
-        :target: https://nlnet.nl
-        :class: dark-light no-scaled-link
-
-.. only:: latex
-
-    .. |cea_logo| image:: images/logos/cea.svg
-        :width: 1cm
-
-    .. |codra_logo| image:: images/logos/codra.svg
-        :width: 1cm
-
-    .. |nlnet_logo| image:: images/logos/nlnet.svg
-        :width: 1cm
+.. |nlnet_logo| image:: images/logos/nlnet.svg
+    :width: 64px
+    :height: 64px
+    :target: https://nlnet.nl
+    :class: dark-light no-scaled-link latex-icon
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
@@ -188,7 +218,7 @@ and scientific dialogs (see :ref:`ecosystem`).
 
 .. [#f1] DataLab processing primitives are mainly based on
    `Sigima <https://sigima.readthedocs.io/>`_, `NumPy`_, `SciPy`_,
-   `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization
+   `scikit-image`_, `OpenCV`_ (optional) and `PyWavelets`_ libraries. DataLab visualization
    capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries
    for building scientific applications with Qt graphical user interfaces.
    DataLab advanced and specialized processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
@@ -204,3 +234,5 @@ and scientific dialogs (see :ref:`ecosystem`).
 .. _PlotPyStack: https://github.com/PlotPyStack
 .. _CODRA: https://codra.net/
 .. _Pierre Raybaut: https://github.com/PierreRaybaut/
+
+.. include:: /_card_icons.txt

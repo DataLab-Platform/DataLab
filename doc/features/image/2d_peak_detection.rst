@@ -12,8 +12,8 @@ minimum-maximum filter algorithm.
 
 How to use the feature:
   - Create or open an image in DataLab workspace
-  - Select "2d peak detection" in "Analysis" menu
-  - Enter parameters "Neighborhoods size" and "Relative threhold"
+  - Select "2D peak detection" in "Analysis" menu
+  - Enter parameters "Neighborhoods size" and "Relative threshold"
   - Optionally, enable "Create regions of interest" to automatically create
     ROIs around each detected peak:
 
@@ -26,12 +26,13 @@ How to use the feature:
 
 .. figure:: /images/2d_peak_detection/peak2d_app_results.png
 
-    2d peak detection results (see test "peak2d_app.py")
+    2d peak detection results (see test "peak2d_app_test.py")
 
 Results are shown in a table:
-  - Each row is associated to a detected peak
-  - First column shows the ROI index (0 if no ROI is defined on input image)
-  - Second and third columns show peak coordinates
+  - Each row is associated to a detected peak, and is labelled with the name of
+    the function and the reference of the image (followed by the ROI title, if a
+    ROI is defined on input image)
+  - Columns x and y show peak coordinates
 
 .. figure:: /images/2d_peak_detection/peak2d_app_zoom.png
 

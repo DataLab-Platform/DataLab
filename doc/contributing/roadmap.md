@@ -16,7 +16,7 @@ From the project’s inception in 2023, the development of DataLab has been fund
 | Funding | Description                                                                 |
 |---------|-----------------------------------------------------------------------------|
 | <a href="https://www.cea.fr/" target="_blank"><img src="../_images/cea.svg" alt="CEA" width="50"/></a> | [CEA](https://www.cea.fr/) - French Alternative Energies and Atomic Energy Commission:<br>• DataLab was initially created for analyzing data from CEA's Laser Megajoule (LMJ) facility<br>• Interfaced with the LMJ control system, DataLab is used to process and visualize signals and images acquired with plasma diagnostics (devices such as cameras, digitizers, spectrometers, etc.)<br>• It is also used for R&D activities around the LMJ facility (e.g., metrology, data analysis, etc.)<br>• CEA is the major investor in DataLab and the main contributor to the project: CEA scientists and engineers are actively involved in the roadmap |
-| <a href="https://codra.net/en/offer/software-engineering/datalab/" target="_blank"><img src="../_images/codra.svg" alt="CODRA" width="50"/></a> | [CODRA](https://codra.net/), a software engineering company and software publisher, has supported DataLab’s open-source journey since its inception:<br>• Open-source project management and communication (social media, website, etc.)<br>• Conferences and events: [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), [Open Source Experience 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), etc.<br>• Documentation: tutorials, videos, and more |
+| <a href="https://codra.net/en/offer/software-engineering/datalab/" target="_blank"><img src="../_images/codra.svg" alt="CODRA" width="50"/></a> | [CODRA](https://codra.net/), a software engineering company and software publisher, has supported DataLab’s open-source journey since its inception:<br>• Open-source project management and communication (social media, website, etc.)<br>• Conferences and events: [SciPy 2024](https://cfp.scipy.org/2024/talk/G3MC9L/), [PyData Paris 2024](https://pretalx.com/pydata-paris-2024/talk/WTDVCC/), [Open Source Experience 2024](https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK), etc.<br>• Documentation: tutorials, videos, and more |
 | <a href="https://nlnet.nl/" target="_blank"><img src="../_images/nlnet.svg" alt="NLnet" width="50"/></a> | [NLnet Foundation](https://nlnet.nl/), as part of the NGI0 Commons Fund backed by the European Commission, funded the [redesign of DataLab’s core architecture](https://nlnet.nl/project/DataLab/) — a major overhaul included in the 1.0 release (November 2025):<br>• The goal was to decouple the data model, computation, and I/O from the UI<br>• This led to the creation of the [Sigima](https://sigima.readthedocs.io/en/latest/) library, which now handles data processing independently of DataLab’s GUI<br>• This redesign improves maintainability, testability, and extensibility of the codebase<br>• This also enables DataLab to be used as a library (through Sigima) in other software projects, fostering integration and reuse |
 
 (future-milestones)=
@@ -29,11 +29,12 @@ The following table summarizes the future evolutions and maintenance plans for D
 
 | Milestone type       | Description                                  |
 |----------------------|----------------------------------------------|
-| 🔄 Future Evolutions | • Support for data acquisition<br>• Support for time series<br>• Database connectors<br>• Spyder plugin for interactive data analysis |
+| 🔄 Future Evolutions | • Support for data acquisition (started)<br>• Support for time series<br>• Database connectors<br>• Spyder plugin for interactive data analysis |
 | 🛠️ Maintenance      | • Transition to gRPC for remote control<br>• Drop Qt5 support and migrate to Qt6 |
-| 🧱 Other Tasks       | • Create a DataLab plugin template          |
 
-### 🔄 Support for Data Acquisition
+### 🔄 Support for Data Acquisition 🚧 Started
+
+> ℹ️ Data acquisition has started with DataLab 1.4: an application plugin may provide **instruments**, opened in a window with a live view, their settings and an **Acquire** button adding the acquired signals or images to the workspace (see {ref}`plugins_applications`). The [TANGO Instruments](https://github.com/DataLab-Platform/datalab-tango) demonstration plugin acquires the attributes of TANGO devices this way, and the camera and pulse characterization plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/) provide simulated instruments. The original exploration notes are kept below for context.
 
 Adding support for data acquisition would be a major step forward in making DataLab not only a platform for signal and image processing, but also a **versatile tool for real-time experimental workflows**. The idea would be to allow users to acquire data directly from various hardware devices (e.g., cameras, digitizers, spectrometers, etc.) **within DataLab itself**.
 
@@ -84,7 +85,9 @@ The design could include:
 
 This evolution would help bridge the gap between **data acquisition, analysis, and long-term storage**, enabling more robust scientific data workflows.
 
-### 📓 Jupyter Plugin for Interactive Data Analysis
+### 📓 Jupyter Plugin for Interactive Data Analysis 🚧 Partially Delivered
+
+> ℹ️ The first feature below has been delivered by **DataLab-Kernel** (see its [documentation](https://datalab-kernel.readthedocs.io/) and the {ref}`ecosystem overview <ecosystem>`): a Jupyter kernel giving notebook access to DataLab workspaces, with optional live synchronization with a running DataLab instance. The original notes are kept below for context.
 
 Although DataLab can already be remotely controlled from a Jupyter notebook — thanks to its existing remote control capabilities (see {ref}`ref-to-remote-control`) — the user experience could be greatly enhanced by developing a **dedicated Jupyter plugin**.
 
@@ -137,9 +140,11 @@ DataLab currently relies on XML-RPC for remote control, which may become a limit
 
 This improvement is tracked in [Issue #18](https://github.com/DataLab-Platform/DataLab/issues/18).
 
-#### 🚫 2025: Drop Qt5 Support and Migrate to Qt6
+#### 🚫 Drop Qt5 Support and Migrate to Qt6 🚧 Started
 
-With the **end-of-life of Qt5 scheduled for mid-2025**, DataLab will fully migrate to **Qt6**.
+> ℹ️ DataLab supports PyQt6 since version 1.1 (tested by the continuous integration), but PyQt5 remains the reference Qt binding: it is installed by the `qt` extra and used by the stand-alone Windows installer.
+
+With the **end-of-life of Qt5 in mid-2025**, DataLab will fully migrate to **Qt6**.
 This transition is expected to be **straightforward**, thanks to:
 
 * The use of the `qtpy` abstraction layer;
@@ -149,7 +154,9 @@ This change will ensure compatibility with future versions of Qt and modern Pyth
 
 ### 🧱 Other Tasks
 
-#### 🧩 Create a DataLab Plugin Template
+#### 🧩 Create a DataLab Plugin Template ✅ Delivered
+
+> ℹ️ Delivered with DataLab 1.4: the `datalab-plugin create` command creates a ready-to-use plugin in a single Python file or, with `--project`, a layered installable project with tests and a release workflow, ready to publish in the [DataLab plugin catalog](https://datalab-platform.com/plugins/) (see {ref}`plugins_developing` and the tutorial {ref}`tutorial_plugin_catalog`). The original notes are kept below for context.
 
 To encourage community contributions and facilitate the development of extensions, a **template for creating DataLab plugins** is planned.
 
@@ -165,7 +172,7 @@ The task is tracked in [Issue #26](https://github.com/DataLab-Platform/DataLab/i
 
 ## 🏆 Past Milestones
 
-From version 0.9 to 1.0, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images.
+From version 0.9 to 1.4, DataLab has undergone significant development and enhancements. The project has evolved from a simple data analysis tool to a powerful platform for processing and visualizing signals and images.
 
 Those enhancements have been made possible thanks to the support of the following organizations (see [Funding](#funding) for more details):
 
@@ -177,6 +184,10 @@ The following table summarizes the major past milestones of DataLab, including t
 
 | Milestone | Description                                                                 |
 |-----------|-----------------------------------------------------------------------------|
+| [1.4](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.4.0)<br>2026/11 | • Welcome page with application tiles, and Applications panel<br>• Application plugins: headless recipes, packaged examples, tools and instruments<br>• [DataLab plugin catalog](https://datalab-platform.com/plugins/): official and community plugins installed from DataLab, local and offline catalogs<br>• Plugin generator: `datalab-plugin create`<br>• Workspace provenance and workspace capsules<br>• Live processing preview, brightness and contrast, RAW image import, NeXus files |
+| [1.3](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.3.0)<br>2026/09 | • History panel<br>• Built-in AI assistant and command palette<br>• Spectral analysis support<br>• Regions of interest from detection (auto mask)<br>• DataLab now builds on the SigimaX application framework |
+| [1.2](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.2.0)<br>2026/04 | • Plugin configuration dialog and plugin hot-reload<br>• Multi-instance detection<br>• Remote control API: push modified objects back to DataLab |
+| [1.1](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.1.0)<br>2026/02 | • Web API for HTTP/JSON integration, used by DataLab-Kernel<br>• PyQt6 compatibility<br>• Remote control API enhancements |
 | [1.0](https://github.com/DataLab-Platform/DataLab/releases/tag/v1.0.0)<br>2025/11 | • Interactive object editing: modify creation/processing parameters and recompute objects<br>• New object creation: parametric signal/image generators, Poisson noise, complex-valued objects<br>• Enhanced processing: pulse features, ideal filters, 2D resampling, convolution, projections<br>• ROI & annotations: copy/paste, import/export, grid creation, inverse ROI logic<br>• Visualization: merged result labels, datetime support, performance optimizations<br>• File formats: FT-Lab (.sig, .ima), coordinated text files, improved HDF5 support<br>• Non-uniform coordinates and polynomial calibration<br>• Public API enhancements for programmability |
 | [0.20](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.20.0)<br>2025/04 | • ANDOR SIF images: add support for background images<br>• Array editor: new copy all, export, and paste features<br>• Fourier analysis: new zero padding feature for signals and images<br>• ROI editor: ROI selection tool now active by default<br>• Signal processing: X-Y mode, abscissa/ordinate find features, full width at y=...<br>• Public API: add `group_id` and `set_current` arguments to add methods |
 | [0.19](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.19.0)<br>2025/04 | • Open all signals or images from a folder (recursively)<br>• ROI editor: add options to create ROIs from coordinates |
@@ -186,6 +197,6 @@ The following table summarizes the major past milestones of DataLab, including t
 | [0.15](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.15.0)<br>2024/04 | • New MSI installer for the stand-alone version on Windows<br>• Add support for large text/CSV files (> 1 GB)<br>• Add auto downsampling feature |
 | [0.14](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.14.0)<br>2024/03 | • HDF5 browser: multiple file support, detailed info on groups and attributes<br>• New Debian package for native installation on Linux |
 | [0.12](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.12.0)<br>2024/02 | • Add a tour and demo feature<br>• Add tutorials to the documentation<br>• Add a Text file import assistant |
-| [0.11](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.11.0)<br>2024/01 | • Add features for reordering signals and images (e.g. drag-and-drop)<br>• Add 1D convolution, interpolation, resampling and detrending features |
+| [0.11](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.11)<br>2024/01 | • Add features for reordering signals and images (e.g. drag-and-drop)<br>• Add 1D convolution, interpolation, resampling and detrending features |
 | [0.10](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.10.0)<br>2023-12 | • Develop a very simple DataLab plugin to demonstrate the plugin system<br>• Allow to disable the automatic refresh when doing multiple processing steps<br>• Serialize curve and image styles in HDF5 files<br>• Improve curve readability |
 | [0.9](https://github.com/DataLab-Platform/DataLab/releases/tag/v0.9.0)<br>2023-11 | • Run computations in a separate process<br>• Add a plugin system: API for third-party extensions<br>• Add a macro-command system<br>• Add an XML-RPC server to allow DataLab remote control |

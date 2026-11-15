@@ -781,6 +781,27 @@ def test_accept_applies_global_plugin_toggle(monkeypatch):
         Conf.v020_plugins_warning_ignore.set(original_warning_ignore)
 
 
+def test_plugin_catalog_opens_on_catalog_tab(monkeypatch):
+    """The plugin catalog entry point opens the dialog on its Catalog tab."""
+    opened_on_catalog: list[bool] = []
+
+    def exec_dialog(dialog: PluginConfigDialog) -> int:
+        opened_on_catalog.append(
+            dialog.tabs.currentWidget() is dialog.available_plugins_widget
+        )
+        return 0
+
+    with datalab_test_app_context(console=False) as win:
+        dialog = PluginConfigDialog(win)
+        assert dialog.tabs.currentIndex() == 0
+        dialog.show_catalog()
+        assert dialog.tabs.currentWidget() is dialog.available_plugins_widget
+
+        monkeypatch.setattr(PluginConfigDialog, "exec", exec_dialog)
+        win.show_plugin_catalog()
+        assert opened_on_catalog == [True]
+
+
 def test_plugin_many_actions_menu_behavior():
     """Test plugin with many actions in dropdown menu."""
     had_config = has_persisted_option(Conf, "plugins_enabled_list")

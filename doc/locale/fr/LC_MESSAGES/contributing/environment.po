@@ -119,8 +119,11 @@ msgstr "Installation de tous les paquets requis :"
 msgid "ℹ️ See [Installation](https://datalab-platform.com/en/intro/installation.html) for more details on reference Python and Qt versions."
 msgstr "Voir [Installation](https://datalab-platform.com/en/intro/installation.html) pour plus de détails sur les versions de référence de Python et Qt."
 
-msgid "⚠️ If you are contributing to DataLab's processing features, you will need to work on both DataLab's main repository and sigima's repository. To install `sigima` in editable mode, use the following command:"
-msgstr "⚠️ Si vous contribuez aux fonctionnalités de traitement de DataLab, vous devrez travailler à la fois sur le dépôt principal de DataLab et sur celui de Sigima. Pour installer `sigima` en mode éditable, utilisez la commande suivante :"
+msgid "⚠️ DataLab relies on its sibling repositories [Sigima](https://github.com/DataLab-Platform/Sigima) (processing features), [SigimaX](https://github.com/DataLab-Platform/SigimaX) (application framework) and [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) (workspace capsules). If your contribution needs unreleased changes of these repositories (e.g. a processing feature, implemented in Sigima), you will need to work on them too. Either install them in editable mode:"
+msgstr "⚠️ DataLab s'appuie sur ses dépôts voisins [Sigima](https://github.com/DataLab-Platform/Sigima) (fonctionnalités de traitement), [SigimaX](https://github.com/DataLab-Platform/SigimaX) (framework applicatif) et [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) (capsules d'espace de travail). Si votre contribution nécessite des modifications non publiées de ces dépôts (par exemple une fonctionnalité de traitement, implémentée dans Sigima), vous devrez également travailler sur ceux-ci. Installez-les soit en mode éditable :"
+
+msgid "or add them to the `PYTHONPATH` variable of the `.env` file (see below), e.g. `PYTHONPATH=.;../Sigima;../SigimaX;../DataLab-Capsule/src`."
+msgstr "soit ajoutez-les à la variable `PYTHONPATH` du fichier `.env` (voir ci-dessous), par exemple `PYTHONPATH=.;../Sigima;../SigimaX;../DataLab-Capsule/src`."
 
 msgid "If you are using [WinPython](https://winpython.github.io/), thank you for supporting the scientific open-source Python community!"
 msgstr "Si vous utilisez [WinPython](https://winpython.github.io/), merci de soutenir la communauté scientifique Python open-source !"
@@ -137,10 +140,10 @@ msgstr "Statut"
 msgid "WinPython version"
 msgstr "Version de WinPython"
 
-msgid "OK"
+msgid "3.10"
 msgstr ""
 
-msgid "3.10"
+msgid "OK"
 msgstr ""
 
 msgid "3.10.11.1"
@@ -162,6 +165,12 @@ msgid "3.13"
 msgstr ""
 
 msgid "3.13.2.0"
+msgstr ""
+
+msgid "3.14"
+msgstr ""
+
+msgid "3.14.5.0"
 msgstr ""
 
 msgid "⚠ We strongly recommend using the `.dot` versions of WinPython which are lightweight and can be customized to your needs (using `pip install -r requirements.txt`)."
@@ -215,8 +224,8 @@ msgstr "Installeur Windows"
 msgid "The official Windows executable and MSI installer are built by the GitHub CI release pipeline. The Python version embedded in the standalone application shipped to end users is defined by the `python-version` input default of the reusable build workflow (`.github/workflows/_build.yml`), consumed by its `build-msi` job; the release workflows do not override it. That workflow is the single source of truth — refer to it for the exact version currently in use."
 msgstr "L'exécutable Windows officiel et l'installeur MSI sont générés par le pipeline de publication de l'intégration continue GitHub. La version de Python embarquée dans l'application autonome distribuée aux utilisateurs finaux est définie par la valeur par défaut de l'entrée `python-version` du workflow de build réutilisable (`.github/workflows/_build.yml`), utilisée par son job `build-msi` ; les workflows de publication ne la redéfinissent pas. Ce workflow est la source de vérité unique — reportez-vous-y pour connaître la version exacte actuellement utilisée."
 
-msgid "The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5. Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
-msgstr "L'installateur Windows est construit avec [WiX Toolset](https://wixtoolset.org/) V4.0.5. L'utilisation de WiX Toolset nécessite le [SDK .NET](https://dotnet.microsoft.com/download/dotnet/) V6.0 au minimum."
+msgid "The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4 (the CI release pipeline installs the latest 4.x version, with the WiX UI extension V4.0.5). Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
+msgstr "L'installateur Windows est construit avec [WiX Toolset](https://wixtoolset.org/) V4 (le pipeline de publication de la CI installe la dernière version 4.x, avec l'extension WiX UI V4.0.5). L'utilisation de WiX Toolset nécessite le [SDK .NET](https://dotnet.microsoft.com/download/dotnet/) V6.0 au minimum."
 
 msgid "You may install .NET SDK using `winget`:"
 msgstr "Vous pouvez installer le SDK .NET avec `winget` :"
@@ -224,11 +233,14 @@ msgstr "Vous pouvez installer le SDK .NET avec `winget` :"
 msgid "Once .NET SDK is installed, the WiX Toolset can be installed and configured using the following commands:"
 msgstr "Une fois le SDK .NET installé, WiX Toolset peut être installé et configuré avec les commandes suivantes :"
 
-msgid "First, you need to generate the installer script from a generic template:"
-msgstr "Vous devez d'abord générer le script de l'installateur à partir d'un modèle générique :"
+msgid "First, you need to generate the installer script from a generic template (replace `X.Y.Z` by the version of DataLab, e.g. `1.4.0`):"
+msgstr "Vous devez d'abord générer le script de l'installateur à partir d'un modèle générique (remplacez `X.Y.Z` par la version de DataLab, par exemple `1.4.0`) :"
 
 msgid "Building the installer is done using the following command:"
 msgstr "La construction de l'installateur s'effectue avec la commande suivante :"
+
+msgid "Alternatively, `scripts\\build_installer.bat` (Visual Studio Code task \"📦 Create installer\") runs both commands for the current version of DataLab."
+msgstr "Alternativement, `scripts\\build_installer.bat` (tâche Visual Studio Code \"📦 Create installer\") exécute les deux commandes pour la version courante de DataLab."
 
 msgid "Release smoke test"
 msgstr "Test de fumée avant publication"

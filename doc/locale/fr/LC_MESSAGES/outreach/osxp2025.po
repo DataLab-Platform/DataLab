@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -95,8 +94,8 @@ msgstr "une plateforme modulaire dont les composants de traitement de base sont 
 msgid "At the heart of this architectural shift lies a new object-oriented processing library, designed as part of the DataLab Core Architecture Redesign project funded by the NLnet Foundation. This library enables developers and domain experts to easily create their own data processing tools while reusing the same core components that power DataLab."
 msgstr "Au cœur de ce changement architectural se trouve une nouvelle bibliothèque de traitement orientée objet, conçue dans le cadre du projet de refonte de l'architecture de base de DataLab financé par la NLnet Foundation. Cette bibliothèque permet aux développeurs et aux experts du domaine de créer facilement leurs propres outils de traitement de données tout en réutilisant les mêmes composants de base qui alimentent DataLab."
 
-msgid "The talk will highlight the key features of DataLab 1.0, including its redesigned architecture and new user-facing functionalities, and will demonstrate how it can serve both as a ready-to-use application and as a foundation for building domain-specific tools in scientific and industrial contexts."
-msgstr "La présentation mettra en avant les principales fonctionnalités de DataLab 1.0, y compris son architecture repensée et ses nouvelles fonctionnalités orientées utilisateur, et démontrera comment il peut servir à la fois d'application prête à l'emploi et de base pour la création d'outils spécifiques au domaine dans des contextes scientifiques et industriels."
+msgid "The talk highlighted the key features of DataLab 1.0, including its redesigned architecture and new user-facing functionalities, and demonstrated how it can serve both as a ready-to-use application and as a foundation for building domain-specific tools in scientific and industrial contexts."
+msgstr "La présentation a mis en avant les principales fonctionnalités de DataLab 1.0, notamment son architecture repensée et ses nouvelles fonctionnalités pour les utilisateurs. Elle a montré comment il peut servir à la fois d'application prête à l'emploi et de base pour créer des outils spécialisés dans des contextes scientifiques et industriels."
 
 msgid "Watch the Full Presentation"
 msgstr "Regardez la présentation complète"
@@ -140,8 +139,8 @@ msgstr "La réalisation de ce logiciel ouvre la voie à de nouvelles application
 msgid "DataLab 1.0: Key Features and Architecture"
 msgstr "DataLab 1.0 : Fonctionnalités Clés et Architecture"
 
-msgid "This presentation will showcase the major advancements in DataLab 1.0:"
-msgstr "Cette présentation mettra en avant les avancées majeures de DataLab 1.0 :"
+msgid "This presentation showcased the major advancements in DataLab 1.0:"
+msgstr "Cette présentation a mis en avant les avancées majeures de DataLab 1.0 :"
 
 msgid "**Modular Architecture**"
 msgstr "**Architecture Modulaire**"
@@ -284,8 +283,8 @@ msgstr "DataLab 1.0 représente une évolution significative - passant d'une app
 msgid "The originally planned X-ray scene reconstruction project remains an excellent example of DataLab's capabilities in advanced industrial applications, demonstrating how the platform bridges the gap between research and industrial applications while combining scientific rigor, industrial robustness, and open-source collaboration."
 msgstr "Le projet de reconstruction de scènes radiographiées initialement prévu reste un excellent exemple des capacités de DataLab dans les applications industrielles avancées, démontrant comment la plateforme comble le fossé entre la recherche et les applications industrielles tout en combinant rigueur scientifique, robustesse industrielle et collaboration open-source."
 
-msgid "**Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future."
-msgstr "**Événement Passé** : Cette présentation a eu lieu le **11 décembre 2025**. Les documents de présentation et informations complémentaires pourront être ajoutés ici à l'avenir."
+msgid "**Past Event**: This presentation took place on **December 11, 2025**. Its video recording is available above."
+msgstr "**Événement passé** : Cette présentation a eu lieu le **11 décembre 2025**. Son enregistrement vidéo est disponible ci-dessus."
 
 msgid "Resources"
 msgstr "Ressources"
@@ -293,8 +292,8 @@ msgstr "Ressources"
 msgid "`Open Source Experience 2025 website <https://www.opensource-experience.com/>`_"
 msgstr "Site Web de l'Open Source Experience 2025 <https://www.opensource-experience.com/>"
 
-msgid "Talk details and schedule to be published closer to the event"
-msgstr "Les détails de la présentation et le calendrier seront publiés à l'approche de l'événement."
+msgid "`Video recording on YouTube <https://www.youtube.com/watch?v=0D4ffBJIc5Q>`_"
+msgstr "`Enregistrement vidéo sur YouTube <https://www.youtube.com/watch?v=0D4ffBJIc5Q>`_"
 
 msgid "For more information about DataLab's use in CEA projects, see:"
 msgstr "Pour plus d'informations sur l'utilisation de DataLab dans les projets CEA, voir :"

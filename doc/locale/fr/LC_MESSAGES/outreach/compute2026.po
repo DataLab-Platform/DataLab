@@ -1,0 +1,48 @@
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+#
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Meet DataLab at the CODRA booth at Compute! Paris 2026"
+msgstr "Retrouvez DataLab sur le stand CODRA à Compute! Paris 2026"
+
+msgid "DataLab, Compute! Paris 2026, CODRA, open source, scientific computing, Paris"
+msgstr "DataLab, Compute! Paris 2026, CODRA, open source, calcul scientifique, Paris"
+
+msgid "Compute! Paris 2026"
+msgstr ""
+
+msgid "CODRA will participate in `Compute! Paris 2026 <https://compute.events/paris2026/>`_ as a **Gold Sponsor** and present DataLab at its booth."
+msgstr "CODRA participera à `Compute! Paris 2026 <https://compute.events/paris2026/>`_ en tant que **sponsor Gold** et présentera DataLab sur son stand."
+
+msgid "Live demonstrations will cover signal and image processing with examples involving cameras and detectors, pulses and transients, and radiographic images for non-destructive testing (NDT)."
+msgstr "Nous montrerons des exemples de traitement de signaux et d'images : données de caméras et de détecteurs, impulsions et phénomènes transitoires, images radiographiques utilisées pour le contrôle non destructif (CND)."
+
+msgid "Visit the booth to try the tools and discuss your experimental data and scientific software projects with the team."
+msgstr "Venez sur le stand essayer les outils et échanger avec l'équipe sur vos données expérimentales et vos projets de logiciels scientifiques."
+
+msgid "**Event Details**"
+msgstr "**Détails de l'événement**"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "November 25–26, 2026"
+msgstr "25 et 26 novembre 2026"
+
+msgid "Location"
+msgstr "Lieu"
+
+msgid "Centre International de Conférences de Sorbonne Université, 4 place Jussieu, 75005 Paris, France"
+msgstr ""
+
+msgid "DataLab screenshots showing an image with intensity profiles and the applications panel"
+msgstr "Captures de DataLab montrant une image avec des profils d'intensité et le panneau des applications"
+
+msgid "DataLab in action at the CODRA booth"
+msgstr "DataLab en action sur le stand CODRA"

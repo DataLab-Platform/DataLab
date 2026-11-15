@@ -20,12 +20,16 @@ The following subpackages are available:
 
 from __future__ import annotations
 
+import atexit
+import gc
 import multiprocessing
 import os
 import os.path as osp
 import socket
 import sys
 import time
+import traceback
+import weakref
 from contextlib import contextmanager
 from typing import Generator
 
@@ -38,6 +42,8 @@ if "pytest" in sys.modules:
 import psutil
 import pytest
 from guidata.guitest import run_testlauncher
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima.tests import helpers
 
 import datalab.config  # Loading icons
@@ -84,36 +90,119 @@ def datalab_test_app_context(
     if size is None:
         size = 1200, 700
     ensure_initialized(load_user_config=False)
-    with qth.datalab_app_context(exec_loop=exec_loop):
-        win: DLMainWindow | None = None
+    win: DLMainWindow | None = None
+    try:
+        with qth.datalab_app_context(exec_loop=exec_loop):
+            try:
+                win = DLMainWindow(console=console)
+                if not history:
+                    win.historypanel.set_tracking_enabled(False)
+                    win.historypanel.setEnabled(False)
+                    win.docks[win.historypanel].hide()
+                if maximized:
+                    win.showMaximized()
+                else:
+                    width, height = size
+                    win.resize(width, height)
+                    win.showNormal()
+                win.show()
+                win.setObjectName(helpers.get_default_test_name())  # screenshot name
+                yield win
+            finally:
+                if save:
+                    path = helpers.get_output_data_path("h5")
+                    try:
+                        os.remove(path)
+                        win.save_to_h5_file(path)
+                    except (FileNotFoundError, PermissionError):
+                        pass
+                has_exception_occurred = sys.exc_info()[0] is not None
+                if not exec_loop or has_exception_occurred and win is not None:
+                    # Closing main window properly
+                    win.set_modified(False)
+                    win.close()
+    finally:
+        if win is not None:
+            _register_closed_test_window(win)
+
+
+_CLOSED_TEST_WINDOWS: list[weakref.ref[DLMainWindow]] = []
+_CLOSED_TEST_WINDOWS_CLEANUP_REGISTERED: list[bool] = []
+
+
+def _register_closed_test_window(win: DLMainWindow) -> None:
+    """Register a closed test window, to be destroyed at interpreter exit if the
+    garbage collector has not destroyed it before
+
+    Args:
+        win: closed main window
+    """
+    if not _CLOSED_TEST_WINDOWS_CLEANUP_REGISTERED:
+        atexit.register(destroy_closed_test_windows)
+        _CLOSED_TEST_WINDOWS_CLEANUP_REGISTERED.append(True)
+    _CLOSED_TEST_WINDOWS[:] = [ref for ref in _CLOSED_TEST_WINDOWS if ref() is not None]
+    _CLOSED_TEST_WINDOWS.append(weakref.ref(win))
+
+
+def destroy_closed_test_windows() -> None:
+    """Destroy the main windows closed by :func:`datalab_test_app_context`
+
+    Part of reference cycles, a closed window would otherwise be destroyed at
+    interpreter exit, possibly after the Qt application, which crashes (issue #556).
+    It is not destroyed when leaving the context: objects still used by the caller,
+    e.g. a tree item iterator kept by a test function, would then refer to deleted
+    widgets and crash when they are deleted in turn.
+    """
+    gc.collect()  # Delete the objects which refer to the windows first
+    if QW.QApplication.instance() is None:
+        return
+    while _CLOSED_TEST_WINDOWS:
+        win = _CLOSED_TEST_WINDOWS.pop()()
+        if win is None:
+            continue
         try:
-            win = DLMainWindow(console=console)
-            if not history:
-                win.historypanel.set_tracking_enabled(False)
-                win.historypanel.setEnabled(False)
-                win.docks[win.historypanel].hide()
-            if maximized:
-                win.showMaximized()
-            else:
-                width, height = size
-                win.resize(width, height)
-                win.showNormal()
-            win.show()
-            win.setObjectName(helpers.get_default_test_name())  # screenshot name
-            yield win
-        finally:
-            if save:
-                path = helpers.get_output_data_path("h5")
-                try:
-                    os.remove(path)
-                    win.save_to_h5_file(path)
-                except (FileNotFoundError, PermissionError):
-                    pass
-            has_exception_occurred = sys.exc_info()[0] is not None
-            if not exec_loop or has_exception_occurred and win is not None:
-                # Closing main window properly
-                win.set_modified(False)
-                win.close()
+            win.deleteLater()
+        except RuntimeError:  # Already deleted, e.g. by the test itself
+            pass
+    QC.QCoreApplication.sendPostedEvents(None, QC.QEvent.DeferredDelete)
+
+
+class _ShownWindowsRecorder(QC.QObject):
+    """Record the top-level windows shown while installed on the application"""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.shown: list[str] = []
+
+    def eventFilter(self, obj: QC.QObject, event: QC.QEvent) -> bool:  # pylint: disable=invalid-name
+        """Record the class of each shown window and the code showing it"""
+        if event.type() == QC.QEvent.Show and obj.isWidgetType() and obj.isWindow():
+            caller = traceback.extract_stack(limit=2)[0]
+            self.shown.append(
+                f"{type(obj).__name__} shown from {caller.filename}:{caller.lineno}"
+            )
+        return False
+
+
+@contextmanager
+def record_shown_windows() -> Generator[list[str], None, None]:
+    """Record the top-level windows shown within the context
+
+    A widget made visible while it has no parent is shown as a top-level window,
+    flashing on screen until it is added to a layout. Use this context to check
+    that building widgets shows no such transient window.
+
+    Yields:
+        List filled, within the context, with one entry per shown window: its
+         class name and the code location showing it
+    """
+    recorder = _ShownWindowsRecorder()
+    app = QW.QApplication.instance()
+    app.installEventFilter(recorder)
+    try:
+        yield recorder.shown
+    finally:
+        app.removeEventFilter(recorder)
 
 
 def is_pid_alive(pid: int) -> bool:

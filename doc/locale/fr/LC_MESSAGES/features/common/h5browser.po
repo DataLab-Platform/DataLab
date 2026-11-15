@@ -33,11 +33,26 @@ msgstr "Dans le panneau de gauche, sélectionner la courbe ou l'image à importe
 msgid "Selected data is plotted on the right panel"
 msgstr "Les données sélectionnées peuvent être visualisées graphiquement dans le panneau de droite"
 
-msgid "Click on \"Check all\" if you want to import all compatible data"
-msgstr "Cliquer sur \"Cocher tout\" pour importer toutes les données compatibles"
+msgid "Click on \"Check all\" if you want to import all compatible data (or on \"Uncheck all\" to clear the selection)"
+msgstr "Cliquer sur \"Tout cocher\" pour importer toutes les données compatibles (ou sur \"Tout décocher\" pour effacer la sélection)"
 
 msgid "Then validate by clicking on \"OK\""
 msgstr "Valider ensuite en cliquant sur \"OK\""
+
+msgid "Other commands are available:"
+msgstr "D'autres commandes sont disponibles :"
+
+msgid "The \"Open ...\" and \"Close\" buttons, next to the file selector, add another HDF5 file to the browser or close the current one"
+msgstr "Les boutons \"Ouvrir ...\" et \"Fermer\", à côté du sélecteur de fichier, ajoutent un autre fichier HDF5 à l'explorateur ou ferment le fichier courant"
+
+msgid "The \"Show only supported data\" check box hides the data that cannot be imported, and the \"Show values\" check box shows the \"Value\" column of the tree"
+msgstr "La case à cocher \"Afficher uniquement les données prises en charge\" masque les données qui ne peuvent pas être importées, et la case à cocher \"Afficher les valeurs\" affiche la colonne \"Valeur\" de l'arborescence"
+
+msgid "The \"Show array\" button, at the top right of the right panel, shows the values of the selected array in a read-only table"
+msgstr "Le bouton \"Afficher le tableau\", en haut à droite du panneau de droite, affiche les valeurs du tableau sélectionné dans une table en lecture seule"
+
+msgid "The context menu of the tree expands or collapses all items (\"Expand all\", \"Collapse all\") or the selected ones (\"Expand selection\", \"Collapse selection\"), and \"Restore\" restores the original tree layout"
+msgstr "Le menu contextuel de l'arborescence développe ou réduit tous les éléments (\"Tout développer\", \"Tout réduire\") ou les éléments sélectionnés (\"Développer la sélection\", \"Réduire la sélection\"), et \"Restaurer\" rétablit la disposition d'origine de l'arborescence"
 
 msgid "The HDF5 browser may be used to explore multiple HDF5 files at once, thus allowing to import data from different files into the same DataLab workspace."
 msgstr "L'explorateur HDF5 peut être utilisé pour explorer plusieurs fichiers HDF5 à la fois, permettant ainsi d'importer des données de différents fichiers dans le même espace de travail de DataLab."
@@ -104,7 +119,4 @@ msgstr "Les objets NeXus et décrits par un profil portent une entrée de métad
 
 msgid "Save the imported objects in a DataLab workspace to keep both their data and this metadata. Reopening that workspace does not require the original NeXus file or the mapping plugin. Generic raw dataset imports do not automatically receive this structured experimental source."
 msgstr "Enregistrez les objets importés dans un espace de travail DataLab pour conserver leurs données et ces métadonnées. La réouverture de cet espace de travail ne nécessite ni le fichier NeXus original ni le plugin du profil. Les imports génériques de jeux de données bruts ne reçoivent pas automatiquement cette description structurée de leur origine expérimentale."
-
-#~ msgid "Datasets with three or more dimensions, such as image stacks and spectral cubes, are listed but cannot be imported as complete objects. There is no graphical slice selector yet. Developers can read 1D or 2D views without loading the whole cube using the selection API described in the SigimaX guide."
-#~ msgstr "Les jeux de données à trois dimensions ou plus, comme les piles d'images et les cubes spectraux, sont listés mais ne peuvent pas être importés comme objets complets. Il n'existe pas encore de sélecteur graphique de coupes. Les développeurs peuvent lire des vues 1D ou 2D sans charger tout le cube avec l'API de sélection décrite dans le guide de SigimaX."
 

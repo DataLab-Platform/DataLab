@@ -22,8 +22,8 @@ msgstr "Nous suivons le style de codage `PEP 8 <https://www.python.org/dev/peps/
 msgid "In particular, we are especially strict about the following guidelines:"
 msgstr "En particulier, nous sommes particulièrement stricts sur les directives suivantes :"
 
-msgid "Limit all lines to a maximum of 79 characters."
-msgstr "Limiter toutes les lignes à un maximum de 79 caractères."
+msgid "Limit all lines to a maximum of 88 characters (the line length configured for ``ruff`` in ``pyproject.toml``)."
+msgstr "Limiter toutes les lignes à 88 caractères au maximum (la longueur de ligne configurée pour ``ruff`` dans ``pyproject.toml``)."
 
 msgid "Respect the naming conventions (classes, functions, variables, etc.)."
 msgstr "Respecter les conventions de nommage (classes, fonctions, variables, etc.)."
@@ -43,8 +43,8 @@ msgstr "`pylint <https://pypi.org/project/pylint/>`_ pour l'analyse statique du 
 msgid "ruff"
 msgstr "ruff"
 
-msgid "If you are using `Visual Studio Code <https://code.visualstudio.com/>`_, the project settings will automatically format your code with `ruff` on save (you may also run the task \"Run Ruff\" to run `ruff` on the project)."
-msgstr "Si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_, les paramètres du projet formateront automatiquement votre code avec `ruff` à l'enregistrement (vous pouvez également exécuter la tâche \"Run Ruff\" pour exécuter `ruff` sur le projet)."
+msgid "If you are using `Visual Studio Code <https://code.visualstudio.com/>`_, the project settings will automatically format your code with `ruff` on save (you may also run the task \"🧽🔦 Ruff\" to run `ruff` on the project)."
+msgstr "Si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_, les paramètres du projet formateront automatiquement votre code avec `ruff` à l'enregistrement (vous pouvez également exécuter la tâche \"🧽🔦 Ruff\" pour exécuter `ruff` sur le projet)."
 
 msgid "To run `ruff`, run the following command::"
 msgstr "Pour exécuter `ruff`, exécutez la commande suivante::"
@@ -55,11 +55,11 @@ msgstr "pylint"
 msgid "To run `pylint`, run the following command::"
 msgstr "Pour exécuter `pylint`, exécutez la commande suivante::"
 
-msgid "If you are using `Visual Studio Code <https://code.visualstudio.com/>`_ on Windows, you may run the task \"Run Pylint\" to run `pylint` on the project."
-msgstr "Si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_ sur Windows, vous pouvez exécuter la tâche \"Run Pylint\" pour exécuter `pylint` sur le projet."
+msgid "If you are using `Visual Studio Code <https://code.visualstudio.com/>`_ on Windows, you may run the task \"🔦 Pylint\" to run `pylint` on the project."
+msgstr "Si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_ sur Windows, vous pouvez exécuter la tâche \"🔦 Pylint\" pour exécuter `pylint` sur le projet."
 
-msgid "A `pylint` rating greater than 9/10 is required to merge a pull request."
-msgstr "Une note `pylint` supérieure à 9/10 est requise pour fusionner une demande d'extraction."
+msgid "A `pylint` rating greater than 9/10 is expected to merge a pull request. Unlike `ruff`, `pylint` is not run by the continuous integration: check the rating before submitting your pull request."
+msgstr "Une note `pylint` supérieure à 9/10 est attendue pour fusionner une pull request. Contrairement à `ruff`, `pylint` n'est pas exécuté par l'intégration continue : vérifiez la note avant de soumettre votre pull request."
 
 msgid "Specific coding guidelines"
 msgstr "Règles de codage spécifiques"

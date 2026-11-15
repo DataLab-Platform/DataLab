@@ -27,6 +27,11 @@ The "File" menu allows you to:
 
 - Edit DataLab preferences (see :ref:`settings`).
 
+- Start or stop the Web API server, copy its connection information, and check
+  its status (see :ref:`ref-to-webapi`).
+
+- Quit DataLab.
+
 .. _open_signal:
 
 Open signal
@@ -45,8 +50,12 @@ Create a new signal from the following supported filetypes:
       - .npy
     * - MAT-Files
       - .mat
+    * - HDF5 signal files
+      - .h5sig
     * - FT-Lab files
       - .sig
+    * - MCA files
+      - .mca
 
 Open from directory
 ^^^^^^^^^^^^^^^^^^^
@@ -64,7 +73,13 @@ Save current signal to the following supported filetypes:
     * - File type
       - Extensions
     * - Text files
-      - .csv
+      - .csv, .txt
+    * - NumPy arrays
+      - .npy
+    * - MAT-Files
+      - .mat
+    * - HDF5 signal files
+      - .h5sig
 
 Save signals to directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -79,10 +94,12 @@ and signal format.
 When you select "Save to directory..." from the File menu, a dialog appears where you can:
 
 - **Directory**: Choose the target directory where signals will be saved
-- **Filename pattern**: Define a pattern for the filenames using Python format strings
-- **File extension**: Select the output format (.csv, .txt, etc.)
+- **Basename pattern**: Define a pattern for the filenames using Python format strings
+  (the **Help** button describes the available placeholders)
+- **Extension**: Select the output format (.csv, .txt, etc.)
 - **Overwrite**: Choose whether to overwrite existing files
-- **Preview**: See the list of files that will be created (with object IDs)
+- **Preview**: See the list of files that will be created (each file name is
+  preceded by the group and the title of the corresponding signal)
 
 The filename pattern supports the following placeholders:
 
@@ -127,11 +144,14 @@ The second step consists of configuring the import and previewing the result. Yo
 configure the following options:
 
 - **Delimiter**: The character used to separate the values in the text file.
+- **Decimal**: The decimal separator (point or comma).
 - **Comments**: The character used to indicate that the line is a comment and should be
   ignored.
 - **Rows to Skip**: The number of rows to skip at the beginning of the file.
-- **Maximum Number of Rows**: The maximum number of rows to import. If the file contains
+- **Max. nb of rows**: The maximum number of rows to import. If the file contains
   more rows, they will be ignored.
+- **Header**: The row containing the column names, if any (none, inferred from the
+  data, or first row).
 - **Transpose**: If checked, the rows and columns will be transposed.
 - **Data type**: The destination data type of the imported data.
 - **First Column is X**: If checked, the first column will be used as the X axis.

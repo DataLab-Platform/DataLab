@@ -152,6 +152,20 @@ def test_webapi_computation_error(win: DLMainWindow, message_boxes: list[str]):
         adapter.calc("unknown_function")
 
 
+def test_webapi_missing_object_lookup_not_reported(
+    win: DLMainWindow, message_boxes: list[str]
+):
+    """Looking up a missing object is an answer, not a failed Web API request"""
+    adapter = WorkspaceAdapter(win)
+    assert not adapter.object_exists("Missing")
+    assert adapter.get_object_panel("Missing") is None
+    # Adding an object checks first that its name is not used yet
+    adapter.add_object(create_signal("New", np.array([0.0, 1.0]), np.array([1.0, 2.0])))
+    assert adapter.object_exists("New")
+    assert not message_boxes
+    assert FAILED_REQUEST not in win.statusBar().currentMessage()
+
+
 def test_xmlrpc_load_error(win: DLMainWindow, message_boxes: list[str], tmp_path: Path):
     """A file that cannot be read is reported to the XML-RPC client"""
     filename = tmp_path / "invalid.npy"

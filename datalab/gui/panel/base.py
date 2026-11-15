@@ -1727,6 +1727,19 @@ class PasteMetadataParam(gds.DataSet):
     keep_tables = gds.BoolItem(_("Table results"), default=False).set_pos(col=1)
     keep_other = gds.BoolItem(_("Other metadata"), default=True)
 
+    @classmethod
+    def for_dialog(cls) -> PasteMetadataParam:
+        """Create parameters with the metadata paste dialog's explanation."""
+        return cls(
+            _("Paste metadata"),
+            comment=_(
+                "Select what to keep from the clipboard.<br><br>"
+                "Geometry and table results, if kept, will be merged with "
+                "existing results. <u>Other metadata with matching keys will "
+                "be replaced</u>. Annotations are copied and pasted separately."
+            ),
+        )
+
 
 class NonModalInfoDialog(QW.QMessageBox):
     """Non-modal information message box with selectable text.
@@ -2774,14 +2787,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def paste_metadata(self, param: PasteMetadataParam | None = None) -> None:
         """Paste metadata to selected object(s)"""
         if param is None:
-            param = PasteMetadataParam(
-                _("Paste metadata"),
-                comment=_(
-                    "Select what to keep from the clipboard.<br><br>"
-                    "Result shapes and annotations, if kept, will be merged with "
-                    "existing ones. <u>All other metadata will be replaced</u>."
-                ),
-            )
+            param = PasteMetadataParam.for_dialog()
             if not param.edit(parent=self.parentWidget()):
                 return
         self.mainwindow.historypanel.add_ui_entry(
@@ -2987,16 +2993,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         sel_groups = self.objview.get_sel_groups()
         sel_objects = self.objview.get_sel_objects(include_groups=True)
-        for obj in sorted(sel_objects, key=get_short_id, reverse=True):
+        sel_objects = sorted(sel_objects, key=get_short_id, reverse=True)
+        for obj in sel_objects:
             dlg_list: list[QW.QDialog] = []
             for dlg, obj_i in self.__separate_views.items():
                 if obj_i is obj:
                     dlg_list.append(dlg)
             for dlg in dlg_list:
                 dlg.done(QW.QDialog.DialogCode.Rejected)
-            self.plothandler.remove_item(get_uuid(obj))
-            self.objview.remove_item(get_uuid(obj), refresh=False)
-            self.objmodel.remove_object(obj)
+        # Bulk removal: the plot and the numbering are updated once, not per object
+        uuids = [get_uuid(obj) for obj in sel_objects]
+        self.plothandler.remove_items(uuids)
+        self.objview.remove_items(uuids, refresh=False)
+        self.objmodel.remove_objects(sel_objects)
         for group in sel_groups:
             self.objview.remove_item(get_uuid(group), refresh=False)
             self.objmodel.remove_group(group)

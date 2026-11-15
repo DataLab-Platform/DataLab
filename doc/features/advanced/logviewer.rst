@@ -10,7 +10,7 @@ Log viewer
 Despite countless efforts (unit testing, test coverage...),
 DataLab might crash or behave unexpectedly.
 
-For those situations, DataLab provides two logs (located in your home directory):
+For those situations, DataLab provides two logs (located in the DataLab configuration folder, e.g. ``~/.DataLab_v1``):
   - "Traceback log", for Python exceptions
   - "Faulthandler log", for system failures (e.g. Qt-related crash)
 

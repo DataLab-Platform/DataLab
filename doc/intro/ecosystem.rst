@@ -4,8 +4,8 @@ The DataLab Platform
 ====================
 
 .. meta::
-    :description: The DataLab Platform ecosystem - desktop application, browser-native DataLab-Web, DataLab-Kernel Jupyter kernel, the Sigima computation engine and the SigimaX application framework
-    :keywords: DataLab, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, DataLab-Kernel, Jupyter, Sigima, SigimaX, desktop, ecosystem, editions
+    :description: The DataLab Platform ecosystem - desktop application, browser-native DataLab-Web, DataLab-Kernel Jupyter kernel, the Sigima computation engine, the SigimaX application framework and the DataLab-Capsule provenance package
+    :keywords: DataLab, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, DataLab-Kernel, Jupyter, Sigima, SigimaX, DataLab-Capsule, provenance, RO-Crate, desktop, ecosystem, editions
 
 When DataLab started in 2023, it was a single product: a desktop application. Since then,
 the same scientific core has grown into a small family of complementary tools — the
@@ -15,9 +15,9 @@ that best fits your needs.
 .. figure:: ../images/ecosystem.png
     :class: dark-light
 
-    The DataLab Platform: the desktop application, DataLab-Web and DataLab-Kernel are three
-    access modes sharing the same Sigima computation engine and interoperable through HDF5
-    workspaces.
+    The DataLab Platform brings together the desktop application, DataLab-Web and
+    DataLab-Kernel around the Sigima computation engine. DataLab-Web can open and save HDF5
+    workspaces, but it does not preserve Desktop History, so round trips are not lossless.
 
 .. seealso::
 
@@ -46,8 +46,8 @@ desktop application. To avoid confusion, this documentation uses the following v
       - The reference **desktop application** (Qt-based). Unless stated otherwise, the rest
         of this documentation describes this product.
     * - **DataLab-Web**
-      - The **browser-native** edition: the full platform running inside a web browser tab,
-        with no installation. Try it at `datalab-platform.com/web
+      - The **browser-native** edition: a curated set of DataLab features running inside a
+        web browser tab, with no installation. Try it at `datalab-platform.com/web
         <https://datalab-platform.com/web/>`_ --
         `project on GitHub <https://github.com/DataLab-Platform/web>`__.
     * - **DataLab-Kernel**
@@ -62,13 +62,20 @@ desktop application. To avoid confusion, this documentation uses the following v
         main window, configuration system, dockable plot widgets, HDF5 workspace and
         browser, log viewer and scientific dialogs. Aimed at developers building their own
         Qt scientific application. `Documentation <https://sigimax.readthedocs.io/>`__.
+    * - **DataLab-Capsule**
+      - The **workspace provenance and capsule** package (``datalab-capsule``), used by
+        both the desktop application and DataLab-Web: it records how results were
+        obtained in the HDF5 workspace, and packages workspaces as open RO-Crate
+        ``.dlcapsule`` archives to exchange, compare and verify them. Its library and
+        command line do not require DataLab. `Project on GitHub
+        <https://github.com/DataLab-Platform/DataLab-Capsule>`__.
 
 .. note::
 
     This documentation site is, first and foremost, the documentation of the **desktop
-    application**. Everything that is shared across editions — the object model, the
-    processing catalog, the parameters — is described here and applies to DataLab-Web as
-    well. Only the differences specific to an edition are called out explicitly.
+    application**. Some core concepts and operations are shared across editions, but feature
+    availability is not identical: DataLab-Web exposes a curated subset of Sigima processing
+    operations. Edition-specific differences are called out explicitly.
 
 Members of the platform
 -----------------------
@@ -78,36 +85,53 @@ Members of the platform
     .. grid:: 1 1 2 2
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`device-desktop;1em;sd-text-info`  DataLab (desktop)
+        .. grid-item-card:: |card-icon-device-desktop|  DataLab (desktop)
 
             The reference application, with a native Qt graphical user interface and the full
             PlotPyStack interactive visualization. Runs locally on Windows, Linux and macOS.
 
-        .. grid-item-card:: :octicon:`browser;1em;sd-text-info`  DataLab-Web
+        .. grid-item-card:: |card-icon-browser|  DataLab-Web
 
-            The same platform, running entirely inside your browser via WebAssembly. Zero
-            install, your data never leaves your machine. Try it at
+            A curated set of DataLab features running in your browser via WebAssembly, with
+            no DataLab server or installation required. Core processing stays in the browser.
+            Try it at
             `datalab-platform.com/web <https://datalab-platform.com/web/>`_ or browse the
             `project on GitHub <https://github.com/DataLab-Platform/web>`__.
 
-        .. grid-item-card:: :octicon:`terminal;1em;sd-text-info`  DataLab-Kernel
+        .. grid-item-card:: |card-icon-terminal|  DataLab-Kernel
 
             A Jupyter kernel for notebook-driven workflows: live-synchronized with a running
             desktop session, or fully standalone — notebooks run unchanged with or without
             DataLab, including in JupyterLite. See the
             `DataLab-Kernel documentation <https://datalab-kernel.readthedocs.io/>`_.
 
-        .. grid-item-card:: :octicon:`cpu;1em;sd-text-info`  Sigima
+        .. grid-item-card:: |card-icon-cpu|  Sigima
 
             The open-source computation engine that powers every edition. See the
             `Sigima documentation <https://sigima.readthedocs.io/>`_.
 
-        .. grid-item-card:: :octicon:`stack;1em;sd-text-info`  SigimaX
+        .. grid-item-card:: |card-icon-stack|  SigimaX
 
             The Qt application framework extracted from DataLab: main window skeleton,
             configuration system, plot docks, HDF5 workspace and scientific dialogs — the
             foundation of the desktop application, reusable for your own Qt application.
             See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_.
+
+        .. grid-item-card:: |card-icon-file-zip|  DataLab-Capsule
+
+            The provenance of the workspace and the open RO-Crate ``.dlcapsule``
+            capsules, shared by the desktop application and DataLab-Web: exchange,
+            compare and verify workspaces with the provenance of their processing (see
+            :ref:`capsules`). Browse the
+            `project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__.
+
+        .. grid-item-card:: |card-icon-package|  DataLab plugin catalog
+
+            The plugins of the DataLab team and of the community, checked automatically
+            and installable in one click from the desktop application, some of them also
+            available in DataLab-Web. Browse the
+            `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, or publish your
+            own plugin (see :ref:`tutorial_plugin_catalog`).
 
 .. only:: latex and not html
 
@@ -123,20 +147,27 @@ Members of the platform
     - **SigimaX** — the Qt application framework on which the desktop application is built,
       reusable to create other scientific Qt applications
       (`documentation <https://sigimax.readthedocs.io/>`_).
+    - **DataLab-Capsule** — the provenance of the workspace and the open RO-Crate
+      ``.dlcapsule`` capsules, shared by the desktop application and DataLab-Web
+      (`project on GitHub <https://github.com/DataLab-Platform/DataLab-Capsule>`__).
+    - **DataLab plugin catalog** — the plugins of the DataLab team and of the community,
+      checked automatically and installable in one click from the desktop application
+      (`datalab-platform.com/plugins <https://datalab-platform.com/plugins/>`_).
 
 Which one should I use?
 -----------------------
 
-The desktop application and DataLab-Web are not competitors: they are two access modes to
-the *same* platform, and they can be used interchangeably (HDF5 workspaces are
-interoperable). A few rules of thumb:
+The desktop application and DataLab-Web are two access modes to the same platform and can
+exchange HDF5 workspaces, but they are not fully interchangeable. DataLab-Web does not
+preserve Desktop History when it opens and saves an HDF5 workspace, and its processing
+catalog is a curated subset. A few rules of thumb:
 
 - **Use the desktop application** when you work on your own machine and want the richest,
   fastest experience, the full set of interactive PlotPy tools, native file access, and the
   ability to handle very large datasets limited only by your system RAM.
 - **Use DataLab-Web** when you cannot or do not want to install anything — for example on a
   shared or locked-down computer, on someone else's machine, or simply to give DataLab a
-  quick try. Everything runs locally in the browser tab; no server, no account, no upload.
+  quick try. Core processing runs locally in the browser without a DataLab server or account.
 - **Use DataLab-Kernel** when your workflow is notebook-centric and you want DataLab's
   processing catalog available from a Jupyter notebook — for example to write reproducible
   analysis reports that can be replayed with or without DataLab. You can `try it online
@@ -144,15 +175,19 @@ interoperable). A few rules of thumb:
   in a live JupyterLite environment, without installing anything.
 
 A common pattern is to use the desktop application on your personal workstation and
-DataLab-Web everywhere else, sharing work back and forth through HDF5 workspace files.
+DataLab-Web elsewhere, exchanging workspace data through HDF5 files. DataLab-Web does not
+preserve Desktop History, so round trips can lose that information.
 
 DataLab vs DataLab-Web
 ----------------------
 
-DataLab-Web shares the **computation engine** (Sigima) and the **processing catalog** with
-the desktop application: the very same Sigima code — not a port — runs on CPython (desktop)
-and on Pyodide (browser), so results are identical for the same inputs. The differences are
-about the **runtime environment**, not about the science.
+DataLab-Web shares the **computation engine** (Sigima) with the desktop application and
+exposes a curated subset of its processing catalog. The very same Sigima code — not a port —
+runs on CPython (desktop) and on Pyodide (browser). For operations available in both editions,
+compatible versions of Sigima use the same algorithms and parameters, but numerical
+equivalence depends on the inputs and the numerical environment. Most operation contracts
+declare an exact or tolerance-based comparison of replayed results; a few declare no
+comparison rule. The available operations and runtime environment differ between editions.
 
 .. list-table::
     :header-rows: 1
@@ -177,8 +212,9 @@ about the **runtime environment**, not about the science.
       - Native file system I/O
       - Browser file picker, drag-and-drop
     * - Persistence
-      - HDF5 on disk
-      - HDF5 download / upload (workspaces are interoperable)
+      - HDF5 and ``.dlcapsule`` files on disk
+      - HDF5 and ``.dlcapsule`` download / upload; Desktop History is not preserved when
+        DataLab-Web opens and saves an HDF5 workspace
     * - Memory
       - Limited by system RAM (64-bit)
       - ~2 GB WebAssembly heap by default; an optional on-disk storage mode lifts this
@@ -195,12 +231,15 @@ about the **runtime environment**, not about the science.
       - XML-RPC and FastAPI Web API
       - In-browser proxy and optional ``postMessage`` SDK
 
-What is **not** different: the object model (``SignalObj``, ``ImageObj``, ROIs, groups), the
-processing catalog discovered from Sigima, the auto-generated parameter dialogs, and the
-HDF5 workspace format. A workspace saved in the desktop application can be opened in
-DataLab-Web, and vice versa.
+Both editions use the Sigima computation engine and can exchange HDF5 workspace files, but
+the features and information they preserve are not identical. DataLab-Web provides a
+curated subset of Sigima operations and does not preserve Desktop History when it opens and
+saves an HDF5 workspace. Check the edition-specific documentation before moving a workspace
+between them.
 
 .. note::
 
     Plugins are largely portable between the desktop application and DataLab-Web, with a few
-    constraints related to the browser runtime. See :ref:`about_plugins` for details.
+    constraints related to the browser runtime. See :ref:`plugins_web` for details.
+
+.. include:: /_card_icons.txt

@@ -41,6 +41,9 @@ msgstr "`qt`: interface utilisateur graphique basée sur Qt (actuellement, PyQt5
 msgid "`opencv`: computer vision tasks requiring OpenCV."
 msgstr "`opencv`: tâches de vision par ordinateur nécessitant OpenCV."
 
+msgid "`exe`: building the stand-alone Windows executable with PyInstaller (pinned version), including OpenCV and PyQt5."
+msgstr "`exe`: construction de l'exécutable Windows autonome avec PyInstaller (version figée), incluant OpenCV et PyQt5."
+
 msgid "`dev`: development and testing (linters, formatters, etc.)."
 msgstr "`dev`: développement et tests (linters, formateurs, etc.)."
 

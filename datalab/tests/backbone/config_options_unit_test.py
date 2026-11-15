@@ -145,7 +145,6 @@ def test_inherited_and_specific_options() -> None:
     # Former [macro]/[ai] sections are flattened with a prefix.
     assert opt.macro_console_max_lines.get() == 5000
     assert opt.ai_provider.get() == "openai"
-    assert opt.ai_enabled.get() is False
 
 
 def test_field_type_replacements() -> None:

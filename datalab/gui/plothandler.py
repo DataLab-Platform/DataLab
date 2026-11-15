@@ -28,7 +28,7 @@ Image plot handler
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING, Generic
 from weakref import WeakKeyDictionary
 
@@ -168,6 +168,44 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             return
         self.__plotitem_oids.pop(id(item), None)
         self.plot.del_item(item)
+
+    def remove_items(self, oids: Iterable[str]) -> None:
+        """Remove the plot items associated to objects, at once
+
+        Removing the items one by one would refresh the plot observers (e.g. the
+        item list panel) once per item: removing many items would take a long time.
+
+        Args:
+            oids: Object uuids (objects without plot item are ignored, see
+             :meth:`remove_item`)
+        """
+        items: list[TypePlotItem] = []
+        for oid in oids:
+            item = self.__plotitems.pop(oid, None)
+            if item is not None:
+                self.__plotitem_oids.pop(id(item), None)
+                items.append(item)
+        self.__delete_plot_items(items)
+
+    def __delete_plot_items(self, items: list[TypePlotItem]) -> None:
+        """Delete items from the plot, notifying the plot observers once
+
+        Args:
+            items: Plot items (items which are not in the plot are ignored)
+        """
+        in_plot = set(self.plot.items)
+        items = [item for item in items if item in in_plot]
+        if not items:
+            return
+        try:
+            self.plot.del_items(items)
+        except ValueError:
+            # An item was removed meanwhile (e.g. by the detach method of another
+            # item): the remaining items are removed one by one
+            for item in items:
+                if item in self.plot.items:
+                    self.plot.del_item(item)
+            self.plot.SIG_ITEMS_CHANGED.emit(self.plot)
 
     def clear(self) -> None:
         """Clear plot items"""
@@ -613,13 +651,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             and item not in handled_items
             and not isinstance(item, (LegendBoxItem, GridItem))
         ]
-        # Delete items one by one with error handling for items already removed
-        for item in items_to_remove:
-            try:
-                self.plot.del_item(item)
-            except ValueError:
-                # Item was already removed (e.g., by detach())
-                pass
+        self.__delete_plot_items(items_to_remove)
 
     def get_plot_options(self) -> PlotOptions:
         """Return standard signal/image plot options"""

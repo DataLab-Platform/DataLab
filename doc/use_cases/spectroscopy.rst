@@ -19,8 +19,8 @@ non-programmers).
 What DataLab does
 -----------------
 
-DataLab lets you chain the whole analysis interactively, and keeps every
-processing step recorded with its parameters:
+DataLab lets you chain the whole analysis interactively. Enable History
+recording to keep processing steps and their parameters:
 
 - **filter noise** (Wiener, moving average, and more),
 - **correct the baseline**, including linear detrending restricted to
@@ -28,8 +28,8 @@ processing step recorded with its parameters:
 - **select a region of interest** and **fit a model** (Gaussian, Lorentzian,
   Voigt, multi-peak...),
 - **save the whole workspace** (data + processing history + metadata) to a
-  single HDF5 file that colleagues can reopen -- in the desktop app or in
-  the browser.
+  single HDF5 file that colleagues can reopen. DataLab-Web can open the data,
+  but does not preserve the desktop History when it saves the workspace again.
 
 .. figure:: ../images/tutorials/spectrum/11.png
 

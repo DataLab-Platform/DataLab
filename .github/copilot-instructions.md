@@ -35,48 +35,50 @@ This document provides comprehensive guidance for AI coding agents working on th
 
 ```
 DataLab/
-+-- datalab/              # Main application code
-│   +-- gui/              # GUI layer
-│   │   +-- processor/    # Processor pattern (signal.py, image.py, base.py)
-│   │   +-- actionhandler.py  # Menu/action management
-│   │   +-- main.py       # Main window
-│   │   +-- panel/        # Signal/Image panels
-│   +-- control/          # Remote control API
-│   │   +-- baseproxy.py  # Abstract API definition (BaseProxy)
-│   │   +-- proxy.py      # RemoteProxy, LocalProxy
-│   │   +-- remote.py     # XML-RPC server
-│   +-- webapi/           # Web API (FastAPI HTTP/JSON server)
-│   │   +-- routes.py     # API endpoint definitions
-│   │   +-- controller.py # Business logic
-│   │   +-- adapter.py    # DataLab GUI adapter
-│   │   +-- schema.py     # Pydantic models
-│   │   +-- serialization.py  # NPZ data serialization
-│   │   +-- actions.py    # GUI actions (start/stop server)
-│   +-- adapters_plotpy/  # PlotPy integration adapters
-│   +-- adapters_metadata/  # Metadata adapters
-│   +-- h5/               # HDF5 I/O layer
-│   +-- widgets/          # Qt widgets (dialogs, editors, viewers)
-│   +-- utils/            # Utilities (instance check, etc.)
-│   +-- plugins/          # Plugin system (lazy facade over base.py, Qt-free contracts)
-│   │   +-- base.py       # Plugin host: registry, PluginBase, discovery (Qt)
-│   │   +-- recipes.py, recipe_binding.py, examples.py, tools.py, ...  # Contracts
-│   │   +-- builtin/      # Built-in plugins (data folder, not a package)
-│   +-- tests/            # pytest test suite
-│   +-- locale/           # Translations (.po files)
-│   +-- config.py         # Configuration management
-│   +-- objectmodel.py    # Object data model for GUI
-+-- doc/                  # Sphinx documentation
-│   +-- locale/fr/        # French documentation translations
-│   +-- features/         # Feature documentation (signal/, image/)
-+-- macros/examples/      # Demo macros
-+-- scripts/              # Build/development scripts
-│   +-- run_with_env.py   # Environment loader (.env support)
-+-- .env                  # Local Python path (PYTHONPATH=.;../guidata;../plotpy;../sigima)
-+-- pyproject.toml        # Project configuration
+├── datalab/              # Main application code
+│   ├── gui/              # GUI layer
+│   │   ├── processor/    # Processor pattern (signal.py, image.py, base.py)
+│   │   ├── actionhandler.py  # Menu/action management
+│   │   ├── main.py       # Main window
+│   │   └── panel/        # Signal/Image panels
+│   ├── control/          # Remote control API
+│   │   ├── baseproxy.py  # Abstract API definition (BaseProxy)
+│   │   ├── proxy.py      # RemoteProxy, LocalProxy
+│   │   └── remote.py     # XML-RPC server
+│   ├── webapi/           # Web API (FastAPI HTTP/JSON server)
+│   │   ├── routes.py     # API endpoint definitions
+│   │   ├── controller.py # Business logic
+│   │   ├── adapter.py    # DataLab GUI adapter
+│   │   ├── schema.py     # Pydantic models
+│   │   ├── serialization.py  # NPZ data serialization
+│   │   └── actions.py    # GUI actions (start/stop server)
+│   ├── adapters_plotpy/  # PlotPy integration adapters
+│   ├── adapters_metadata/  # Metadata adapters
+│   ├── h5/               # HDF5 I/O layer
+│   ├── widgets/          # Qt widgets (dialogs, editors, viewers)
+│   ├── utils/            # Utilities (instance check, etc.)
+│   ├── plugins/          # Plugin system (lazy facade over base.py, Qt-free contracts)
+│   │   ├── base.py       # Plugin host: registry, PluginBase, discovery (Qt)
+│   │   ├── recipes.py, recipe_binding.py, examples.py, tools.py, ...  # Contracts
+│   │   └── builtin/      # Built-in plugins (data folder, not a package)
+│   ├── tests/            # pytest test suite
+│   ├── locale/           # Translations (.po files)
+│   ├── config/           # Configuration management (package)
+│   └── objectmodel.py    # Object data model for GUI
+├── doc/                  # Sphinx documentation
+│   ├── locale/fr/        # French documentation translations
+│   └── features/         # Feature documentation (signal/, image/)
+├── macros/examples/      # Demo macros
+├── scripts/              # Build/development scripts
+│   └── run_with_env.py   # Environment loader (.env support)
+├── .env                  # Local PYTHONPATH to the sibling repositories (untracked)
+└── pyproject.toml        # Project configuration
 ```
 
 **Related Projects** (sibling directories in multi-root workspace):
 - `../Sigima/` - Computation library
+- `../SigimaX/` - Reusable GUI components and application utilities
+- `../DataLab-Capsule/` - Workspace provenance capsules (RO-Crate), `src/` layout
 - `../PlotPy/` - Plotting library
 - `../guidata/` - GUI toolkit
 - `../PythonQwt/` - Qwt bindings
@@ -88,12 +90,16 @@ DataLab/
 **ALWAYS use `scripts/run_with_env.py` for Python commands** to load environment from `.env`:
 
 ```powershell
-# ? CORRECT - Loads PYTHONPATH from .env
+# ✅ CORRECT - Loads PYTHONPATH from .env
 python scripts/run_with_env.py python -m pytest
 
-# ? WRONG - Misses local development packages
+# ❌ WRONG - Misses local development packages
 python -m pytest
 ```
+
+- `.env` sets `PYTHONPATH=.;../guidata;../PythonQwt;../plotpy;../Sigima;../SigimaX;../DataLab-Capsule/src`.
+- `run_with_env.py` prints emoji: on a Windows console using cp1252, it crashes with `UnicodeEncodeError` unless `$env:PYTHONIOENCODING="utf-8"` is set first, in the same PowerShell call.
+- `.env` is untracked and its paths are relative: a new git worktree has no `.env`. Copy it into a worktree that is a sibling of the other repositories, or write one with absolute paths elsewhere. Otherwise, imports silently use the stale packages installed in `.venv`.
 
 ### Testing
 
@@ -151,16 +157,24 @@ python scripts/run_with_env.py python -m guidata.utils.translations compile \
 # Extract translatable strings
 python scripts/run_with_env.py python -m sphinx build doc build/gettext -b gettext -W
 
-# Update French .po files
-python scripts/run_with_env.py python -m sphinx_intl update -d doc/locale -p build/gettext -l fr
+# Update French .po files, then restore their unwrapped format
+python scripts/run_with_env.py python -m sphinx_intl update -d doc/locale -p build/gettext -l fr --no-obsolete -w 0
+python scripts/run_with_env.py python -m guidata.utils.translations cleanup-doc --directory .
 
 # Build localized docs
 python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D language=fr
 ```
 
+**Translation pitfalls**:
+- `translations scan --directory .` also scans `build/lib/datalab` (an ignored copy left by package builds) and adds stale msgids to `datalab.po`: delete `build/lib` first.
+- With the Python 3.11 `.venv`, the scan misses `_()` calls inside f-strings and removes their msgids from `datalab.po`: check the msgids removed in the `.po` diff and restore those still used.
+- The gettext builder never deletes `.pot` files from `build/gettext`: after switching branches, `sphinx_intl update` recreates `.po` files for pages absent from the current branch. Delete these stale `.pot` and `.po` files.
+- In `.rst` documentation, prefer inline links (`` `text <url>`_ ``) to named targets (`` `text`_ `` + `.. _text: url`): Sphinx i18n warns about inconsistent references unless the translation keeps the exact English target.
+- Commit release note entries (`doc/release_notes/*.md`) with their French translations (`doc/locale/fr/LC_MESSAGES/release_notes/*.po`) in the same commit.
+
 ## Core Patterns
 
-### 1. Processor Pattern (GUI ? Computation Bridge)
+### 1. Processor Pattern (GUI ↔ Computation Bridge)
 
 **Location**: `datalab/gui/processor/`
 
@@ -170,11 +184,11 @@ python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D l
 
 | Method | Pattern | Multi-selection | Use Cases |
 |--------|---------|----------------|-----------|
-| `compute_1_to_1` | 1 obj ? 1 obj | k ? k | Independent transformations (FFT, normalization) |
-| `compute_1_to_0` | 1 obj ? metadata | k ? 0 | Analysis producing scalar results (FWHM, centroid) |
-| `compute_1_to_n` | 1 obj ? n objs | k ? k�n | ROI extraction, splitting |
-| `compute_n_to_1` | n objs ? 1 obj | n ? 1 (or n ? n pairwise) | Averaging, summing, concatenation |
-| `compute_2_to_1` | 1 obj + 1 operand ? 1 obj | k + 1 ? k (or n + n pairwise) | Binary operations (add, multiply) |
+| `compute_1_to_1` | 1 obj → 1 obj | k → k | Independent transformations (FFT, normalization) |
+| `compute_1_to_0` | 1 obj → metadata | k → 0 | Analysis producing scalar results (FWHM, centroid) |
+| `compute_1_to_n` | 1 obj → n objs | k → k×n | ROI extraction, splitting |
+| `compute_n_to_1` | n objs → 1 obj | n → 1 (or n → n pairwise) | Averaging, summing, concatenation |
+| `compute_2_to_1` | 1 obj + 1 operand → 1 obj | k + 1 → k (or n + n pairwise) | Binary operations (add, multiply) |
 
 **Example: Implementing a New Processing Feature**
 
@@ -243,13 +257,13 @@ def register_operations(self) -> None:
 **When to Skip**: Use `skip_xarray_compat=True` when operations **intentionally use mismatched X arrays** (e.g., replacing X with Y values from another signal).
 
 ```python
-# ? BAD: Will trigger unwanted interpolation
+# ❌ BAD: Will trigger unwanted interpolation
 self.register_2_to_1(
     sips.replace_x_by_other_y,
     _("Replace X by other signal's Y"),
 )
 
-# ? GOOD: Skips compatibility check
+# ✅ GOOD: Skips compatibility check
 self.register_2_to_1(
     sips.replace_x_by_other_y,
     _("Replace X by other signal's Y"),
@@ -257,7 +271,7 @@ self.register_2_to_1(
 )
 ```
 
-**Code Location**: `datalab/gui/processor/base.py` (lines ~1764, 1886)
+**Code Location**: `datalab/gui/processor/base.py` (`_check_signal_xarray_compatibility()`, called by `prepare_2_to_1_pairs()`, `compute_2_to_1()` and `compute_n_to_1()`)
 
 ### 3. Action Handler Pattern (Menu Management)
 
@@ -274,15 +288,18 @@ self.register_2_to_1(
 
 ```python
 # In SignalActionHandler or ImageActionHandler
-def setup_processing_actions(self) -> None:
-    """Setup processing menu actions."""
+def create_first_actions(self):
+    """Create actions that are added to the menus in the first place"""
+    super().create_first_actions()
 
-    # Reference registered processor operation
-    act = self.action_for("my_processing_func")
-
-    # Add to menu
-    self.processing_menu.addAction(act)
+    # Actions created in a category are added to the corresponding menu
+    with self.new_category(ActionCategory.PROCESSING):
+        with self.new_menu(_("My submenu")):  # Submenu
+            # Reference registered processor operation
+            self.action_for("my_processing_func")
 ```
+
+Actions added at the end of the menus are created in `create_last_actions()`. Reopening an existing built-in submenu (same title in the same category, e.g. "Axis transformation" created by `BaseActionHandler`) replaces its contents: list all the actions of that submenu, as `SignalActionHandler` and `ImageActionHandler` do.
 
 **Menu Organization**:
 
@@ -310,7 +327,7 @@ generated with `scripts/print_datalab_menus.py`).
 
 **Key Classes**:
 - `PluginBase`: Abstract base class for all plugins (uses metaclass `PluginBaseMeta`)
-- `PluginInfo`: Plugin metadata dataclass (name, version, description, icon)
+- `PluginInfo`: Plugin metadata dataclass (name, version, description, icon, id, capabilities, documentation_url)
 - `PluginRegistry`: Metaclass that auto-registers plugin subclasses
 
 **Example: Creating a Plugin**
@@ -352,7 +369,7 @@ class MyPlugin(PluginBase):
 
 **Plugin Discovery**: Plugins are loaded from:
 1. `datalab/plugins/builtin/` (built-in)
-2. User plugin directory (`~/.DataLab/plugins`)
+2. User plugin directory (`~/.DataLab_v1/plugins`, the suffix being the major version of DataLab)
 3. Custom plugin directory (configurable in preferences)
 4. For frozen apps, from `plugins/` directory next to executable
 
@@ -372,6 +389,7 @@ class MyPlugin(PluginBase):
 ```python
 from datalab.control.proxy import RemoteProxy
 import numpy as np
+import sigima.params
 
 proxy = RemoteProxy()
 
@@ -442,7 +460,7 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 - Start/Stop Web API Server
 - Copy Connection Info (URL + token)
 
-**Authentication**: Bearer token authentication for all endpoints except `/api/v1/status`.
+**Authentication**: Bearer token authentication is required for all endpoints except `/api/v1/status`, unless the Web API localhost bypass is enabled (default), in which case requests from localhost do not need a token.
 
 ## Coding Conventions
 
@@ -465,6 +483,22 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 - Use direct access for attributes guaranteed by the object's contract (e.g., `mainwindow.historypanel` after window setup). Do not silently skip required behavior or add `None` guards to compensate for an unverified assumption.
 - If a test double lacks a required attribute, fix the test double to satisfy the production contract; do not weaken production code solely to accommodate incomplete mocks.
 - Defensive attribute access is appropriate only for verified optional capabilities, supported compatibility paths, or genuinely dynamic attribute names. Make the reason clear and cover the supported absence case in tests. If access occurs too early, fix the initialization order or call timing instead of hiding the defect.
+
+### Qt Widget Parenting
+
+A `QWidget` without a parent is a top-level window: making it visible (`show()`, `setVisible(True)`, `setVisible(condition)`, `setHidden(False)`) before it is laid out flashes it on screen as a separate window. This defect has recurred several times, between the splash screen and the main window and when opening dialogs.
+
+- Create a widget with its parent (e.g., `QW.QWidget(self)`) when its visibility may be set before it is laid out. Otherwise, add it to its layout (or call `setParent`) **before** setting its visibility.
+- A layout reparents its widgets only once it is installed on a widget (`QVBoxLayout(widget)`, `widget.setLayout(layout)`, or nested in such a layout): adding a widget to a detached layout does not parent it.
+- `hide()` or `setVisible(False)` on a parentless widget is harmless; showing a child of a hidden widget is harmless too.
+- Cover widgets built hidden (startup, dialogs) with `datalab.tests.record_shown_windows()` and assert that no window is shown. `test_main_window_creation_shows_no_transient_window` (`datalab/tests/backbone/main_app_test.py`) guards the whole main window construction: when it fails, it names the class and code location of the flashing widget.
+
+### Reentrant Event Processing
+
+Methods of `DLMainWindow` decorated with `@remote_controlled` (e.g. `get_current_panel`) call `QApplication.processEvents()` before returning. Called from a Qt event handler (`showEvent`, `resizeEvent`, an event filter...), they process events while Qt is handling one: docking the Applications panel crashed Qt this way (issue #527).
+
+- Code that may run from an event handler (panels, plugin helpers such as `PluginBase.get_selected_objects`) uses methods that do not process events, e.g. `DLMainWindow.current_panel_name()` instead of `get_current_panel()`.
+- `datalab/tests/features/plugins/recipe_launcher_app_test.py` checks that assessing a recipe processes no pending event.
 
 ### Type Annotations
 
@@ -514,7 +548,7 @@ def compute_feature(obj: SignalObj, param: MyParam) -> SignalObj:
 
 ### Imports
 
-**Order**: Standard library ? Third-party ? Local
+**Order**: Standard library → Third-party → Local
 
 ```python
 from __future__ import annotations
@@ -539,11 +573,11 @@ if TYPE_CHECKING:
 ```python
 from datalab.config import _
 
-# ? CORRECT
+# ✅ CORRECT
 menu_title = _("Processing")
 action_text = _("Replace X by other signal's Y")
 
-# ? WRONG
+# ❌ WRONG
 menu_title = "Processing"  # Not translatable!
 ```
 
@@ -573,8 +607,7 @@ menu_title = "Processing"  # Not translatable!
    refused), increase its `contract_version` (and its qualification) in Sigima in the same change,
    **whatever the releases of DataLab**: Sigima is a reference of its own. Only previously refused
    inputs now accepted, changes without effect on the result, or changes covered by a versioned
-   rule of the execution context (image ROI convention, X alignment) do not require it. The 1.4
-   exception (contracts kept at version 1) was one-off and does not apply anymore. Then update the
+   rule of the execution context (image ROI convention, X alignment) do not require it. In Sigima 1.4.0, 16 contracts are at version 2 (image profiles, `product`, `extract_roi`, `extract_rois` and the image analyses giving geometric results, listed in the Sigima 1.4 release notes), while the others kept version 1, even when their result had changed since 1.3.0 (e.g. `resampling`): this one-off exception does not apply anymore. Then update the
    DataLab provenance tests that check a contract version
    (`datalab/tests/features/common/provenance_*_test.py`). Full rules: Sigima
    `doc/contributing/guidelines.rst` and `doc/user_guide/contracts.rst`.
@@ -599,9 +632,10 @@ menu_title = "Processing"  # Not translatable!
 
 4. **Add menu action** (`datalab/gui/actionhandler.py`):
    ```python
-   def setup_processing_actions(self) -> None:
-       act = self.action_for("my_feature")
-       self.processing_menu.addAction(act)
+   def create_first_actions(self):
+       super().create_first_actions()
+       with self.new_category(ActionCategory.PROCESSING):
+           self.action_for("my_feature")
    ```
 
 5. **Add tests** (`datalab/tests/features/signal/`):
@@ -631,8 +665,9 @@ menu_title = "Processing"  # Not translatable!
    # UI translation
    python scripts/run_with_env.py python -m guidata.utils.translations scan ...
 
-   # Doc translation
-   python scripts/run_with_env.py python -m sphinx_intl update -d doc/locale -p build/gettext -l fr
+   # Doc translation (after extracting with the gettext builder)
+   python scripts/run_with_env.py python -m sphinx_intl update -d doc/locale -p build/gettext -l fr --no-obsolete -w 0
+   python scripts/run_with_env.py python -m guidata.utils.translations cleanup-doc --directory .
    ```
 
 ### Working with X-array Compatibility
@@ -642,15 +677,15 @@ menu_title = "Processing"  # Not translatable!
 - **X coordinate manipulation**: Set `skip_xarray_compat=True`
 
 **Examples**:
-- ? `difference` (subtract two signals): Compatible X arrays expected ? `skip_xarray_compat=False`
-- ? `xy_mode` (swap X and Y): Uses Y as new X ? `skip_xarray_compat=True`
-- ? `replace_x_by_other_y`: Takes Y from second signal as X ? `skip_xarray_compat=True`
+- ✅ `difference` (subtract two signals): Compatible X arrays expected → `skip_xarray_compat=False`
+- ✅ `xy_mode` (use a second signal's Y as X): Default compatibility handling aligns the input signals.
+- ✅ `replace_x_by_other_y`: Takes Y from second signal as X → `skip_xarray_compat=True`
 
 ### Debugging Tips
 
 1. **Check processor registration**: Look in `register_operations()` methods
 2. **Verify action handler**: Search `actionhandler.py` for `action_for("function_name")`
-3. **Test in isolation**: Use pytest with `--ff` flag (fail-fast)
+3. **Test in isolation**: Use pytest with `--ff` flag (failed tests first), or `-x` to stop at the first failure
 4. **Check translations**: Missing `_()` wrapper causes English-only UI
 5. **Verify imports**: Ensure function is in `__all__` export list
 
@@ -670,15 +705,15 @@ menu_title = "Processing"  # Not translatable!
 ## VS Code Tasks
 
 The workspace includes predefined tasks (`.vscode/tasks.json`). Access via:
-- `Ctrl+Shift+B` ? "???? Ruff" (format + lint)
-- Terminal ? "Run Task..." ? "?? Pytest", "?? Compile translations", etc.
+- `Ctrl+Shift+B` → build tasks, e.g. "🧽🔦 Ruff" (format + lint)
+- Terminal → "Run Task..." → "🚀 Pytest", "📚 Compile translations", etc.
 
 **Key Tasks**:
-- `???? Ruff`: Format and lint code
-- `?? Pytest`: Run tests with `--ff`
-- `?? Compile translations`: Build .mo files
-- `?? Scan translations`: Update .po files
-- `?? Build/open HTML doc`: Generate and open Sphinx docs
+- `🧽🔦 Ruff`: Format and lint code
+- `🚀 Pytest`: Run tests with `--ff`
+- `📚 Compile translations`: Build .mo files
+- `🔎 Scan translations`: Update .po files
+- `🌐 Build/open HTML doc`: Generate and open Sphinx docs
 
 ## Multi-Root Workspace
 
@@ -686,6 +721,8 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 
 - `DataLab/` - Main GUI application
 - `Sigima/` - Computation library
+- `SigimaX/` - Reusable GUI components and application utilities
+- `DataLab-Capsule/` - Workspace provenance capsules (RO-Crate)
 - `PlotPy/` - Plotting library
 - `guidata/` - GUI toolkit
 - `PythonQwt/` - Qwt bindings
@@ -695,6 +732,17 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 2. Use `.env` file to point to local development versions
 3. Test changes in both Sigima unit tests AND DataLab integration tests
 
+## Branches, CI and Cross-Repository Changes
+
+- Pull requests target `develop`, which prepares the next release: a patch release (e.g. 1.4.1) as long as it only contains fixes since the last release, then the next minor or major version. While `develop` prepares a patch release, keep changes for the next minor or major version in their branches. A `release` branch exists only when a patch release is needed while `develop` already contains such changes: it is created from `main`, receives the fixes, is merged into `develop` after each patch release (no cherry-pick) and is deleted at the next minor or major release (`doc/contributing/gitworkflow.rst`). The default branch is `main`: `Closes #N` in a pull request does not close the issue when it is merged. Close the issue manually after merging.
+- CI of pushes and pull requests (`.github/workflows/ci.yml`) runs the jobs needed by the changed files, selected by `scripts/ci_changes.py`: the tests (`test_pyqt5.yml`, `test_pyqt6.yml`) unless only documentation (`doc/`) or contributor files (`.github/`, `.vscode/`, root Markdown files) change, and the strict documentation build (`test_doc.yml`: gettext, English and French HTML with `-W`) when `doc/`, `datalab/`, `plugins/` or the dependencies change. Changing the CI definition runs every job. A skipped job counts as passed. A new push to a pull request cancels the run of its previous push. When adding a CI job or a file read by the tests or the documentation outside these folders, update the rules of `scripts/ci_changes.py` and their tests (`datalab/tests/backbone/ci_changes_unit_test.py`).
+- CI installs the dependencies with the `.github/actions/install-dependencies` action.
+- For pull requests into `release` (when this branch exists), CI clones every dependency (Sigima, SigimaX, DataLab-Capsule, guidata, PlotPy) at its `release` branch, falling back to `main`/`master`.
+- For pull requests into `develop`, CI clones Sigima, SigimaX and DataLab-Capsule on the branch named like the pull request branch, falling back to `develop`: give the branches of a cross-repository change identical names.
+- CI always clones guidata and PlotPy on their `develop` branch: merge guidata or PlotPy changes into their `develop` before a DataLab pull request relies on them.
+- Pull request CI never tests the standalone application: the PyInstaller build, the frozen plugin probe and the MSI smoke test run only in `.github/workflows/_build.yml`, called by `release.yml` (tags) or `release-dryrun.yml` (manual).
+- To run Python inside the frozen build, use `DataLab.exe -c "<code>"`. It ignores `PYTHONPATH` (`sys.flags.ignore_environment` is set) and has no console: redirect `sys.stdout` and `sys.stderr` to a file, as the CI plugin probe does.
+
 ## Release Notes Guidelines
 
 **Location**: `doc/release_notes/release_MAJOR.MINOR.md` where MINOR is zero-padded to 2 digits (e.g., `release_1.00.md` for v1.0.x, `release_1.01.md` for v1.1.x)
@@ -702,14 +750,14 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 **Writing Style**: Focus on **user impact**, not implementation details.
 
 **Good release note** (user-focused):
-- ? "Fixed syntax errors when using f-strings with nested quotes in macros"
-- ? "Fixed corrupted Unicode characters in macro console output on Windows"
-- ? "Fixed 'Lock LUT range' setting not persisting after closing Settings dialog"
+- ✅ "Fixed syntax errors when using f-strings with nested quotes in macros"
+- ✅ "Fixed corrupted Unicode characters in macro console output on Windows"
+- ✅ "Fixed 'Lock LUT range' setting not persisting after closing Settings dialog"
 
 **Bad release note** (implementation-focused):
-- ? "Removed `code.replace('"', "'")` that broke f-strings"
-- ? "Changed QTextCodec.codecForLocale() to codecForName(b'UTF-8')"
-- ? "Added missing `ima_def_keep_lut_range` option in configuration"
+- ❌ "Removed `code.replace('"', "'")` that broke f-strings"
+- ❌ "Changed QTextCodec.codecForLocale() to codecForName(b'UTF-8')"
+- ❌ "Added missing `ima_def_keep_lut_range` option in configuration"
 
 **Structure**:
 - **What went wrong**: Describe the symptom users experienced
@@ -721,7 +769,7 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 **Macro execution:**
 
 * Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
-* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ?, ??, and ? now display correctly instead of showing garbled text
+* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text
 ```
 
 ### Dependency Version Tracking (`Requirements` section)
@@ -763,7 +811,7 @@ Follow [RELEASING.md](../RELEASING.md). **Never create a GitHub release by hand*
 | `datalab/gui/processor/image.py` | Image processor registration |
 | `datalab/gui/processor/base.py` | Base processor class (generic methods) |
 | `datalab/gui/actionhandler.py` | Menu and action management |
-| `datalab/config.py` | Configuration, `_()` translation function |
+| `datalab/config/` | Configuration package, `_()` translation function |
 | `datalab/plugins/base.py` | Plugin system implementation (public names re-exported by `datalab.plugins`) |
 | `datalab/gui/plugins/config.py` | Plugin configuration dialog |
 | `datalab/control/baseproxy.py` | Abstract base proxy (API definition) |

@@ -15,6 +15,6 @@ Spyder (with the Variable Explorer) and DataLab (with the visualizations).
 # ---- Begin of the example code ----
 # %% Debugging my work with DataLab
 
-from my_work import generate_2d_data
+from my_work import test_my_2d_algorithm
 
-x, z = generate_2d_data(debug_with_datalab=True)
+x, z = test_my_2d_algorithm(debug_with_datalab=True)

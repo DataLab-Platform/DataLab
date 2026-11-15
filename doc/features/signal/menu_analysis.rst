@@ -27,7 +27,8 @@ full width at 1/e².
     In DataLab vocabulary, an "analysis" is a feature that computes a scalar
     result from a signal. This result is stored as metadata, and thus attached
     to signal. This is different from a "processing" which creates a new signal
-    from an existing one.
+    from an existing one. The "Histogram" feature is an exception: it creates a
+    new signal from each selected signal.
 
 Statistics
 ^^^^^^^^^^
@@ -87,6 +88,14 @@ Compute the Full Width at Half-Maximum (FWHM) of selected signal, using one of t
 
     The computed result is displayed as an annotated segment.
 
+.. note::
+
+    The **Zero-crossing** method (default) estimates the baseline and the amplitude
+    from the data: it is robust to noise, but it overestimates the width of smooth
+    peaks, e.g. by about 2.5 % to 7 % for a noise-free Gaussian peak, depending on
+    the baseline level. For a peak of known shape, prefer the corresponding fitting
+    method (**Gauss**, **Lorentz** or **Voigt**).
+
 Full width at 1/e²
 ^^^^^^^^^^^^^^^^^^
 
@@ -97,25 +106,40 @@ Then, compute the full width at 1/e².
     Metadata is attached to signal and serialized with it when exporting
     current session in a HDF5 file.
 
-Arguments of the min and max
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Full width at y=...
+^^^^^^^^^^^^^^^^^^^
+
+Compute the full width of the selected signal at a given ordinate value, chosen
+by moving a horizontal cursor in a dialog box. The computed result is displayed
+as an annotated segment.
+
+Abscissa of the minimum and maximum
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compute the smallest argument of the minima and the smallest argument of the maxima of
 the selected signal.
 
-Abscissa at y=...
+First abscissa at y=...
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Compute the abscissa at a given ordinate value for the selected signal (using linear
+interpolation), chosen by moving a horizontal cursor in a dialog box.
+If there is no solution, the displayed result is NaN.
+If there are multiple solutions, the displayed result is the first one.
+
+Ordinate at x=...
 ^^^^^^^^^^^^^^^^^
 
-Compute the abscissa at a given ordinate value for the selected signal.
-If there is no solution, the displayed result is NaN.
-If there are multiple solutions, the displayed result is the smallest value.
+Compute the ordinate at a given abscissa value for the selected signal (using linear
+interpolation), chosen by moving a vertical cursor in a dialog box.
+If the abscissa is outside the signal range, the displayed result is NaN.
 
 Peak detection
 ^^^^^^^^^^^^^^
 
 DataLab offers two complementary ways to detect peaks. Both produce the
 same result: an *XY-markers* :class:`~sigima.objects.scalar.TableResult`
-attached to the signal (visible from *View ▸ Show results* and overlayed
+attached to the signal (visible from *Analysis ▸ Show results* and overlayed
 on the curve).
 
 .. list-table::
@@ -213,7 +237,7 @@ This feature provides automated pulse characterization with intelligent signal t
 
 **Key Capabilities:**
 
-* **Automated signal recognition**: Heuristically identifies signal type (step, square, or other) for optimal analysis
+* **Automated signal recognition**: Heuristically identifies step or square signal type for analysis
 * **Polarity detection**: Automatically determines positive/negative pulse polarity using baseline comparison
 * **Comprehensive timing measurements**: Extracts rise time, fall time, FWHM, and timing parameters at specific amplitude fractions
 * **Baseline characterization**: Analyzes start and end baseline regions for accurate feature computation
@@ -251,13 +275,13 @@ The analysis computes the following pulse characteristics:
     * - Feature
       - Description
     * - Signal shape
-      - Detected signal type (STEP, SQUARE, or OTHER)
+      - Detected signal type (STEP or SQUARE)
     * - Polarity
       - Signal polarity (+1 for positive, -1 for negative pulses)
     * - Amplitude
-      - Peak-to-peak amplitude of the pulse
+      - Absolute difference between the baseline and plateau means; the analysis requires usable baseline and plateau regions
     * - Offset
-      - DC offset (baseline level)
+      - Mean of the initial baseline, with its original sign in Sigima 1.4.1 or later
     * - Rise time
       - Time from the lower to upper reference levels during rising edge
     * - Fall time
@@ -275,7 +299,7 @@ The analysis computes the following pulse characteristics:
 
 .. note::
 
-    Results are displayed in a comprehensive table showing all extracted parameters, and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable and show as None. The feature works best with well-defined pulse signals that have clear baseline regions.
+    Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions. For smooth peaks (e.g. Gaussian ones), the amplitude is underestimated and the FWHM overestimated by several percent, depending on the baseline level: for a peak of known shape, prefer a fitting method.
 
 Show results
 ^^^^^^^^^^^^
@@ -298,3 +322,10 @@ Plot results
 
 Plot the results of analyses performed on the selected signals, with user-defined
 X and Y axes (e.g. plot the FWHM as a function of the signal index).
+
+Delete results
+^^^^^^^^^^^^^^
+
+Delete analysis results of the selected signals: this submenu lists the results
+(one entry per result, to delete it individually), followed by a
+"Delete all results..." entry.

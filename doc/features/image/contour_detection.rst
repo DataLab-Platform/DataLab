@@ -4,7 +4,7 @@ Contour Detection
 =================
 
 DataLab provides a "Contour Detection" feature which is based on
-`the marching cubes algorithm <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_.
+`the marching squares algorithm <https://en.wikipedia.org/wiki/Marching_squares>`_.
 
 .. figure:: /images/contour_detection/contour_app_param.png
 
@@ -14,26 +14,26 @@ How to use the feature:
   - Create or open an image in DataLab workspace
   - Eventually create a ROI around the target area
   - Select "Contour detection" in "Analysis" menu
-  - Enter parameter "Shape" ("Ellipse", "Circle" or "Polygon")
+  - Enter parameters "Relative threshold" and "Shape" ("Ellipse", "Circle" or "Polygon")
   - Optionally, enable "Create regions of interest" to automatically create
-    ROIs around each detected contour:
+    a ROI from each detected contour:
 
-    * Choose ROI geometry: "Rectangle" or "Circle"
-    * ROI size is automatically calculated based on the minimum distance
-      between detected contours (to avoid overlap)
-    * This feature requires at least 2 detected contours
+    * ROI geometry is determined by the selected shape: circular ROIs for
+      circles, polygonal ROIs for polygons and ellipses (approximated by a polygon)
     * Created ROIs can be useful for subsequent processing on each contour area
 
 .. figure:: /images/contour_detection/contour_app_results.png
 
-    Contour detection results (see test "contour_app.py")
+    Contour detection results (see test "contour_app_test.py")
 
 Results are shown in a table:
-  - Each row is associated to a contour
-  - First column shows the ROI index (0 if no ROI is defined on input image)
-  - Other columns show contour coordinates:
-    4 columns for circles (coordinates of diameter),
-    8 columns for ellipses (coordinates of diameters)
+  - Each row is associated to a contour, and is labelled with the name of the
+    function and the reference of the image (followed by the ROI title, if a ROI
+    is defined on input image)
+  - Columns show contour coordinates:
+    3 columns for circles (center coordinates x, y and radius r),
+    5 columns for ellipses (center coordinates x, y, semi-axes a, b and angle θ),
+    and vertex coordinates (x0, y0, x1, y1, ...) for polygons
 
 .. figure:: /images/contour_detection/contour_app.png
 

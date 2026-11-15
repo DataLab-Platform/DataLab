@@ -46,6 +46,9 @@ def test_welcome_page(monkeypatch) -> None:
     calls: list[object] = []
     monkeypatch.setattr(DLMainWindow, "show_tour", lambda self: calls.append("tour"))
     monkeypatch.setattr(DLMainWindow, "play_demo", lambda self: calls.append("demo"))
+    monkeypatch.setattr(
+        DLMainWindow, "show_plugin_catalog", lambda self: calls.append("catalog")
+    )
     monkeypatch.setattr(welcome.webbrowser, "open", calls.append)
 
     def choose_image(menu: QW.QMenu, *_args) -> QW.QAction:
@@ -69,6 +72,16 @@ def test_welcome_page(monkeypatch) -> None:
         assert is_in_front(dock) and not is_in_front(sigdock)
         assert page.start_title.text() == _("Get started")
 
+        # Without application, the Applications section invites to discover some
+        assert not page.applications_section.isHidden()
+        assert not page.entries["plugin_catalog"].isHidden()
+        for widget in (
+            page.tile_grid,
+            page.discover_plugins_button,
+            page.browse_applications_button,
+        ):
+            assert widget.isHidden()
+
         # Panel-specific entries ask for the destination panel first
         monkeypatch.setattr(QW.QMenu, "exec", choose_image)
         for key, method in (
@@ -83,10 +96,10 @@ def test_welcome_page(monkeypatch) -> None:
         monkeypatch.setattr(
             win, "open_h5_files", lambda import_all=None: calls.append(import_all)
         )
-        for key in ("browse_h5", "open_h5", "tour", "demo"):
+        for key in ("browse_h5", "open_h5", "tour", "demo", "plugin_catalog"):
             page.entries[key].SIG_CLICKED.emit()
         for key in ("documentation", "release_notes"):
-            page.entries[key].SIG_CLICKED.emit()
+            page.resource_links[key].click()
         assert calls == [
             "open",
             "import_text",
@@ -94,6 +107,7 @@ def test_welcome_page(monkeypatch) -> None:
             True,
             "tour",
             "demo",
+            "catalog",
             Conf.app_docurl.get(),
             welcome.get_release_notes_url(),
         ]
@@ -200,10 +214,14 @@ def test_welcome_page_application_tiles(monkeypatch) -> None:
     launched: list[tuple[str, str]] = []
     errors: list[tuple[str, str]] = []
     shown: list[str | None] = []
+    catalog_shown: list[bool] = []
     monkeypatch.setattr(
         welcome,
         "qt_handle_error_message",
         lambda _widget, exc, context: errors.append((str(exc), context)),
+    )
+    monkeypatch.setattr(
+        DLMainWindow, "show_plugin_catalog", lambda self: catalog_shown.append(True)
     )
     camera = _application_plugin(
         "org.example.camera",
@@ -241,6 +259,11 @@ def test_welcome_page_application_tiles(monkeypatch) -> None:
 
             keys = ["org.example.camera", "org.example.pulse"]
             assert not page.applications_section.isHidden()
+            # With applications, the invitation becomes a button of the section
+            assert page.entries["plugin_catalog"].isHidden()
+            assert not page.discover_plugins_button.isHidden()
+            page.discover_plugins_button.click()
+            assert catalog_shown == [True]
             assert list(page.application_tiles) == keys
             camera_group, pulse_group = (page.application_groups[key] for key in keys)
             assert len(camera_group) == 1 and len(pulse_group) == 3
@@ -275,9 +298,71 @@ def test_welcome_page_application_tiles(monkeypatch) -> None:
             registry[:] = [processing]
             page.refresh_application_tiles()
             assert page.application_tiles == {}
-            assert page.applications_section.isHidden()
+            assert not page.applications_section.isHidden()
+            assert not page.entries["plugin_catalog"].isHidden()
+            assert page.tile_grid.isHidden()
+            page.entries["plugin_catalog"].SIG_CLICKED.emit()
+            assert catalog_shown == [True, True]
         finally:
             registry[:] = previous_plugins
+
+
+def test_welcome_page_stacks_columns_and_footer() -> None:
+    """The columns and the footer links are stacked on a narrow page"""
+    with datalab_test_app_context(console=False) as win:
+        page = win.welcomepanel
+        win.show_welcome_page()
+        QW.QApplication.processEvents()
+        for width, direction in (
+            (welcome.SINGLE_COLUMN_WIDTH - 100, QW.QBoxLayout.TopToBottom),
+            (welcome.SINGLE_COLUMN_WIDTH + 100, QW.QBoxLayout.LeftToRight),
+        ):
+            size = QC.QSize(width, page.height())
+            page.resizeEvent(QG.QResizeEvent(size, page.size()))
+            assert page.columns_layout.direction() == direction
+            assert page.footer_layout.direction() == direction
+
+
+def test_tiles_elide_long_texts(monkeypatch) -> None:
+    """Tiles have the same height; long texts are elided and shown in a tooltip"""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    short = welcome.WelcomeEntry("libre-gui-plugin.svg", "Short", "Text.", tile=True)
+    long_description = " ".join(["Analyze repeated pulse acquisitions"] * 8)
+    long = welcome.WelcomeEntry(
+        "libre-gui-plugin.svg",
+        "Pulse & Transient Characterization of very long titles",
+        long_description,
+        tile=True,
+    )
+    shown: list[str] = []
+    monkeypatch.setattr(
+        QW.QToolTip, "showText", lambda _pos, text, *_args: shown.append(text)
+    )
+    try:
+        for tile in (short, long):
+            tile.show()
+        QW.QApplication.processEvents()
+        assert short.sizeHint().height() == long.sizeHint().height()
+        assert not short.is_elided() and long.is_elided()
+        # The description follows the header: no gap after a one-line title
+        assert short.title_label.height() < long.title_label.height()
+        assert short.description_label.y() == long.description_label.y()
+        assert short.title_label.text().count("\n") == 0
+        assert long.title_label.text().count("\n") == welcome.TILE_TITLE_LINES - 1
+        text = long.description_label.text()
+        assert text.count("\n") == welcome.TILE_DESCRIPTION_LINES - 1
+        assert text.endswith("\u2026")
+        assert long.full_title().startswith("Pulse & Transient")
+        event = QG.QHelpEvent(QC.QEvent.ToolTip, QC.QPoint(5, 5), QC.QPoint(5, 5))
+        long.event(event)
+        assert shown and long_description in shown[0]
+        shown.clear()
+        short.event(event)
+        assert not shown
+        assert qt_app is not None
+    finally:
+        short.deleteLater()
+        long.deleteLater()
 
 
 def test_tile_grid_wraps_and_overflows() -> None:
@@ -304,25 +389,30 @@ def test_tile_grid_wraps_and_overflows() -> None:
         assert grid.columns == 1
         assert grid.placed == [tiles[0], overflow]
         assert position(overflow) == (1, 0)
-        assert overflow.title_label.text() == overflow_title(2)
+        assert overflow.full_title() == overflow_title(2)
         grid.arrange(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING)
         assert grid.columns == 3
         assert grid.placed == tiles[:3]
         assert position(tiles[2]) == (0, 2)
         assert overflow.isHidden() and not tiles[2].isHidden()
+        # Tiles share the extra width, keeping the grid aligned on both sides
+        assert tiles[0].width() == welcome.TILE_WIDTH
+        grid.arrange(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING + 30)
+        assert grid.columns == 3
+        assert tiles[0].width() == overflow.width() == welcome.TILE_WIDTH + 10
 
         grid.resize(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING, 100)
         grid.set_order([[tile] for tile in tiles], max_rows=2)
         assert grid.placed == [*tiles[:5], overflow]
         assert position(overflow) == (1, 2)
-        assert overflow.title_label.text() == overflow_title(3)
+        assert overflow.full_title() == overflow_title(3)
         assert all(tile.isHidden() for tile in tiles[5:])
         grid.set_order([[tile] for tile in reversed(tiles)], max_rows=1)
         assert grid.placed == [tiles[7], tiles[6], overflow]
-        assert overflow.title_label.text() == overflow_title(6)
+        assert overflow.full_title() == overflow_title(6)
         grid.arrange(welcome.TILE_WIDTH)
         assert grid.placed == [overflow]
-        assert overflow.title_label.text() == overflow_title(8)
+        assert overflow.full_title() == overflow_title(8)
 
         grid.set_tiles([])
         assert grid.placed == [] and overflow.isHidden()
@@ -492,7 +582,7 @@ def test_welcome_page_application_plugin_lifecycle() -> None:
             page = win.welcomepanel
             page.refresh_application_tiles()
             entry = page.application_tiles[plugin_id]
-            assert entry.title_label.text() == "Welcome tiles application"
+            assert entry.full_title() == "Welcome tiles application"
 
             entry.SIG_CLICKED.emit()
             QW.QApplication.processEvents()

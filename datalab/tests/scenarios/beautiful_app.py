@@ -26,6 +26,7 @@ from sigima.tests.data import get_test_image
 
 from datalab.config import Conf
 from datalab.tests import datalab_test_app_context
+from datalab.utils.qthelpers import grab_save_window
 
 
 def run_beautiful_scenario(screenshots: bool = False) -> None:
@@ -61,15 +62,17 @@ def run_beautiful_scenario(screenshots: bool = False) -> None:
         panel.processor.run_feature("denoise_tv", sigima.params.DenoiseTVParam())
         n = data_size // 3
         roi = sigima.objects.create_image_roi(
-            "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n]
+            "rectangle", [n, n, data_size - 2 * n, data_size - 2 * n], indices=True
         )
         panel.processor.compute_roi_extraction(roi)
         if screenshots:
             win.statusBar().hide()
-            win.take_screenshot("i_beautiful")
+            win.tabwidget.setMaximumWidth(500)
+            win.memorystatus.set_demo_mode(True)
+            grab_save_window(win, "i_beautiful")
             win.take_menu_screenshots()
             win.set_current_panel(win.signalpanel)
-            win.take_screenshot("s_beautiful")
+            grab_save_window(win, "s_beautiful")
 
 
 def run_blob_detection_on_flower_image(screenshots: bool = False) -> None:
@@ -95,7 +98,9 @@ def run_blob_detection_on_flower_image(screenshots: bool = False) -> None:
         panel.processor.run_feature("roberts")
 
         # Extract a rectangular ROI
-        roi = sigima.objects.create_image_roi("rectangle", [32, 64, 448, 384])
+        roi = sigima.objects.create_image_roi(
+            "rectangle", [32, 64, 448, 384], indices=True
+        )
         panel.processor.compute_roi_extraction(roi)
 
         # Apply a closing morphological filter to clean up the result
@@ -114,7 +119,9 @@ def run_blob_detection_on_flower_image(screenshots: bool = False) -> None:
                 panel.processor.run_feature("blob_opencv", param)
                 if screenshots:
                     win.statusBar().hide()
-                    win.take_screenshot("i_blob_detection_flower")
+                    win.tabwidget.setMaximumWidth(500)
+                    win.memorystatus.set_demo_mode(True)
+                    grab_save_window(win, "i_blob_detection_flower")
 
 
 if __name__ == "__main__":

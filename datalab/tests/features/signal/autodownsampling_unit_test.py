@@ -66,7 +66,7 @@ def _edit_settings(
         options: option names and their new values
     """
 
-    def fake_edit_settings(_parent) -> list[str]:
+    def fake_edit_settings(_parent, _tab=None) -> list[str]:
         for name, value in options.items():
             getattr(Conf, name).set(value)
         return list(options)

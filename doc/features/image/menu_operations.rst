@@ -18,8 +18,29 @@ When the "Image Panel" is selected, the menus and toolbars are updated to
 provide image-related actions.
 
 The "Operations" menu allows you to perform various operations on the current
-image or group of images. It also allows you to extract profiles, distribute
-images on a grid, or resize images.
+image or group of images, such as arithmetic operations, mathematical functions,
+convolution, or flat-field correction.
+
+Arithmetic
+----------
+
+The "Arithmetic" |arithmetic| action creates a new image which is the result of
+an arithmetic operation between each selected image and a second image (selected
+in a dialog box):
+
+.. math::
+    z = (z_{1} \odot z_{2}) \times a + b
+
+where :math:`z_{1}` is the selected image, :math:`z_{2}` is the second image,
+:math:`\odot` is the **Operator** (:math:`+`, :math:`-`, :math:`\times` or
+:math:`/`), :math:`a` is the **Factor** and :math:`b` is the **Constant**.
+The **Operation** field shows the resulting expression. By default, the result
+is converted to the data type of the selected image.
+
+.. |arithmetic| image:: ../../../datalab/data/icons/operations/arithmetic.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
 
 Operations with a constant
 --------------------------
@@ -142,7 +163,7 @@ Basic mathematical functions
       - :math:`z_{k} = \exp(z_{k})`
     * - |log10| Logarithm (base 10)
       - :math:`z_{k} = \log_{10}(z_{k})`
-    * - Log10(z+10)
+    * - Log10(z+n)
       - :math:`z_{k} = \log_{10}(z_{k}+n)` (useful if image background is zero)
 
 .. |exp| image:: ../../../datalab/data/icons/operations/exp.svg
@@ -291,24 +312,33 @@ Create a new image which is the result of a statistical operation on each pixel 
 Flat-field correction
 ^^^^^^^^^^^^^^^^^^^^^
 
-Create a new image which is flat-field correction
-of the **two** selected images:
+Apply flat-field correction to each selected raw image, using a separately
+selected flat-field image or a matching flat-field image for each source:
 
 .. math::
     z_{1} =
     \begin{cases}
-        \dfrac{z_{0}}{z_{f}}.\overline{z_{f}} & \text{if } z_{0} > z_{threshold} \\
+        \dfrac{z_{0}}{z_{f}}.\overline{z_{f}} & \text{if } z_{0} > z_{threshold}\text{ and the pixel is in the ROI} \\
         z_{0} & \text{otherwise}
-    \end{cases}`
+    \end{cases}
 
 where :math:`z_{0}` is the raw image,
 :math:`z_{f}` is the flat field image,
 :math:`z_{threshold}` is an adjustable threshold
-and :math:`\overline{z_{f}}` is the flat field image average value:
+and :math:`\overline{z_{f}}` is the average over the entire flat-field image,
+ignoring NaNs. For an image with no NaNs:
 
 .. math::
     \overline{z_{f}}=
-    \dfrac{1}{N_{row}.N_{col}}.\sum_{i=0}^{N_{row}}\sum_{j=0}^{N_{col}}{z_{f}(i,j)}
+    \dfrac{1}{N_{row}.N_{col}}.\sum_{i=0}^{N_{row}-1}\sum_{j=0}^{N_{col}-1}{z_{f}(i,j)}
+
+If no ROI is defined, all pixels above the threshold are corrected. With Sigima
+1.4.1 or later, a zero flat-field value at a corrected pixel is rejected;
+zero values outside the ROI or at pixels excluded by the threshold are allowed.
+Flat-field values close to zero strongly amplify the noise of the corrected
+pixels. With Sigima 1.4.1 or later, correcting an integer image gives a
+floating-point image, instead of wrapping the values exceeding the range of the
+image type.
 
 .. note::
 

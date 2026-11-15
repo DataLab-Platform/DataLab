@@ -358,11 +358,11 @@ msgstr "Renvoie la version publique de DataLab."
 msgid "DataLab version"
 msgstr "Version de DataLab"
 
-msgid "Get the current status of the WebAPI server."
-msgstr "Obtenir l'état actuel du serveur WebAPI."
+msgid "Get Web API server status."
+msgstr "Obtenir l'état du serveur de l'API Web."
 
-msgid "Dictionary with status info including 'running', 'url', and 'port'."
-msgstr "Dictionnaire avec les informations d'état incluant 'running', 'url' et 'port'."
+msgid "Dictionary with \"running\", \"url\", \"token\" and \"available\" keys."
+msgstr "Dictionnaire contenant les clés \"running\", \"url\", \"token\" et \"available\"."
 
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
 msgstr "Ouvrir le navigateur HDF5 de DataLab pour importer un fichier HDF5."
@@ -502,26 +502,26 @@ msgstr "Définir le port XML-RPC auquel se connecter."
 msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
 msgstr "Port XML-RPC auquel se connecter. Si None, le port est automatiquement récupéré depuis la configuration de DataLab."
 
-msgid "Start the WebAPI server."
-msgstr "Démarrer le serveur WebAPI."
+msgid "Start the Web API server."
+msgstr "Démarrer le serveur de l'API Web."
 
 msgid "Host address to bind to. Defaults to \"127.0.0.1\"."
 msgstr "Adresse hôte à laquelle se lier. Par défaut \"127.0.0.1\"."
 
-msgid "Port number. Defaults to 8080."
-msgstr "Numéro de port. Par défaut 8080."
+msgid "Port number. Defaults to auto-detect available port."
+msgstr "Numéro de port. Par défaut, un port disponible est détecté automatiquement."
 
-msgid "Dictionary with server info including 'url' and 'token'."
-msgstr "Dictionnaire avec les informations du serveur incluant 'url' et 'token'."
+msgid "Dictionary with \"url\" and \"token\" keys."
+msgstr "Dictionnaire contenant les clés \"url\" et \"token\"."
+
+msgid "If Web API dependencies not installed or server     already running."
+msgstr "Si les dépendances de l'API Web ne sont pas installées ou si le serveur est déjà en cours d'exécution."
 
 msgid "Stop macro."
 msgstr "Arrêter la macro."
 
-msgid "Stop the WebAPI server."
-msgstr "Arrêter le serveur WebAPI."
-
-msgid "True if server was stopped, False if it wasn't running."
-msgstr "True si le serveur a été arrêté, False s'il n'était pas en cours d'exécution."
+msgid "Stop the Web API server."
+msgstr "Arrêter le serveur de l'API Web."
 
 msgid "Toggle auto refresh state."
 msgstr "Basculer l'état du rafraîchissement automatique."
@@ -609,27 +609,6 @@ msgstr "Cette méthode enregistre directement l'espace de travail courant dans u
 
 msgid "Path to the output HDF5 file"
 msgstr "Chemin vers le fichier HDF5 de sortie"
-
-msgid "Get Web API server status."
-msgstr "Obtenir l'état du serveur de l'API Web."
-
-msgid "Dictionary with \"running\", \"url\", and \"token\" keys."
-msgstr "Dictionnaire contenant les clés \"running\", \"url\" et \"token\"."
-
-msgid "Start the Web API server."
-msgstr "Démarrer le serveur de l'API Web."
-
-msgid "Port number. Defaults to auto-detect available port."
-msgstr "Numéro de port. Par défaut, un port disponible est détecté automatiquement."
-
-msgid "Dictionary with \"url\" and \"token\" keys."
-msgstr "Dictionnaire contenant les clés \"url\" et \"token\"."
-
-msgid "If Web API dependencies not installed or server     already running."
-msgstr "Si les dépendances de l'API Web ne sont pas installées ou si le serveur est déjà en cours d'exécution."
-
-msgid "Stop the Web API server."
-msgstr "Arrêter le serveur de l'API Web."
 
 msgid "Proxy context manager"
 msgstr "Gestionnaire de contexte de proxy"

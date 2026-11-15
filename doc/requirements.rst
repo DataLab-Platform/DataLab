@@ -11,7 +11,7 @@ The `datalab-platform` package requires the following Python modules:
       - >=3.10, <4
       - Python programming language
     * - guidata
-      - >= 3.17.2
+      - >= 3.17.3
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
       - >= 2.12.1
@@ -57,7 +57,7 @@ The `datalab-platform` package requires the following Python modules:
       - FastAPI framework, high performance, easy to learn, fast to code, ready for production
     * - uvicorn[standard]
       - >= 0.27.0
-      -
+      - 
     * - pydantic
       - >= 2.0
       - Data validation using Python type hints
@@ -85,22 +85,22 @@ Optional modules for development:
       - Version
       - Summary
     * - build
-      -
+      - 
       - A simple, correct Python build frontend
     * - babel
-      -
+      - 
       - Internationalization utilities
     * - Coverage
-      -
+      - 
       - Code coverage measurement for Python
     * - pylint
-      -
+      - 
       - python code static checker
     * - ruff
-      -
+      - 
       - An extremely fast Python linter and code formatter, written in Rust.
     * - pre-commit
-      -
+      - 
       - A framework for managing and maintaining multi-language pre-commit hooks.
 
 Optional modules for building the documentation:
@@ -113,32 +113,32 @@ Optional modules for building the documentation:
       - Version
       - Summary
     * - sphinx
-      -
+      - 
       - Python documentation generator
     * - sphinx_intl
-      -
+      - 
       - Sphinx utility that make it easy to translate and to apply translation.
     * - sphinx-sitemap
-      -
+      - 
       - Sitemap generator for Sphinx
     * - sphinxext-opengraph
-      -
+      - 
       - Sphinx Extension to enable OGP support
     * - myst_parser
-      -
+      - 
       - An extended [CommonMark](https://spec.commonmark.org/) compliant parser,
     * - sphinx_design
-      -
+      - 
       - A sphinx extension for designing beautiful, view size responsive web components.
     * - sphinx-copybutton
-      -
+      - 
       - Add a copy button to each of your code cells.
     * - pydata-sphinx-theme
-      -
+      - 
       - Bootstrap-based Sphinx theme from the PyData community
     * - sphinxcontrib-svg2pdfconverter[CairoSVG]
-      -
-      -
+      - 
+      - 
 
 Optional modules for running test suite:
 
@@ -150,14 +150,14 @@ Optional modules for running test suite:
       - Version
       - Summary
     * - pytest
-      -
+      - 
       - pytest: simple powerful testing with Python
     * - pytest-xvfb
-      -
+      - 
       - A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests.
     * - httpx
-      -
+      - 
       - The next generation HTTP client.
     * - pyyaml
-      -
+      - 
       - YAML parser and emitter for Python

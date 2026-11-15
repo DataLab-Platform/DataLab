@@ -104,14 +104,14 @@ msgstr "Fonctionnalités de l'éditeur"
 msgid "The macro editor offers a few features that make script writing more comfortable:"
 msgstr "L'éditeur de macros offre quelques fonctionnalités qui facilitent l'écriture de scripts :"
 
-msgid "**Autosave**: every keystroke is debounced and persisted into the current workspace, so unsaved edits survive an unexpected shutdown. A recovery prompt is offered at startup when an autosaved revision is detected."
-msgstr "**Sauvegarde automatique** : chaque frappe est temporisée et persistée dans l'espace de travail courant, afin que les modifications non sauvegardées survivent à un arrêt inattendu. Une invite de récupération est proposée au démarrage lorsqu'une version sauvegardée automatiquement est détectée."
+msgid "**Autosave**: every edit is saved, after a short delay, to a recovery file of the DataLab configuration folder (independent of the workspace), so unsaved edits survive an unexpected shutdown. When the Macro panel is shown after a restart, DataLab offers to restore the macros found in this file."
+msgstr "**Sauvegarde automatique** : chaque modification est enregistrée, après un court délai, dans un fichier de récupération du répertoire de configuration de DataLab (indépendant de l'espace de travail), de sorte que les modifications non enregistrées survivent à un arrêt inattendu. Lorsque le Gestionnaire de Macros est affiché après un redémarrage, DataLab propose de restaurer les macros trouvées dans ce fichier."
 
 msgid "**Tab persistence**: the set of open macros and the active tab are restored the next time DataLab starts, so you pick up exactly where you left off."
 msgstr "**Persistance des onglets** : l'ensemble des macros ouvertes et l'onglet actif sont restaurés au démarrage suivant de DataLab, vous permettant de reprendre exactement là où vous vous étiez arrêté."
 
-msgid "**Find / Replace** (``Ctrl+F`` / ``Ctrl+H``): an inline bar at the bottom of the editor supports case-sensitive search, whole-word matching, regular expressions, and replace (or replace-all) inside the active macro."
-msgstr "**Rechercher / Remplacer** (``Ctrl+F`` / ``Ctrl+H``) : une barre intégrée en bas de l'éditeur prend en charge la recherche sensible à la casse, la correspondance de mots entiers, les expressions régulières et le remplacement (ou le remplacement total) dans la macro active."
+msgid "**Find / Replace** (``Ctrl+F`` / ``Ctrl+H``): an inline bar at the bottom of the editor supports case-sensitive search, whole-word matching, and replace (or replace-all) inside the active macro."
+msgstr "**Rechercher / Remplacer** (``Ctrl+F`` / ``Ctrl+H``) : une barre intégrée en bas de l'éditeur prend en charge la recherche sensible à la casse, la correspondance de mots entiers et le remplacement (ou le remplacement total) dans la macro active."
 
 msgid "**Python autocompletion** is enabled out of the box (``Ctrl+Space`` to trigger it manually), backed by the embedded code editor."
 msgstr "**L'autocomplétion Python** est activée par défaut (``Ctrl+Espace`` pour la déclencher manuellement), fournie par l'éditeur de code intégré."
@@ -128,14 +128,14 @@ msgstr "**Effacer la console** — efface le contenu actuel."
 msgid "**Save history log...** — export the console history to a text file."
 msgstr "**Enregistrer le journal de l'historique...** — exporte l'historique de la console vers un fichier texte."
 
-msgid "The maximum number of lines retained by the console can be tuned via the ``Conf.macro.console_max_lines`` setting (defaults to ``5000``)."
-msgstr "Le nombre maximum de lignes conservées par la console peut être ajusté via le paramètre ``Conf.macro.console_max_lines`` (par défaut ``5000``)."
+msgid "The maximum number of lines retained by the console can be tuned via the ``console_max_lines`` option of the ``[macro]`` section of the configuration file (``Conf.macro_console_max_lines``, defaults to ``5000``)."
+msgstr "Le nombre maximum de lignes conservées par la console peut être ajusté via l'option ``console_max_lines`` de la section ``[macro]`` du fichier de configuration (``Conf.macro_console_max_lines``, par défaut ``5000``)."
 
 msgid "Templates"
 msgstr "Modèles"
 
-msgid "The \"New macro\" dropdown lists a set of ready-to-use *templates* covering common patterns (signal creation, image processing, batch loops, etc.). You can ship your own templates by dropping ``*.py`` files into the user templates directory — by default ``~/.DataLab/macro_templates/``, configurable via ``Conf.macro.templates_path``. The first non-empty docstring line of each template is used as its menu entry title. Bundled templates take precedence over user templates when names collide."
-msgstr "Le menu déroulant \"Nouvelle macro\" liste un ensemble de *modèles* prêts à l'emploi couvrant des cas courants (création de signal, traitement d'image, boucles de traitement par lots, etc.). Vous pouvez fournir vos propres modèles en plaçant des fichiers ``*.py`` dans le répertoire des modèles utilisateur — par défaut ``~/.DataLab/macro_templates/``, configurable via ``Conf.macro.templates_path``. La première ligne non vide de la docstring de chaque modèle est utilisée comme titre de l'entrée du menu. Les modèles fournis avec DataLab ont priorité sur les modèles utilisateur en cas de conflit de noms."
+msgid "The \"New macro\" dropdown lists a set of ready-to-use *templates* covering common patterns (signal creation, image processing, batch loops, etc.). You can ship your own templates by dropping ``*.py`` files into the user templates directory — by default ``~/.DataLab_v1/macro_templates/``, configurable via the ``templates_path`` option of the ``[macro]`` section of the configuration file (``Conf.macro_templates_path``). The menu entry title of a template is read from its first line when it starts with ``# DataLab template:`` (e.g. ``# DataLab template: Batch processing of images``); otherwise, it is derived from the file name. Bundled templates take precedence over user templates when names collide."
+msgstr "Le menu déroulant \"Nouvelle macro\" liste un ensemble de *modèles* prêts à l'emploi couvrant des cas courants (création de signal, traitement d'image, boucles de traitement par lots, etc.). Vous pouvez fournir vos propres modèles en plaçant des fichiers ``*.py`` dans le répertoire des modèles utilisateur — par défaut ``~/.DataLab_v1/macro_templates/``, configurable via l'option ``templates_path`` de la section ``[macro]`` du fichier de configuration (``Conf.macro_templates_path``). Le titre de l'entrée de menu d'un modèle est lu dans sa première ligne lorsque celle-ci commence par ``# DataLab template:`` (par exemple ``# DataLab template: Batch processing of images``) ; sinon, il est dérivé du nom du fichier. Les modèles fournis avec DataLab ont priorité sur les modèles utilisateur en cas de conflit de noms."
 
 msgid "Example"
 msgstr "Exemple"

@@ -1,0 +1,108 @@
+# Install DataLab and its dependencies for the CI jobs (tests, documentation).
+#
+# The dependencies are selected by the target branch of the pull request, or by
+# the pushed branch:
+#   * development (develop, feature/*, fix/*): guidata and PlotPy from their
+#     `develop` branch; Sigima, SigimaX and DataLab-Capsule from the branch named
+#     like the pull request branch, falling back to `develop`
+#   * release: every dependency from its `release` branch, falling back to
+#     `main`/`master`
+#   * published (main, tags): every dependency from PyPI
+#
+# Dependencies are cloned next to the DataLab checkout (`../Sigima`, ...), like in
+# the development workspace: the documentation quotes sources of `../Sigima`.
+#
+# Also installs the system libraries of Qt and starts Xvfb on display :99: set
+# `DISPLAY: ':99.0'` in the environment of the job.
+
+name: Install DataLab and its dependencies
+description: Install DataLab, a Qt binding and the development, release or published versions of its dependencies
+
+inputs:
+  qt-binding:
+    description: Qt binding installed with pip (PyQt5 or PyQt6)
+    required: true
+  extras:
+    description: Comma-separated optional dependency groups of DataLab to install (e.g. "doc")
+    required: false
+    default: ""
+  packages:
+    description: Space-separated additional packages installed with pip (e.g. test tools)
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Install system dependencies and start Xvfb
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils libegl1
+        /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
+
+    - name: Install Python dependencies
+      shell: bash
+      env:
+        QT_BINDING: ${{ inputs.qt-binding }}
+        EXTRAS: ${{ inputs.extras }}
+        PACKAGES: ${{ inputs.packages }}
+        # PRs select by target branch; pushes and manual runs by their own branch.
+        TARGET_BRANCH: ${{ github.base_ref || github.ref_name }}
+        DEPENDENCY_BRANCH: ${{ github.head_ref || github.ref_name }}
+      run: |
+        python -m pip install --upgrade pip
+        if [ -n "$PACKAGES" ]; then
+          python -m pip install $PACKAGES
+        fi
+        pip install "$QT_BINDING"
+        case "$TARGET_BRANCH" in
+          develop|feature/*|fix/*) DEPENDENCIES=development ;;
+          release) DEPENDENCIES=release ;;
+          *) DEPENDENCIES=published ;;
+        esac
+        echo "Dependencies: $DEPENDENCIES"
+        if [ "$DEPENDENCIES" = "published" ]; then
+          # Install from PyPI normally for main branch
+          pip install ".${EXTRAS:+[$EXTRAS]}"
+          exit 0
+        fi
+        cd ..
+        if [ "$DEPENDENCIES" = "development" ]; then
+          # Clone development versions of key dependencies
+          git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git
+          git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
+          git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
+          git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/sigima.git Sigima || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git Sigima
+          git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/SigimaX.git
+          git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/DataLab-Capsule.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/DataLab-Capsule.git
+        else
+          # Clone dependencies from release branches (with fallback to main/master)
+          # Try cloning PythonQwt from main or master
+          git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/PythonQwt.git
+          # Try cloning guidata from release, fallback to main or master
+          git clone --depth 1 --branch release https://github.com/PlotPyStack/guidata.git || git clone --depth 1 https://github.com/PlotPyStack/guidata.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/guidata.git
+          # Try cloning plotpy from release, fallback to main or master
+          git clone --depth 1 --branch release https://github.com/PlotPyStack/plotpy.git || git clone --depth 1 https://github.com/PlotPyStack/plotpy.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/plotpy.git
+          # Try cloning sigima from release, fallback to main
+          git clone --depth 1 --branch release https://github.com/DataLab-Platform/sigima.git Sigima || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git Sigima
+          # Try cloning SigimaX from release, fallback to main
+          git clone --depth 1 --branch release https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 https://github.com/DataLab-Platform/SigimaX.git
+          git clone --depth 1 --branch release https://github.com/DataLab-Platform/DataLab-Capsule.git || git clone --depth 1 https://github.com/DataLab-Platform/DataLab-Capsule.git
+        fi
+        cd "$GITHUB_WORKSPACE"
+        # Editable install of the cloned dependencies
+        pip install -e ../guidata
+        pip install -e ../PythonQwt
+        pip install -e ../plotpy
+        pip install -e ../Sigima
+        pip install -e ../SigimaX --no-deps
+        pip install -e ../DataLab-Capsule
+        # Install tomli for TOML parsing (safe if already present)
+        pip install tomli
+        # Extract dependencies of DataLab (with the requested extras) and of SigimaX
+        # (installed with --no-deps above), save them to file, then install
+        python "$GITHUB_ACTION_PATH/extract_dependencies.py" > deps.txt
+        pip install -r deps.txt
+        # Install DataLab without dependencies
+        pip install --no-deps .

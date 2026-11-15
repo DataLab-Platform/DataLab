@@ -1,7 +1,7 @@
 .. _tutorial_history_panel:
 
 :octicon:`book;1em;sd-text-info` Recording and replaying a processing chain
-==========================================================================
+===========================================================================
 
 .. meta::
     :description: Tutorial on how to record, replay and share a processing
@@ -79,7 +79,7 @@ session already in progress.
 
 To illustrate the recording of a processing chain, let's create a test using the
 "Create > Gaussian" menu entry and then add to it some noise using "Processing
-> Noise Addition > Gaussian Noise".
+> Noise addition > Add Gaussian noise...".
 
 .. figure:: ../../images/tutorials/history_panel/04.png
 
@@ -116,6 +116,8 @@ The toolbar provides the following commands:
 -   **Replay** applies the selected session or action without showing parameter
     dialogs, whereas **Step-by-step** replays it while allowing parameters to be
     edited at each step.
+-   **Show execution provenance** shows the recorded provenance of the last
+    successful execution of the selected computation action (see :ref:`provenance`).
 -   **Duplicate** copies the selected session, or the complete session
     containing the selected action, to compare a processing variant.
 -   **Remove incompatible** removes actions that cannot be directly applied in
@@ -196,7 +198,7 @@ session of your current workspace.
 In both cases, activate the history recording and switch to the **Image Panel**.
 
 Create or open a test image and apply a first noise-reduction operation, for
-example **Processing > Noise reduction > Moving Average**. As you can see, for
+example **Processing > Noise reduction > Moving average...**. As you can see, for
 images the history is recorded in the same way that it is for signals.
 
 .. figure:: ../../images/tutorials/history_panel/10.png

@@ -114,14 +114,15 @@ Editor features
 The macro editor offers a few features that make script writing more
 comfortable:
 
-- **Autosave**: every keystroke is debounced and persisted into the current
-  workspace, so unsaved edits survive an unexpected shutdown. A recovery
-  prompt is offered at startup when an autosaved revision is detected.
+- **Autosave**: every edit is saved, after a short delay, to a recovery file of
+  the DataLab configuration folder (independent of the workspace), so unsaved
+  edits survive an unexpected shutdown. When the Macro panel is shown after a
+  restart, DataLab offers to restore the macros found in this file.
 - **Tab persistence**: the set of open macros and the active tab are restored
   the next time DataLab starts, so you pick up exactly where you left off.
 - **Find / Replace** (``Ctrl+F`` / ``Ctrl+H``): an inline bar at the bottom
-  of the editor supports case-sensitive search, whole-word matching, regular
-  expressions, and replace (or replace-all) inside the active macro.
+  of the editor supports case-sensitive search, whole-word matching, and
+  replace (or replace-all) inside the active macro.
 - **Python autocompletion** is enabled out of the box (``Ctrl+Space`` to
   trigger it manually), backed by the embedded code editor.
 
@@ -136,7 +137,8 @@ exposes:
 - **Save history log...** — export the console history to a text file.
 
 The maximum number of lines retained by the console can be tuned via the
-``Conf.macro.console_max_lines`` setting (defaults to ``5000``).
+``console_max_lines`` option of the ``[macro]`` section of the configuration
+file (``Conf.macro_console_max_lines``, defaults to ``5000``).
 
 .. _macro_templates:
 
@@ -146,10 +148,13 @@ Templates
 The "New macro" dropdown lists a set of ready-to-use *templates* covering
 common patterns (signal creation, image processing, batch loops, etc.).
 You can ship your own templates by dropping ``*.py`` files into the user
-templates directory — by default ``~/.DataLab/macro_templates/``, configurable
-via ``Conf.macro.templates_path``. The first non-empty docstring line of each
-template is used as its menu entry title. Bundled templates take precedence
-over user templates when names collide.
+templates directory — by default ``~/.DataLab_v1/macro_templates/``, configurable
+via the ``templates_path`` option of the ``[macro]`` section of the configuration
+file (``Conf.macro_templates_path``). The menu entry title of a template is read
+from its first line when it starts with ``# DataLab template:`` (e.g.
+``# DataLab template: Batch processing of images``); otherwise, it is derived
+from the file name. Bundled templates take precedence over user templates when
+names collide.
 
 Example
 -------

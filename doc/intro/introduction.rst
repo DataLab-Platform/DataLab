@@ -38,7 +38,8 @@ Depending on the application, DataLab can be used in three different modes:
 
 - |appmode| **Stand-alone mode**: DataLab is a full-fledged processing application that
   can be adapted to the client's needs through the addition of
-  industry-specific plugins.
+  industry-specific plugins (see the `DataLab plugin catalog
+  <https://datalab-platform.com/plugins/>`_).
 - |libmode| **Embedded mode**: DataLab is integrated into your application to provide
   the necessary processing and visualization features.
 - |remotemode| **Remote-controlled mode**: DataLab communicates with your application,
@@ -108,7 +109,8 @@ Debugging a data processing application
   DataLab can be used as an advanced debugging tool for your data processing
   applications, independently from the development environment or the language
   used (Python, C#, C++, etc.). All you need is to be able to communicate with
-  DataLab via its remote control interface (standard XML-RPC protocol). This
+  DataLab via its remote control interface (standard XML-RPC protocol; an HTTP/JSON
+  Web API is also available, see :ref:`ref-to-webapi`). This
   allows you to send data to DataLab (signals, images or even geometric shapes),
   visualize the data at each step of the processing chain, manipulate them to
   better understand the behavior of your algorithms, and even modify them to
@@ -144,9 +146,16 @@ The main technical features of DataLab include:
 - Standard operations and processing on signals and images
 - Advanced image processing (restoration, morphology, edge detection, etc.)
 - Management of multiple regions of interest (calculations, extractions)
+- History panel to record and replay processing chains
+- Provenance of results (verification by recomputation) and workspace capsules
+  (``.dlcapsule``), based on `DataLab-Capsule
+  <https://github.com/DataLab-Platform/DataLab-Capsule>`_
+- HDF5 workspaces and HDF5/NeXus browser
 - Macro-command editor
-- Remote-controllable API
+- Remote-controllable API (XML-RPC) and HTTP/JSON Web API
 - Embedded interactive Python console
+- Command palette, welcome page and Applications panel
+- Optional AI assistant
 
 .. _key_strengths:
 
@@ -159,6 +168,10 @@ Extensibility
   The DataLab plugin system makes it easy to code new features (specific
   processing, specific file formats, custom graphical interfaces). It can also
   be used as a customizable platform.
+
+  :octicon:`package;1em;sd-text-info` Browse the `DataLab plugin catalog
+  <https://datalab-platform.com/plugins/>`_, or create your own plugin
+  (see :ref:`about_plugins` and the tutorial :ref:`tutorial_plugin_catalog`).
 
 Interoperability
   DataLab can also be embedded in your own application. For example, within data

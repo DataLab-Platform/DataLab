@@ -421,8 +421,8 @@ class LocalProxy(BaseProxy):
         """Add object annotations (annotation plot items).
 
         Args:
-            itemsTrue: annotation plot items
-            refresh_plotTrue: refresh plot. Defaults to True
+            items: annotation plot items
+            refresh_plot: refresh plot. Defaults to True
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used
         """

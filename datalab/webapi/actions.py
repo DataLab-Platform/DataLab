@@ -24,6 +24,7 @@ from guidata.qthelpers import add_actions, create_action
 from qtpy import QtWidgets as QW
 
 from datalab.config import APP_NAME, _
+from datalab.webapi import webapi_unavailable_message
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -112,9 +113,8 @@ class WebApiActions:
         self._status_action.setEnabled(False)
 
         if not available:
-            self._status_action.setText(
-                _("Web API unavailable (install datalab-platform[webapi])")
-            )
+            self._status_action.setText(_("Web API unavailable (hover for details)"))
+            self._status_action.setToolTip(webapi_unavailable_message(_))
 
     def create_menu(self, parent_menu: QW.QMenu) -> QW.QMenu:
         """Create the Web API submenu.
@@ -126,6 +126,8 @@ class WebApiActions:
             The created submenu.
         """
         self._menu = parent_menu.addMenu(_("Web API"))
+        if self._controller is None:
+            self._menu.setToolTipsVisible(True)
         add_actions(
             self._menu,
             [
@@ -147,6 +149,12 @@ class WebApiActions:
         try:
             url, token = self._controller.start()
             self._show_connection_dialog(url, token)
+        except ImportError as error:
+            QW.QMessageBox.critical(
+                self._main_window,
+                APP_NAME,
+                webapi_unavailable_message(_) + f"\n\n{error}",
+            )
         except Exception as e:  # pylint: disable=broad-exception-caught
             QW.QMessageBox.critical(
                 self._main_window,
@@ -313,6 +321,12 @@ class WebApiActions:
         This is called when the status widget is clicked while server is not running.
         Shows a confirmation dialog before starting the server.
         """
+        if self._controller is None:
+            QW.QMessageBox.warning(
+                self._main_window, APP_NAME, webapi_unavailable_message(_)
+            )
+            return
+
         # Show confirmation dialog
         answer = QW.QMessageBox.question(
             self._main_window,

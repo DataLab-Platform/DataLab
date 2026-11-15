@@ -40,6 +40,12 @@ msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travai
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
 
+msgid "Start or stop the Web API server, copy its connection information, and check its status (see :ref:`ref-to-webapi`)."
+msgstr "Démarrer ou arrêter le serveur de l'API Web, copier ses informations de connexion et vérifier son état (voir :ref:`ref-to-webapi`)."
+
+msgid "Quit DataLab."
+msgstr "Quitter DataLab."
+
 msgid "Open signal"
 msgstr "Ouvrir un signal"
 
@@ -70,10 +76,22 @@ msgstr "Fichiers MAT"
 msgid ".mat"
 msgstr ""
 
+msgid "HDF5 signal files"
+msgstr "Fichiers de signal HDF5"
+
+msgid ".h5sig"
+msgstr ""
+
 msgid "FT-Lab files"
 msgstr "Fichiers FT-Lab"
 
 msgid ".sig"
+msgstr ""
+
+msgid "MCA files"
+msgstr "Fichiers MCA"
+
+msgid ".mca"
 msgstr ""
 
 msgid "Open from directory"
@@ -88,7 +106,7 @@ msgstr "Enregistrer un signal"
 msgid "Save current signal to the following supported filetypes:"
 msgstr "Enregistre le signal sélectionné dans l'un des types de fichier pris en charge :"
 
-msgid ".csv"
+msgid ".csv, .txt"
 msgstr ""
 
 msgid "Save signals to directory"
@@ -106,17 +124,17 @@ msgstr "Lorsque vous sélectionnez « Enregistrer dans un répertoire... » dans
 msgid "**Directory**: Choose the target directory where signals will be saved"
 msgstr "**Répertoire** : Choisissez le répertoire cible où les signaux seront enregistrés."
 
-msgid "**Filename pattern**: Define a pattern for the filenames using Python format strings"
-msgstr "**Nom de fichier** : Définissez un modèle pour les noms de fichiers en utilisant des chaînes de format Python."
+msgid "**Basename pattern**: Define a pattern for the filenames using Python format strings (the **Help** button describes the available placeholders)"
+msgstr "**Modèle de nom de base** : Définissez un modèle pour les noms de fichiers en utilisant des chaînes de format Python (le bouton **Aide** décrit les champs disponibles)"
 
-msgid "**File extension**: Select the output format (.csv, .txt, etc.)"
-msgstr "**Extension de fichier** : Sélectionnez le format de sortie (.csv, .txt, etc.)."
+msgid "**Extension**: Select the output format (.csv, .txt, etc.)"
+msgstr "**Extension** : Sélectionnez le format de sortie (.csv, .txt, etc.)"
 
 msgid "**Overwrite**: Choose whether to overwrite existing files"
 msgstr "**Écraser** : Choisissez si vous souhaitez écraser les fichiers existants."
 
-msgid "**Preview**: See the list of files that will be created (with object IDs)"
-msgstr "**Aperçu** : Voir la liste des fichiers qui seront créés (avec les ID d'objet)"
+msgid "**Preview**: See the list of files that will be created (each file name is preceded by the group and the title of the corresponding signal)"
+msgstr "**Aperçu** : Voir la liste des fichiers qui seront créés (chaque nom de fichier est précédé du groupe et du titre du signal correspondant)"
 
 msgid "The filename pattern supports the following placeholders:"
 msgstr "Le modèle de nom de fichier prend en charge les espaces réservés suivants :"
@@ -172,14 +190,20 @@ msgstr "La deuxième étape consiste à configurer l'importation et à prévisua
 msgid "**Delimiter**: The character used to separate the values in the text file."
 msgstr "**Délimiteur** : Le caractère utilisé pour séparer les valeurs dans le fichier texte."
 
+msgid "**Decimal**: The decimal separator (point or comma)."
+msgstr "**Décimal** : Le séparateur décimal (point ou virgule)."
+
 msgid "**Comments**: The character used to indicate that the line is a comment and should be ignored."
 msgstr "**Commentaires** : Le caractère utilisé pour indiquer que la ligne est un commentaire et doit être ignorée."
 
 msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
 msgstr "**Lignes à sauter** : Le nombre de lignes à sauter au début du fichier."
 
-msgid "**Maximum Number of Rows**: The maximum number of rows to import. If the file contains more rows, they will be ignored."
-msgstr "**Nombre maximum de lignes** : Le nombre maximum de lignes à importer. Si le fichier contient plus de lignes, elles seront ignorées."
+msgid "**Max. nb of rows**: The maximum number of rows to import. If the file contains more rows, they will be ignored."
+msgstr "**Nb max. de lignes** : Le nombre maximum de lignes à importer. Si le fichier contient plus de lignes, elles seront ignorées."
+
+msgid "**Header**: The row containing the column names, if any (none, inferred from the data, or first row)."
+msgstr "**En-tête** : La ligne contenant les noms des colonnes, le cas échéant (aucune, déduite des données, ou première ligne)."
 
 msgid "**Transpose**: If checked, the rows and columns will be transposed."
 msgstr "**Transposer** : Si coché, les lignes et les colonnes seront transposées."

@@ -285,7 +285,19 @@ class PluginCapability(str, enum.Enum):
 
 @dataclasses.dataclass
 class PluginInfo:
-    """Plugin info"""
+    """Plugin info
+
+    Attributes:
+        name: Plugin display name
+        version: Plugin version
+        description: Plugin description
+        icon: Plugin icon: ``package:relative/path`` resource, ``module:filename``
+         image registered with guidata, or DataLab icon file name
+        id: Stable, namespaced plugin ID (e.g. ``"org.example.my-plugin"``)
+        capabilities: Plugin capabilities (:class:`PluginCapability` values)
+        documentation_url: HTTP or HTTPS URL of the plugin documentation, opened
+         by the **Documentation** action of the **Applications** panel
+    """
 
     name: str = None
     version: str = "0.0.0"
@@ -448,8 +460,10 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Return the objects selected in the current signal or image panel."""
         if self.main is None:
             raise RuntimeError("Plugin must be registered to access the selection")
+        # Called while Qt shows the Applications panel: processing events then
+        # may crash Qt (issue #527)
         panel = {"signal": self.signalpanel, "image": self.imagepanel}.get(
-            self.main.get_current_panel()
+            self.main.current_panel_name()
         )
         if panel is None:
             return []

@@ -22,10 +22,10 @@ In DataLab, functional validation is based on a classic test strategy (see
       - Number of tests
     * - DataLab
       - ~82%
-      - >130
+      - >1200
     * - Sigima
       - ~90%
-      - >570
+      - >1600
 
 Technical validation
 ---------------------
@@ -42,7 +42,8 @@ what we call technical validation, see :ref:`scientific_validation`).
     validation status indicates whether the function has been validated against
     ground-truth data or analytical models. The test coverage indicates the percentage
     of the code that is executed by the test suite, but it does not necessarily take
-    into account the correctness of the results (DataLab's test coverage is around 90%).
+    into account the correctness of the results (see the coverage of each package in
+    the table above).
 
 .. csv-table:: Validation Statistics
    :file: ../../validation_statistics.csv

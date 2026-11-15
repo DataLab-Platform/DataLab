@@ -1,0 +1,63 @@
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+#
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DataLab Web presentation at Open Source Experience 2026 in Paris"
+msgstr "Présentation de DataLab Web à Open Source Experience 2026 à Paris"
+
+msgid "DataLab, DataLab Web, Open Source Experience, OSXP, 2026, Paris, AI assistant"
+msgstr "DataLab, DataLab Web, Open Source Experience, OSXP, 2026, Paris, assistant IA"
+
+msgid "Open Source Experience 2026"
+msgstr ""
+
+msgid "Pierre Raybaut will present **DataLab Web: open source scientific platform with a local AI assistant, 100% in-browser** at `Open Source Experience 2026 <https://www.opensource-experience.com/fr/programme-2026>`_."
+msgstr "Pierre Raybaut présentera **DataLab Web : plateforme scientifique open source avec Assistant IA local, 100 % navigateur** à `Open Source Experience 2026 <https://www.opensource-experience.com/fr/programme-2026>`_."
+
+msgid "The talk will include demonstrations of DataLab Web and its AI assistant, as well as feedback on practical constraints and NLnet funding."
+msgstr "La conférence comprendra des démonstrations de DataLab Web et de son assistant IA, ainsi qu'un retour d'expérience sur les contraintes pratiques et le financement NLnet."
+
+msgid "**Event Details**"
+msgstr "**Détails de l'événement**"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "December 9, 2026"
+msgstr "9 décembre 2026"
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "14:00–14:20"
+msgstr "14 h 00 – 14 h 20"
+
+msgid "Location"
+msgstr "Lieu"
+
+msgid "Paris Expo Porte de Versailles, Hall 5.2, Paris, France"
+msgstr ""
+
+msgid "Room"
+msgstr "Salle"
+
+msgid "Katherine Johnson"
+msgstr ""
+
+msgid "Track"
+msgstr "Thématique"
+
+msgid "Open AI, Models, Data and Sovereign Ecosystems"
+msgstr "IA ouverte, modèles, data et écosystèmes souverains"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Talk in French (20 minutes)"
+msgstr "Conférence en français (20 minutes)"

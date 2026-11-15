@@ -64,7 +64,9 @@ This feature is particularly useful for calibration scenarios, such as:
 - Combining signals where one contains calibration points
 
 The two signals must have the same number of points. The operation directly uses
-the Y arrays without interpolation.
+the Y arrays without interpolation. With Sigima 1.4.1 or later, if the first
+signal has a region of interest, only its samples within this region are kept,
+and the result has no region of interest.
 
 .. list-table::
     :header-rows: 1
@@ -87,6 +89,15 @@ This operation plots one signal as a function of another by:
 1. Finding the overlapping X range between both signals
 2. Resampling both signals onto a common X grid within that overlap
 3. Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)
+
+With Sigima 1.4.1 or later, signals sharing the same X grid are paired without
+interpolation; otherwise, the common grid is uniform, with the smaller of the
+two input point counts. Non-overlapping domains and signals with different X
+units are rejected. If the first signal has a region of interest, only the
+points within it are kept, and the result has no region of interest. The X and
+Y labels and units of the result are those of the Y axes of the first and
+second signals. Earlier Sigima versions may extend an operand beyond its
+original domain in DataLab.
 
 .. note::
 
@@ -130,11 +141,14 @@ by maximum, amplitude, sum, energy or RMS:
     * - Amplitude
       - :math:`y_{1}= \dfrac{y_{0}'}{\max\left(y_{0}'\right)}` with :math:`y_{0}'=y_{0}-\min\left(y_{0}\right)`
     * - Area
-      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N-1}y_{0}[n]}`
     * - Energy
-      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}\left|y_{0}[n]\right|^2}}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N-1}\left|y_{0}[n]\right|^2}}`
     * - RMS
-      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}\left|y_{0}[n]\right|^2}}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N-1}\left|y_{0}[n]\right|^2}}`
+
+Here :math:`N` is the number of samples, assuming no NaNs. The implemented
+sum and mean ignore NaNs.
 
 Clipping
 ~~~~~~~~
@@ -249,8 +263,12 @@ The following parameters are available:
       - Description
     * - Strategy
       - Zero padding strategy (see below)
+    * - Location
+      - Where to add the zeros: 'append' (after the signal), 'prepend' (before
+        the signal) or 'both' (half before, half after)
     * - Number of points
-      - Custom length (if `strategy` is "custom")
+      - Number of points to add (user-defined if `strategy` is "custom", computed
+        automatically otherwise)
 
 Zero padding strategy refers to the method used to increase the length of the signal, and it can be one of the following:
 
@@ -261,13 +279,13 @@ Zero padding strategy refers to the method used to increase the length of the si
     * - Strategy
       - Description
     * - next_pow2
-      - Next power of 2 (e.g. 1024 → 2048)
+      - Next power of 2, greater than or equal to the signal length (e.g. 1000 → 1024)
     * - double
       - Double the length (e.g. 1024 → 2048)
     * - triple
       - Triple the length (e.g. 1024 → 3072)
     * - custom
-      - Custom length (user-defined)
+      - Custom number of points to add (user-defined)
 
 FFT related functions
 ~~~~~~~~~~~~~~~~~~~~~
@@ -374,8 +392,10 @@ Fitting
 ^^^^^^^
 
 Fit a model to each selected signal.
-This can be done automatically or through an interactive curve fitting dialog,
-which shows the formula of the model below the fit parameters.
+This can be done automatically or through an interactive curve fitting dialog
+(**Interactive fitting** submenu), which shows the formula of the model below the
+fit parameters. Most models are available in both modes, except Multi-Gaussian and
+Multi-Lorentzian fits (interactive mode only) and Sigmoid fit (automatic mode only).
 
 The fitted signal stores the model parameters in its metadata
 (``metadata["fit_params"]``), under the names given in the last column of the
@@ -416,7 +436,7 @@ table below:
       - | :math:`y = y_{0,L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
         | :math:`y = y_{0,R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
       - :math:`A_L`: ``amp_left``, :math:`A_R`: ``amp_right``, :math:`\sigma_L`: ``sigma_left``, :math:`\sigma_R`: ``sigma_right``, :math:`x_0`: ``x0``, :math:`y_{0,L}`: ``y0_left``, :math:`y_{0,R}`: ``y0_right``
-    * - Two back-to-back exponentials
+    * - Piecewise exponential (raise-decay)
       - | :math:`y = y_{0} + a_{L} \cdot \exp\left(b_{L} \cdot x\right)` if :math:`x < x_{c}`
         | :math:`y = y_{0} + a_{R} \cdot \exp\left(b_{R} \cdot x\right)` otherwise
       - :math:`x_c`: ``x_center``, :math:`a_L`: ``a_left``, :math:`b_L`: ``b_left``, :math:`a_R`: ``a_right``, :math:`b_R`: ``b_right``, :math:`y_0`: ``y0``
@@ -590,7 +610,7 @@ The following interpolation methods are available:
     * - Spline
       - Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_ function
     * - Quadratic
-      - Quadratic interpolation, using using NumPy's `polyval <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_ function
+      - Piecewise quadratic interpolation using SciPy's `interp1d <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_ function with Sigima 1.4.1 or later; earlier versions fit a single quadratic polynomial
     * - Cubic
       - Cubic interpolation, using using SciPy's `Akima1DInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_ class
     * - Barycentric

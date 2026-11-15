@@ -1,0 +1,54 @@
+# Continuous integration of the pushes and pull requests.
+#
+# The `changes` job selects the jobs to run according to the changed files
+# (`scripts/ci_changes.py`): the tests (`test_pyqt5.yml`, `test_pyqt6.yml`) and
+# the strict documentation build (`test_doc.yml`). The selected workflows are
+# called as reusable workflows: release builds (`release.yml`) and manual runs
+# call them directly, so they always run.
+
+name: CI
+
+on:
+  push:
+    branches: [ "main", "develop", "release" ]
+  pull_request:
+    branches: [ "main", "develop", "release" ]
+
+permissions:
+  contents: read
+
+concurrency:
+  # A new push to a pull request cancels the run of its previous push; pushes to
+  # branches are never cancelled.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      tests: ${{ steps.select.outputs.tests }}
+      docs: ${{ steps.select.outputs.docs }}
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        # The commit merging the pull request into its base branch, and its parents
+        fetch-depth: 2
+    - name: Select the jobs according to the changed files
+      id: select
+      run: python3 scripts/ci_changes.py
+
+  test_pyqt5:
+    needs: changes
+    if: needs.changes.outputs.tests == 'true'
+    uses: ./.github/workflows/test_pyqt5.yml
+
+  test_pyqt6:
+    needs: changes
+    if: needs.changes.outputs.tests == 'true'
+    uses: ./.github/workflows/test_pyqt6.yml
+
+  docs:
+    needs: changes
+    if: needs.changes.outputs.docs == 'true'
+    uses: ./.github/workflows/test_doc.yml

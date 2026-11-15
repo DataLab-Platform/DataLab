@@ -40,6 +40,12 @@ msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travai
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
 
+msgid "Start or stop the Web API server, copy its connection information, and check its status (see :ref:`ref-to-webapi`)."
+msgstr "Démarrer ou arrêter le serveur de l'API Web, copier ses informations de connexion et vérifier son état (voir :ref:`ref-to-webapi`)."
+
+msgid "Quit DataLab."
+msgstr "Quitter DataLab."
+
 msgid "Open image"
 msgstr "Ouvrir une image"
 
@@ -64,10 +70,22 @@ msgstr "Fichiers TIFF"
 msgid ".tif, .tiff"
 msgstr ""
 
-msgid "8-bit images"
-msgstr "Images 8bits"
+msgid "JPEG files"
+msgstr "Fichiers JPEG"
 
-msgid ".jpg, .gif"
+msgid ".jpg, .jpeg"
+msgstr ""
+
+msgid "JPEG 2000 files"
+msgstr "Fichiers JPEG 2000"
+
+msgid ".jp2"
+msgstr ""
+
+msgid "Bitmap images"
+msgstr "Images Bitmap"
+
+msgid ".bmp"
 msgstr ""
 
 msgid "NumPy arrays"
@@ -88,6 +106,12 @@ msgstr "Fichiers texte"
 msgid ".txt, .csv, .asc"
 msgstr ""
 
+msgid "HDF5 image files"
+msgstr "Fichiers d'image HDF5"
+
+msgid ".h5ima"
+msgstr ""
+
 msgid "Andor SIF files"
 msgstr "Fichiers Andor SIF"
 
@@ -106,8 +130,8 @@ msgstr "Fichiers Opticks GEL"
 msgid ".gel"
 msgstr ""
 
-msgid "Hammamatsu NDPI files"
-msgstr "Fichiers Hammamatsu NDPI"
+msgid "Hamamatsu NDPI files"
+msgstr "Fichiers Hamamatsu NDPI"
 
 msgid ".ndpi"
 msgstr ""
@@ -124,16 +148,16 @@ msgstr "Fichiers SPIRICON"
 msgid ".scor-data"
 msgstr ""
 
-msgid "FXD files"
-msgstr "Fichiers FXD"
+msgid "Thales Pixium FXD files"
+msgstr "Fichiers Thales Pixium FXD"
 
 msgid ".fxd"
 msgstr ""
 
-msgid "Bitmap images"
-msgstr "Images Bitmap"
+msgid "Dürr NDT XYZ files"
+msgstr "Fichiers Dürr NDT XYZ"
 
-msgid ".bmp"
+msgid ".xyz"
 msgstr ""
 
 msgid "FT-Lab files"
@@ -148,14 +172,17 @@ msgstr "Fichiers RAW sans en-tête"
 msgid ".raw"
 msgstr ""
 
+msgid "Thales Pixium FXD files, and the writing of Dürr NDT XYZ files, are supported by the built-in image formats plugin (``datalab_imageformats``)."
+msgstr "Les fichiers Thales Pixium FXD, ainsi que l'écriture des fichiers Dürr NDT XYZ, sont pris en charge par le plugin intégré de formats d'image (``datalab_imageformats``)."
+
 msgid "When opening a headerless RAW file (``.raw``), DataLab displays a **RAW image import** dialog to describe its binary layout: pixel data type, image width and height, offset to the first image, number of images, gap between consecutive images, byte order, and the **White is zero** option (which displays the imported image with an inverted gray colormap without altering pixel values). Multi-image files create one image per frame. When several RAW files are opened at once, DataLab asks whether to apply the same import parameters to all of them or to set the parameters of each file individually."
 msgstr "À l'ouverture d'un fichier RAW sans en-tête (``.raw``), DataLab affiche une boîte de dialogue **Import d'image RAW** permettant de décrire sa structure binaire : type de données des pixels, largeur et hauteur de l'image, décalage avant la première image, nombre d'images, espacement entre images consécutives, ordre des octets, ainsi que l'option **Blanc à zéro** (qui affiche l'image importée avec une palette de niveaux de gris inversée sans modifier les valeurs des pixels). Les fichiers multi-images créent une image par trame. Lorsque plusieurs fichiers RAW sont ouverts simultanément, DataLab demande s'il faut appliquer les mêmes paramètres d'import à tous les fichiers ou définir les paramètres de chaque fichier individuellement."
 
 msgid "DataLab also supports any image format that can be read by the `imageio` library, provided that the associated plugin(s) are installed (see `imageio documentation <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) and that the output NumPy array data type and shape are supported by DataLab."
 msgstr "DataLab prend également en charge tout format d'image pouvant être lu par la bibliothèque `imageio`, à condition que le(s) plugin(s) associé(s) soient installé(s) (voir `documentation imageio <https://imageio.readthedocs.io/en/stable/formats/index.html>`_) et que le type de données et la forme du tableau NumPy de sortie soient pris en charge par DataLab."
 
-msgid "To add a new file format, you may use the `imageio_formats` entry of DataLab configuration file. This entry is a formatted like the `IMAGEIO_FORMATS` object which represents the natively supported formats:"
-msgstr "Pour ajouter un nouveau format de fichier, vous pouvez utiliser l'entrée `imageio_formats` du fichier de configuration de DataLab. Cette entrée est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats pris en charge nativement :"
+msgid "To add a new file format, you may set the ``imageio_formats`` option of the Sigima library (``sigima.config.options.imageio_formats``), for example from a plugin. This option is formatted like the `IMAGEIO_FORMATS` object which represents the natively supported formats (formats added this way can only be opened, not saved):"
+msgstr "Pour ajouter un nouveau format de fichier, vous pouvez définir l'option ``imageio_formats`` de la bibliothèque Sigima (``sigima.config.options.imageio_formats``), par exemple depuis un plugin. Cette option est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats pris en charge nativement (les formats ajoutés de cette manière peuvent seulement être ouverts, pas enregistrés) :"
 
 msgid "Built-in immutable sequence."
 msgstr "Séquence immuable intégrée."
@@ -175,8 +202,8 @@ msgstr "Ouvrir plusieurs images depuis un répertoire spécifié."
 msgid "Save image"
 msgstr "Enregistrer l'image"
 
-msgid "Save current image (see \"Open image\" supported filetypes; writing ``.raw`` files is not supported)."
-msgstr "Enregistre l'image courante (voir les types de fichiers pris en charge dans « Ouvrir une image » ; l'écriture de fichiers ``.raw`` n'est pas prise en charge)."
+msgid "Save current image to the following supported filetypes (the other file types listed in \"Open image\" can only be opened):"
+msgstr "Enregistre l'image courante dans les types de fichiers pris en charge suivants (les autres types de fichiers listés dans \"Ouvrir une image\" peuvent seulement être ouverts) :"
 
 msgid "After choosing the destination file, DataLab opens an **Export image** dialog tailored to the selected file format, with a live preview of the exported image (displayed in gray levels as it will be read back from the file):"
 msgstr "Après le choix du fichier de destination, DataLab ouvre une boîte de dialogue **Exporter l'image** adaptée au format de fichier sélectionné, avec un aperçu en direct de l'image exportée (affichée en niveaux de gris telle qu'elle sera relue depuis le fichier) :"
@@ -202,17 +229,17 @@ msgstr "Lorsque vous sélectionnez \"Enregistrer dans un répertoire...\" dans l
 msgid "**Directory**: Choose the target directory where images will be saved"
 msgstr "**Répertoire** : Choisissez le répertoire cible où les images seront enregistrées."
 
-msgid "**Filename pattern**: Define a pattern for the filenames using Python format strings"
-msgstr "**Nom de fichier** : Définissez un modèle pour les noms de fichiers en utilisant des chaînes de format Python."
+msgid "**Basename pattern**: Define a pattern for the filenames using Python format strings (the **Help** button describes the available placeholders)"
+msgstr "**Modèle de nom de base** : Définissez un modèle pour les noms de fichiers en utilisant des chaînes de format Python (le bouton **Aide** décrit les champs disponibles)"
 
-msgid "**File extension**: Select the output format (.png, .tiff, .h5ima, etc.)"
-msgstr "**Extension de fichier** : Sélectionnez le format de sortie (.png, .tiff, .h5ima, etc.)."
+msgid "**Extension**: Select the output format (.png, .tiff, .h5ima, etc.)"
+msgstr "**Extension** : Sélectionnez le format de sortie (.png, .tiff, .h5ima, etc.)"
 
 msgid "**Overwrite**: Choose whether to overwrite existing files"
 msgstr "**Écraser** : Choisissez si vous souhaitez écraser les fichiers existants."
 
-msgid "**Preview**: See the list of files that will be created (with object IDs)"
-msgstr "**Aperçu** : Voir la liste des fichiers qui seront créés (avec les ID d'objet)."
+msgid "**Preview**: See the list of files that will be created (each file name is preceded by the group and the title of the corresponding image)"
+msgstr "**Aperçu** : Voir la liste des fichiers qui seront créés (chaque nom de fichier est précédé du groupe et du titre de l'image correspondante)"
 
 msgid "The filename pattern supports the following placeholders:"
 msgstr "Le modèle de nom de fichier prend en charge les espaces réservés suivants :"
@@ -230,8 +257,8 @@ msgid "``{count}``: Total number of selected images"
 msgstr "``{count}``: Nombre total d'images sélectionnées"
 
 #, python-brace-format
-msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``, ``{zlabel}``, ``{zunit}``: Axis labels and units"
-msgstr "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``, ``{zlabel}``, ``{zunit}``: Étiquettes et unités des axes"
+msgid "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Axis labels and units"
+msgstr "``{xlabel}``, ``{xunit}``, ``{ylabel}``, ``{yunit}``: Étiquettes et unités des axes"
 
 #, python-brace-format
 msgid "``{metadata[key]}``: Access metadata values"
@@ -268,14 +295,20 @@ msgstr "La deuxième étape consiste à configurer l'importation et à prévisua
 msgid "**Delimiter**: The character used to separate the values in the text file."
 msgstr "**Délimiteur** : Le caractère utilisé pour séparer les valeurs dans le fichier texte."
 
+msgid "**Decimal**: The decimal separator (point or comma)."
+msgstr "**Décimal** : Le séparateur décimal (point ou virgule)."
+
 msgid "**Comments**: The character used to indicate that the line is a comment and should be ignored."
 msgstr "**Commentaires** : Le caractère utilisé pour indiquer que la ligne est un commentaire et doit être ignorée."
 
 msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
 msgstr "**Lignes à sauter** : Le nombre de lignes à sauter au début du fichier."
 
-msgid "**Maximum Number of Rows**: The maximum number of rows to import. If the file contains more rows, they will be ignored."
-msgstr "**Nombre maximum de lignes** : Le nombre maximum de lignes à importer. Si le fichier contient plus de lignes, elles seront ignorées."
+msgid "**Max. nb of rows**: The maximum number of rows to import. If the file contains more rows, they will be ignored."
+msgstr "**Nb max. de lignes** : Le nombre maximum de lignes à importer. Si le fichier contient plus de lignes, elles seront ignorées."
+
+msgid "**Header**: The row containing the column names, if any (none, inferred from the data, or first row)."
+msgstr "**En-tête** : La ligne contenant les noms des colonnes, le cas échéant (aucune, déduite des données, ou première ligne)."
 
 msgid "**Transpose**: If checked, the rows and columns will be transposed."
 msgstr "**Transposer** : Si coché, les lignes et les colonnes seront transposées."
