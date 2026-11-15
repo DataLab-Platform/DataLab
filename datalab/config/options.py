@@ -19,7 +19,7 @@ Design notes
   :class:`~sigimax.config.SigimaXOptions`. DataLab only *adds* its own options.
 - The former ``[macro]`` and ``[ai]`` INI sections are flattened with a
   ``macro_``/``ai_`` prefix to avoid generic-name collisions in the flat
-  namespace (e.g. ``ai_enabled``, ``ai_provider``).
+  namespace (e.g. ``ai_provider``, ``ai_model``).
 - :meth:`DataLabOptions.to_dict` / :meth:`DataLabOptions.from_dict` are
     overridden so that fields whose ``get``/``set`` transform the stored value
     (config paths, working directory, DataSet options) are (de)serialized using
@@ -563,14 +563,6 @@ class DataLabOptions(SigimaXOptions):
         # AI assistant options — DataLab-specific (former [ai] section, prefixed)
         # ===================================================================
 
-        self.ai_enabled = TypedOptionField(
-            self,
-            "ai_enabled",
-            category="ai",
-            default=False,
-            expected_type=bool,
-            description="If True, enable the AI assistant.",
-        )
         self.ai_provider = TypedOptionField(
             self,
             "ai_provider",

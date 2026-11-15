@@ -26,6 +26,7 @@ from datalab.aiassistant.tools.builtin import (
 from datalab.aiassistant.tools.registry import ToolResult
 from datalab.aiassistant.widgets.toolconfirmdialog import ToolConfirmDialog
 from datalab.config import Conf, _
+from datalab.gui import main as main_module
 from datalab.tests import datalab_test_app_context
 
 MACRO_TITLE = "Generate super-Gaussian"
@@ -210,3 +211,17 @@ def test_confirm_dialog_tells_when_the_macro_will_not_run(autorun) -> None:
             assert not any(note in text for text in labels)
             assert ok_button.text() == _("Run")
         dialog.deleteLater()
+
+
+def test_settings_button_shows_ai_settings(monkeypatch) -> None:
+    """The Settings button of the panel opens the AI Assistant settings tab."""
+    tabs = []
+
+    def fake_edit_settings(_parent, tab=None) -> list[str]:
+        tabs.append(tab)
+        return []
+
+    monkeypatch.setattr(main_module, "edit_settings", fake_edit_settings)
+    with datalab_test_app_context(console=False) as win:
+        win.aiassistantpanel.settings_button.click()
+    assert tabs == ["ai"]

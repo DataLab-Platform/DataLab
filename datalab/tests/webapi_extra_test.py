@@ -260,6 +260,35 @@ def test_workspace_adapter_overwrite_replaces_existing_object() -> None:
 
 
 @pytest.mark.usefixtures("qt_app")
+@pytest.mark.parametrize("overwrite", [False, True])
+def test_workspace_adapter_refuses_resident_instance(overwrite: bool) -> None:
+    """Adding an instance already in the workspace changes nothing.
+
+    Replacing an object by its own instance used to give it a new UUID, then fail
+    to remove the original entry, leaving two entries for one object.
+    """
+    resident = _make_signal("Resident", n=10)
+    resident_uuid = get_uuid(resident)
+    signal_panel = make_panel([resident])
+    signal_panel._add_object = Mock()  # pylint: disable=protected-access
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, make_panel([])))
+
+    with pytest.raises(ValueError, match="already in the workspace"):
+        adapter.add_object(resident, overwrite=overwrite)
+
+    assert signal_panel.objmodel == [resident]
+    assert get_uuid(resident) == resident_uuid
+    signal_panel._add_object.assert_not_called()  # pylint: disable=protected-access
+    signal_panel.SIG_OBJECT_REMOVED.emit.assert_not_called()
+
+    # A copy of the resident object can replace it
+    signal_panel._add_object = signal_panel.objmodel.append  # pylint: disable=W0212
+    adapter.add_object(resident.copy(), overwrite=True)
+    assert len(signal_panel.objmodel) == 1
+    assert signal_panel.objmodel[0] is not resident
+
+
+@pytest.mark.usefixtures("qt_app")
 def test_workspace_adapter_calc_errors() -> None:
     """Only unknown computation functions are reported as such (HTTP 404).
 

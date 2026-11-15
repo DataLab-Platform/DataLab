@@ -47,6 +47,12 @@ msgstr "Historique…"
 msgid "Browse, load or delete past conversations."
 msgstr "Parcourir, charger ou supprimer les conversations passées."
 
+msgid "Settings…"
+msgstr "Préférences…"
+
+msgid "Open the AI Assistant tab of the settings (provider, model, API key…)."
+msgstr "Ouvrir l'onglet Assistant IA des préférences (fournisseur, modèle, clé d'API…)."
+
 msgid "Idle"
 msgstr "Inactif"
 
@@ -62,8 +68,8 @@ msgstr "Annuler la requête en cours (Échap)."
 msgid "Send"
 msgstr "Envoyer"
 
-msgid "AI Assistant ready. Configure your provider in the Edit > Preferences dialog (AI Assistant tab) before sending the first message."
-msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > Préférences (onglet Assistant IA) avant d'envoyer le premier message."
+msgid "AI Assistant ready. Configure your provider with the Settings… button (AI Assistant tab of File > Settings) before sending the first message. The provider is only contacted when you send a message or test the connection."
+msgstr "Assistant IA prêt. Configurez votre fournisseur avec le bouton Préférences… (onglet Assistant IA de Fichier > Préférences) avant d'envoyer le premier message. Le fournisseur n'est contacté que lorsque vous envoyez un message ou testez la connexion."
 
 msgid "You"
 msgstr "Vous"
@@ -126,11 +132,11 @@ msgstr ""
 msgid ""
 "No API key configured.\n"
 "\n"
-"Open the Edit > Preferences dialog (AI Assistant tab) to enter your provider credentials, or select the 'mock' provider for offline testing."
+"Click the Settings… button of the AI Assistant panel (AI Assistant tab of File > Settings) to enter your provider credentials, or select the 'mock' provider for offline testing."
 msgstr ""
 "Aucune clé d'API configurée.\n"
 "\n"
-"Ouvrez le menu Edition > Préférences (onglet Assistant IA) pour entrer les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
+"Cliquez sur le bouton Préférences… du panneau Assistant IA (onglet Assistant IA de Fichier > Préférences) pour entrer les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
 
 msgid "Conversation reset."
 msgstr "Conversation réinitialisée."
@@ -235,9 +241,6 @@ msgstr "Fichiers Markdown (*.md);;Tous les fichiers (*)"
 #, python-format
 msgid "Could not write file: %s"
 msgstr "Impossible d'écrire le fichier : %s"
-
-msgid "Enable AI Assistant"
-msgstr "Activer l'assistant IA"
 
 msgid "Provider"
 msgstr "Fournisseur"
