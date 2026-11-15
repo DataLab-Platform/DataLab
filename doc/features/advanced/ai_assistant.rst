@@ -22,8 +22,9 @@ signals and images, and write and run Python macros on your behalf.
 Getting started
 ---------------
 
-1. Open ``File > Settings``, go to the **AI Assistant** tab and enable the
-   assistant (see :ref:`ai-assistant-settings` for the complete list of options).
+1. Open ``File > Settings`` and go to the **AI Assistant** tab, or click the
+   **Settings...** button of the AI Assistant panel (see
+   :ref:`ai-assistant-settings` for the complete list of options).
 2. Choose a provider and a model, then set the API key — or, better, leave the
    field empty and export the provider's standard environment variable.
 3. Click **Test connection** to check the endpoint before starting.
@@ -61,6 +62,8 @@ The panel is made of a toolbar, the conversation view and an input box:
 - **History...**: browse past conversations, load, rename or delete them, and
   **export** one as a Markdown file. Conversations are stored in the DataLab
   user configuration directory.
+- **Settings...**: open the **AI Assistant** tab of the settings dialog
+  (provider, model, API key...).
 - **Send** / **Stop**: send the current message, or interrupt an ongoing
   request. Requests run in a background thread, so the interface stays
   responsive.
@@ -162,6 +165,11 @@ the refusal to the model, which may then propose something else.
 Privacy and security
 --------------------
 
+- **No request without your action**: the assistant contacts its provider only
+  when you send a message in the panel, or when you click **Test connection** in
+  the settings. Opening the panel or DataLab sends nothing. Note that with the
+  ``openai`` provider, a key found in the ``OPENAI_API_KEY`` environment
+  variable is used even if the *API key* field is empty.
 - **No telemetry**: DataLab does not log or forward the content of your
   conversations anywhere else than to the provider you configured.
 - **Local providers**: to keep everything on your machine, point the *Base URL*

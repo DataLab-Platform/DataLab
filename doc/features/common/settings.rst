@@ -418,18 +418,13 @@ AI Assistant
 ------------
 
 The AI Assistant settings tab configures the built-in conversational assistant
-(see :ref:`ai_assistant`). Unchecking **Enable AI Assistant** makes the other
-fields inactive. When the dialog opens with the assistant already disabled,
-the fields may initially remain editable; checking and unchecking the option
-refreshes their state.
+(see :ref:`ai_assistant`). The **Settings...** button of the AI Assistant panel
+opens this tab directly. The assistant contacts its provider only when you send
+a message or click **Test connection**.
 
 .. figure:: /images/shots/settings_ai.png
 
     The AI Assistant settings tab.
-
-**Enable AI Assistant**
-    Enable the AI Assistant panel. When disabled, no request is ever sent to an
-    external service.
 
 **Provider**
     Backend used to serve the model. ``openai`` covers every OpenAI-compatible

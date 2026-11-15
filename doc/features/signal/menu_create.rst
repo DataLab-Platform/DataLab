@@ -143,6 +143,11 @@ Create a new signal from various models:
 For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
 above the baseline :math:`y_0`, expressed in the signal's Y unit.
 
+For the sine, cosine, sawtooth, triangle, square and cardinal sine signals, the
+phase :math:`\phi` is entered in degrees in the creation dialog, while the
+formulas above use it in radians. The initial phase :math:`\phi_0` of the linear
+chirp is entered in radians.
+
 The cardinal sine uses the unnormalized definition
 :math:`\sinc(u) = \dfrac{\sin(u)}{u}`, with :math:`\sinc(0) = 1`, as the 2D sinc
 image: when :math:`\phi = 0`, its peak is at :math:`x = 0` and its first zeros

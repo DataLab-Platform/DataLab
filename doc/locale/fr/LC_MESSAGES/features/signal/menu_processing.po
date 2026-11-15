@@ -84,8 +84,8 @@ msgstr "Utiliser un signal de référence étalonné pour recalibrer les donnée
 msgid "Combining signals where one contains calibration points"
 msgstr "Combiner des signaux où l'un contient des points d'étalonnage"
 
-msgid "The two signals must have the same number of points. The operation directly uses the Y arrays without interpolation."
-msgstr "Les deux signaux doivent avoir le même nombre de points. L'opération utilise directement les tableaux Y sans interpolation."
+msgid "The two signals must have the same number of points. The operation directly uses the Y arrays without interpolation. With Sigima 1.4.1 or later, if the first signal has a region of interest, only its samples within this region are kept, and the result has no region of interest."
+msgstr "Les deux signaux doivent avoir le même nombre de points. L'opération utilise directement les tableaux Y sans interpolation. Avec Sigima 1.4.1 ou ultérieur, si le premier signal possède une région d'intérêt, seuls ses échantillons situés dans cette région sont conservés, et le résultat n'a pas de région d'intérêt."
 
 msgid "Input"
 msgstr "Entrée"
@@ -123,8 +123,8 @@ msgstr "Rééchantillonnant les deux signaux sur une grille X commune dans ce ch
 msgid "Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)"
 msgstr "Utilisant les valeurs Y rééchantillonnées comme coordonnées (Y du premier signal comme X, Y du second signal comme Y)"
 
-msgid "With Sigima 1.4.1 or later, the common grid is uniform, with the smaller of the two input point counts, and non-overlapping domains are rejected. Earlier Sigima versions may extend an operand beyond its original domain in DataLab."
-msgstr "Avec Sigima 1.4.1 ou ultérieur, la grille commune est uniforme et utilise le plus petit des nombres de points des deux signaux ; les domaines sans recouvrement sont refusés. Les versions antérieures de Sigima peuvent prolonger un opérande au-delà de son domaine d'origine dans DataLab."
+msgid "With Sigima 1.4.1 or later, signals sharing the same X grid are paired without interpolation; otherwise, the common grid is uniform, with the smaller of the two input point counts. Non-overlapping domains and signals with different X units are rejected. If the first signal has a region of interest, only the points within it are kept, and the result has no region of interest. The X and Y labels and units of the result are those of the Y axes of the first and second signals. Earlier Sigima versions may extend an operand beyond its original domain in DataLab."
+msgstr "Avec Sigima 1.4.1 ou ultérieur, les signaux partageant la même grille X sont appariés sans interpolation ; sinon, la grille commune est uniforme et utilise le plus petit des nombres de points des deux signaux. Les domaines sans recouvrement et les signaux dont les unités X diffèrent sont refusés. Si le premier signal possède une région d'intérêt, seuls les points qui s'y trouvent sont conservés, et le résultat n'a pas de région d'intérêt. Les libellés et unités X et Y du résultat sont ceux des axes Y du premier et du second signal. Les versions antérieures de Sigima peuvent prolonger un opérande au-delà de son domaine d'origine dans DataLab."
 
 msgid "This is different from \"Replace X by other signal's Y\" as it performs interpolation to handle signals with different X arrays."
 msgstr "Ceci est différent de \"Remplacer X par le Y d'un autre signal\" car il effectue une interpolation pour gérer les signaux avec des tableaux X différents."

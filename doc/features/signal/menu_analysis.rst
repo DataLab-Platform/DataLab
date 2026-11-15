@@ -88,6 +88,14 @@ Compute the Full Width at Half-Maximum (FWHM) of selected signal, using one of t
 
     The computed result is displayed as an annotated segment.
 
+.. note::
+
+    The **Zero-crossing** method (default) estimates the baseline and the amplitude
+    from the data: it is robust to noise, but it overestimates the width of smooth
+    peaks, e.g. by about 2.5 % to 7 % for a noise-free Gaussian peak, depending on
+    the baseline level. For a peak of known shape, prefer the corresponding fitting
+    method (**Gauss**, **Lorentz** or **Voigt**).
+
 Full width at 1/e²
 ^^^^^^^^^^^^^^^^^^
 
@@ -271,7 +279,7 @@ The analysis computes the following pulse characteristics:
     * - Polarity
       - Signal polarity (+1 for positive, -1 for negative pulses)
     * - Amplitude
-      - Absolute difference between the baseline and plateau means; for a square pulse, peak-to-peak is used as a fallback if polarity cannot be determined
+      - Absolute difference between the baseline and plateau means; the analysis requires usable baseline and plateau regions
     * - Offset
       - Mean of the initial baseline, with its original sign in Sigima 1.4.1 or later
     * - Rise time
@@ -291,7 +299,7 @@ The analysis computes the following pulse characteristics:
 
 .. note::
 
-    Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions.
+    Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions. For smooth peaks (e.g. Gaussian ones), the amplitude is underestimated and the FWHM overestimated by several percent, depending on the baseline level: for a peak of known shape, prefer a fitting method.
 
 Show results
 ^^^^^^^^^^^^

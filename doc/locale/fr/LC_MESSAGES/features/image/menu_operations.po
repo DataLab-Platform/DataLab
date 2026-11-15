@@ -368,8 +368,8 @@ msgid ""
 "\n"
 msgstr ""
 
-msgid "If no ROI is defined, all pixels above the threshold are corrected. With Sigima 1.4.1 or later, a zero flat-field value at a corrected pixel is rejected; zero values outside the ROI or at pixels excluded by the threshold are allowed."
-msgstr "Si aucune ROI n'est définie, tous les pixels au-dessus du seuil sont corrigés. Avec Sigima 1.4.1 ou ultérieur, une valeur nulle du champ plat pour un pixel corrigé est refusée ; les valeurs nulles hors de la ROI ou aux pixels exclus par le seuil sont autorisées."
+msgid "If no ROI is defined, all pixels above the threshold are corrected. With Sigima 1.4.1 or later, a zero flat-field value at a corrected pixel is rejected; zero values outside the ROI or at pixels excluded by the threshold are allowed. Flat-field values close to zero strongly amplify the noise of the corrected pixels. With Sigima 1.4.1 or later, correcting an integer image gives a floating-point image, instead of wrapping the values exceeding the range of the image type."
+msgstr "Si aucune ROI n'est définie, tous les pixels au-dessus du seuil sont corrigés. Avec Sigima 1.4.1 ou ultérieur, une valeur nulle du champ plat pour un pixel corrigé est refusée ; les valeurs nulles hors de la ROI ou aux pixels exclus par le seuil sont autorisées. Des valeurs du champ plat proches de zéro amplifient fortement le bruit des pixels corrigés. Avec Sigima 1.4.1 ou ultérieur, la correction d'une image entière donne une image à valeurs flottantes, au lieu de replier les valeurs qui dépassent la plage du type de l'image."
 
 msgid "Raw image and flat field image are supposedly already corrected by performing a dark frame subtraction."
 msgstr "L'image brute et l'image d'homogénéité sont supposées avoir déjà été corrigées par soustraction d'image de noir.\"`n`"

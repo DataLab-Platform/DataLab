@@ -166,7 +166,9 @@ Minimum enclosing circle center
 With Sigima 1.4.1 or later, compute the smallest circle containing the physical
 centers of the pixels strictly above the midpoint of the image value range.
 The X and Y units must match. Earlier versions fit a contour and could leave
-selected pixel centers outside the circle.
+selected pixel centers outside the circle. A single isolated hot pixel above the
+threshold enlarges the circle: the result is not a robust measure of a beam
+width.
 
 2D peak detection
 ^^^^^^^^^^^^^^^^^

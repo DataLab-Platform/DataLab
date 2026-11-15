@@ -335,6 +335,10 @@ ignoring NaNs. For an image with no NaNs:
 If no ROI is defined, all pixels above the threshold are corrected. With Sigima
 1.4.1 or later, a zero flat-field value at a corrected pixel is rejected;
 zero values outside the ROI or at pixels excluded by the threshold are allowed.
+Flat-field values close to zero strongly amplify the noise of the corrected
+pixels. With Sigima 1.4.1 or later, correcting an integer image gives a
+floating-point image, instead of wrapping the values exceeding the range of the
+image type.
 
 .. note::
 

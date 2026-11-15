@@ -64,7 +64,9 @@ This feature is particularly useful for calibration scenarios, such as:
 - Combining signals where one contains calibration points
 
 The two signals must have the same number of points. The operation directly uses
-the Y arrays without interpolation.
+the Y arrays without interpolation. With Sigima 1.4.1 or later, if the first
+signal has a region of interest, only its samples within this region are kept,
+and the result has no region of interest.
 
 .. list-table::
     :header-rows: 1
@@ -88,9 +90,14 @@ This operation plots one signal as a function of another by:
 2. Resampling both signals onto a common X grid within that overlap
 3. Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)
 
-With Sigima 1.4.1 or later, the common grid is uniform, with the smaller of the
-two input point counts, and non-overlapping domains are rejected. Earlier Sigima
-versions may extend an operand beyond its original domain in DataLab.
+With Sigima 1.4.1 or later, signals sharing the same X grid are paired without
+interpolation; otherwise, the common grid is uniform, with the smaller of the
+two input point counts. Non-overlapping domains and signals with different X
+units are rejected. If the first signal has a region of interest, only the
+points within it are kept, and the result has no region of interest. The X and
+Y labels and units of the result are those of the Y axes of the first and
+second signals. Earlier Sigima versions may extend an operand beyond its
+original domain in DataLab.
 
 .. note::
 

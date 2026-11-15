@@ -184,9 +184,10 @@ DataLab vs DataLab-Web
 DataLab-Web shares the **computation engine** (Sigima) with the desktop application and
 exposes a curated subset of its processing catalog. The very same Sigima code — not a port —
 runs on CPython (desktop) and on Pyodide (browser). For operations available in both editions,
-compatible versions of Sigima give identical results, or results within the tolerance
-declared by the operation contract. The available operations and runtime environment differ
-between editions.
+compatible versions of Sigima use the same algorithms and parameters, but numerical
+equivalence depends on the inputs and the numerical environment. Most operation contracts
+declare an exact or tolerance-based comparison of replayed results; a few declare no
+comparison rule. The available operations and runtime environment differ between editions.
 
 .. list-table::
     :header-rows: 1

@@ -202,7 +202,10 @@ the ``Content-Disposition`` header using the RFC 5987 ``filename*`` form.
 
 The ``PUT /objects/{name}/data`` endpoint creates a new object with the given
 name, or returns ``409 Conflict`` if it already exists. Pass
-``?overwrite=true`` to atomically replace the existing object.
+``?overwrite=true`` to replace the existing object: the new object is added
+first, then the existing one is removed, so that the existing object is kept if
+the new one cannot be added. While the replacement is in progress, the workspace
+briefly contains both objects.
 
 Computation (Auth Required)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
