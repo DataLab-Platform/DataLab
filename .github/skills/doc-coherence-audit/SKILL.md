@@ -46,7 +46,8 @@ git -C <repo> describe --tags --always
 
 - Environment: DataLab and Sigima have a `.venv` and an `.env`; SigimaX uses DataLab's interpreter with `$env:PYTHONPATH = ".;..\guidata;..\PythonQwt;..\plotpy;..\Sigima"` (see `issue-pr-fusion` [repositories.md](../issue-pr-fusion/references/repositories.md)). Always set `$env:PYTHONIOENCODING = "utf-8"` and, for Qt code, `$env:QT_QPA_PLATFORM = "offscreen"`.
 - Previous audit: the most recent `doc-audit-*.md` in `$HOME\.copilot\doc-audits\`. Load its findings to classify each new finding as fixed, still present or new.
-- Known issues: list the open documentation issues to link the findings already reported instead of proposing duplicates: `gh issue list --repo <owner/repo> --state open --label documentation --limit 100 --json number,title`.
+- Decisions: read [decisions.md](./references/decisions.md). Do not report again an accepted finding unless a fact it cites has changed, and link the issues it lists instead of proposing them again.
+- Known issues: list all open issues (follow-ups are not always labelled `documentation`) to link the findings already reported instead of proposing duplicates: `gh issue list --repo <owner/repo> --state open --limit 200 --json number,title,labels`.
 - Incremental mode: `git -C <repo> diff --name-only <ref>..HEAD` (with a date, find the commit with `git rev-list -1 --before=<date> HEAD`), then map the changed files to the perimeters.
 
 Tell the user the scope, mode, branches and expected duration, then continue without waiting unless something is ambiguous (local changes, branch behind).
@@ -102,7 +103,7 @@ With the facts reported by the subagents and the automated checks, run the check
 ### 6. Consolidation
 
 - Deduplicate (same defect reported by several perimeters: keep one finding, cite all locations) and renumber by perimeter.
-- Classify against the previous audit (fixed, still present, new) and link the open issues already covering a finding.
+- Classify against the previous audit (fixed, still present, new) and link the open issues already covering a finding. Drop the findings accepted in [decisions.md](./references/decisions.md) whose facts are unchanged, and give their count.
 - Group the findings into follow-up proposals: one group per repository and topic, small enough for one PR; separate "documentation fix", "code fix" and "decision needed" (the documentation or the code may be the reference: say which one you recommend and why).
 
 ### 7. Report and Handover
@@ -110,6 +111,7 @@ With the facts reported by the subagents and the automated checks, run the check
 - Write the report with the structure of [report-template.md](./references/report-template.md) to `files/doc-audit-<YYYY-MM-DD>.md` in the session folder, and archive a copy in `$HOME\.copilot\doc-audits\` (outside the repositories: the next audit compares with it).
 - Present to the user: the summary table, the priorities (high-severity findings and code defects), the delta with the previous audit and the proposed follow-up groups. Do not create issues: propose them, and let the user choose the groups to deliver with `/issue-pr-fusion <model>`.
 - If the repository tree changed (new pages, perimeters to split) or a new class of cross-project defect was found, propose the corresponding update of this skill's references.
+- When the user decides not to fix a finding, or opens an issue to track it, record it in [decisions.md](./references/decisions.md) so that the next audit does not propose it again.
 
 ### 8. Cleanup
 
