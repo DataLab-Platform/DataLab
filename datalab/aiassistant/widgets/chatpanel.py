@@ -153,8 +153,16 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self.history_button = QW.QPushButton(get_icon("history.svg"), _("History…"))
         self.history_button.setToolTip(_("Browse, load or delete past conversations."))
         self.history_button.clicked.connect(self._on_open_history)
+        self.settings_button = QW.QPushButton(
+            get_icon("libre-gui-settings.svg"), _("Settings…")
+        )
+        self.settings_button.setToolTip(
+            _("Open the AI Assistant tab of the settings (provider, model, API key…).")
+        )
+        self.settings_button.clicked.connect(self._on_open_settings)
         toolbar.addWidget(self.new_button)
         toolbar.addWidget(self.history_button)
+        toolbar.addWidget(self.settings_button)
         toolbar.addStretch(1)
         self.usage_label = QW.QLabel("")
         self.usage_label.setStyleSheet(
@@ -206,9 +214,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
 
         self._append_system(
             _(
-                "AI Assistant ready. Configure your provider in the "
-                "Edit > Preferences dialog (AI Assistant tab) before "
-                "sending the first message."
+                "AI Assistant ready. Configure your provider with the Settings… "
+                "button (AI Assistant tab of File > Settings) before sending the "
+                "first message. The provider is only contacted when you send a "
+                "message or test the connection."
             )
         )
 
@@ -426,6 +435,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self.input_edit.setEnabled(not busy)
         self.new_button.setEnabled(not busy)
         self.history_button.setEnabled(not busy)
+        self.settings_button.setEnabled(not busy)
         self.status_label.setText(_("Thinking…") if busy else _("Idle"))
 
     # ----------------------------------------------------- token usage
@@ -545,9 +555,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
                 _("AI Assistant"),
                 _(
                     "No API key configured.\n\n"
-                    "Open the Edit > Preferences dialog (AI Assistant tab) "
-                    "to enter your provider credentials, or select the "
-                    "'mock' provider for offline testing."
+                    "Click the Settings… button of the AI Assistant panel "
+                    "(AI Assistant tab of File > Settings) to enter your "
+                    "provider credentials, or select the 'mock' provider for "
+                    "offline testing."
                 )
                 + env_hint,
             )
@@ -611,11 +622,15 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         if dialog.exec_() and dialog.selected_id is not None:
             self._load_conversation(dialog.selected_id)
 
+    def _on_open_settings(self) -> None:
+        """Show the AI Assistant tab of the settings dialog"""
+        self.mainwindow.show_settings("ai")
+
     def invalidate_controller(self) -> None:
         """Drop the cached controller so the next prompt rebuilds it.
 
         Called whenever AI assistant settings are modified through
-        DataLab's main Settings dialog (Edit > Preferences).
+        DataLab's main Settings dialog (File > Settings).
         """
         self._controller = None
 

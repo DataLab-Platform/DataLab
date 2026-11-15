@@ -170,8 +170,8 @@ msgstr "Un usage courant consiste à utiliser l'application de bureau sur votre 
 msgid "DataLab vs DataLab-Web"
 msgstr "DataLab et DataLab-Web"
 
-msgid "DataLab-Web shares the **computation engine** (Sigima) with the desktop application and exposes a curated subset of its processing catalog. The very same Sigima code — not a port — runs on CPython (desktop) and on Pyodide (browser). For operations available in both editions, compatible versions of Sigima give identical results, or results within the tolerance declared by the operation contract. The available operations and runtime environment differ between editions."
-msgstr "DataLab-Web partage le **moteur de calcul** (Sigima) avec l'application de bureau, mais n'en expose qu'une sélection du catalogue de traitements. C'est le même code Sigima — et non un portage — qui s'exécute sur CPython (bureau) et sur Pyodide (navigateur). Pour les opérations disponibles dans les deux éditions, des versions compatibles de Sigima donnent des résultats identiques, ou dans la tolérance déclarée par le contrat de l'opération. Les opérations disponibles et l'environnement d'exécution diffèrent selon l'édition."
+msgid "DataLab-Web shares the **computation engine** (Sigima) with the desktop application and exposes a curated subset of its processing catalog. The very same Sigima code — not a port — runs on CPython (desktop) and on Pyodide (browser). For operations available in both editions, compatible versions of Sigima use the same algorithms and parameters, but numerical equivalence depends on the inputs and the numerical environment. Most operation contracts declare an exact or tolerance-based comparison of replayed results; a few declare no comparison rule. The available operations and runtime environment differ between editions."
+msgstr "DataLab-Web partage le **moteur de calcul** (Sigima) avec l'application de bureau, mais n'en expose qu'une sélection du catalogue de traitements. C'est le même code Sigima — et non un portage — qui s'exécute sur CPython (bureau) et sur Pyodide (navigateur). Pour les opérations disponibles dans les deux éditions, des versions compatibles de Sigima utilisent les mêmes algorithmes et paramètres, mais l'équivalence numérique dépend des données d'entrée et de l'environnement numérique. La plupart des contrats d'opération déclarent une comparaison exacte ou avec tolérance des résultats rejoués ; quelques-uns ne déclarent aucune règle de comparaison. Les opérations disponibles et l'environnement d'exécution diffèrent selon l'édition."
 
 msgid "Topic"
 msgstr "Sujet"
@@ -277,4 +277,3 @@ msgstr "Les deux éditions utilisent le moteur de calcul Sigima et peuvent écha
 
 msgid "Plugins are largely portable between the desktop application and DataLab-Web, with a few constraints related to the browser runtime. See :ref:`plugins_web` for details."
 msgstr "Les plugins sont en grande partie portables entre l'application de bureau et DataLab-Web, avec quelques contraintes liées à l'environnement d'exécution du navigateur. Voir :ref:`plugins_web` pour plus de détails."
-

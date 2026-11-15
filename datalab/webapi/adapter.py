@@ -358,15 +358,18 @@ class WorkspaceAdapter(QObject):
     def add_object(self, obj: DataObject, overwrite: bool = False) -> None:
         """Add an object to the workspace.
 
-        This operation is marshaled to the Qt main thread as a single atomic
-        operation to ensure thread safety.
+        This operation is marshaled to the Qt main thread to ensure thread safety.
+        When replacing an object, the new object is added before the existing one
+        is removed, so that the existing object is kept if the addition fails.
 
         Args:
-            obj: Object to add.
+            obj: Object to add (a new instance: the object is given a new
+             identity in the workspace).
             overwrite: If True, replace existing object with same name.
 
         Raises:
-            ValueError: If object exists and overwrite is False.
+            ValueError: If object exists and overwrite is False, or if this
+             instance is already in the workspace.
         """
         self._ensure_main_window()
         name = obj.title
@@ -376,6 +379,17 @@ class WorkspaceAdapter(QObject):
             raise TypeError(f"Unsupported object type: {obj_type}")
 
         def do_add() -> None:
+            panel = (
+                self._main_window.signalpanel
+                if obj_type == "SignalObj"
+                else self._main_window.imagepanel
+            )
+            # Adding gives the object a new identity: a resident instance would be
+            # registered twice and lose the UUID of its current entry
+            if any(resident is obj for resident in panel.objmodel):
+                raise ValueError(
+                    f"Object '{name}' is already in the workspace: add a copy instead"
+                )
             try:
                 existing_uuid = get_uuid(self.find_object(name)[2])
             except KeyError:

@@ -1489,7 +1489,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             _("Settings..."),
             icon=get_icon("libre-gui-settings.svg"),
             tip=_("Open settings dialog"),
-            triggered=self.__edit_settings,
+            triggered=lambda: self.show_settings(),
         )
         self.capsule_action = create_action(
             self,
@@ -2881,9 +2881,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     # Settings changes are intentionally dispatched in one place because each
     # option may trigger a specific live UI update or panel refresh.
-    def __edit_settings(self) -> None:  # pylint: disable=too-many-branches,too-many-statements
-        """Edit settings"""
-        changed_options = edit_settings(self)
+    def show_settings(self, tab: str | None = None) -> None:  # pylint: disable=too-many-branches,too-many-statements
+        """Show the settings dialog, then apply the changed settings
+
+        Args:
+            tab: Key of the settings tab to show first (e.g. "ai"), or None for
+             the first tab
+        """
+        changed_options = edit_settings(self, tab)
         sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
         refresh_signal_panel = refresh_image_panel = False

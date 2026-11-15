@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -251,8 +250,8 @@ msgid "The ``GET /objects/{name}/data`` endpoint streams an NPZ archive as ``app
 msgstr "Le point d'accès ``GET /objects/{name}/data`` diffuse une archive NPZ sous le type ``application/x-npz``. Passez ``?compress=false`` pour désactiver la compression deflate du ZIP lorsque le client (par exemple un notebook) préfère un transfert plus rapide au prix d'une charge utile plus volumineuse. Les noms d'objets contenant des caractères non ASCII sont renvoyés dans l'en-tête ``Content-Disposition`` au moyen de la forme ``filename*`` de la RFC 5987."
 
 #, python-brace-format
-msgid "The ``PUT /objects/{name}/data`` endpoint creates a new object with the given name, or returns ``409 Conflict`` if it already exists. Pass ``?overwrite=true`` to atomically replace the existing object."
-msgstr "Le point d'accès ``PUT /objects/{name}/data`` crée un nouvel objet portant le nom indiqué, ou renvoie ``409 Conflict`` s'il existe déjà. Passez ``?overwrite=true`` pour remplacer l'objet existant de manière atomique."
+msgid "The ``PUT /objects/{name}/data`` endpoint creates a new object with the given name, or returns ``409 Conflict`` if it already exists. Pass ``?overwrite=true`` to replace the existing object: the new object is added first, then the existing one is removed, so that the existing object is kept if the new one cannot be added. While the replacement is in progress, the workspace briefly contains both objects."
+msgstr "Le point d'accès ``PUT /objects/{name}/data`` crée un nouvel objet portant le nom indiqué, ou renvoie ``409 Conflict`` s'il existe déjà. Passez ``?overwrite=true`` pour remplacer l'objet existant : le nouvel objet est d'abord ajouté, puis l'objet existant est supprimé, de sorte que l'objet existant est conservé si le nouveau ne peut pas être ajouté. Pendant le remplacement, l'espace de travail contient brièvement les deux objets."
 
 msgid "Computation (Auth Required)"
 msgstr "Calcul (authentification requise)"

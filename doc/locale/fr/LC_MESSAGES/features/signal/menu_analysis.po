@@ -111,6 +111,10 @@ msgstr "Ajuste les données à un modèle de Voigt en utilisant un algorithme de
 msgid "The computed result is displayed as an annotated segment."
 msgstr "Le résultat du calcul est affiché sous la forme d'un segment annoté."
 
+#, python-format
+msgid "The **Zero-crossing** method (default) estimates the baseline and the amplitude from the data: it is robust to noise, but it overestimates the width of smooth peaks, e.g. by about 2.5 % to 7 % for a noise-free Gaussian peak, depending on the baseline level. For a peak of known shape, prefer the corresponding fitting method (**Gauss**, **Lorentz** or **Voigt**)."
+msgstr "La méthode **Passage par zéro** (par défaut) estime la ligne de base et l'amplitude à partir des données : elle est robuste au bruit, mais surestime la largeur des pics lisses, par exemple d'environ 2,5 % à 7 % pour un pic gaussien sans bruit, selon le niveau de la ligne de base. Pour un pic de forme connue, préférez la méthode d'ajustement correspondante (**Gauss**, **Lorentz** ou **Voigt**)."
+
 msgid "Full width at 1/e²"
 msgstr "Largeur à 1/e²"
 
@@ -341,8 +345,8 @@ msgstr "Polarité du signal (+1 pour les impulsions positives, -1 pour les néga
 msgid "Amplitude"
 msgstr "Amplitude"
 
-msgid "Absolute difference between the baseline and plateau means; for a square pulse, peak-to-peak is used as a fallback if polarity cannot be determined"
-msgstr "Différence absolue entre les moyennes de la ligne de base et du plateau ; pour une impulsion carrée, l'amplitude crête à crête est utilisée si la polarité ne peut pas être déterminée"
+msgid "Absolute difference between the baseline and plateau means; the analysis requires usable baseline and plateau regions"
+msgstr "Différence absolue entre les moyennes de la ligne de base et du plateau ; l'analyse nécessite des régions de ligne de base et de plateau exploitables"
 
 msgid "Offset"
 msgstr "Décalage"
@@ -394,8 +398,8 @@ msgstr "Plages de ligne de base"
 msgid "Extracted start and end baseline boundary coordinates"
 msgstr "Coordonnées des limites de ligne de base de début et de fin extraites"
 
-msgid "Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions."
-msgstr "Les résultats sont affichés dans un tableau et sous forme d'annotations sur le tracé du signal. Pour les signaux en échelon, les paramètres liés à la descente (fall_time, fwhm) ne sont pas applicables ; les colonnes ne contenant que des valeurs indisponibles peuvent être omises. Cette fonctionnalité fonctionne au mieux avec des impulsions bien définies et des régions de ligne de base claires."
+msgid "Results are displayed in a table and as visual annotations on the signal plot. For step signals, fall-related parameters (fall_time, fwhm) are not applicable; columns containing only unavailable values may be omitted. The feature works best with well-defined pulse signals that have clear baseline regions. For smooth peaks (e.g. Gaussian ones), the amplitude is underestimated and the FWHM overestimated by several percent, depending on the baseline level: for a peak of known shape, prefer a fitting method."
+msgstr "Les résultats sont affichés dans un tableau et sous forme d'annotations sur le tracé du signal. Pour les signaux en échelon, les paramètres liés à la descente (fall_time, fwhm) ne sont pas applicables ; les colonnes ne contenant que des valeurs indisponibles peuvent être omises. Cette fonctionnalité fonctionne au mieux avec des impulsions bien définies et des régions de ligne de base claires. Pour des pics lisses (par exemple gaussiens), l'amplitude est sous-estimée et la FWHM surestimée de plusieurs pour cent, selon le niveau de la ligne de base : pour un pic de forme connue, préférez une méthode d'ajustement."
 
 msgid "Show results"
 msgstr "Afficher les résultats"

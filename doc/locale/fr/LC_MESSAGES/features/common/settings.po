@@ -521,17 +521,11 @@ msgstr "Si le réglage est activé, le nom du fichier HDF5 est ajouté comme suf
 msgid "AI Assistant"
 msgstr "Assistant IA"
 
-msgid "The AI Assistant settings tab configures the built-in conversational assistant (see :ref:`ai_assistant`). Unchecking **Enable AI Assistant** makes the other fields inactive. When the dialog opens with the assistant already disabled, the fields may initially remain editable; checking and unchecking the option refreshes their state."
-msgstr "L'onglet Assistant IA configure l'assistant conversationnel intégré (voir :ref:`ai_assistant`). Décocher **Activer l'assistant IA** rend les autres champs inactifs. Si la boîte de dialogue s'ouvre alors que l'assistant est déjà désactivé, les champs peuvent rester modifiables au départ ; cocher puis décocher l'option actualise leur état."
+msgid "The AI Assistant settings tab configures the built-in conversational assistant (see :ref:`ai_assistant`). The **Settings...** button of the AI Assistant panel opens this tab directly. The assistant contacts its provider only when you send a message or click **Test connection**."
+msgstr "L'onglet Assistant IA configure l'assistant conversationnel intégré (voir :ref:`ai_assistant`). Le bouton **Préférences...** du panneau Assistant IA ouvre directement cet onglet. L'assistant ne contacte son fournisseur que lorsque vous envoyez un message ou cliquez sur **Tester la connexion**."
 
 msgid "The AI Assistant settings tab."
 msgstr "L'onglet des préférences de l'assistant IA."
-
-msgid "**Enable AI Assistant**"
-msgstr "**Activer l'assistant IA**"
-
-msgid "Enable the AI Assistant panel. When disabled, no request is ever sent to an external service."
-msgstr "Active le panneau Assistant IA. Lorsque l'option est désactivée, aucune requête n'est jamais envoyée à un service externe."
 
 msgid "**Provider**"
 msgstr "**Fournisseur**"
@@ -641,4 +635,3 @@ msgstr "**Arguments de l'éditeur externe**"
 #, python-brace-format
 msgid "Command-line arguments to pass to the external editor: ``{path}`` and ``{line_number}`` are replaced by the path of the file and the line number of the error (default: ``-g {path}:{line_number}``)."
 msgstr "Arguments de ligne de commande à transmettre à l'éditeur externe : ``{path}`` et ``{line_number}`` sont remplacés par le chemin du fichier et le numéro de ligne de l'erreur (par défaut : ``-g {path}:{line_number}``)."
-

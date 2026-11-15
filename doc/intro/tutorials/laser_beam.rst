@@ -165,7 +165,7 @@ To do this, select "Analysis > Centroid" from the menu.
 
 Next, we can extract a line profile along the horizontal axis using
 "Analysis > Intensity profiles > Line profile...". Set the Y coordinate of the
-row to the Y coordinate of the previously computed centroid (i.e., 668) using the
+row to the Y coordinate of the previously computed centroid (i.e., 674) using the
 "Edit profile parameters" button.
 See :ref:`tutorial_fabry_perot` for more details on intensity profile extraction.
 

@@ -325,9 +325,28 @@ def capture_blobs(directory: Path) -> None:
 
 
 def capture_laser_beam(directory: Path) -> None:
-    """Capture the results table, plot and calibration from the same measurements."""
+    """Capture the centroid, then the results table, plot and calibration from the
+    same measurements."""
     paths = helpers.get_test_fnames("laser_beam/TEM00_z_*.jpg")
     paths.sort(key=lambda path: int(path.split("_z_")[1].split(".")[0]))
+    with screenshot_app_context() as win:
+        # Centroid of the clipped image used in the first steps of the tutorial
+        image_panel = win.imagepanel
+        win.set_current_panel(image_panel)
+        image = sigima.io.read_image(
+            next(path for path in paths if path.endswith("TEM00_z_70.jpg"))
+        )
+        image.title = "TEM00_z_70.jpg"
+        image_panel.add_object(image)
+        image_panel.processor.run_feature("clip", sip.ClipParam.create(lower=35))
+        image_panel.processor.run_feature("centroid")
+        clipped = image_panel.objview.get_sel_objects()[0]
+        adapters = list(GeometryAdapter.iterate_from_obj(clipped))
+        assert len(adapters) == 1
+        # The tutorial extracts the profile of this row
+        assert int(adapters[0].get_column_values("y")[0]) == 674
+        save_screenshot(win, directory / "06.png")
+
     with screenshot_app_context() as win:
         panel = win.signalpanel
         measurements = []

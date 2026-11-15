@@ -215,6 +215,9 @@ msgstr "Saisie manuelle des valeurs X et Y"
 msgid "For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height above the baseline :math:`y_0`, expressed in the signal's Y unit."
 msgstr "Pour les modèles gaussien, lorentzien et de Voigt, :math:`A` est la hauteur signée du pic au-dessus de la ligne de base :math:`y_0`, exprimée dans l'unité Y du signal."
 
+msgid "For the sine, cosine, sawtooth, triangle, square and cardinal sine signals, the phase :math:`\\phi` is entered in degrees in the creation dialog, while the formulas above use it in radians. The initial phase :math:`\\phi_0` of the linear chirp is entered in radians."
+msgstr "Pour les signaux sinus, cosinus, dents de scie, triangle, carré et sinus cardinal, la phase :math:`\\phi` est saisie en degrés dans la boîte de dialogue de création, alors que les formules ci-dessus l'utilisent en radians. La phase initiale :math:`\\phi_0` de la modulation linéaire de fréquence est saisie en radians."
+
 #, python-brace-format
 msgid "The cardinal sine uses the unnormalized definition :math:`\\sinc(u) = \\dfrac{\\sin(u)}{u}`, with :math:`\\sinc(0) = 1`, as the 2D sinc image: when :math:`\\phi = 0`, its peak is at :math:`x = 0` and its first zeros are at :math:`x = \\pm\\dfrac{1}{2f}`."
 msgstr "Le sinus cardinal utilise la définition non normalisée :math:`\\sinc(u) = \\dfrac{\\sin(u)}{u}`, avec :math:`\\sinc(0) = 1`, comme l'image sinus cardinal 2D : lorsque :math:`\\phi = 0`, son pic est en :math:`x = 0` et ses premiers zéros sont en :math:`x = \\pm\\dfrac{1}{2f}`."
