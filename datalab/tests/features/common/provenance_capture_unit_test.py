@@ -19,11 +19,11 @@ import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from sigima.objects import create_image, create_signal
 from sigima.proc.contracts import build_contract_registry
-from sigima.tests.data import create_peak_image
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.tests import helpers
+from datalab.tests.data import create_reproducible_peak_image
 
 # The autouse fixture is imported to apply to this module too.
 # pylint: disable-next=unused-import
@@ -182,7 +182,7 @@ def test_analyses_are_verified() -> None:
 def test_detection_rois_keep_the_analysis_verifiable() -> None:
     """ROIs created on the input by a detection do not refuse its verification."""
     with app() as win:
-        image = create_peak_image()
+        image = create_reproducible_peak_image()
         win.imagepanel.add_object(image)
         win.imagepanel.objview.select_objects([get_uuid(image)])
         win.imagepanel.processor.compute_1_to_0(

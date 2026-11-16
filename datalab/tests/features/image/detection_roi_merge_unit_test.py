@@ -17,14 +17,33 @@ Testing the following:
 
 from __future__ import annotations
 
+import numpy as np
 import sigima.params
 from sigima.enums import ContourShape
 from sigima.objects import NewImageParam, create_image_roi
-from sigima.tests.data import create_multigaussian_image, create_peak_image
+from sigima.tests.data import create_multigaussian_image
+from sigima.tools.image import get_2d_peaks_coords
 
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
+from datalab.tests.data import create_reproducible_peak_image
 from datalab.tests.features.image.roi_app_test import IROI1, IROI2
+
+
+def test_reproducible_peak_image() -> None:
+    """The integration fixture has reproducible, independently detected peaks."""
+    image = create_reproducible_peak_image()
+    repeated = create_reproducible_peak_image()
+    np.testing.assert_array_equal(image.data, repeated.data)
+    coords = image.metadata["peak_coords"]
+    np.testing.assert_array_equal(coords, repeated.metadata["peak_coords"])
+    assert coords.shape == (4, 2)
+    distances = np.linalg.norm(coords[:, None, :] - coords[None, :, :], axis=2)
+    assert np.min(distances[np.triu_indices(4, 1)]) > 100
+    detected = get_2d_peaks_coords(image.data)
+    assert detected.shape == (4, 2)
+    errors = np.linalg.norm(detected[:, None, :] - coords[None, :, :], axis=2)
+    assert np.all(np.min(errors, axis=1) < 3)
 
 
 def _create_image_with_roi():
@@ -41,7 +60,7 @@ def test_create_rois_no_existing_roi():
     """ROIs are created normally when the image has no pre-existing ROI."""
     with datalab_test_app_context() as win:
         panel = win.imagepanel
-        ima = create_peak_image()
+        ima = create_reproducible_peak_image()
         assert ima.roi is None
         panel.add_object(ima)
 
@@ -116,7 +135,7 @@ def test_auto_recompute_does_not_replace_rois():
     """
     with datalab_test_app_context() as win:
         panel = win.imagepanel
-        ima = create_peak_image()
+        ima = create_reproducible_peak_image()
         panel.add_object(ima)
 
         # Step 1: run detection with ROI creation to store analysis params
@@ -189,7 +208,7 @@ def test_no_infinite_roi_recreation_loop():
     """
     with datalab_test_app_context() as win:
         panel = win.imagepanel
-        ima = create_peak_image()
+        ima = create_reproducible_peak_image()
         panel.add_object(ima)
 
         # Step 1: detection with ROI creation

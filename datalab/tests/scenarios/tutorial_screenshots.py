@@ -33,6 +33,7 @@ from datalab.config import Conf, _
 from datalab.gui.main import DLMainWindow
 from datalab.gui.plugins.config import PluginConfigDialog
 from datalab.tests import datalab_test_app_context
+from datalab.tests.data import create_reproducible_peak_image
 
 
 def save_screenshot(
@@ -396,7 +397,7 @@ def capture_feature_screenshots(directory: Path, language: str) -> None:
         create_reference_image,
         create_reference_signal,
     )
-    from sigima.tests.data import create_multigaussian_image, create_peak_image
+    from sigima.tests.data import create_multigaussian_image
     from sigima.tests.signal.pulse.pulse_unit_test import create_test_step_params
     from sigimax.widgets.signalpeak import SignalPeakDetectionDialog
 
@@ -516,12 +517,7 @@ def capture_feature_screenshots(directory: Path, language: str) -> None:
         assert list(GeometryAdapter.iterate_from_obj(image))
         capture(win, "i_contour_test")
 
-        state = np.random.get_state()
-        try:
-            np.random.seed(42)
-            image = create_peak_image()
-        finally:
-            np.random.set_state(state)
+        image = create_reproducible_peak_image()
         panel.add_object(image)
         panel.processor.compute_peak_detection(
             sip.Peak2DDetectionParam.create(create_rois=True)

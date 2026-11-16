@@ -17,12 +17,12 @@ re-run in place with modified parameters through
 from __future__ import annotations
 
 import sigima.params as sigima_param
-from sigima.tests.data import create_peak_image
 
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.processor.base import extract_analysis_parameters
 from datalab.tests import datalab_test_app_context
+from datalab.tests.data import create_reproducible_peak_image
 
 
 def test_analysis_parameters_edit_image():
@@ -32,7 +32,7 @@ def test_analysis_parameters_edit_image():
         panel = win.imagepanel
 
         # Create a multi-peak image guaranteed to yield detections
-        img = create_peak_image()
+        img = create_reproducible_peak_image()
         panel.add_object(img)
 
         # Run 2D peak detection: a 1-to-0 analysis with an editable parameter

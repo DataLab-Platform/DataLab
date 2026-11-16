@@ -17,7 +17,6 @@ import sigima.proc.signal as sips
 from sigima.objects import Gauss2DParam, create_signal_roi
 from sigima.tests.data import (
     create_paracetamol_signal,
-    create_peak_image,
     create_sincos_image,
 )
 from sigima.tools.signal import fitting as signal_fitting
@@ -45,6 +44,7 @@ from datalab.history.core import numpy_to_json_safe
 from datalab.history.effects import AnalysisEffects
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
+from datalab.tests.data import create_reproducible_peak_image
 from datalab.tests.features.common.history_test_helpers import (
     add_paracetamol_signals,
     build_signal_chain,
@@ -970,7 +970,7 @@ def test_1_to_0_failure_rolls_back_all_source_metadata() -> None:
         # Manifest-driven analysis: a failed recompute rolls back only the
         # manifest keys and leaves unrelated user metadata untouched
         image_panel = win.imagepanel
-        img = create_peak_image()
+        img = create_reproducible_peak_image()
         image_panel.add_object(img)
         det_param = sigima.params.Peak2DDetectionParam.create(
             create_rois=False, threshold=0.5
@@ -1269,7 +1269,7 @@ def test_analysis_effects_manifest_populated_and_recomputed() -> None:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.imagepanel
-        img = create_peak_image()
+        img = create_reproducible_peak_image()
         panel.add_object(img)
         det_param = sigima.params.Peak2DDetectionParam.create(
             create_rois=True, threshold=0.5
@@ -1321,7 +1321,7 @@ def test_replay_reapplies_user_roi_edits_after_detection_recompute() -> None:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.imagepanel
-        img = create_peak_image()
+        img = create_reproducible_peak_image()
         panel.add_object(img)
         det_param = sigima.params.Peak2DDetectionParam.create(
             create_rois=True, threshold=0.5
