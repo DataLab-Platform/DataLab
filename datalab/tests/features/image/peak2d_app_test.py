@@ -11,16 +11,16 @@ Testing the following:
 # guitest: show
 
 import sigima.params
-from sigima.tests.data import create_peak_image
 
 from datalab.tests import datalab_test_app_context, take_plotwidget_screenshot
+from datalab.tests.data import create_reproducible_peak_image
 
 
 def test_peak2d(screenshot: bool = False) -> None:
     """Run 2D peak detection scenario"""
     with datalab_test_app_context() as win:
         panel = win.imagepanel
-        ima = create_peak_image()
+        ima = create_reproducible_peak_image()
         panel.add_object(ima)
 
         # Test with ROI creation enabled (default)
@@ -34,7 +34,7 @@ def test_peak2d(screenshot: bool = False) -> None:
         assert not obj.roi.is_empty(), "ROI should not be empty"
 
         # Test with ROI creation disabled
-        ima2 = create_peak_image()
+        ima2 = create_reproducible_peak_image()
         panel.add_object(ima2)
         param2 = sigima.params.Peak2DDetectionParam.create(create_rois=False)
         panel.processor.compute_peak_detection(param2)

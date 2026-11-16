@@ -26,6 +26,7 @@ from datalab.config import _
 from datalab.env import execenv
 from datalab.objectmodel import get_title_reference, get_uuid
 from datalab.tests import datalab_test_app_context
+from datalab.tests.data import create_reproducible_peak_image
 
 
 def iterate_noisy_signals(
@@ -111,7 +112,7 @@ def test_plot_results_images_one_curve_per_object():
 
         with execenv.context(unattended=True):
             for i in range(3):
-                img = test_data.create_peak_image()
+                img = create_reproducible_peak_image(seed=i)
                 img.title = f"Peaks_{i + 1}"
                 panel.add_object(img)
                 param = sigima.params.Peak2DDetectionParam.create(create_rois=False)
