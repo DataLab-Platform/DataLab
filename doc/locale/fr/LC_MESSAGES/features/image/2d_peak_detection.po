@@ -76,8 +76,8 @@ msgstr "L'image résultante est étiquetée en utilisant `scipy.ndimage.label <h
 msgid "Peak coordinates are then obtained from labels center"
 msgstr "Les coordonnées des pics sont ensuites obtenues en calculant le centre de chaque étiquette"
 
-msgid "Duplicates are eventually removed"
-msgstr "Les doublons sont éventuellement supprimés"
+msgid "Duplicates are removed: peaks are retained by decreasing value (equal values in the order of the image rows), and a peak closer than the neighborhood size to a stronger retained peak is discarded"
+msgstr "Les doublons sont supprimés : les pics sont retenus par valeur décroissante (à valeur égale, dans l'ordre des lignes de l'image), et un pic plus proche qu'une taille de voisinage d'un pic plus intense déjà retenu est écarté"
 
 msgid "The 2d peak detection parameters are the following:"
 msgstr "Les paramètrees de la détection de pics 2D sont les suivants :"

@@ -47,7 +47,9 @@ The 2d peak detection algorithm works in the following way:
     images is clipped at a user-defined threshold
   - Resulting image features are labeled using `scipy.ndimage.label <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.label.html>`_
   - Peak coordinates are then obtained from labels center
-  - Duplicates are eventually removed
+  - Duplicates are removed: peaks are retained by decreasing value (equal values
+    in the order of the image rows), and a peak closer than the neighborhood size
+    to a stronger retained peak is discarded
 
 The 2d peak detection parameters are the following:
   - "Neighborhoods size": size of the sliding window (see above)

@@ -1,5 +1,15 @@
 # Version 1.4 #
 
+## DataLab Version 1.4.2 ##
+
+### Requirements ###
+
+* Requirements are unchanged since version 1.4.1.
+
+### 🛠️ Bug Fixes since version 1.4.1 ###
+
+* **2D peak detection (⚠️ results change)**: with Sigima 1.4.2 or later, **Analysis > 2D peak detection** no longer reduces several distinct peaks to one when they are close to each other, which could prevent the creation of regions of interest, and keeps the strongest of two peaks closer than the neighborhood size instead of the first one of the image rows, e.g. the main peak instead of a weak satellite. Previously recorded calls of this analysis are refused at replay (fixes [Sigima Issue #141](https://github.com/DataLab-Platform/Sigima/issues/141)).
+
 ## DataLab Version 1.4.1 ##
 
 ### Requirements ###
