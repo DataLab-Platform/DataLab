@@ -14,11 +14,23 @@ msgstr ""
 msgid "Version 1.4"
 msgstr "Version 1.4"
 
-msgid "DataLab Version 1.4.1"
-msgstr "DataLab Version 1.4.1"
+msgid "DataLab Version 1.4.2"
+msgstr "DataLab Version 1.4.2"
 
 msgid "Requirements"
 msgstr "Prérequis"
+
+msgid "Requirements are unchanged since version 1.4.1."
+msgstr "Les prérequis sont inchangés depuis la version 1.4.1."
+
+msgid "🛠️ Bug Fixes since version 1.4.1"
+msgstr "🛠️ Corrections de bugs depuis la version 1.4.1"
+
+msgid "**2D peak detection (⚠️ results change)**: with Sigima 1.4.2 or later, **Analysis > 2D peak detection** no longer reduces several distinct peaks to one when they are close to each other, which could prevent the creation of regions of interest, and keeps the strongest of two peaks closer than the neighborhood size instead of the first one of the image rows, e.g. the main peak instead of a weak satellite. Previously recorded calls of this analysis are refused at replay (fixes [Sigima Issue #141](https://github.com/DataLab-Platform/Sigima/issues/141))."
+msgstr "**Détection de pics 2D (⚠️ résultats modifiés)** : avec Sigima 1.4.2 ou ultérieur, **Analyse > Détection de pics 2D** ne réduit plus à un seul plusieurs pics distincts proches les uns des autres, ce qui pouvait empêcher la création de régions d'intérêt, et conserve le plus intense de deux pics plus proches que la taille du voisinage au lieu du premier dans l'ordre des lignes de l'image, par exemple le pic principal au lieu d'un satellite faible. Les appels de cette analyse enregistrés précédemment sont refusés lors d'un rejeu (corrige [l'issue Sigima #141](https://github.com/DataLab-Platform/Sigima/issues/141))."
+
+msgid "DataLab Version 1.4.1"
+msgstr "DataLab Version 1.4.1"
 
 msgid "Runtime requirements are unchanged since version 1.4.0."
 msgstr "Les prérequis d'exécution sont inchangés depuis la version 1.4.0."
