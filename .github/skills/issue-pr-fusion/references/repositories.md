@@ -23,7 +23,7 @@ Always pass `--repo <owner/repo>` to `gh`.
 
 - Fixes of released code in DataLab and Sigima (`doc/contributing/gitworkflow.rst`, `RELEASING.md`): base the branch on `develop`, which prepares the next release, a patch release as long as it only contains fixes since the last release. A `release` branch exists only when a patch release is needed while `develop` already contains changes for the next minor or major version (`git ls-remote --heads origin release`): base the fix on `release` then; `release` is merged into `develop` after each patch release, so never cherry-pick the fix. While `develop` prepares a patch release, ask before merging into it a change for the next minor or major version: it may require creating `release` from `main` first.
 - When the PR base differs from the default branch (e.g. `develop` vs `main`), `Closes #N` does not close the issue at merge time: close it manually (step 10).
-- Milestone names vary between repositories (`v1.4.1`, `V1.2.0`, ...) and some stay open after the release: list the open ones and pick the next release, or ask.
+- Milestone names vary between repositories (`v1.4.1`, `V1.2.0`, ...) and some stay open after the release: list the open ones for each repository and let the user choose a milestone, or explicitly choose none, for each issue. Do not infer the choice from the next release.
 - Labels: `bug` for fixes, `enhancement` for features and improvements, `documentation` for documentation-only changes.
 
 ## CI

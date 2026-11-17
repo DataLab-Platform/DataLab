@@ -1,7 +1,7 @@
 ---
 name: issue-pr-fusion
 description: "Deliver a change end to end in the DataLab-Platform and PlotPyStack repositories: detailed plan for approval, GitHub issue, dedicated branch and PR per repository, implementation with tests, release notes and translations, manual validation with a test scenario, conventional commit with the 'Assisted-by: <model>' trailer, push, CI monitoring, merge once CI is green, issue closing and local sync. Use when asked for an issue, a dedicated branch and a PR, to commit and push, to watch the CI, to merge when green or to sync locally (issue, dedicated branch, PR, watch the CI, merge, sync locally)."
-argument-hint: "<model name and version> [options: no issue | no manual validation | no merge | one PR per issue | base <branch> ...]"
+argument-hint: "<model name and version> [options: milestone <name> | no issue | no manual validation | no merge | one PR per issue | base <branch> ...]"
 ---
 
 # Issue, PR and Merge Workflow
@@ -14,6 +14,7 @@ Talk to the user in their language. Write issues, PRs, commit messages and issue
 
 - **Model** (required): the first argument, i.e. the exact commercial name and version of the AI model (e.g. `Claude Opus 5.5`, `GPT-6.1 Sol`). Use it verbatim in the `Assisted-by: <model>` trailer of every commit and PR body. If it is missing, ask for it: never infer it from `git log`, never write `Assisted-by: GitHub Copilot`, never add `Co-authored-by: Copilot`.
 - **Subject**: the rest of the invocation text or, when absent, the solution(s) chosen earlier in the conversation. Ask when the scope (which points, which repositories) is ambiguous.
+- **Issue milestone(s)**: for each issue to create or reuse, require the user's explicit choice of a milestone or no milestone. If missing, ask after listing the open milestones for the relevant repository; for an existing issue, include its current milestone as an option. Choices may differ between issues and repositories. Never infer a milestone from the next release, and do not ask when `no issue` or `direct` applies. A milestone chosen for the issue does not apply to the PR unless the user requests it, e.g. with the `milestone <name>` option.
 - **Options** (free text, English or French), overriding the defaults:
 
 | Option | Effect |
@@ -56,7 +57,7 @@ git -C <repo> status -sb
 git -C <repo> log --oneline -3 origin/<base>
 gh pr list --repo <owner/repo> --state merged --limit 8 --json number,baseRefName,headRefName
 gh pr list --repo <owner/repo> --state open --json number,title,headRefName,baseRefName
-gh api repos/<owner/repo>/milestones --jq ".[].title"
+gh api --paginate repos/<owner/repo>/milestones --jq ".[] | {number, title}"
 gh label list --repo <owner/repo> --json name --jq ".[].name"
 ```
 
@@ -64,12 +65,13 @@ gh label list --repo <owner/repo> --json name --jq ".[].name"
 - Released or not: find the commit that introduced the defect or the feature and run `git tag --contains <commit>`. A fix of a change not released yet needs neither an issue nor a release note entry: propose this in the plan.
 - Base branch of a fix of released code: the "Fix base" column of [repositories.md](./references/repositories.md). In DataLab and Sigima, `develop`, or `release` when this branch exists (`git ls-remote --heads origin release`), with no cherry-pick into `develop`. State the base branch in the plan.
 - Check the open PRs and branches that could conflict with the change.
+- For an existing issue, read its current milestone with `gh issue view <N> --repo <owner/repo> --json milestone`. Ask the user for any missing milestone choices before the plan, using `ask_user` when available. If a requested milestone does not exist in its repository, ask the user what to use instead; do not create one automatically. If a required milestone cannot be resolved or the user declines to choose, stop rather than assume no milestone.
 
 ### 2. Plan: stop for approval
 
 Present a detailed plan, then wait for explicit approval (with `ask_user` when available):
 
-- Per repository: issue to create (English title, labels, milestone) or issue to reuse; branch name and base; commits (`type(scope): subject`, order); files to change; tests, including a regression test failing before the fix; documentation, release notes and translations; requirement changes.
+- Per repository: issue to create (English title and labels) or issue to reuse; for each, the user's chosen milestone or explicit choice of none, and whether an existing milestone will change; any milestone to set on the PR; branch name and base; commits (`type(scope): subject`, order); files to change; tests, including a regression test failing before the fix; documentation, release notes and translations; requirement changes.
 - Cross-repository changes: identical branch names and merge order (step 9).
 - Outline of the manual test scenario (detailed in step 5).
 - Out-of-scope findings and the issues proposed for them.
@@ -79,13 +81,15 @@ Revise the plan until it is approved. The approval covers the rest of the workfl
 
 ### 3. Issue and Branch
 
-- Write the issue to `files/issue_<repo>.md` (see [templates.md](./references/templates.md)), then:
+- For a new issue, write it to `files/issue_<repo>.md` (see [templates.md](./references/templates.md)), then:
 
   ```powershell
   gh issue create --repo <owner/repo> --title "<title>" --body-file <file> --label <bug|enhancement|documentation> [--milestone "<milestone>"]
   ```
 
-  If `gh issue create` fails, post a JSON payload (`title`, `body`, `labels`) with `gh api repos/<owner/repo>/issues --method POST --input <json> --jq .html_url`.
+  Omit `--milestone` only when the user explicitly chose no milestone. If `gh issue create` fails, post a JSON payload (`title`, `body`, `labels`, and `milestone` set to the chosen milestone's number in that repository, if any) with `gh api repos/<owner/repo>/issues --method POST --input <json> --jq .html_url`.
+- For a reused issue, retain the current milestone if the user chose it; otherwise set the approved milestone with `gh issue edit <N> --repo <owner/repo> --milestone "<milestone>"`. If the user explicitly approved removing an existing milestone, use `gh issue edit <N> --repo <owner/repo> --remove-milestone`.
+- Verify each created or reused issue with `gh issue view <N> --repo <owner/repo> --json milestone`; if it does not match the approved choice, stop and report the error.
 - Name the branch `<type>/<issue>-<slug>`, e.g. `fix/510-float-field-display`, `feature/479-plugin-catalog`, `docs/…`, `chore/…`. Use the same name in every repository of the change: DataLab CI clones the Sigima, SigimaX and DataLab-Capsule branches with the same name.
 
   ```powershell
