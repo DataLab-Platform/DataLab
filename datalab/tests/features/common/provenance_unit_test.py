@@ -364,7 +364,30 @@ def test_capture_failure_keeps_result(monkeypatch) -> None:
         assert win.provenance.capture_failures == 1
 
 
-def test_scope_of_capture() -> None:
+@pytest.mark.parametrize("method", ["maximum", "amplitude"])
+def test_normalize_integer_image_through_processor(method: str) -> None:
+    """Image processing retains fractional pixels and leaves the source unchanged."""
+    data = np.array([[0, 1000], [2000, 4000]], dtype=np.uint16)
+    with app() as win:
+        panel = win.imagepanel
+        src = sigima.objects.create_image("camera", data.copy())
+        panel.add_object(src)
+        panel.objview.select_objects([get_uuid(src)])
+        before = set(panel.objmodel.get_object_ids())
+        panel.processor.compute_1_to_1(
+            sipi.normalize,
+            sigima.params.NormalizeParam.create(method=method),
+            edit=False,
+        )
+        new_ids = set(panel.objmodel.get_object_ids()) - before
+        assert len(new_ids) == 1
+        dst = panel.objmodel[new_ids.pop()]
+        assert dst.data.dtype == np.float64
+        np.testing.assert_array_equal(dst.data, [[0.0, 0.25], [0.5, 1.0]])
+        np.testing.assert_array_equal(src.data, data)
+
+
+def test_scope_of_capture(monkeypatch) -> None:
     """Operations on signals or images are captured with their identity.
 
     Operations whose contract is not qualified are recorded as replayable, and
@@ -404,12 +427,16 @@ def test_scope_of_capture() -> None:
         image_activity = win.provenance.ledger.activities[-1]
         assert image_activity["call"]["operation"] == {
             "id": "sigima.image.normalize",
-            "contract_version": 1,
+            "contract_version": 2,
         }
         assert input_state(win, image_activity)["kind"] == "image"
         assert output_state(win, image_activity)["kind"] == "image"
         report = win.verify_provenance_activity(image_activity["activity_id"])
         assert report["verdict"] == "exact"
+        monkeypatch.setitem(image_activity["call"]["operation"], "contract_version", 1)
+        report = win.verify_provenance_activity(image_activity["activity_id"])
+        assert report["eligibility"] == "unsupported_contract"
+        assert report["verdict"] == "not_verified"
 
 
 def test_multiple_and_1_to_n_executions_are_captured() -> None:

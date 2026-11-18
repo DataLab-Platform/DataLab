@@ -34,7 +34,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.17.2"
+msgid ">= 3.17.3"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -52,8 +52,8 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.4.0"
-msgstr ">= 1.4.0"
+msgid ">= 1.4.2"
+msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
 msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant partie de la plateforme open-source DataLab."
@@ -61,8 +61,8 @@ msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant part
 msgid "SigimaX"
 msgstr ""
 
-msgid ">= 1.1.0"
-msgstr ">= 1.1.0"
+msgid ">= 1.1.1"
+msgstr ""
 
 msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"
 msgstr "Composants d'interface graphique réutilisables et utilitaires applicatifs, faisant partie de la plateforme DataLab de traitement du signal et des images"

@@ -20,11 +20,17 @@ msgstr "DataLab Version 1.4.2"
 msgid "Requirements"
 msgstr "Prérequis"
 
-msgid "Requirements are unchanged since version 1.4.1."
-msgstr "Les prérequis sont inchangés depuis la version 1.4.1."
+msgid "**DataLab-Platform**:"
+msgstr "**DataLab-Platform** :"
+
+msgid "Sigima ≥ 1.4.2 is required to preserve fractional values when normalizing integer images."
+msgstr "Sigima ≥ 1.4.2 est requis pour préserver les valeurs fractionnaires lors de la normalisation des images entières."
 
 msgid "🛠️ Bug Fixes since version 1.4.1"
 msgstr "🛠️ Corrections de bugs depuis la version 1.4.1"
+
+msgid "**Image normalization (⚠️ results change)**: Normalizing an integer image by its maximum or amplitude no longer discards fractional pixel values. The result is now a floating-point image; normalization by a zero maximum is refused explicitly. Previously recorded image normalization calls are refused at replay, while existing stored images are unchanged (fixes [Sigima Issue #148](https://github.com/DataLab-Platform/Sigima/issues/148))."
+msgstr "**Normalisation des images (⚠️ résultats modifiés)** : la normalisation d'une image entière par son maximum ou son amplitude ne supprime plus les valeurs fractionnaires des pixels. Le résultat est désormais une image à virgule flottante ; la normalisation par un maximum nul est explicitement refusée. Les appels de normalisation d'image enregistrés précédemment sont refusés lors d'un rejeu, tandis que les images déjà enregistrées sont inchangées (corrige [l'issue Sigima #148](https://github.com/DataLab-Platform/Sigima/issues/148))."
 
 msgid "**2D peak detection (⚠️ results change)**: with Sigima 1.4.2 or later, **Analysis > 2D peak detection** no longer reduces several distinct peaks to one when they are close to each other, which could prevent the creation of regions of interest, and keeps the strongest of two peaks closer than the neighborhood size instead of the first one of the image rows, e.g. the main peak instead of a weak satellite. Previously recorded calls of this analysis are refused at replay (fixes [Sigima Issue #141](https://github.com/DataLab-Platform/Sigima/issues/141))."
 msgstr "**Détection de pics 2D (⚠️ résultats modifiés)** : avec Sigima 1.4.2 ou ultérieur, **Analyse > Détection de pics 2D** ne réduit plus à un seul plusieurs pics distincts proches les uns des autres, ce qui pouvait empêcher la création de régions d'intérêt, et conserve le plus intense de deux pics plus proches que la taille du voisinage au lieu du premier dans l'ordre des lignes de l'image, par exemple le pic principal au lieu d'un satellite faible. Les appels de cette analyse enregistrés précédemment sont refusés lors d'un rejeu (corrige [l'issue Sigima #141](https://github.com/DataLab-Platform/Sigima/issues/141))."
@@ -169,9 +175,6 @@ msgstr "**Outils des plugins** : un plugin peut déclarer un outil avec `menu=Fa
 
 msgid "DataLab Version 1.4.0"
 msgstr "DataLab Version 1.4.0"
-
-msgid "**DataLab-Platform**:"
-msgstr "**DataLab-Platform** :"
 
 msgid "Sigima 1.4.0 or later is required: it provides operation contracts and replay qualification, RAW image import, format-aware image export, portable annotations, experimental-source metadata, NPZ object serialization and pixel-center ROI rules."
 msgstr "Sigima 1.4.0 ou ultérieur est requis : il fournit les contrats d'opération et la qualification de rejeu, l'import d'images RAW, l'export d'images adapté au format, les annotations portables, les métadonnées d'origine expérimentale, la sérialisation d'objets au format NPZ et les règles de sélection par centre de pixel des ROI."

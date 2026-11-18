@@ -17,10 +17,10 @@ The `datalab-platform` package requires the following Python modules:
       - >= 2.12.1
       - Curve and image plotting tools for Python/Qt applications
     * - Sigima
-      - >= 1.4.0
+      - >= 1.4.2
       - Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform.
     * - SigimaX
-      - >= 1.1.0
+      - >= 1.1.1
       - Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing
     * - datalab-capsule
       - >= 0.2.0, < 0.3
