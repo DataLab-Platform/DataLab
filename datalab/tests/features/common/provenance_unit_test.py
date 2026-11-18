@@ -387,6 +387,33 @@ def test_normalize_integer_image_through_processor(method: str) -> None:
         np.testing.assert_array_equal(src.data, data)
 
 
+def test_normalize_zero_area_through_processor(monkeypatch) -> None:
+    """A zero sum reports an error without adding a result or activity."""
+    data = np.array([[1.0, -1.0], [2.0, -2.0]])
+    errors = []
+    monkeypatch.setattr(
+        "datalab.gui.processor.base.show_warning_error",
+        lambda *args: errors.append(args),
+    )
+    with app() as win, execenv.context(catcher_test=True):
+        panel = win.imagepanel
+        src = sigima.objects.create_image("zero sum", data.copy())
+        panel.add_object(src)
+        panel.objview.select_objects([get_uuid(src)])
+        before = set(panel.objmodel.get_object_ids())
+        panel.processor.compute_1_to_1(
+            sipi.normalize,
+            sigima.params.NormalizeParam.create(method="area"),
+            edit=False,
+        )
+        assert set(panel.objmodel.get_object_ids()) == before
+        assert win.provenance.ledger.activities == ()
+        np.testing.assert_array_equal(src.data, data)
+        assert len(errors) == 1
+        assert errors[0][1] == "error"
+        assert "sum is zero" in errors[0][3]
+
+
 def test_scope_of_capture(monkeypatch) -> None:
     """Operations on signals or images are captured with their identity.
 
@@ -427,16 +454,19 @@ def test_scope_of_capture(monkeypatch) -> None:
         image_activity = win.provenance.ledger.activities[-1]
         assert image_activity["call"]["operation"] == {
             "id": "sigima.image.normalize",
-            "contract_version": 2,
+            "contract_version": 3,
         }
         assert input_state(win, image_activity)["kind"] == "image"
         assert output_state(win, image_activity)["kind"] == "image"
         report = win.verify_provenance_activity(image_activity["activity_id"])
         assert report["verdict"] == "exact"
-        monkeypatch.setitem(image_activity["call"]["operation"], "contract_version", 1)
-        report = win.verify_provenance_activity(image_activity["activity_id"])
-        assert report["eligibility"] == "unsupported_contract"
-        assert report["verdict"] == "not_verified"
+        for old_version in (1, 2):
+            monkeypatch.setitem(
+                image_activity["call"]["operation"], "contract_version", old_version
+            )
+            report = win.verify_provenance_activity(image_activity["activity_id"])
+            assert report["eligibility"] == "unsupported_contract"
+            assert report["verdict"] == "not_verified"
 
 
 def test_multiple_and_1_to_n_executions_are_captured() -> None:
