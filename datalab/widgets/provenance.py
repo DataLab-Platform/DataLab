@@ -25,6 +25,11 @@ the analyses recorded on the object. Three operations are kept apart:
 None of them changes the workspace, the ledger or the History. Results of a
 check or a verification are dropped as soon as the workspace or the selection
 changes.
+
+When the ledger records no production of an object made by a plugin recipe, the
+view shows the record of the recipe run held by the object instead (see
+:func:`datalab.plugins.recipe_provenance.describe_recipe_run`): its data cannot
+be checked or recomputed.
 """
 
 from __future__ import annotations
@@ -42,9 +47,12 @@ from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
 from datalab.objectmodel import get_uuid, get_uuid_display_id
+from datalab.plugins.recipe_provenance import describe_recipe_run
+from datalab.plugins.recipes import RECIPE_RUN_RECORD_OPTION
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
+    from datalab.plugins.recipes import RecipeDescriptor
 
 __all__ = [
     "EDITION_NAMES",
@@ -250,6 +258,8 @@ class ProvenanceWidget(QW.QWidget):
         self._activity_id: str | None = None
         self._fallback: str = ""
         self._description: dict[str, Any] | None = None
+        # Recipe run recorded with the object shown (see describe_recipe_run)
+        self._recipe_run: dict[str, Any] | None = None
         self._generation = 0
         # True once the data were checked: steps expanded afterwards are
         # checked too (reset when another object or activity is shown).
@@ -337,12 +347,15 @@ class ProvenanceWidget(QW.QWidget):
         return self.browser.toPlainText()
 
     def has_content(self) -> bool:
-        """Return True if the ledger records something about the shown object."""
+        """Return True if the ledger records something about the shown object,
+        or if the object holds the record of the method run that produced it."""
         desc = self._description
+        if self._activity_id is not None:
+            return desc is not None
+        if self._recipe_run is not None:
+            return True
         if desc is None:
             return False
-        if self._activity_id is not None:
-            return True
         return bool(
             desc.get("production") is not None
             or desc.get("legacy")
@@ -362,12 +375,14 @@ class ProvenanceWidget(QW.QWidget):
 
         Returns:
             True if the ledger records a production, an old record or an
-            analysis of the object.
+            analysis of the object, or if the object holds the record of the
+            method run that produced it.
         """
         self._generation += 1
         uuid = get_uuid(obj) if obj is not None else None
         same = uuid is not None and uuid == self._object_uuid
         self._activity_id = None
+        self._recipe_run = None if obj is None else self.__recipe_run_of(obj)
         self._fallback = fallback
         self._object_uuid = uuid
         self._checked = False
@@ -379,6 +394,7 @@ class ProvenanceWidget(QW.QWidget):
         self._generation += 1
         same = activity_id == self._activity_id
         self._object_uuid = None
+        self._recipe_run = None
         self._activity_id = activity_id
         self._fallback = ""
         self._checked = False
@@ -508,6 +524,33 @@ class ProvenanceWidget(QW.QWidget):
         except KeyError:
             return None
         return None
+
+    @staticmethod
+    def __resolve_recipe(plugin_id: str, recipe_id: str) -> RecipeDescriptor | None:
+        """Return the descriptor of a recipe of a loaded plugin, if any."""
+        # pylint: disable=import-outside-toplevel
+        from datalab.plugins.base import PluginRegistry
+
+        for plugin in PluginRegistry.get_plugins():
+            if plugin.plugin_id == plugin_id:
+                return plugin.get_recipe(recipe_id)
+        return None
+
+    def __recipe_run_of(self, obj: SignalObj | ImageObj) -> dict[str, Any] | None:
+        """Return the recipe run recorded with *obj* (see describe_recipe_run)."""
+        # Read without get_metadata_option, which would store a default value
+        return describe_recipe_run(
+            get_uuid(obj),
+            obj.metadata.get(f"__{RECIPE_RUN_RECORD_OPTION}"),
+            self.__resolve_recipe,
+        )
+
+    def __recipe_run_for(self, uuid: str | None) -> dict[str, Any] | None:
+        """Return the recipe run recorded with the object holding *uuid*."""
+        obj = None if uuid is None else self.mainwindow.find_object_by_uuid(uuid)
+        if not isinstance(obj, (SignalObj, ImageObj)):
+            return None
+        return self.__recipe_run_of(obj)
 
     def __step(self, key: str, state_id: str, trail: list[str]) -> dict | None:
         """Return the description of an expanded earlier step (cached)."""
@@ -640,8 +683,17 @@ class ProvenanceWidget(QW.QWidget):
         self.__line(f"<b>{_esc(text)}</b>", 0, top=8)
 
     def __build(self, description: dict[str, Any] | None) -> None:
+        recipe_text = _(
+            "The workspace provenance does not record this result: the application "
+            "method that produced it recorded its run."
+        )
         if description is None:
-            self.summary.setText(_("No provenance is recorded for this object."))
+            if self._recipe_run is not None:
+                self.summary.setText(recipe_text)
+                self.__heading(_("Method run"))
+                self.__add_recipe_run(self._recipe_run, 0, "rr", ())
+            else:
+                self.summary.setText(_("No provenance is recorded for this object."))
             if self._fallback:
                 self.__fallback()
             return
@@ -652,11 +704,17 @@ class ProvenanceWidget(QW.QWidget):
             )
             self.__add_activity(activity, [], 0, "a")
             return
-        lines = [_content_message(description["anchor"]["content"])]
+        # The ledger has the priority: the recipe run is shown without production
+        recipe_run = self._recipe_run if description["production"] is None else None
+        lines = []
+        if recipe_run is None or description["anchor"]["content"] != "unrecorded":
+            lines.append(_content_message(description["anchor"]["content"]))
         if description["anchor"].get("file_status") == "altered":
             lines.append(_("The saved data of this object were altered in the file."))
         if description["production"] is None and description["state"] is not None:
             lines.append(_("This state was observed, without recorded production."))
+        if recipe_run is not None:
+            lines.append(recipe_text)
         self.summary.setText("\n".join(lines))
         trail = (
             [] if description["state"] is None else [description["state"]["state_id"]]
@@ -664,8 +722,12 @@ class ProvenanceWidget(QW.QWidget):
         if description["production"] is not None:
             self.__heading(_("Production"))
             self.__add_activity(description["production"], trail, 0, "p")
-        elif self._fallback:
-            self.__fallback()
+        else:
+            if recipe_run is not None:
+                self.__heading(_("Method run"))
+                self.__add_recipe_run(recipe_run, 0, "rr", ())
+            if self._fallback:
+                self.__fallback()
         if description.get("legacy"):
             self.__heading(_("Records of an old workspace"))
             for index, activity in enumerate(description["legacy"]):
@@ -717,6 +779,10 @@ class ProvenanceWidget(QW.QWidget):
             self.__line(
                 self.__muted(_("Observed state, without recorded production")), level
             )
+            if description["object"]["present"]:
+                run = self.__recipe_run_for(description["object"]["object_uuid"])
+                if run is not None:
+                    self.__add_recipe_run(run, level, key + "/r", ())
         elif "depth_limit" in description["limits"]:
             self.__line(self.__muted(_("Too many levels: not expanded")), level)
         else:
@@ -815,6 +881,13 @@ class ProvenanceWidget(QW.QWidget):
             links = []
             if entry.get("has_ancestors") and entry["state_id"] is not None:
                 links.append(self.__step_link(step_key, entry["state_id"]))
+            # An input without recorded production may come from a recipe run
+            recipe_key = step_key + "/r"
+            recipe_run = None
+            if entry.get("produced_by") is None and uuid != self._object_uuid:
+                recipe_run = self.__recipe_run_for(uuid)
+            if recipe_run is not None:
+                links.append(self.__recipe_link(recipe_key))
             if uuid is not None and uuid != self._object_uuid and name:
                 links.append(self.__go_to(uuid))
             if links:
@@ -822,6 +895,8 @@ class ProvenanceWidget(QW.QWidget):
             self.__line(content, level + 1)
             if step_key in self._expanded and entry["state_id"] is not None:
                 self.__add_step(step_key, entry["state_id"], trail, level + 1)
+            if recipe_run is not None and recipe_key in self._expanded:
+                self.__add_recipe_run(recipe_run, level + 1, recipe_key, ())
         if count > len(inputs):
             self.__line(self.__muted(_("%d inputs in total") % count), level + 1)
 
@@ -851,6 +926,152 @@ class ProvenanceWidget(QW.QWidget):
 
     def __go_to(self, uuid: str) -> str:
         return self.__link("goto", uuid, _("Go to object"))
+
+    def __recipe_link(self, key: str) -> str:
+        if key in self._expanded:
+            return self.__link("collapse", key, "▾ " + _("Hide method run"))
+        return self.__link("expand", key, "▸ " + _("Show method run"))
+
+    def __add_recipe_run(
+        self, run: dict[str, Any], level: int, key: str, runs: tuple[str, ...]
+    ) -> None:
+        """Add the card of the recipe run recorded with an object.
+
+        Args:
+            run: Description of the run (see ``describe_recipe_run``).
+            level: Indentation level of the card.
+            key: Key of the card in the view (expanded parts, details).
+            runs: Runs already shown above this one (cycles).
+        """
+        self._html.append(
+            f'<table width="100%" border="1" cellspacing="0" cellpadding="4" '
+            f'style="margin-left:{level * 14}px; margin-top:4px; '
+            f"border-style:solid; border-color:{self._border}; "
+            f'background-color:{self._card}"><tr><td>'
+        )
+        inner = 1
+        if run["status"] != "ok":
+            self.__line(
+                f"<b>{_esc(run.get('recipe_id') or _('Application method'))}</b><br>"
+                + self.__muted(_("Application method")),
+                0,
+            )
+            self.__line(
+                self.__status(
+                    "changed",
+                    _(
+                        "Method record written by a newer version of DataLab "
+                        "(schema %d): it cannot be shown"
+                    )
+                    % run["schema_version"],
+                ),
+                inner,
+            )
+            self._html.append("</td></tr></table>")
+            return
+        details = " — ".join(
+            part
+            for part in (
+                _("Application method"),
+                f"{run['plugin_id']} {run['plugin_version']}",
+                _short_date(run["finished_at"]),
+            )
+            if part
+        )
+        self.__line(
+            f"<b>{_esc(run['title'] or run['recipe_id'])}</b><br>"
+            + self.__muted(details),
+            0,
+        )
+        self.__line(
+            _esc(
+                _("Method: %s, version %s") % (run["recipe_id"], run["recipe_version"])
+            ),
+            inner,
+        )
+        self.__line(
+            self.__muted(
+                _(
+                    "Recorded by the method, outside the workspace provenance: "
+                    "its data cannot be checked or recomputed"
+                )
+            ),
+            inner,
+        )
+        parameters = run["parameters"]
+        if parameters is None:
+            self.__line(self.__muted(_("Parameters: not recorded")), inner)
+        for parameter in parameters or []:
+            self.__line(
+                self.__muted(f"{parameter['label'] or parameter['name']} = ")
+                + _esc(format_parameter_value(parameter["value"])),
+                inner,
+            )
+        runs = (*runs, run["run_id"])
+        inputs = run["inputs"]
+        if inputs:
+            self.__line(
+                f"<b>{_esc(_('Inputs'))}</b> " + self.__muted(f"({len(inputs)})"),
+                inner,
+            )
+        for index, entry in enumerate(inputs):
+            uuid = entry["object_uuid"]
+            name = self.__object_name(uuid)
+            content = _esc(f"{index + 1}. {entry['role']}: ")
+            if name is None:
+                content += self.__status("missing", _("Original input missing"))
+            else:
+                content += _esc(name)
+            input_key = f"{key}/{index}"
+            nested = None
+            if name is not None and uuid != self._object_uuid:
+                nested = self.__recipe_run_for(uuid)
+                if nested is not None and nested.get("run_id") in runs:
+                    nested = None
+            links = []
+            if nested is not None:
+                links.append(self.__recipe_link(input_key))
+            if name is not None and uuid != self._object_uuid:
+                links.append(self.__go_to(uuid))
+            if links:
+                content += "<br>" + " · ".join(links)
+            self.__line(content, inner + 1)
+            if nested is not None and input_key in self._expanded:
+                self.__add_recipe_run(nested, inner + 1, input_key, runs)
+        self.__line(f"<b>{_esc(_('Results'))}</b>", inner)
+        for output in run["outputs"]:
+            uuid = output["object_uuid"]
+            name = self.__object_name(uuid)
+            content = _esc(f"{output['role']}: ")
+            if name is None:
+                content += self.__status("missing", _("Object no longer exists"))
+            else:
+                content += _esc(name)
+            if uuid == self._object_uuid:
+                content += " " + self.__muted(_("(this object)"))
+            elif name is not None:
+                content += "<br>" + self.__go_to(uuid)
+            self.__line(content, inner + 1)
+        details_key = "d/" + key
+        shown = details_key in self._details
+        self.__line(
+            self.__link(
+                "details",
+                details_key,
+                "▾ " + _("Hide details") if shown else "▸ " + _("Show details"),
+            ),
+            inner,
+        )
+        if shown:
+            for label, value in (
+                (_("Software") + ": ", f"DataLab {run['datalab_version']}"),
+                ("sigima: ", run["sigima_version"]),
+                (_("Run ID: "), run["run_id"]),
+                (_("Started at: "), run["started_at"]),
+                (_("Finished at: "), run["finished_at"]),
+            ):
+                self.__line(self.__muted(label) + _esc(value), inner + 1)
+        self._html.append("</td></tr></table>")
 
     def __add_details(self, activity: dict[str, Any], level: int) -> None:
         context = activity.get("context") or {}

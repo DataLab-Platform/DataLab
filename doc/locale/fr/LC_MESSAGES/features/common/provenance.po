@@ -122,6 +122,18 @@ msgstr "État observé, sans production enregistrée"
 msgid "The object exists in the record, but how it was produced is unknown (e.g. data loaded from a file)"
 msgstr "L'objet figure dans l'enregistrement, mais la manière dont il a été produit est inconnue (par exemple des données chargées depuis un fichier)"
 
+msgid "Results of application methods"
+msgstr "Résultats des méthodes d'application"
+
+msgid "A method of an application (a plugin recipe, e.g. *Dark current and hot pixels*) stores with each of its results the record of its run: the method and its plugin, with their versions, its parameters, its inputs and all its results. When the provenance record contains no production of such a result, the **Provenance** tab shows this record in a **Method run** card, with **Go to object** under each input and each other result still in the workspace."
+msgstr "Une méthode d'une application (une recette de plugin, par exemple *Dark current and hot pixels*) enregistre avec chacun de ses résultats le compte rendu de son exécution : la méthode et son plugin, avec leurs versions, ses paramètres, ses entrées et tous ses résultats. Lorsque l'enregistrement de provenance ne contient aucune production d'un tel résultat, l'onglet **Provenance** affiche ce compte rendu dans une carte **Exécution de la méthode**, avec **Aller à l'objet** sous chaque entrée et chaque autre résultat encore présent dans l'espace de travail."
+
+msgid "When a processing is applied to such a result, **Show method run** under its input shows the card of the method run that produced it."
+msgstr "Lorsqu'un traitement est appliqué à un tel résultat, **Afficher l'exécution de la méthode** sous son entrée affiche la carte de l'exécution de la méthode qui l'a produit."
+
+msgid "This record is kept with the object, outside the provenance record: its data cannot be checked and the run cannot be recomputed. A copy of a result (e.g. made with **Duplicate**) is not attributed to the method."
+msgstr "Ce compte rendu est conservé avec l'objet, hors de l'enregistrement de provenance : ses données ne peuvent pas être contrôlées et l'exécution ne peut pas être recalculée. Une copie d'un résultat (par exemple obtenue avec **Dupliquer**) n'est pas attribuée à la méthode."
+
 msgid "Applying a processing again"
 msgstr "Appliquer à nouveau un traitement"
 

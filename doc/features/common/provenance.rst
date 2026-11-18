@@ -100,6 +100,23 @@ The provenance never invents what is unknown. The main messages are:
       - The object exists in the record, but how it was produced is unknown
         (e.g. data loaded from a file)
 
+Results of application methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A method of an application (a plugin recipe, e.g. *Dark current and hot
+pixels*) stores with each of its results the record of its run: the method and
+its plugin, with their versions, its parameters, its inputs and all its results.
+When the provenance record contains no production of such a result, the
+**Provenance** tab shows this record in a **Method run** card, with **Go to
+object** under each input and each other result still in the workspace.
+
+When a processing is applied to such a result, **Show method run** under its
+input shows the card of the method run that produced it.
+
+This record is kept with the object, outside the provenance record: its data
+cannot be checked and the run cannot be recomputed. A copy of a result (e.g.
+made with **Duplicate**) is not attributed to the method.
+
 Applying a processing again
 ---------------------------
 
