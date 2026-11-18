@@ -5988,3 +5988,38 @@ msgstr "Forme"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "The workspace provenance does not record this result: the application method that produced it recorded its run."
+msgstr "La provenance de l'espace de travail n'enregistre pas ce résultat : la méthode d'application qui l'a produit a enregistré son exécution."
+
+msgid "Method run"
+msgstr "Exécution de la méthode"
+
+msgid "Hide method run"
+msgstr "Masquer l'exécution de la méthode"
+
+msgid "Show method run"
+msgstr "Afficher l'exécution de la méthode"
+
+msgid "Application method"
+msgstr "Méthode d'application"
+
+msgid "Method record written by a newer version of DataLab (schema %d): it cannot be shown"
+msgstr "Enregistrement de méthode écrit par une version plus récente de DataLab (schéma %d) : il ne peut pas être affiché"
+
+msgid "Method: %s, version %s"
+msgstr "Méthode : %s, version %s"
+
+msgid "Recorded by the method, outside the workspace provenance: its data cannot be checked or recomputed"
+msgstr "Enregistré par la méthode, hors de la provenance de l'espace de travail : ses données ne peuvent être ni contrôlées ni recalculées"
+
+msgid "(this object)"
+msgstr "(cet objet)"
+
+msgid "Run ID: "
+msgstr "Identifiant d'exécution : "
+
+msgid "Started at: "
+msgstr "Démarré le : "
+
+msgid "Finished at: "
+msgstr "Terminé le : "
