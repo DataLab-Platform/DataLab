@@ -9,7 +9,7 @@
 
 ### 🛠️ Bug Fixes since version 1.4.1 ###
 
-* **Image normalization (⚠️ results change)**: Normalizing an integer image by its maximum or amplitude no longer discards fractional pixel values. The result is now a floating-point image; normalization by a zero maximum is refused explicitly. Previously recorded image normalization calls are refused at replay, while existing stored images are unchanged (fixes [Sigima Issue #148](https://github.com/DataLab-Platform/Sigima/issues/148)).
+* **Image normalization (⚠️ results change)**: Normalizing an integer image by its maximum or amplitude no longer discards fractional pixel values. The result is now a floating-point image; normalization by a zero maximum or a zero sum is refused explicitly instead of producing non-finite values. Previously recorded image normalization calls are refused at replay, while existing stored images are unchanged (fixes [Sigima Issue #148](https://github.com/DataLab-Platform/Sigima/issues/148) and [Sigima Issue #150](https://github.com/DataLab-Platform/Sigima/issues/150)).
 * **2D peak detection (⚠️ results change)**: with Sigima 1.4.2 or later, **Analysis > 2D peak detection** no longer reduces several distinct peaks to one when they are close to each other, which could prevent the creation of regions of interest, and keeps the strongest of two peaks closer than the neighborhood size instead of the first one of the image rows, e.g. the main peak instead of a weak satellite. Previously recorded calls of this analysis are refused at replay (fixes [Sigima Issue #141](https://github.com/DataLab-Platform/Sigima/issues/141)).
 
 ## DataLab Version 1.4.1 ##
