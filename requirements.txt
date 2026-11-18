@@ -4,8 +4,8 @@ PlotPy >= 2.12.1
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2, < 2.0
 SciPy >= 1.10.1, < 1.19
-Sigima >= 1.4.0
-SigimaX >= 1.1.0
+Sigima >= 1.4.2
+SigimaX >= 1.1.1
 babel
 build
 datalab-capsule >= 0.2.0, < 0.3

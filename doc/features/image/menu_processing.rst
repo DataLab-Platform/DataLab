@@ -127,6 +127,8 @@ by maximum, amplitude, sum, energy or RMS:
 
 Here :math:`N` is the number of pixels, indexed over the flattened image,
 assuming no NaNs. The implemented sum and mean ignore NaNs.
+The result uses 64-bit floating-point values, including for integer input images.
+Maximum normalization is refused when the image maximum is zero.
 
 Clipping
 ~~~~~~~~
