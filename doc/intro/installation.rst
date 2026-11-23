@@ -141,6 +141,14 @@ required only by the OpenCV blob detection feature. To install it along with Qt:
 
     $ pip install datalab-platform[qt,opencv]
 
+The optional ``mcp`` extra installs the `MCP SDK <https://pypi.org/project/mcp/>`_,
+which is required only by the server letting external assistants (e.g. VS Code
+Copilot) work on DataLab (see :ref:`mcp_server`):
+
+.. code-block:: console
+
+    $ pip install datalab-platform[qt,mcp]
+
 .. note::
 
     If you already have a previous version of DataLab installed, you can
@@ -307,6 +315,8 @@ Dependencies
 
 The optional ``opencv`` extra (``opencv-python-headless``), not listed above, is
 required only by the OpenCV blob detection feature (see :ref:`install_pip`).
+Likewise, the optional ``mcp`` extra is required only by the MCP server for
+external assistants.
 
 .. note::
 

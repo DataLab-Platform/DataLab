@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Connect an external AI assistant (VS Code Copilot, Claude Desktop...) to DataLab, the open-source scientific data analysis and visualization platform, with the Model Context Protocol (MCP)"
+msgstr "Connecter un assistant IA externe (VS Code Copilot, Claude Desktop...) à DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques, avec le Model Context Protocol (MCP)"
+
+msgid "DataLab, MCP, Model Context Protocol, AI, assistant, VS Code, Copilot, agent"
+msgstr "DataLab, MCP, Model Context Protocol, IA, assistant, VS Code, Copilot, agent"
+
+msgid "External assistants (MCP)"
+msgstr "Assistants externes (MCP)"
+
+msgid "DataLab includes a **Model Context Protocol (MCP)** server: an external assistant, e.g. GitHub Copilot in VS Code, can then use the tools of the :ref:`ai_assistant` on the open DataLab session to list the signals and images, inspect them, create synthetic data, run processing and analysis features and read their results."
+msgstr "DataLab intègre un serveur **Model Context Protocol (MCP)** : un assistant externe, par exemple GitHub Copilot dans VS Code, peut alors utiliser les outils de l':ref:`ai_assistant` sur la session ouverte de DataLab pour lister les signaux et les images, les inspecter, créer des données synthétiques, exécuter des traitements et des analyses et lire leurs résultats."
+
+msgid "The assistant acts on the objects shown in DataLab: you see the results appear, and you confirm every action modifying the workspace, unless you approve the calls automatically (see :ref:`mcp_security`)."
+msgstr "L'assistant agit sur les objets affichés dans DataLab : vous voyez les résultats apparaître, et vous confirmez chaque action modifiant l'espace de travail, sauf si vous approuvez automatiquement les appels (voir :ref:`mcp_security`)."
+
+msgid "The MCP server needs the optional ``mcp`` package. It is included in the standalone version of DataLab; with pip, install it with ``pip install datalab-platform[mcp]``. Without it, the **File > Connect an external assistant (MCP)...** action is disabled and its tooltip explains how to install it."
+msgstr "Le serveur MCP nécessite le paquet optionnel ``mcp``. Il est inclus dans la version autonome de DataLab ; avec pip, installez-le avec ``pip install datalab-platform[mcp]``. Sans lui, l'action **Fichier > Connecter un assistant externe (MCP)...** est désactivée et son info-bulle explique comment l'installer."
+
+msgid "Starting the server"
+msgstr "Démarrage du serveur"
+
+msgid "Select **File > Connect an external assistant (MCP)...**, or click **MCP server...** in the toolbar of the AI Assistant panel."
+msgstr "Sélectionnez **Fichier > Connecter un assistant externe (MCP)...**, ou cliquez sur **Serveur MCP...** dans la barre d'outils du panneau Assistant IA."
+
+msgid "Click **Start server**. The dialog shows the URL of the server (by default ``http://127.0.0.1:18090/mcp``, or the next free port) and its token."
+msgstr "Cliquez sur **Démarrer le serveur**. La boîte de dialogue affiche l'URL du serveur (par défaut ``http://127.0.0.1:18090/mcp``, ou le port libre suivant) et son jeton."
+
+msgid "Copy the VS Code configuration given by the dialog (see below)."
+msgstr "Copiez la configuration de VS Code donnée par la boîte de dialogue (voir ci-dessous)."
+
+msgid "The server stops when you click **Stop server** or when DataLab closes. It listens on this computer only (``127.0.0.1``); the preferred port can be changed in the **General** tab of the settings, and the ``DATALAB_MCP_PORT`` environment variable overrides it."
+msgstr "Le serveur s'arrête lorsque vous cliquez sur **Arrêter le serveur** ou à la fermeture de DataLab. Il n'écoute que sur cet ordinateur (``127.0.0.1``) ; le port préféré peut être modifié dans l'onglet **Général** des préférences, et la variable d'environnement ``DATALAB_MCP_PORT`` le remplace."
+
+msgid "Connecting VS Code"
+msgstr "Connexion de VS Code"
+
+msgid "Save the configuration given by the dialog as ``.vscode/mcp.json`` in your workspace (or add it to your user MCP configuration), for example:"
+msgstr "Enregistrez la configuration donnée par la boîte de dialogue dans le fichier ``.vscode/mcp.json`` de votre espace de travail (ou ajoutez-la à votre configuration MCP utilisateur), par exemple :"
+
+msgid "The token is not written in this file: VS Code asks for it when it starts the server, and stores it securely. Start the ``datalab`` server from the ``mcp.json`` file or from the **MCP: List Servers** command, paste the token copied from DataLab, then ask Copilot in agent mode, for example: *\"List the signals of DataLab, compute the FFT of the first one and give me the frequency of its main peak\"*."
+msgstr "Le jeton n'est pas écrit dans ce fichier : VS Code le demande au démarrage du serveur, et le conserve de manière sécurisée. Démarrez le serveur ``datalab`` depuis le fichier ``mcp.json`` ou avec la commande **MCP: List Servers**, collez le jeton copié depuis DataLab, puis interrogez Copilot en mode agent, par exemple : *« Liste les signaux de DataLab, calcule la FFT du premier et donne-moi la fréquence de son pic principal »*."
+
+#, python-brace-format
+msgid "VS Code keeps the token entered. When the token changes (new start of the server without the persistent token, or **Renew**), DataLab refuses the former token and VS Code cannot connect anymore: in ``mcp.json``, hover over ``${input:datalab-mcp-token}``, choose **Edit** and paste the new token, then restart the ``datalab`` server."
+msgstr "VS Code conserve le jeton saisi. Lorsque le jeton change (nouveau démarrage du serveur sans jeton persistant, ou **Renouveler**), DataLab refuse l'ancien jeton et VS Code ne peut plus se connecter : dans ``mcp.json``, survolez ``${input:datalab-mcp-token}``, choisissez **Edit** et collez le nouveau jeton, puis redémarrez le serveur ``datalab``."
+
+msgid "Other assistants supporting the *Streamable HTTP* transport of MCP with an ``Authorization`` header can connect the same way."
+msgstr "Les autres assistants prenant en charge le transport *Streamable HTTP* de MCP avec un en-tête ``Authorization`` peuvent se connecter de la même manière."
+
+msgid "Available tools"
+msgstr "Outils disponibles"
+
+msgid "The server publishes the tools of the AI Assistant that act on data: ``list_objects``, ``get_current_panel``, ``get_object_info``, ``list_available_operations``, ``get_api_help``, ``capture_view``, ``create_synthetic_signal``, ``create_synthetic_image``, ``apply_operation`` and ``get_results``."
+msgstr "Le serveur publie les outils de l'Assistant IA qui agissent sur les données : ``list_objects``, ``get_current_panel``, ``get_object_info``, ``list_available_operations``, ``get_api_help``, ``capture_view``, ``create_synthetic_signal``, ``create_synthetic_image``, ``apply_operation`` et ``get_results``."
+
+msgid "``list_available_operations`` describes the parameters of each processing feature: types, choices, bounds, units and default values."
+msgstr "``list_available_operations`` décrit les paramètres de chaque traitement : types, choix, bornes, unités et valeurs par défaut."
+
+msgid "``apply_operation`` runs a processing or analysis feature on the objects given by their UUID (``target_uuids``, and ``operand_uuid`` for the operations with a second operand), or on the selected objects. It returns the new objects, the analysis results with their units, and the errors and warnings of the computation."
+msgstr "``apply_operation`` exécute un traitement ou une analyse sur les objets donnés par leur UUID (``target_uuids``, et ``operand_uuid`` pour les opérations ayant un second opérande), ou sur les objets sélectionnés. Il renvoie les nouveaux objets, les résultats d'analyse avec leurs unités, ainsi que les erreurs et avertissements du calcul."
+
+msgid "``get_results`` returns the analysis results stored in objects."
+msgstr "``get_results`` renvoie les résultats d'analyse enregistrés dans les objets."
+
+msgid "For safety, the tools running Python code (macros), reading files or triggering plugin actions are not published."
+msgstr "Par sécurité, les outils exécutant du code Python (macros), lisant des fichiers ou déclenchant des actions de plugins ne sont pas publiés."
+
+msgid "Security"
+msgstr "Sécurité"
+
+msgid "**Local only**: the server listens on ``127.0.0.1`` and refuses requests addressed to another host or coming from a web page of another origin."
+msgstr "**Local uniquement** : le serveur écoute sur ``127.0.0.1`` et refuse les requêtes adressées à un autre hôte ou provenant d'une page web d'une autre origine."
+
+msgid "**Token**: every request needs the token. By default, a new token is created at each start of the server; with the **Persistent MCP token** option of the settings, the token is kept between sessions, in a file of the DataLab configuration directory readable by you only. **Renew** replaces the token: the assistants using the former one are refused."
+msgstr "**Jeton** : chaque requête nécessite le jeton. Par défaut, un nouveau jeton est créé à chaque démarrage du serveur ; avec l'option **Jeton MCP persistant** des préférences, le jeton est conservé d'une session à l'autre, dans un fichier du répertoire de configuration de DataLab lisible par vous seul. **Renouveler** remplace le jeton : les assistants utilisant l'ancien sont refusés."
+
+msgid "**Confirmation**: every action modifying the workspace shows a confirmation dialog naming the external assistant, as in the AI Assistant panel. The read-only tools do not need confirmation. To let the external assistant work without confirmation, check **Approve the calls automatically** in the MCP dialog (or the **Approve external assistant calls automatically** option of the settings): the actions modifying the workspace then run directly, and remain visible in DataLab."
+msgstr "**Confirmation** : chaque action modifiant l'espace de travail affiche une boîte de confirmation nommant l'assistant externe, comme dans le panneau Assistant IA. Les outils en lecture seule ne nécessitent pas de confirmation. Pour laisser l'assistant externe travailler sans confirmation, cochez **Approuver automatiquement les appels** dans la boîte de dialogue MCP (ou l'option **Approuver automatiquement les appels des assistants externes** des préférences) : les actions modifiant l'espace de travail s'exécutent alors directement, et restent visibles dans DataLab."
+
+msgid "**One call at a time**: calls are run one after the other on the DataLab session; a call which has not started yet is cancelled when the server stops."
+msgstr "**Un appel à la fois** : les appels sont exécutés l'un après l'autre sur la session de DataLab ; un appel qui n'a pas encore commencé est annulé à l'arrêt du serveur."
+
+msgid "The external assistant receives the information returned by the tools, e.g. the titles, metadata and results of your objects or a capture of the view, and may send it to the language model it uses. Use a model and a provider suited to the confidentiality of your data."
+msgstr "L'assistant externe reçoit les informations renvoyées par les outils, par exemple les titres, métadonnées et résultats de vos objets ou une capture de la vue, et peut les transmettre au modèle de langage qu'il utilise. Utilisez un modèle et un fournisseur adaptés à la confidentialité de vos données."
+
+msgid "The :ref:`ai_assistant` describes the tools, and the :ref:`ref-to-webapi` gives programmatic access to DataLab from notebooks."
+msgstr "L':ref:`ai_assistant` décrit les outils, et l':ref:`ref-to-webapi` donne un accès programmatique à DataLab depuis des notebooks."

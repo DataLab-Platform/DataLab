@@ -32,6 +32,10 @@ all_hidden_imports += collect_submodules(
     filter=lambda name: name not in ('datalab_capsule.registry_app', 'datalab_capsule.cli'),
 )
 datas += collect_data_files('datalab_capsule')
+# MCP server (optional dependency): the command line of the SDK is not part of
+# the application
+all_hidden_imports += collect_submodules('mcp', filter=lambda name: not name.startswith('mcp.cli'))
+datas += copy_metadata('mcp')
 
 a = Analysis(
     ['datalab\\start.pyw'],

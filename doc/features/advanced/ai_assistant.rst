@@ -64,6 +64,8 @@ The panel is made of a toolbar, the conversation view and an input box:
   user configuration directory.
 - **Settings...**: open the **AI Assistant** tab of the settings dialog
   (provider, model, API key...).
+- **MCP server...**: open the dialog letting an external assistant, e.g. VS Code
+  Copilot, use the same tools on this session (see :ref:`mcp_server`).
 - **Send** / **Stop**: send the current message, or interrupt an ongoing
   request. Requests run in a background thread, so the interface stays
   responsive.
@@ -126,6 +128,10 @@ explicit confirmation.
       - ✓
       - Grab a screenshot of the current plot and inject it in the conversation,
         so a multimodal model can visually inspect the data
+    * - ``get_results``
+      - ✓
+      - Return the analysis results stored in objects (e.g. FWHM, centroid),
+        with their units
     * - ``trigger_plugin_action``
       - ..
       - Trigger a plugin action by its menu path
@@ -186,4 +192,6 @@ Privacy and security
 .. seealso::
 
     The macro system used by the assistant is described in :ref:`about_macros`,
-    and the underlying control API in :ref:`ref-to-remote-control`.
+    and the underlying control API in :ref:`ref-to-remote-control`. External
+    assistants, e.g. VS Code Copilot, can use the same tools through the
+    :ref:`mcp_server`.

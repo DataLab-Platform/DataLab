@@ -140,6 +140,7 @@ This section describes the advanced features of DataLab.
    advanced/migration_v020_to_v100
    advanced/macros
    advanced/ai_assistant
+   advanced/mcp
    advanced/webapi
    advanced/remote
    advanced/model

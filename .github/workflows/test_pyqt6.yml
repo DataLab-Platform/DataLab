@@ -48,6 +48,7 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         qt-binding: PyQt6
+        extras: mcp
         packages: ruff pytest httpx pyyaml
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab

@@ -76,6 +76,8 @@ datalab-plugin = "datalab.plugins.generator:main"
 [project.optional-dependencies]
 qt = ["PyQt5 >= 5.15.6"]
 opencv = ["opencv-python-headless >= 4.8.1.78"]
+# MCP server letting external assistants (e.g. VS Code Copilot) use DataLab tools
+mcp = ["mcp >= 1.10, < 2"]
 exe = [
     # This section is used to build the standalone executable with PyInstaller for the
     # official stand-alone releases of DataLab.
@@ -83,6 +85,7 @@ exe = [
     "pyinstaller == 6.16.0",  # DataLab 1.0
     "opencv-python-headless >= 4.8.1.78",
     "PyQt5 >= 5.15.6",
+    "mcp >= 1.10, < 2",
 ]
 dev = [
     "build",
