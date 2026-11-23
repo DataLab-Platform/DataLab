@@ -86,6 +86,7 @@ from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.gui.welcome import WelcomePanel
+from datalab.mcpserver.actions import McpActions
 from datalab.objectmodel import (
     UUID_REGEX,
     ObjectGroup,
@@ -209,6 +210,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         #: History entry of the HDF5 files being opened, recorded once opened
         self.__h5_open_entry: tuple | None = None
         self.webapi_actions: WebApiActions | None = None
+        self.mcp_actions: McpActions | None = None
 
         self.openh5_action: QW.QAction | None = None
         self.saveh5_action: QW.QAction | None = None
@@ -249,6 +251,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         self.__register_plugins()
         self.webapi_actions = WebApiActions(self)
+        self.mcp_actions = McpActions(self)
 
     def _after_setup(self, console: bool) -> None:
         """Process remote requests, the main window being fully set up."""
@@ -2137,6 +2140,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.webapi_actions is not None:
             self.file_menu.addSeparator()
             self.webapi_actions.create_menu(self.file_menu)
+        if self.mcp_actions is not None:
+            self.file_menu.addAction(self.mcp_actions.action)
         if self.quit_action is not None:
             add_actions(self.file_menu, [self.quit_action])
 
@@ -3053,6 +3058,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         super()._cleanup_before_reset()
         if self.webapi_actions is not None:
             self.webapi_actions.cleanup()
+        if self.mcp_actions is not None:
+            self.mcp_actions.cleanup()
 
     def _cleanup_after_state_save(self) -> None:
         """Persist DataLab UI state and unregister plugins after shutdown."""

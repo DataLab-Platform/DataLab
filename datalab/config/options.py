@@ -108,6 +108,36 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="If True, allow localhost Web API connections without a token.",
         )
+        self.mcp_port = TypedOptionField(
+            self,
+            "mcp_port",
+            category="main",
+            default=18090,
+            expected_type=int,
+            description="Preferred port of the MCP server (next free port if busy).",
+        )
+        self.mcp_persistent_token = TypedOptionField(
+            self,
+            "mcp_persistent_token",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description=(
+                "If True, keep the MCP server token between sessions (stored in a "
+                "dedicated file of the user profile)."
+            ),
+        )
+        self.mcp_auto_approve = TypedOptionField(
+            self,
+            "mcp_auto_approve",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description=(
+                "If True, run the tool calls of external assistants (MCP) without "
+                "confirmation (read-only tools never need confirmation)."
+            ),
+        )
         self.capsule_registry_address = TypedOptionField(
             self,
             "capsule_registry_address",

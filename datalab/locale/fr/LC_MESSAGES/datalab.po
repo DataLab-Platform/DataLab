@@ -6023,3 +6023,90 @@ msgstr "Démarré le : "
 
 msgid "Finished at: "
 msgstr "Terminé le : "
+
+msgid "External assistant — Confirm tool call"
+msgstr "Assistant externe — Confirmer l'appel d'outil"
+
+msgid "An external assistant (%s) requests to run the following action:"
+msgstr "Un assistant externe (%s) demande à exécuter l'action suivante :"
+
+msgid "MCP server port"
+msgstr "Port du serveur MCP"
+
+msgid "Preferred port of the MCP server used by external assistants (e.g. VS Code Copilot).<br>If this port is busy, the next free port is used."
+msgstr "Port préféré du serveur MCP utilisé par les assistants externes (par exemple VS Code Copilot).<br>Si ce port est occupé, le port libre suivant est utilisé."
+
+msgid "Persistent MCP token"
+msgstr "Jeton MCP persistant"
+
+msgid "When enabled, the MCP server keeps the same token between sessions, <br>so that the configuration of external assistants does not change.<br>The token is stored in a dedicated file of your user profile.<br>When disabled (default), a new token is created at each start."
+msgstr "Si cette option est activée, le serveur MCP conserve le même jeton d'une session à l'autre, <br>afin que la configuration des assistants externes ne change pas.<br>Le jeton est enregistré dans un fichier dédié de votre profil utilisateur.<br>Si elle est désactivée (par défaut), un nouveau jeton est créé à chaque démarrage."
+
+msgid "The MCP server needs the 'mcp' package: install it with 'pip install datalab-platform[mcp]'."
+msgstr "Le serveur MCP nécessite le paquet 'mcp' : installez-le avec 'pip install datalab-platform[mcp]'."
+
+msgid "Connect an external assistant"
+msgstr "Connecter un assistant externe"
+
+msgid "The MCP server lets an external assistant (e.g. VS Code Copilot) use the tools of the AI Assistant on this DataLab session. It listens on this computer only and needs the token below. Unless you approve its calls automatically, you confirm every action modifying the workspace, as in the AI Assistant panel."
+msgstr "Le serveur MCP permet à un assistant externe (par exemple VS Code Copilot) d'utiliser les outils de l'Assistant IA sur cette session de DataLab. Il n'écoute que sur cet ordinateur et nécessite le jeton ci-dessous. Sauf si vous approuvez automatiquement ses appels, vous confirmez chaque action modifiant l'espace de travail, comme dans le panneau Assistant IA."
+
+msgid "Renew"
+msgstr "Renouveler"
+
+msgid "Replace the token: the assistants using the former token are refused"
+msgstr "Remplacer le jeton : les assistants utilisant l'ancien jeton sont refusés"
+
+msgid "Show token"
+msgstr "Afficher le jeton"
+
+msgid "VS Code configuration (.vscode/mcp.json), prompting for the token:"
+msgstr "Configuration de VS Code (.vscode/mcp.json), qui demande le jeton :"
+
+msgid "Copy configuration"
+msgstr "Copier la configuration"
+
+msgid "Copy to clipboard"
+msgstr "Copier dans le presse-papier"
+
+msgid "Status: running"
+msgstr "Statut : démarré"
+
+msgid "Stop server"
+msgstr "Arrêter le serveur"
+
+msgid "Status: not running"
+msgstr "Statut : arrêté"
+
+msgid "Start server"
+msgstr "Démarrer le serveur"
+
+msgid "The token is persistent: it stays the same when DataLab restarts (see the settings)."
+msgstr "Le jeton est persistant : il reste le même au redémarrage de DataLab (voir les préférences)."
+
+msgid "The token changes at each start of the server (see the settings to keep it). VS Code keeps the token entered: to enter the new one, hover over the token input in mcp.json and choose Edit."
+msgstr "Le jeton change à chaque démarrage du serveur (voir les préférences pour le conserver). VS Code conserve le jeton saisi : pour saisir le nouveau, survolez l'entrée du jeton dans mcp.json et choisissez Edit."
+
+msgid "The connected assistants will be refused until they use the new token. Renew the token?"
+msgstr "Les assistants connectés seront refusés tant qu'ils n'utiliseront pas le nouveau jeton. Renouveler le jeton ?"
+
+msgid "Connect an external assistant (MCP)..."
+msgstr "Connecter un assistant externe (MCP)..."
+
+msgid "Let an external assistant (e.g. VS Code Copilot) use the tools of the AI Assistant on this session"
+msgstr "Permettre à un assistant externe (par exemple VS Code Copilot) d'utiliser les outils de l'Assistant IA sur cette session"
+
+msgid "Approve external assistant calls automatically"
+msgstr "Approuver automatiquement les appels des assistants externes"
+
+msgid "When enabled, the tool calls of external assistants (MCP) run without confirmation,<br>including those modifying the workspace.<br>When disabled (default), you confirm each action modifying the workspace.<br>Read-only tools never need confirmation."
+msgstr "Si cette option est activée, les appels d'outils des assistants externes (MCP) s'exécutent sans confirmation,<br>y compris ceux modifiant l'espace de travail.<br>Si elle est désactivée (par défaut), vous confirmez chaque action modifiant l'espace de travail.<br>Les outils en lecture seule ne nécessitent jamais de confirmation."
+
+msgid "Approve the calls automatically (no confirmation)"
+msgstr "Approuver automatiquement les appels (sans confirmation)"
+
+msgid "Run the tool calls of external assistants without confirmation, including those modifying the workspace"
+msgstr "Exécuter les appels d'outils des assistants externes sans confirmation, y compris ceux modifiant l'espace de travail"
+
+msgid "MCP server…"
+msgstr "Serveur MCP…"
