@@ -29,7 +29,13 @@ from datalab.aiassistant.providers.base import (
     TokenUsage,
     sum_usage,
 )
-from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
+from datalab.aiassistant.tools.registry import (
+    ERROR_REFUSED,
+    ERROR_UNKNOWN_TOOL,
+    Tool,
+    ToolRegistry,
+    ToolResult,
+)
 
 if TYPE_CHECKING:
     from datalab.control.proxy import LocalProxy
@@ -527,9 +533,11 @@ class AIController:
                 try:
                     tool = self.registry.get(call.name)
                 except KeyError as exc:
-                    result = ToolResult(ok=False, error=str(exc))
+                    result = ToolResult(
+                        ok=False, error=str(exc), error_kind=ERROR_UNKNOWN_TOOL
+                    )
                 else:
-                    needs_confirm = not (tool.readonly and self.auto_approve_readonly)
+                    needs_confirm = tool.needs_confirmation(self.auto_approve_readonly)
                     if needs_confirm and not self.confirm_callback(
                         tool, call.arguments
                     ):
@@ -539,7 +547,11 @@ class AIController:
                         # is rejected as malformed. Synthesize a cancellation
                         # response for THIS call and every remaining call in
                         # the same turn before returning.
-                        cancel_result = ToolResult(ok=False, error="Cancelled by user.")
+                        cancel_result = ToolResult(
+                            ok=False,
+                            error="Cancelled by user.",
+                            error_kind=ERROR_REFUSED,
+                        )
                         for pending in response.tool_calls[call_index:]:
                             self.history.append(
                                 ChatMessage(

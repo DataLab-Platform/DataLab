@@ -13,6 +13,7 @@ from sigima.io import RawImageImportParam
 
 from datalab.aiassistant.tools.builtin import build_default_registry
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
+from datalab.aiassistant.tools.validation import validate_arguments
 
 
 def _ok_tool(_proxy, _mw, **kwargs):  # noqa: ARG001
@@ -189,3 +190,94 @@ def test_macro_tool_documents_autorun() -> None:
     assert autorun["default"] is True
     assert "without executing" in autorun["description"]
     assert "'autorun' to false" in tool.description
+
+
+def _make_strict_registry(handler: Mock) -> ToolRegistry:
+    reg = ToolRegistry()
+    reg.register(
+        Tool(
+            name="strict",
+            description="Strict schema.",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "n": {"type": "integer", "minimum": 1},
+                    "kind": {"type": "string", "enum": ["a", "b"]},
+                    "uuid": {"type": ["string", "null"]},
+                },
+                "required": ["n"],
+                "additionalProperties": False,
+            },
+            handler=handler,
+        )
+    )
+    return reg
+
+
+@pytest.mark.parametrize(
+    "arguments, message",
+    [
+        ({}, "missing required property 'n'"),
+        ({"n": "3"}, "expected integer"),
+        ({"n": True}, "expected integer"),
+        ({"n": 0}, "lower than 1"),
+        ({"n": 1, "kind": "c"}, "is not one of"),
+        ({"n": 1, "other": 2}, "unexpected property 'other'"),
+    ],
+)
+def test_call_rejects_invalid_arguments(arguments: dict, message: str) -> None:
+    """Arguments not matching the schema are rejected before the handler runs."""
+    handler = Mock(return_value={})
+    res = _make_strict_registry(handler).call("strict", arguments, None, None)
+    assert res.ok is False
+    assert res.error_kind == "invalid"
+    assert message in (res.error or "")
+    handler.assert_not_called()
+
+
+def test_call_accepts_valid_arguments() -> None:
+    """Valid arguments, including integral floats and nulls, reach the handler."""
+    handler = Mock(return_value={"done": True})
+    res = _make_strict_registry(handler).call(
+        "strict", {"n": 2.0, "kind": "a", "uuid": None}, None, None
+    )
+    assert res.ok is True
+    handler.assert_called_once()
+
+
+def test_call_error_kinds() -> None:
+    """Unknown tools and handler failures are reported with their error kind."""
+    reg = _make_registry()
+    assert reg.call("missing", {}, None, None).error_kind == "unknown_tool"
+    assert reg.call("boom", {}, None, None).error_kind == "failed"
+
+
+def test_needs_confirmation() -> None:
+    """Only read-only tools may skip the confirmation."""
+    reg = _make_registry()
+    assert reg.get("echo").needs_confirmation(True) is False
+    assert reg.get("echo").needs_confirmation(False) is True
+    assert reg.get("boom").needs_confirmation(True) is True
+
+
+def test_without_returns_filtered_registry() -> None:
+    """``without`` leaves out the given tools, without changing the original."""
+    reg = _make_registry()
+    filtered = reg.without(["boom", "unknown"])
+    assert set(filtered.tools) == {"echo"}
+    assert set(reg.tools) == {"echo", "boom"}
+
+
+def test_default_registry_schemas_accept_their_defaults() -> None:
+    """The defaults declared in the built-in schemas are valid arguments."""
+    for tool in build_default_registry().tools.values():
+        properties = tool.parameters.get("properties", {})
+        for name, schema in properties.items():
+            if "default" in schema:
+                arguments = {name: schema["default"]}
+                for required in tool.parameters.get("required", []):
+                    arguments.setdefault(required, "x")
+                assert validate_arguments(tool.parameters, arguments) == [], (
+                    tool.name,
+                    name,
+                )

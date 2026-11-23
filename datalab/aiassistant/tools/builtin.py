@@ -20,8 +20,10 @@ from __future__ import annotations
 import ast
 import base64
 import inspect
+from enum import Enum
 from typing import TYPE_CHECKING, Any
 
+import guidata.dataset as gds
 import numpy as np
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -29,9 +31,16 @@ from qtpy import QtWidgets as QW
 from sigima.io import RawImageImportParam
 from sigima.io.image.raw import RAW_DTYPES
 
+from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.aiassistant.providers.base import ChatMessage
-from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
+from datalab.aiassistant.tools.registry import (
+    Tool,
+    ToolRegistry,
+    ToolResult,
+    is_non_interactive,
+)
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.processor.base import computation_messages_collected
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
@@ -146,14 +155,25 @@ def _tool_list_available_operations(
             try:
                 instance = feature.paramclass()
                 for item in instance.get_items():
-                    param_fields.append(
-                        {
-                            "name": item.get_name(),
-                            "type": type(item).__name__,
-                            "label": item.get_prop_value("display", instance, "label"),
-                            "default": item.get_value(instance),
-                        }
-                    )
+                    if isinstance(item, gds.ButtonItem):
+                        continue
+                    field_info = {
+                        "name": item.get_name(),
+                        "type": type(item).__name__,
+                        "label": item.get_prop_value("display", instance, "label"),
+                        "default": json_safe(item.get_value(instance)),
+                    }
+                    keys = _choice_keys(item, instance)
+                    if keys is not None:
+                        field_info["choices"] = json_safe(keys)
+                    for prop in ("min", "max"):
+                        limit = item.get_prop("data", prop, None)
+                        if limit is not None:
+                            field_info[prop] = json_safe(limit)
+                    unit = item.get_prop("display", "unit", "")
+                    if unit:
+                        field_info["unit"] = unit
+                    param_fields.append(field_info)
             except Exception:  # pylint: disable=broad-except
                 # Some param classes require positional args; skip introspection.
                 param_fields = [{"name": "?", "info": "introspection failed"}]
@@ -438,32 +458,310 @@ def _tool_apply_operation(
     parameters: dict[str, Any] | None = None,
     panel: str | None = None,
     target_uuid: str | None = None,
+    target_uuids: list[str] | None = None,
+    operand_uuid: str | None = None,
 ) -> dict[str, Any]:
     if panel is not None:
         proxy.set_current_panel(panel)
-    if target_uuid is not None:
-        proxy.select_objects([target_uuid])
-
     panel_widget = _resolve_panel(mainwindow, proxy.get_current_panel())
+    uuids = list(target_uuids or [])
+    if target_uuid is not None and target_uuid not in uuids:
+        uuids.insert(0, target_uuid)
+    _check_uuids(panel_widget, uuids + ([operand_uuid] if operand_uuid else []))
+    if uuids:
+        panel_widget.objview.select_objects(uuids)
+
     processor = panel_widget.processor
     feature = processor.get_feature(name)
+    obj2 = None
+    if operand_uuid is not None:
+        if feature.pattern != "2_to_1":
+            raise ValueError(
+                f"'operand_uuid' only applies to operations of pattern 2_to_1, "
+                f"not to {name!r} (pattern {feature.pattern})."
+            )
+        obj2 = panel_widget.objmodel[operand_uuid]
+    if is_non_interactive():
+        return _apply_operation_non_interactive(
+            mainwindow, panel_widget, feature, parameters, obj2
+        )
     param_obj = None
     if parameters and feature.paramclass is not None:
         param_obj = feature.paramclass()
-        for key, value in parameters.items():
-            try:
-                setattr(param_obj, key, value)
-            except Exception as exc:  # pylint: disable=broad-except
-                raise ValueError(
-                    f"Cannot set parameter {key!r} on "
-                    f"{feature.paramclass.__name__}: {exc}"
-                ) from exc
-    proxy.calc(feature.feature_id, param_obj)
+        _set_param_values(param_obj, parameters)
+    if obj2 is not None:
+        processor.run_feature(feature, obj2, param_obj)
+    else:
+        proxy.calc(feature.feature_id, param_obj)
     return {
         "operation": name,
         "feature_id": feature.feature_id,
         "panel": proxy.get_current_panel(),
     }
+
+
+def _check_uuids(panel_widget, uuids: list[str]) -> None:
+    """Raise ValueError if one of ``uuids`` is not an object of the panel."""
+    missing = [uuid for uuid in uuids if not panel_widget.objmodel.has_uuid(uuid)]
+    if missing:
+        raise ValueError(
+            f"No object with UUID {', '.join(missing)} in the "
+            f"{panel_widget.PANEL_STR_ID} panel (see 'list_objects')."
+        )
+
+
+def freeze_operation_targets(
+    mainwindow: DLMainWindow, arguments: dict[str, Any]
+) -> dict[str, Any]:
+    """Return the arguments of 'apply_operation' with explicit targets.
+
+    When the call gives no target, the targets are the objects selected when
+    the call is received: the confirmation shows them, and changing the
+    selection meanwhile does not change them.
+
+    Args:
+        mainwindow: DataLab main window.
+        arguments: Arguments of the 'apply_operation' call.
+
+    Returns:
+        A copy of ``arguments``, with the panel and the targets set.
+
+    Raises:
+        ValueError: A target or the operand is not an object of the panel.
+    """
+    arguments = dict(arguments)
+    panel = arguments.get("panel") or mainwindow.current_panel_name()
+    if panel not in ("signal", "image"):
+        return arguments
+    panel_widget = _resolve_panel(mainwindow, panel)
+    arguments["panel"] = panel_widget.PANEL_STR_ID
+    uuids = list(arguments.get("target_uuids") or [])
+    if arguments.get("target_uuid"):
+        uuids.append(arguments["target_uuid"])
+    if arguments.get("operand_uuid"):
+        uuids.append(arguments["operand_uuid"])
+    _check_uuids(panel_widget, uuids)
+    if not (arguments.get("target_uuid") or arguments.get("target_uuids")):
+        arguments["target_uuids"] = [
+            get_uuid(obj) for obj in panel_widget.objview.get_sel_objects(True)
+        ]
+    return arguments
+
+
+def _choice_keys(item, param) -> list[Any] | None:
+    """Return the valid keys of a choice item, or None for other items."""
+    if not isinstance(item, gds.ChoiceItem):
+        return None
+    choices = item.get_prop_value("data", param, "choices", [])
+    return [choice[0] for choice in choices]
+
+
+def _set_param_values(param, values: dict[str, Any]) -> None:
+    """Set the parameter values given by a client, checking every value.
+
+    Args:
+        param: Parameter set to update.
+        values: Values keyed by item name.
+
+    Raises:
+        ValueError: Unknown item name or invalid value.
+    """
+    items = {item.get_name(): item for item in param.get_items()}
+    pclass = type(param).__name__
+    for key, value in values.items():
+        item = items.get(key)
+        if item is None:
+            valid = ", ".join(sorted(items)) or "<none>"
+            raise ValueError(
+                f"Unknown parameter {key!r} for {pclass} (valid parameters: {valid})."
+            )
+        if isinstance(item, gds.FloatItem) and isinstance(value, int):
+            value = float(value)
+        elif (
+            isinstance(item, gds.IntItem)
+            and isinstance(value, float)
+            and value.is_integer()
+        ):
+            value = int(value)
+        keys = _choice_keys(item, param)
+        try:
+            setattr(param, key, value)
+            stored = item.get_value(param)
+            if keys is not None and stored not in keys:
+                raise ValueError(f"valid values: {keys}")
+            if keys is None and not isinstance(item, gds.BoolItem):
+                item.check_value(stored, raise_exception=True)
+            elif isinstance(item, gds.BoolItem) and not isinstance(stored, bool):
+                raise ValueError("expected a boolean")
+        except Exception as exc:  # pylint: disable=broad-except
+            raise ValueError(
+                f"Invalid value {value!r} for parameter {key!r} of {pclass}: {exc}"
+            ) from exc
+
+
+def _result_entries(obj) -> dict[str, int]:
+    """Return the identity of each result stored in the metadata of ``obj``."""
+    return {
+        key: id(value)
+        for key, value in obj.metadata.items()
+        if GeometryAdapter.match(key, value) or TableAdapter.match(key, value)
+    }
+
+
+def _apply_operation_non_interactive(
+    mainwindow: DLMainWindow, panel_widget, feature, parameters, obj2
+) -> dict[str, Any]:
+    """Run an operation without any dialog box (e.g. for the MCP server)."""
+    processor = panel_widget.processor
+    targets = panel_widget.objview.get_sel_objects(include_groups=True)
+    if not targets:
+        raise ValueError(
+            "No target object: pass 'target_uuids' (see 'list_objects') "
+            "or select objects in DataLab."
+        )
+    if feature.pattern == "1_to_n":
+        raise ValueError(
+            f"Operation {feature.name!r} (pattern 1_to_n) needs interactive "
+            "settings: it is not available to external assistants."
+        )
+    if feature.pattern == "2_to_1" and obj2 is None:
+        raise ValueError(
+            f"Operation {feature.name!r} (pattern 2_to_1) needs a second operand: "
+            "pass its UUID as 'operand_uuid'."
+        )
+    param = None
+    if feature.paramclass is not None:
+        _edit, param = processor.init_param(
+            None, feature.paramclass, feature.title, feature.comment
+        )
+        _set_param_values(param, parameters or {})
+    elif parameters:
+        raise ValueError(f"Operation {feature.name!r} takes no parameter.")
+
+    panels = (mainwindow.signalpanel, mainwindow.imagepanel)
+    uuids_before = {get_uuid(obj) for p in panels for obj in p.objmodel}
+    results_before = {get_uuid(obj): _result_entries(obj) for obj in targets}
+    args = [] if obj2 is None else [obj2]
+    with computation_messages_collected() as messages:
+        processor.run_feature(feature, *args, param=param, edit=False)
+    created = [
+        {"uuid": get_uuid(obj), "title": obj.title, "panel": p.PANEL_STR_ID}
+        for p in panels
+        for obj in p.objmodel
+        if get_uuid(obj) not in uuids_before
+    ]
+    new_results = []
+    for obj in targets:
+        before = results_before[get_uuid(obj)]
+        for key, ident in _result_entries(obj).items():
+            if before.get(key) != ident:
+                new_results.append({"uuid": get_uuid(obj), "result_key": key})
+    if messages.errors:
+        raise RuntimeError("\n".join(messages.errors))
+    output: dict[str, Any] = {
+        "operation": feature.name,
+        "feature_id": feature.feature_id,
+        "panel": panel_widget.PANEL_STR_ID,
+        "pattern": feature.pattern,
+        "targets": [{"uuid": get_uuid(obj), "title": obj.title} for obj in targets],
+        "created_objects": created,
+        "new_results": new_results,
+    }
+    if param is not None:
+        output["parameters"] = {
+            item.get_name(): json_safe(item.get_value(param))
+            for item in param.get_items()
+            if not isinstance(item, gds.ButtonItem)
+        }
+    if messages.warnings:
+        output["warnings"] = messages.warnings
+    if new_results:
+        output["note"] = "Read the new results with 'get_results'."
+    return output
+
+
+def json_safe(value: Any) -> Any:
+    """Convert ``value`` to a JSON-serializable value (non-finite floats → None)."""
+    if isinstance(value, np.ndarray):
+        return [json_safe(v) for v in value.tolist()]
+    if isinstance(value, np.generic):
+        value = value.item()
+    if isinstance(value, float):
+        return value if np.isfinite(value) else None
+    if isinstance(value, (str, int, bool)) or value is None:
+        return value
+    if isinstance(value, (list, tuple)):
+        return [json_safe(v) for v in value]
+    if isinstance(value, dict):
+        return {str(k): json_safe(v) for k, v in value.items()}
+    if isinstance(value, Enum):
+        return value.name
+    return str(value)
+
+
+# =============================================================================
+# Results tool
+# =============================================================================
+
+
+def _describe_results(obj) -> list[dict[str, Any]]:
+    """Return the analysis results stored in the metadata of ``obj``."""
+    units = {"x": obj.xunit or "", "y": obj.yunit or ""}
+    if hasattr(obj, "zunit"):
+        units["z"] = obj.zunit or ""
+    out = []
+    for kind, adapter_class in (("geometry", GeometryAdapter), ("table", TableAdapter)):
+        for adapter in adapter_class.iterate_from_obj(obj):
+            df = adapter.to_dataframe()
+            rows = []
+            for record in df.to_dict(orient="records"):
+                row = {str(k): json_safe(v) for k, v in record.items()}
+                if "roi_index" in row:
+                    index = row.pop("roi_index")
+                    row["roi"] = (
+                        None
+                        if index is None or index < 0 or obj.roi is None
+                        else obj.roi.get_single_roi_title(int(index))
+                    )
+                rows.append(row)
+            entry: dict[str, Any] = {
+                "result_key": adapter.metadata_key,
+                "kind": kind,
+                "title": adapter.title,
+                "function": adapter.func_name,
+                "rows": rows,
+                "object_units": units,
+            }
+            if kind == "geometry":
+                entry["shape"] = adapter.result.kind.value
+            out.append(entry)
+    return out
+
+
+def _tool_get_results(
+    proxy: LocalProxy,
+    mainwindow: DLMainWindow,
+    uuids: list[str] | None = None,
+    panel: str | None = None,
+) -> dict[str, Any]:
+    panel_widget = _resolve_panel(mainwindow, panel)
+    if uuids:
+        _check_uuids(panel_widget, uuids)
+        objs = [panel_widget.objmodel[uuid] for uuid in uuids]
+    else:
+        objs = panel_widget.objview.get_sel_objects(include_groups=True)
+    objects = []
+    for obj in objs:
+        results = _describe_results(obj)
+        objects.append(
+            {
+                "uuid": get_uuid(obj),
+                "title": obj.title,
+                "has_results": bool(results),
+                "results": results,
+            }
+        )
+    return {"panel": panel_widget.PANEL_STR_ID, "objects": objects}
 
 
 # =============================================================================
@@ -783,7 +1081,12 @@ def _tool_capture_view(
             },
         ],
     )
-    return ToolResult(ok=True, data=summary, followup_messages=[followup])
+    return ToolResult(
+        ok=True,
+        data=summary,
+        followup_messages=[followup],
+        images=[("image/png", b64)],
+    )
 
 
 # =============================================================================
@@ -1083,11 +1386,53 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
                             "operation."
                         ),
                     },
+                    "target_uuids": {
+                        "type": ["array", "null"],
+                        "items": {"type": "string"},
+                        "description": (
+                            "UUIDs of the objects to process (see 'list_objects'). "
+                            "Defaults to the current selection."
+                        ),
+                    },
+                    "operand_uuid": {
+                        "type": ["string", "null"],
+                        "description": (
+                            "UUID of the second operand, for the operations of "
+                            "pattern 2_to_1 (e.g. 'difference')."
+                        ),
+                    },
                 },
                 "required": ["name"],
                 "additionalProperties": False,
             },
             handler=_tool_apply_operation,
+        )
+    )
+    reg.register(
+        Tool(
+            name="get_results",
+            description=(
+                "Return the analysis results (e.g. FWHM, centroid, statistics) "
+                "stored on objects, with their rows and the units of the object. "
+                "Analyses of pattern 1_to_0 run by 'apply_operation' store their "
+                "results this way."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "uuids": {
+                        "type": ["array", "null"],
+                        "items": {"type": "string"},
+                        "description": (
+                            "UUIDs of the objects. Defaults to the current selection."
+                        ),
+                    },
+                    "panel": _PANEL_PARAM,
+                },
+                "additionalProperties": False,
+            },
+            handler=_tool_get_results,
+            readonly=True,
         )
     )
     if expose_macro_tool:

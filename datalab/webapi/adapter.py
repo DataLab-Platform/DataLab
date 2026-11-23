@@ -29,6 +29,7 @@ handlers via FastAPI dependency injection.
 
 from __future__ import annotations
 
+import concurrent.futures
 import threading
 from contextlib import AbstractContextManager, nullcontext
 from typing import TYPE_CHECKING, Any, Union
@@ -69,6 +70,8 @@ class MainThreadExecutor(QObject):
 
     # Signal to request execution on main thread
     _execute_signal = Signal(object, object)  # (func, result_holder)
+    # Signal to request execution on main thread, with a future
+    _submit_signal = Signal(object, object)  # (func, future)
 
     def __init__(
         self, request_context: Callable[[], AbstractContextManager] | None = None
@@ -80,6 +83,7 @@ class MainThreadExecutor(QObject):
         # creating the executor, the slot must be run by the main thread
         self.moveToThread(self._main_thread)
         self._execute_signal.connect(self._execute_on_main_thread)
+        self._submit_signal.connect(self._run_submitted)
 
     def _call(self, func) -> Any:
         """Call a function on the main thread, in the request context.
@@ -110,6 +114,39 @@ class MainThreadExecutor(QObject):
         finally:
             # Signal that execution is complete
             result_holder["event"].set()
+
+    @Slot(object, object)
+    def _run_submitted(self, func, future: concurrent.futures.Future) -> None:
+        """Slot running a function submitted with :meth:`submit`.
+
+        Args:
+            func: Zero-argument callable to execute.
+            future: Future receiving the result or the exception.
+        """
+        if not future.set_running_or_notify_cancel():
+            return  # Cancelled before its start: never run it
+        try:
+            result = self._call(func)
+        except BaseException as exc:  # pylint: disable=broad-exception-caught
+            future.set_exception(exc)
+        else:
+            future.set_result(result)
+
+    def submit(self, func) -> concurrent.futures.Future:
+        """Queue a function for the Qt main thread, without waiting for it.
+
+        Unlike :meth:`run_on_main_thread`, the caller chooses how long to wait,
+        and may cancel the future while the function has not started yet.
+
+        Args:
+            func: Zero-argument callable to execute.
+
+        Returns:
+            A future receiving the result of the function, or its exception.
+        """
+        future: concurrent.futures.Future = concurrent.futures.Future()
+        self._submit_signal.emit(func, future)
+        return future
 
     def run_on_main_thread(self, func) -> Any:
         """Run a function on the Qt main thread and wait for the result.
