@@ -534,6 +534,10 @@ def _wait_macro_finished(macro, console, console_before_len: int, timeout: float
     loop = QC.QEventLoop()
     macro.FINISHED.connect(loop.quit)
     timed_out = {"flag": False}
+    if not macro.is_running():
+        # The macro failed to start: FINISHED has already been emitted
+        output = console.toPlainText()[console_before_len:]
+        return output, False
 
     def _on_timeout() -> None:
         timed_out["flag"] = True

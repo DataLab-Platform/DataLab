@@ -1105,6 +1105,10 @@ msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
 #, python-format
+msgid "Executable: %s"
+msgstr "Exécutable : %s"
+
+#, python-format
 msgid "# ==> Running '%s' macro..."
 msgstr "# ==> Exécution de la macro '%s'..."
 
