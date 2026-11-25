@@ -18,12 +18,16 @@ All other methods should be tested here.
 # guitest: show
 
 import os.path as osp
+import sys
 import time
+from unittest import mock
 
 from guidata.io import HDF5Reader, HDF5Writer
 from guidata.qthelpers import qt_app_context
+from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+from datalab.aiassistant.tools.builtin import _wait_macro_finished
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.macroeditor import Macro
@@ -278,7 +282,52 @@ print("All Unicode tests passed! ✓")
             win.macropanel.remove_all_objects()
 
 
+def test_macro_start_failure():
+    """Test that a macro which cannot start reports why (issue #587).
+
+    Without the fix, the error message box was given the macro (a QObject) as
+    parent, raising a TypeError which hid the cause of the failure.
+    """
+    missing = osp.join(helpers.get_temporary_directory(), "missing_python.exe")
+    messages = []
+
+    def critical(parent, title, text):
+        """Record the message box instead of showing it"""
+        assert isinstance(parent, QW.QWidget), f"Invalid parent: {parent!r}"
+        messages.append(text)
+
+    with qt_app_context():
+        widget = MacroPanel(None)
+        macro = widget.add_macro()
+        states = []
+        macro.STARTED.connect(lambda: states.append("started"))
+        macro.FINISHED.connect(lambda: states.append("finished"))
+        with (
+            mock.patch.object(sys, "executable", missing),
+            mock.patch.object(QW.QMessageBox, "critical", side_effect=critical),
+        ):
+            widget.run_macro()
+            timer = QC.QElapsedTimer()
+            timer.start()
+            while "finished" not in states and timer.elapsed() < 10000:
+                QW.QApplication.processEvents()
+                time.sleep(0.05)
+        assert states and states[-1] == "finished"
+        assert not macro.is_running()
+        assert macro.get_exit_code() is None
+        assert len(messages) == 1 and missing in messages[0]
+        error_msg = _("# ==> Unable to run '%s' macro") % macro.title
+        assert error_msg in widget.console.toPlainText()
+
+        # The AI Assistant does not wait for a macro which failed to start
+        timer.restart()
+        _output, timed_out = _wait_macro_finished(macro, widget.console, 0, 5.0)
+        assert not timed_out and timer.elapsed() < 1000
+        widget.remove_all_objects()
+
+
 if __name__ == "__main__":
     test_macro_editor()
     test_macro_uid_and_new_actions()
     test_macro_unicode_encoding()
+    test_macro_start_failure()

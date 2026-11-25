@@ -322,6 +322,7 @@ print("All done!")
     def run(self) -> None:
         """Run macro"""
         self.flush_autosave()
+        self.__last_exit_code = None
         self.process = QC.QProcess()
         code = self.get_code()
         datalab_path = osp.abspath(osp.join(osp.dirname(datalab.__file__), os.pardir))
@@ -340,19 +341,45 @@ print("All done!")
             env.insert(key, sysenv.value(key))
         self.process.readyReadStandardOutput.connect(self.write_output)
         self.process.readyReadStandardError.connect(self.write_error)
+        self.process.started.connect(self.started)
+        self.process.errorOccurred.connect(self.error_occurred)
         self.process.finished.connect(self.finished)
         self.process.setProcessEnvironment(env)
         args = ["-c", code]
+        # The process starts asynchronously, without a timeout: its start may be
+        # slow, e.g. when an antivirus scans the standalone executable.
         self.process.start(sys.executable, args)
-        running = self.process.waitForStarted(3000)
-        if not running:
-            self.print(_("# ==> Unable to run '%s' macro") % self.title, error=True)
-            QW.QMessageBox.critical(
-                self, _("Error"), _("Macro Python interpreter failed to start!")
-            )
-        else:
-            self.print(_("# ==> Running '%s' macro...") % self.title)
+        # On Windows, a start failure is reported (and FINISHED emitted) by
+        # `error_occurred` before `start` returns
+        if self.is_running():
             self.STARTED.emit()
+
+    def started(self) -> None:
+        """Process has started"""
+        self.print(_("# ==> Running '%s' macro...") % self.title)
+
+    def error_occurred(self, error: QC.QProcess.ProcessError) -> None:
+        """Process error has occurred
+
+        Args:
+            error: Process error
+        """
+        # Other errors (e.g. a crash) are followed by the `finished` signal
+        if error != QC.QProcess.FailedToStart:
+            return
+        reason = self.process.errorString()
+        self.print(
+            _("# ==> Unable to run '%s' macro") % self.title + f": {reason}",
+            error=True,
+        )
+        QW.QMessageBox.critical(
+            self.console,
+            _("Error"),
+            _("Macro Python interpreter failed to start!")
+            + f"\n\n{reason}\n\n"
+            + _("Executable: %s") % self.process.program(),
+        )
+        self.FINISHED.emit()
 
     def is_running(self) -> bool:
         """Is macro running?
@@ -361,7 +388,7 @@ print("All done!")
             True if macro is running
         """
         if self.process is not None:
-            return self.process.state() == QC.QProcess.Running
+            return self.process.state() != QC.QProcess.NotRunning
         return False
 
     def kill(self) -> None:
