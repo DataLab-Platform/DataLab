@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import abc
+import contextvars
 import copy
 import inspect
 import multiprocessing
@@ -16,7 +17,8 @@ import os.path as osp
 import time
 import uuid
 import warnings
-from contextlib import ExitStack
+from collections.abc import Iterator
+from contextlib import ExitStack, contextmanager
 from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
 from multiprocessing.pool import Pool
@@ -78,6 +80,42 @@ if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
     from datalab.processingcall import ProcessingCall
+
+
+@dataclass
+class ComputationMessages:
+    """Errors and warnings of computations, collected instead of being shown.
+
+    Attributes:
+        errors: Error messages, prefixed with their context.
+        warnings: Warning messages, prefixed with their context.
+    """
+
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+
+
+_COMPUTATION_MESSAGES: contextvars.ContextVar[ComputationMessages | None] = (
+    contextvars.ContextVar("datalab_computation_messages", default=None)
+)
+
+
+@contextmanager
+def computation_messages_collected() -> Iterator[ComputationMessages]:
+    """Collect the errors and warnings of computations instead of showing them.
+
+    Use it when no user waits for a message box, e.g. for a tool called by an
+    external assistant, which reports the messages itself.
+
+    Yields:
+        The collected messages.
+    """
+    messages = ComputationMessages()
+    token = _COMPUTATION_MESSAGES.set(messages)
+    try:
+        yield messages
+    finally:
+        _COMPUTATION_MESSAGES.reset(token)
 
 
 @dataclass
@@ -1534,6 +1572,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              or None if error
         """
         if compout.error_msg or compout.warning_msg:
+            collector = _COMPUTATION_MESSAGES.get()
+            if collector is not None:
+                if compout.error_msg:
+                    collector.errors.append(f"{context}: {compout.error_msg}")
+                if compout.warning_msg:
+                    collector.warnings.append(f"{context}: {compout.warning_msg}")
+                return None if compout.error_msg else compout.result
             mindur = progress.minimumDuration()
             progress.setMinimumDuration(1000000)
             if compout.error_msg:

@@ -160,9 +160,15 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             _("Open the AI Assistant tab of the settings (provider, model, API key…).")
         )
         self.settings_button.clicked.connect(self._on_open_settings)
+        mcp_action = self.mainwindow.mcp_actions.action
+        self.mcp_button = QW.QPushButton(mcp_action.icon(), _("MCP server…"))
+        self.mcp_button.setToolTip(mcp_action.toolTip())
+        self.mcp_button.setEnabled(mcp_action.isEnabled())
+        self.mcp_button.clicked.connect(self.mainwindow.mcp_actions.show_dialog)
         toolbar.addWidget(self.new_button)
         toolbar.addWidget(self.history_button)
         toolbar.addWidget(self.settings_button)
+        toolbar.addWidget(self.mcp_button)
         toolbar.addStretch(1)
         self.usage_label = QW.QLabel("")
         self.usage_label.setStyleSheet(

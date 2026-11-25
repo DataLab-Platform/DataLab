@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Version 1.5"
+msgstr "Version 1.5"
+
+msgid "DataLab Version 1.5.0"
+msgstr "DataLab Version 1.5.0"
+
+msgid "Requirements"
+msgstr "Prérequis"
+
+msgid "**Third-party**:"
+msgstr "**Bibliothèques tierces** :"
+
+msgid "The new `mcp` optional dependency (MCP SDK ≥ 1.10, < 2) enables the MCP server for external assistants: install it with `pip install datalab-platform[mcp]`. It is included in the standalone version."
+msgstr "La nouvelle dépendance optionnelle `mcp` (SDK MCP ≥ 1.10, < 2) active le serveur MCP pour les assistants externes : installez-la avec `pip install datalab-platform[mcp]`. Elle est incluse dans la version autonome."
+
+msgid "✨ New Features"
+msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**External assistants (MCP)**: an external AI assistant, e.g. GitHub Copilot in VS Code, can now work on the open DataLab session through the Model Context Protocol. **File > Connect an external assistant (MCP)...**, also available from the AI Assistant panel, starts a server listening on this computer only, protected by a token, and gives the VS Code configuration to use. The assistant can list and inspect signals and images, create synthetic data, run processing and analysis features on the objects it chooses, and read their results with their units; you see the results in DataLab and confirm every action modifying the workspace, unless you approve the calls automatically. Running macros, loading files and triggering plugin actions are not available to external assistants (closes [Issue #584](https://github.com/DataLab-Platform/DataLab/issues/584))."
+msgstr "**Assistants externes (MCP)** : un assistant IA externe, par exemple GitHub Copilot dans VS Code, peut désormais travailler sur la session ouverte de DataLab grâce au Model Context Protocol. **Fichier > Connecter un assistant externe (MCP)...**, également accessible depuis le panneau Assistant IA, démarre un serveur n'écoutant que sur cet ordinateur, protégé par un jeton, et donne la configuration de VS Code à utiliser. L'assistant peut lister et inspecter les signaux et les images, créer des données synthétiques, exécuter des traitements et des analyses sur les objets de son choix, et lire leurs résultats avec leurs unités ; vous voyez les résultats dans DataLab et confirmez chaque action modifiant l'espace de travail, sauf si vous approuvez automatiquement les appels. L'exécution de macros, le chargement de fichiers et le déclenchement d'actions de plugins ne sont pas accessibles aux assistants externes (ferme [l'issue #584](https://github.com/DataLab-Platform/DataLab/issues/584))."
+
+msgid "**AI Assistant**: the assistant can now read the analysis results stored in objects (e.g. FWHM or centroid) with their units, apply an operation to given objects instead of the selected ones, and knows the choices, bounds, units and default values of the processing parameters. Invalid parameter values are reported with the valid ones instead of failing later (closes [Issue #584](https://github.com/DataLab-Platform/DataLab/issues/584))."
+msgstr "**Assistant IA** : l'assistant peut désormais lire les résultats d'analyse enregistrés dans les objets (par exemple la largeur à mi-hauteur ou le centroïde) avec leurs unités, appliquer une opération à des objets donnés plutôt qu'aux objets sélectionnés, et connaît les choix, bornes, unités et valeurs par défaut des paramètres de traitement. Les valeurs de paramètres invalides sont signalées avec les valeurs valides au lieu d'échouer plus tard (ferme [l'issue #584](https://github.com/DataLab-Platform/DataLab/issues/584))."

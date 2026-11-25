@@ -81,6 +81,37 @@ class MainSettings(gds.DataSet):
             "<br>Disable for stricter security if needed."
         ),
     )
+    mcp_port = gds.IntItem(
+        _("MCP server port"),
+        default=18090,
+        min=1024,
+        max=65535,
+        help=_(
+            "Preferred port of the MCP server used by external assistants "
+            "(e.g. VS Code Copilot).<br>If this port is busy, the next free port "
+            "is used."
+        ),
+    )
+    mcp_persistent_token = gds.BoolItem(
+        "",
+        _("Persistent MCP token"),
+        help=_(
+            "When enabled, the MCP server keeps the same token between sessions, "
+            "<br>so that the configuration of external assistants does not change."
+            "<br>The token is stored in a dedicated file of your user profile."
+            "<br>When disabled (default), a new token is created at each start."
+        ),
+    )
+    mcp_auto_approve = gds.BoolItem(
+        "",
+        _("Approve external assistant calls automatically"),
+        help=_(
+            "When enabled, the tool calls of external assistants (MCP) run without "
+            "confirmation,<br>including those modifying the workspace."
+            "<br>When disabled (default), you confirm each action modifying the "
+            "workspace.<br>Read-only tools never need confirmation."
+        ),
+    )
     available_memory_threshold = gds.IntItem(
         _("Memory threshold"),
         default=0,

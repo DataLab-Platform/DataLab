@@ -25,6 +25,8 @@ class ToolConfirmDialog(QW.QDialog):
         tool: Tool to be executed.
         arguments: Arguments proposed by the LLM.
         parent: Parent widget.
+        source: Name of the external assistant requesting the call (MCP client),
+         or None for the AI Assistant panel.
     """
 
     def __init__(
@@ -32,9 +34,18 @@ class ToolConfirmDialog(QW.QDialog):
         tool: Tool,
         arguments: dict,
         parent: QW.QWidget | None = None,
+        source: str | None = None,
     ) -> None:
         super().__init__(parent)
-        self.setWindowTitle(_("AI Assistant — Confirm tool call"))
+        if source is None:
+            self.setWindowTitle(_("AI Assistant — Confirm tool call"))
+            header_text = _("The AI assistant requests to run the following action:")
+        else:
+            self.setWindowTitle(_("External assistant — Confirm tool call"))
+            header_text = (
+                _("An external assistant (%s) requests to run the following action:")
+                % source
+            )
         self.resize(640, 480)
 
         layout = QW.QVBoxLayout(self)
@@ -43,7 +54,7 @@ class ToolConfirmDialog(QW.QDialog):
             arguments.get("autorun") is False
         )
 
-        header = QW.QLabel(_("The AI assistant requests to run the following action:"))
+        header = QW.QLabel(header_text)
         header.setWordWrap(True)
         layout.addWidget(header)
 
@@ -100,7 +111,8 @@ class ToolConfirmDialog(QW.QDialog):
         tool: Tool,
         arguments: dict,
         parent: QW.QWidget | None = None,
+        source: str | None = None,
     ) -> bool:
         """Show the dialog and return True if the user clicked Run."""
-        dialog = cls(tool, arguments, parent)
+        dialog = cls(tool, arguments, parent, source)
         return dialog.exec() == QW.QDialog.Accepted
