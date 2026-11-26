@@ -82,7 +82,11 @@ Create a new image from the following supported filetypes:
       - .ima
     * - Headerless RAW files
       - .raw
+    * - NIfTI files [#nifti]_
+      - .nii, .nii.gz
 
+.. [#nifti] Requires the optional NiBabel package: install the ``nifti`` extra of
+   DataLab (``pip install datalab-platform[nifti]``).
 .. note::
 
     Thales Pixium FXD files, and the writing of Dürr NDT XYZ files, are supported
@@ -96,6 +100,39 @@ colormap without altering pixel values). Multi-image files create one image per 
 When several RAW files are opened at once, DataLab asks whether to apply the same import
 parameters to all of them or to set the parameters of each file individually.
 
+When opening a NIfTI file (``.nii`` or ``.nii.gz``, NIfTI-1 or NIfTI-2), a 2D image is
+opened directly. For a 3D volume, DataLab displays a **NIfTI image import** dialog
+showing the dimensions of the volume, its data type and its spatial unit, where you
+select the **First slice** and the **Last slice** to import, indexed along the third
+axis of the file. The central slice is selected by default, and the dialog shows the
+number of selected slices with their indicative memory size. Only the selected slices
+are read: each one becomes an image titled after the file and its slice index (e.g.
+``brain.nii.gz [k=12]``), and the slices of a volume are gathered in a group named after
+the file. When several volumes are opened at once, each one has its own dialog;
+canceling a dialog skips its volume.
+
+Pixel values are those of the file, scaling factors included, without any windowing.
+Pixel sizes and units come from the spatial transform of the file. The images are
+displayed in pixels when this transform or the voxel sizes are invalid, when the
+transform shears the slice plane, or when the spatial unit is unknown. The images are
+not reoriented: the X and Y axes follow
+the first two axes of the file, and the position of each slice in space is not shown.
+The NIfTI header information (format version, slice index, spatial transform,
+calibration) is stored in the ``nifti`` metadata of each image. Volumes with four
+dimensions or more, complex and color images, separate ``.hdr``/``.img`` files and
+NIfTI writing are not supported.
+
+.. warning::
+
+    Opening a NIfTI file does not de-identify it: the file name, the image titles and
+    the ``nifti`` metadata are kept in the workspace and in the files saved from it.
+
+.. note::
+
+    The import parameters of each file are recorded in the history, so that replaying
+    an import opens the same slices without showing the dialog again. With the remote
+    control API, pass a :class:`sigima.io.NiftiImageImportParam` instance as ``param``
+    to open the slices of volumes without any dialog.
 .. note::
 
     DataLab also supports any image format that can be read by the `imageio` library,

@@ -2275,6 +2275,33 @@ msgid "RAW image import (%d files)"
 msgstr "Importation d'image RAW (%d fichiers)"
 
 #, python-format
+msgid "indices must satisfy 0 ≤ first ≤ last ≤ %d"
+msgstr "les indices doivent vérifier 0 ≤ première ≤ dernière ≤ %d"
+
+#, python-format
+msgid "%d slice(s) selected (about %s in memory)"
+msgstr "%d coupe(s) sélectionnée(s) (environ %s en mémoire)"
+
+msgid "First slice"
+msgstr "Première coupe"
+
+msgid "Last slice"
+msgstr "Dernière coupe"
+
+msgid "Selection"
+msgstr "Sélection"
+
+msgid "NIfTI image import"
+msgstr "Importation d'image NIfTI"
+
+msgid "not specified"
+msgstr "non spécifiée"
+
+#, python-format
+msgid "Volume of %d × %d pixels and %d slices (k = 0 to %d), data type %s, spatial unit: %s.<br>Select the slices to import, indexed along the third axis of the file. Each slice is imported as an image of type %s: the memory size is indicative, processing may need more."
+msgstr "Volume de %d × %d pixels et %d coupes (k = 0 à %d), type de données %s, unité spatiale : %s.<br>Sélectionnez les coupes à importer, indexées selon le troisième axe du fichier. Chaque coupe est importée comme une image de type %s : la taille mémoire est indicative, les traitements peuvent en nécessiter davantage."
+
+#, python-format
 msgid "Complex images cannot be exported to %s files.<br><br>Use one of the NumPy, MAT-File, text, CSV or HDF5 image formats."
 msgstr "Les images complexes ne peuvent pas être exportées dans des fichiers %s.<br><br>Utilisez l'un des formats NumPy, MAT-File, texte, CSV ou image HDF5."
 

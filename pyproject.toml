@@ -76,12 +76,14 @@ datalab-plugin = "datalab.plugins.generator:main"
 [project.optional-dependencies]
 qt = ["PyQt5 >= 5.15.6"]
 opencv = ["opencv-python-headless >= 4.8.1.78"]
+nifti = ["nibabel >= 5.3"]
 exe = [
     # This section is used to build the standalone executable with PyInstaller for the
     # official stand-alone releases of DataLab.
     # For reproducibility, the PyInstaller version is pinned for each DataLab release.
     "pyinstaller == 6.16.0",  # DataLab 1.0
     "opencv-python-headless >= 4.8.1.78",
+    "nibabel >= 5.3",
     "PyQt5 >= 5.15.6",
 ]
 dev = [

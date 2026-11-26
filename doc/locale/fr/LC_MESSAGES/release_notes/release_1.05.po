@@ -1,0 +1,42 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Version 1.5"
+msgstr "Version 1.5"
+
+msgid "DataLab Version 1.5.0"
+msgstr "DataLab Version 1.5.0"
+
+msgid "Requirements"
+msgstr "Prérequis"
+
+msgid "**DataLab-Platform**:"
+msgstr "**DataLab-Platform** :"
+
+msgid "Sigima ≥ 1.5.0 is required: it reads NIfTI images."
+msgstr "Sigima ≥ 1.5.0 est requis : il lit les images NIfTI."
+
+msgid "**Third-party**:"
+msgstr "**Bibliothèques tierces** :"
+
+msgid "NiBabel ≥ 5.3 is an optional dependency, installed with the new `nifti` extra (`pip install datalab-platform[nifti]`) and included in the standalone version: it is required to open NIfTI images."
+msgstr "NiBabel ≥ 5.3 est une dépendance optionnelle, installée avec la nouvelle dépendance optionnelle `nifti` (`pip install datalab-platform[nifti]`) et incluse dans la version autonome : elle est nécessaire pour ouvrir les images NIfTI."
+
+msgid "✨ New Features"
+msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**NIfTI images**: **File > Open** of the Image panel now opens NIfTI images (`.nii` and `.nii.gz`), e.g. from medical imaging or neuroimaging, when NiBabel is installed. A 2D image opens directly. For a 3D volume, a dialog shows its dimensions, data type and spatial unit, and selects a slice or a range of slices (the central slice by default) with their indicative memory size: only these slices are read, each one becoming an image in a group named after the file. Pixel values, sizes and units are those of the file, and its header information is kept in the `nifti` metadata of each image. Replaying an import from the history opens the same slices without asking again, and the remote control API can open volumes without any dialog. Opening a NIfTI file does not de-identify it (closes [Issue #590](https://github.com/DataLab-Platform/DataLab/issues/590))."
+msgstr "**Images NIfTI** : **Fichier > Ouvrir** du panneau Image ouvre désormais les images NIfTI (`.nii` et `.nii.gz`), issues par exemple de l'imagerie médicale ou de la neuro-imagerie, lorsque NiBabel est installé. Une image 2D s'ouvre directement. Pour un volume 3D, une boîte de dialogue indique ses dimensions, son type de données et son unité spatiale, et sélectionne une coupe ou une plage de coupes (la coupe centrale par défaut) avec leur taille mémoire indicative : seules ces coupes sont lues, chacune devenant une image dans un groupe portant le nom du fichier. Les valeurs, la taille des pixels et les unités sont celles du fichier, et les informations de son en-tête sont conservées dans la métadonnée `nifti` de chaque image. Rejouer une importation depuis l'historique ouvre les mêmes coupes sans les redemander, et l'API de contrôle à distance peut ouvrir des volumes sans aucune boîte de dialogue. Ouvrir un fichier NIfTI ne le désidentifie pas (ferme [l'issue #590](https://github.com/DataLab-Platform/DataLab/issues/590))."
+
+msgid "**Opening files**: canceling the reading of a file now also skips the remaining files of the selection, instead of reading them one after the other; the images already read are kept."
+msgstr "**Ouverture de fichiers** : annuler la lecture d'un fichier ignore désormais aussi les fichiers restants de la sélection, au lieu de les lire l'un après l'autre ; les images déjà lues sont conservées."

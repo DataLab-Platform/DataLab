@@ -78,8 +78,11 @@ class RawLoadPanelStub:
     PANEL_STR_ID = "image"
     load_from_files = BaseDataPanel.load_from_files
     load_from_directory = BaseDataPanel.load_from_directory
+    _load_prepared_files = BaseDataPanel._load_prepared_files
     edit_import_parameters = ImagePanel.edit_import_parameters
     edit_raw_import_parameters = ImagePanel.edit_raw_import_parameters
+    edit_nifti_import_parameters = ImagePanel.edit_nifti_import_parameters
+    groups_file_objects = ImagePanel.groups_file_objects
     apply_import_parameters = ImagePanel.apply_import_parameters
 
     def __init__(self) -> None:
@@ -633,22 +636,22 @@ def test_panel_load_helper_reads_raw_through_image_registry(tmp_path) -> None:
         apply_import_parameters=Mock(),
         selection_changed=Mock(),
     )
-    progress = SimpleNamespace(setValue=Mock(), wasCanceled=Mock(return_value=False))
     loader = getattr(BaseDataPanel, "_BaseDataPanel__load_from_file")
 
     with (
         patch.object(
-            panel_base, "CallbackWorker", side_effect=lambda callback: callback
+            panel_base,
+            "CallbackWorker",
+            side_effect=lambda callback: SimpleNamespace(
+                callback=callback,
+                was_canceled=lambda: False,
+                set_progress=lambda _value: None,
+            ),
         ),
         patch.object(
             panel_base,
             "qt_long_callback",
-            side_effect=lambda _panel, _title, callback, _show: callback(None),
-        ),
-        patch.object(
-            panel_base,
-            "create_progress_bar",
-            return_value=nullcontext(progress),
+            side_effect=lambda _panel, _title, worker, _show: worker.callback(worker),
         ),
     ):
         objects = loader(

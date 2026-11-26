@@ -141,6 +141,13 @@ required only by the OpenCV blob detection feature. To install it along with Qt:
 
     $ pip install datalab-platform[qt,opencv]
 
+The optional ``nifti`` extra installs `NiBabel <https://nipy.org/nibabel/>`_, which is
+required only to open NIfTI images (``.nii`` and ``.nii.gz``):
+
+.. code-block:: console
+
+    $ pip install datalab-platform[qt,nifti]
+
 .. note::
 
     If you already have a previous version of DataLab installed, you can

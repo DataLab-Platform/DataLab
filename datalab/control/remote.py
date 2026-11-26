@@ -1223,7 +1223,8 @@ class RemoteClient(BaseProxy):
             filenames: list of file names
             param: Optional format-specific import parameters applied to every
              file requiring them, without showing any dialog (e.g.
-             :class:`sigima.io.RawImageImportParam` for RAW images).
+             :class:`sigima.io.RawImageImportParam` for RAW images or
+             :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes).
              Defaults to None.
         """
         if param is None:
@@ -1238,7 +1239,8 @@ class RemoteClient(BaseProxy):
             path: directory path
             param: Optional format-specific import parameters applied to every
              file requiring them, without showing any dialog (e.g.
-             :class:`sigima.io.RawImageImportParam` for RAW images).
+             :class:`sigima.io.RawImageImportParam` for RAW images or
+             :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes).
              Defaults to None.
         """
         if param is None:

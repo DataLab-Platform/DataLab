@@ -313,8 +313,8 @@ msgstr "Ouvrir des objets depuis des fichiers dans le panneau courant (signaux/i
 msgid "list of file names"
 msgstr "liste des noms de fichiers"
 
-msgid "Optional format-specific import parameters applied to every file requiring them, without showing any dialog (e.g. :class:`sigima.io.RawImageImportParam` for RAW images). Defaults to None."
-msgstr "Paramètres d'import optionnels propres au format, appliqués à chaque fichier qui en a besoin, sans afficher de boîte de dialogue (par exemple :class:`sigima.io.RawImageImportParam` pour les images RAW). Par défaut None."
+msgid "Optional format-specific import parameters applied to every file requiring them, without showing any dialog (e.g. :class:`sigima.io.RawImageImportParam` for RAW images or :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes). Defaults to None."
+msgstr "Paramètres d'importation optionnels propres au format, appliqués à chaque fichier qui en a besoin, sans afficher de boîte de dialogue (par exemple :class:`sigima.io.RawImageImportParam` pour les images RAW ou :class:`sigima.io.NiftiImageImportParam` pour les volumes NIfTI). Par défaut : None."
 
 msgid "Open objects from directory in current panel (signals/images)."
 msgstr "Ouvrir des objets depuis un répertoire dans le panneau courant (signaux/images)."
