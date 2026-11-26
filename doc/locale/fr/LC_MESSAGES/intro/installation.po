@@ -121,6 +121,9 @@ msgstr "Ou, si vous préférez, vous pouvez installer DataLab sans la bibliothè
 msgid "The optional ``opencv`` extra installs `OpenCV <https://opencv.org/>`_, which is required only by the OpenCV blob detection feature. To install it along with Qt:"
 msgstr "La dépendance optionnelle ``opencv`` installe `OpenCV <https://opencv.org/>`_, qui n'est nécessaire que pour la fonctionnalité de détection de taches OpenCV. Pour l'installer avec Qt :"
 
+msgid "The optional ``nifti`` extra installs `NiBabel <https://nipy.org/nibabel/>`_, which is required only to open NIfTI images (``.nii`` and ``.nii.gz``):"
+msgstr "La dépendance optionnelle ``nifti`` installe `NiBabel <https://nipy.org/nibabel/>`_, qui n'est nécessaire que pour ouvrir les images NIfTI (``.nii`` et ``.nii.gz``) :"
+
 msgid "If you already have a previous version of DataLab installed, you can upgrade it by running the same command with the ``--upgrade`` option:"
 msgstr "Si vous avez déjà une version antérieure de DataLab installée, vous pouvez la mettre à jour en exécutant la même commande avec l'option ``--upgrade`` :"
 
@@ -229,7 +232,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.17.2"
+msgid ">= 3.17.3"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -247,7 +250,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.4.0"
+msgid ">= 1.4.2"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -256,7 +259,7 @@ msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant part
 msgid "SigimaX"
 msgstr ""
 
-msgid ">= 1.1.0"
+msgid ">= 1.1.1"
 msgstr ""
 
 msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"

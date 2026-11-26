@@ -292,7 +292,8 @@ class AbstractDLControl(abc.ABC):
             filenames: list of file names
             param: Optional format-specific import parameters applied to every
              file requiring them, without showing any dialog (e.g.
-             :class:`sigima.io.RawImageImportParam` for RAW images).
+             :class:`sigima.io.RawImageImportParam` for RAW images or
+             :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes).
              Defaults to None.
         """
 
@@ -304,7 +305,8 @@ class AbstractDLControl(abc.ABC):
             path: directory path
             param: Optional format-specific import parameters applied to every
              file requiring them, without showing any dialog (e.g.
-             :class:`sigima.io.RawImageImportParam` for RAW images).
+             :class:`sigima.io.RawImageImportParam` for RAW images or
+             :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes).
              Defaults to None.
         """
 
@@ -908,7 +910,8 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             filenames: list of file names
             param: Optional format-specific import parameters applied to every
              file requiring them, without showing any dialog (e.g.
-             :class:`sigima.io.RawImageImportParam` for RAW images).
+             :class:`sigima.io.RawImageImportParam` for RAW images or
+             :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes).
              Defaults to None.
         """
         self._datalab.load_from_files(filenames, param)
@@ -920,7 +923,8 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             path: directory path
             param: Optional format-specific import parameters applied to every
              file requiring them, without showing any dialog (e.g.
-             :class:`sigima.io.RawImageImportParam` for RAW images).
+             :class:`sigima.io.RawImageImportParam` for RAW images or
+             :class:`sigima.io.NiftiImageImportParam` for NIfTI volumes).
              Defaults to None.
         """
         self._datalab.load_from_directory(path, param)

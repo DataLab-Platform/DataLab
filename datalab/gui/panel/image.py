@@ -33,15 +33,20 @@ from qtpy import QtWidgets as QW
 from sigima.io import (
     ImageExportOptionSpec,
     ImageExportParam,
+    NiftiImageImportParam,
+    NiftiImageInfo,
     RawImageImportParam,
     get_image_export_capabilities,
+    get_nifti_image_info,
     get_supported_export_dtypes,
     prepare_image_export_preview,
     prepare_image_for_export,
     validate_image_export_configuration,
     write_image,
 )
+from sigima.io.base import IOAction
 from sigima.io.image import ImageIORegistry
+from sigima.io.image.nifti import NiftiImageFormat
 from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
 from datalab.config import Conf, _
@@ -378,6 +383,163 @@ def is_raw_image_file(filename: str) -> bool:
     return osp.splitext(filename)[1].lower() == ".raw"
 
 
+def is_nifti_image_file(filename: str) -> bool:
+    """Return True if the image registry reads the file as a NIfTI image.
+
+    Args:
+        filename: File name.
+
+    Returns:
+        True if the file is read by the NIfTI format, which is only registered
+        when NiBabel is installed.
+    """
+    try:
+        fmt = ImageIORegistry.get_format(filename, IOAction.LOAD)
+    except NotImplementedError:
+        return False
+    return isinstance(fmt, NiftiImageFormat)
+
+
+def inspect_nifti_files(nifti_files: list[str]) -> dict[str, NiftiImageInfo | None]:
+    """Read the header information of NIfTI files, without their voxels.
+
+    Args:
+        nifti_files: NIfTI file names.
+
+    Returns:
+        Header information of each file, or None if its header cannot be read
+        (reading the file reports the error).
+    """
+    infos: dict[str, NiftiImageInfo | None] = {}
+    for fname in nifti_files:
+        try:
+            infos[fname] = get_nifti_image_info(fname)
+        except Exception:  # pylint: disable=broad-exception-caught
+            infos[fname] = None
+    return infos
+
+
+def format_memory_size(nbytes: int) -> str:
+    """Return a memory size with a binary unit, e.g. ``"1.5 MiB"``.
+
+    Args:
+        nbytes: Size in bytes.
+
+    Returns:
+        Formatted size.
+    """
+    size = float(nbytes)
+    for unit in ("B", "KiB", "MiB", "GiB"):
+        if size < 1024.0 or unit == "GiB":
+            return f"{size:.0f} {unit}" if unit == "B" else f"{size:.1f} {unit}"
+        size /= 1024.0
+    raise AssertionError("unreachable")
+
+
+#: Prefix of the selection summary of an invalid NIfTI slice range
+NIFTI_INVALID_SELECTION = "⚠"
+
+
+def get_nifti_selection_summary(info: NiftiImageInfo, first: int, last: int) -> str:
+    """Return the summary of a slice selection shown by the NIfTI import dialog.
+
+    Args:
+        info: Header information of the NIfTI volume.
+        first: First selected slice index.
+        last: Last selected slice index (included).
+
+    Returns:
+        Number of selected slices and indicative memory size, or a message
+        starting with :data:`NIFTI_INVALID_SELECTION` if the selection is invalid.
+    """
+    last_index = info.slice_count - 1
+    if not 0 <= first <= last <= last_index:
+        return (
+            NIFTI_INVALID_SELECTION
+            + " "
+            + (_("indices must satisfy 0 ≤ first ≤ last ≤ %d") % last_index)
+        )
+    count = last - first + 1
+    return _("%d slice(s) selected (about %s in memory)") % (
+        count,
+        format_memory_size(count * info.slice_nbytes),
+    )
+
+
+def create_nifti_import_gui_param(info: NiftiImageInfo) -> gds.DataSet:
+    """Create the slice selection dialog parameters of a NIfTI volume.
+
+    The dialog shows the dimensions of the volume, preselects its central slice
+    and updates the number of selected slices and their memory size. Its OK button
+    is disabled while the selection is invalid.
+
+    Args:
+        info: Header information of the NIfTI volume.
+
+    Returns:
+        Dialog parameters, converted with :func:`get_nifti_import_param`.
+    """
+    last_index = info.slice_count - 1
+    center = info.slice_count // 2
+
+    def update_summary(instance: gds.DataSet, _item=None, _value=None) -> None:
+        instance.selection = get_nifti_selection_summary(
+            info, instance.first_slice, instance.last_slice
+        )
+
+    attributes = {
+        "first_slice": gds.IntItem(
+            _("First slice"), default=center, min=0, max=last_index
+        ).set_prop("display", callback=update_summary),
+        "last_slice": gds.IntItem(
+            _("Last slice"), default=center, min=0, max=last_index
+        ).set_prop("display", callback=update_summary),
+        "selection": gds.TextItem(
+            _("Selection"),
+            default=get_nifti_selection_summary(info, center, center),
+            regexp=f"^(?!{NIFTI_INVALID_SELECTION})",
+        ).set_prop("display", readonly=True),
+    }
+    paramclass = type("NiftiImageImportGUIParam", (gds.DataSet,), attributes)
+    param = paramclass(
+        title=f"{_('NIfTI image import')} - {osp.basename(info.filename)}"
+    )
+    unit = info.spatial_unit or _("not specified")
+    param.set_comment(
+        _(
+            "Volume of %d × %d pixels and %d slices (k = 0 to %d), "
+            "data type %s, spatial unit: %s.<br>"
+            "Select the slices to import, indexed along the third axis of the "
+            "file. Each slice is imported as an image of type %s: the memory "
+            "size is indicative, processing may need more."
+        )
+        % (
+            info.width,
+            info.height,
+            info.slice_count,
+            last_index,
+            info.data_dtype,
+            unit,
+            info.image_dtype,
+        )
+    )
+    return param
+
+
+def get_nifti_import_param(param: gds.DataSet) -> NiftiImageImportParam:
+    """Return the NIfTI import parameters of a slice selection dialog.
+
+    Args:
+        param: Parameters created by :func:`create_nifti_import_gui_param`.
+
+    Returns:
+        NIfTI image import parameters, as recorded by the history.
+    """
+    return NiftiImageImportParam.create(
+        first_slice=param.first_slice, last_slice=param.last_slice
+    )
+
+
 def create_image_export_gui_param(obj: ImageObj, filename: str) -> ImageExportGUIParam:
     """Create format-aware image export parameters with practical defaults.
 
@@ -560,43 +722,116 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     def edit_import_parameters(
         self, filenames: list[str], param: gds.DataSet | None = None
     ) -> list[tuple[str, gds.DataSet | None]] | None:
-        """Return files to import with their RAW image import parameters.
+        """Return files to import with their RAW or NIfTI import parameters.
 
         When several RAW files are imported, the user first chooses whether the same
         parameters apply to all of them (a single dialog) or not (one dialog per
-        file).
+        file). The slices of each NIfTI volume are selected in a dialog of their own;
+        2D NIfTI images need no parameters.
+
+        A NIfTI file whose header cannot be inspected is kept without parameters:
+        reading it then reports the error, like any other unreadable file.
 
         Args:
             filenames: File names to import.
-            param: Optional RAW image import parameters applied to every RAW file
-             without showing any dialog (e.g. remote control).
+            param: Optional RAW or NIfTI image import parameters applied to every
+             file of the matching format requiring them, without showing any
+             dialog (e.g. remote control). Files of the other format get no
+             parameters, so that reading those requiring parameters fails.
 
         Returns:
-            File names with aligned import parameters, without the RAW files whose
+            File names with aligned import parameters, without the files whose
             dialog was cancelled, or None if the whole import was cancelled.
 
         Raises:
-            TypeError: If ``param`` is not a RAW image import parameter set.
+            TypeError: If ``param`` is neither a RAW nor a NIfTI image import
+             parameter set.
         """
         raw_files = [fname for fname in filenames if is_raw_image_file(fname)]
+        nifti_files = [fname for fname in filenames if is_nifti_image_file(fname)]
+        raw_params: dict[str, RawImageImportParam | None] = {}
+        nifti_params: dict[str, NiftiImageImportParam | None] = {}
         if param is not None:
-            if not isinstance(param, RawImageImportParam):
+            if isinstance(param, RawImageImportParam):
+                raw_params = {fname: copy.deepcopy(param) for fname in raw_files}
+                nifti_params = dict.fromkeys(nifti_files)
+            elif isinstance(param, NiftiImageImportParam):
+                raw_params = dict.fromkeys(raw_files)
+                nifti_params = {
+                    fname: copy.deepcopy(param)
+                    if info is None or info.is_volume
+                    else None
+                    for fname, info in inspect_nifti_files(nifti_files).items()
+                }
+            else:
                 raise TypeError(
-                    "Image import parameters must be RawImageImportParam, "
-                    f"got {type(param).__name__}"
+                    "Image import parameters must be RawImageImportParam or "
+                    f"NiftiImageImportParam, got {type(param).__name__}"
                 )
-            raw_params = {fname: copy.deepcopy(param) for fname in raw_files}
-        elif raw_files:
-            raw_params = self.edit_raw_import_parameters(raw_files)
-            if raw_params is None:
-                return None
         else:
-            raw_params = {}
-        return [
-            (fname, raw_params.get(fname))
-            for fname in filenames
-            if not is_raw_image_file(fname) or fname in raw_params
+            if raw_files:
+                raw_params = self.edit_raw_import_parameters(raw_files)
+                if raw_params is None:
+                    return None
+            nifti_params = self.edit_nifti_import_parameters(nifti_files)
+        result: list[tuple[str, gds.DataSet | None]] = []
+        for fname in filenames:
+            if is_raw_image_file(fname):
+                if fname in raw_params:
+                    result.append((fname, raw_params[fname]))
+            elif fname in nifti_files:
+                if fname in nifti_params:
+                    result.append((fname, nifti_params[fname]))
+            else:
+                result.append((fname, None))
+        return result
+
+    def edit_nifti_import_parameters(
+        self, nifti_files: list[str]
+    ) -> dict[str, NiftiImageImportParam | None]:
+        """Select the slices of each NIfTI volume, in one dialog per volume.
+
+        In unattended mode, no dialog is shown: volumes get no parameters, so that
+        reading them fails explicitly.
+
+        Args:
+            nifti_files: NIfTI file names.
+
+        Returns:
+            Parameters of the files to read: None for 2D images, unreadable
+            headers and volumes in unattended mode. Volumes whose dialog was
+            cancelled are left out.
+        """
+        infos = inspect_nifti_files(nifti_files)
+        volumes = [
+            fname
+            for fname, info in infos.items()
+            if info is not None and info.is_volume
         ]
+        nifti_params: dict[str, NiftiImageImportParam | None] = {
+            fname: None for fname in nifti_files if fname not in volumes
+        }
+        if execenv.unattended:
+            nifti_params.update(dict.fromkeys(volumes))
+            return nifti_params
+        for fname in volumes:
+            guiparam = create_nifti_import_gui_param(infos[fname])
+            if guiparam.edit(parent=self.parentWidget()):
+                nifti_params[fname] = get_nifti_import_param(guiparam)
+        return nifti_params
+
+    def groups_file_objects(self, filename: str) -> bool:
+        """Return True if the objects read from a file are grouped by default.
+
+        The slices read from a NIfTI volume are grouped under the file name.
+
+        Args:
+            filename: File name.
+
+        Returns:
+            True for NIfTI files.
+        """
+        return is_nifti_image_file(filename)
 
     def edit_raw_import_parameters(
         self, raw_files: list[str]

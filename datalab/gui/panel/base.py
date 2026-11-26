@@ -1627,6 +1627,32 @@ class H5ImportBatch:
                 batch.panel.refresh_after_reference_remap()
 
 
+class FileLoadCanceledError(Exception):
+    """Reading a file was cancelled: the remaining files of a batch are skipped.
+
+    Args:
+        objects: Objects read (and added, if requested) before the cancellation.
+    """
+
+    def __init__(self, objects: list[TypeObj]) -> None:
+        super().__init__("File loading was cancelled")
+        self.objects = objects
+
+
+@dataclass
+class FilesLoadResult:
+    """Result of loading files with their import parameters."""
+
+    #: Objects read from the files
+    objects: list[TypeObj]
+    #: Files from which objects were read, in reading order
+    filenames: list[str]
+    #: Import parameters of ``filenames``
+    params: list[gds.DataSet | None]
+    #: True if reading was cancelled: the remaining files were skipped
+    canceled: bool = False
+
+
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -3313,34 +3339,63 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         Returns:
             New object or list of new objects
+
+        Raises:
+            FileLoadCanceledError: If reading was cancelled, with the objects read
+             (and added) before the cancellation.
         """
+        # The progress dialog cancels the worker when it closes: whether reading was
+        # cancelled is recorded by the reading thread, once it has finished.
+        read_canceled = False
 
         def read_objects(worker):
+            nonlocal read_canceled
             if import_param is None:
-                return self.IO_REGISTRY.read(filename, worker)
-            return self.IO_REGISTRY.read(filename, worker, param=import_param)
+                objs = self.IO_REGISTRY.read(filename, worker)
+            else:
+                objs = self.IO_REGISTRY.read(filename, worker, param=import_param)
+            read_canceled = worker.was_canceled()
+            return objs
 
         worker = CallbackWorker(read_objects)
-        objs = qt_long_callback(self, _("Reading objects from file"), worker, True)
+        objs = list(
+            qt_long_callback(self, _("Reading objects from file"), worker, True)
+        )
         self.apply_import_parameters(objs, import_param)
-        group_id = None
-        if len(objs) > 1 and create_group:
-            # Create a new group if more than one object is loaded
-            group_id = get_uuid(self.add_group(osp.basename(filename)))
-        with create_progress_bar(
-            self, _("Adding objects to workspace"), max_=len(objs) - 1
-        ) as progress:
-            for i_obj, obj in enumerate(objs):
-                progress.setValue(i_obj + 1)
-                if progress.wasCanceled():
-                    break
-                if add_objects:
-                    set_uuid(obj)  # In case the object UUID was serialized in the file,
-                    # we need to reset it to a new UUID to avoid conflicts
-                    # (e.g. HDF5 file)
-                    self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
-        self.selection_changed()
+        if add_objects and objs:
+            for obj in objs:
+                # In case the object UUID was serialized in the file, we need to
+                # reset it to a new UUID to avoid conflicts (e.g. HDF5 file)
+                set_uuid(obj)
+            group = None
+            if len(objs) > 1 and create_group:
+                group = self.add_group(osp.basename(filename))
+            try:
+                self._add_objects(
+                    objs, group_id=None if group is None else get_uuid(group)
+                )
+            except Exception:
+                if group is not None:
+                    self.objview.remove_item(get_uuid(group), refresh=False)
+                    self.objmodel.remove_group(group)
+                raise
+            self.selection_changed()
+        if read_canceled:
+            raise FileLoadCanceledError(objs)
         return objs
+
+    def groups_file_objects(self, filename: str) -> bool:
+        """Return True if the objects read from a file are grouped by default.
+
+        Args:
+            filename: File name.
+
+        Returns:
+            False: objects are added to the current group unless a group is
+            requested.
+        """
+        del filename
+        return False
 
     def edit_import_parameters(
         self, filenames: list[str], param: gds.DataSet | None = None
@@ -3526,13 +3581,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         fnames = [fname for fname in fnames if fname in file_params]
                         if not fnames:
                             continue
-                        new_objs = self.load_from_files(
-                            fnames,
+                        result = self._load_prepared_files(
+                            [(fname, file_params[fname]) for fname in fnames],
                             create_group=False,
                             add_objects=False,
                             ignore_errors=True,
-                            import_params=[file_params[fname] for fname in fnames],
                         )
+                        new_objs = result.objects
                         if new_objs:
                             objs += new_objs
                             grp_name = osp.relpath(path, directory)
@@ -3543,12 +3598,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                                 self.add_object(
                                     obj, group_id=get_uuid(grp), set_current=False
                                 )
+                        if result.canceled:
+                            break
         return objs
 
     def load_from_files(
         self,
         filenames: list[str] | None = None,
-        create_group: bool = False,
+        create_group: bool | None = None,
         add_objects: bool = True,
         ignore_errors: bool = False,
         import_params: list[gds.DataSet | None] | None = None,
@@ -3559,15 +3616,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             filenames: File names
             create_group: if True, create a new group if more than one object is loaded
-             for a single file. Defaults to False: all objects are added to the current
-             group.
+             for a single file; if False, all objects are added to the current group.
+             Defaults to None: only the objects of the files whose format groups
+             them (e.g. the slices of a NIfTI volume) get a group of their own.
             add_objects: if True, add objects to the panel. Defaults to True.
             ignore_errors: if True, ignore errors when loading files. Defaults to False.
             import_params: Optional format-specific parameters aligned with file names.
              When provided by history replay, import dialogs are not reopened.
             param: Optional format-specific parameters applied to every file
-             requiring import parameters (e.g. RAW images), without showing any
-             dialog. Cannot be combined with ``import_params``.
+             requiring import parameters (e.g. RAW images or NIfTI volumes), without
+             showing any dialog. Cannot be combined with ``import_params``.
 
         Returns:
             list of new objects
@@ -3629,32 +3687,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 save_state=False,
                 **history_kwargs,
             )
-        objs = []
-        loaded_filenames: list[str] = []
-        loaded_params: list[gds.DataSet | None] = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
             with self.mainwindow.historypanel.capture_outputs(action):
-                for filename, import_param in prepared_pairs:
-                    with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                        Conf.base_dir.set(filename)
-                        try:
-                            new_objs = self.__load_from_file(
-                                filename,
-                                create_group=create_group,
-                                add_objects=add_objects,
-                                import_param=import_param,
-                            )
-                        except Exception as exc:  # pylint: disable=broad-exception-caught
-                            if ignore_errors:
-                                # Ignore unknown file types
-                                pass
-                            else:
-                                raise exc
-                        else:
-                            objs += new_objs
-                            if new_objs:
-                                loaded_filenames.append(filename)
-                                loaded_params.append(import_param)
+                result = self._load_prepared_files(
+                    prepared_pairs, create_group, add_objects, ignore_errors
+                )
+        objs = result.objects
+        loaded_filenames, loaded_params = result.filenames, result.params
         if action is not None and loaded_filenames and len(loaded_filenames) < nbf:
             # Some files could not be loaded: make the recorded entry reflect
             # the files actually loaded, so the title is accurate and replay
@@ -3674,6 +3713,54 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 action.kwargs.pop("import_params", None)
             self.mainwindow.historypanel.tree.refresh_action_item(action)
         return objs
+
+    def _load_prepared_files(
+        self,
+        prepared_pairs: list[tuple[str, gds.DataSet | None]],
+        create_group: bool | None,
+        add_objects: bool,
+        ignore_errors: bool,
+    ) -> FilesLoadResult:
+        """Read files with their import parameters, stopping if one is cancelled.
+
+        Args:
+            prepared_pairs: File names with aligned import parameters.
+            create_group: Group policy of :meth:`load_from_files`.
+            add_objects: if True, add objects to the panel.
+            ignore_errors: if True, skip the files that cannot be read.
+
+        Returns:
+            Objects read, with the files and parameters they come from.
+        """
+        result = FilesLoadResult([], [], [])
+        for filename, import_param in prepared_pairs:
+            if create_group is None:
+                group = self.groups_file_objects(filename)
+            else:
+                group = create_group
+            new_objs: list[TypeObj] = []
+            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                Conf.base_dir.set(filename)
+                try:
+                    new_objs = self.__load_from_file(
+                        filename,
+                        create_group=group,
+                        add_objects=add_objects,
+                        import_param=import_param,
+                    )
+                except FileLoadCanceledError as exc:
+                    new_objs = exc.objects
+                    result.canceled = True
+                except Exception:  # pylint: disable=broad-exception-caught
+                    if not ignore_errors:
+                        raise
+            result.objects += new_objs
+            if new_objs:
+                result.filenames.append(filename)
+                result.params.append(import_param)
+            if result.canceled:
+                break
+        return result
 
     def save_to_files(
         self,
