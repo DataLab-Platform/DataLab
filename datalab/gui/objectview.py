@@ -414,16 +414,47 @@ class SimpleObjectTree(QW.QTreeWidget):
         super().changeEvent(event)
 
     def populate_tree(self) -> None:
-        """Populate tree with objects"""
+        """Populate tree with objects, keeping the selection and the current item
+        (items no longer in the model are ignored)"""
         uuid = self.get_current_item_id()
+        sel_uuids = [item.data(0, QC.Qt.UserRole) for item in self.selectedItems()]
         with block_signals(widget=self):
             self.clear()
         with self._title_reference_indexes():
             for group in self.objmodel.get_groups():
                 self.add_group_item(group, resize=False)
         self.resize_title_column()
-        if uuid is not None:
-            self.set_current_item_id(uuid)
+        sel_items = [
+            item
+            for item in (self.get_item_from_id(sel_uuid) for sel_uuid in sel_uuids)
+            if item is not None
+        ]
+        if not sel_items or [item.data(0, QC.Qt.UserRole) for item in sel_items] == [
+            uuid
+        ]:
+            if uuid is not None:
+                self.set_current_item_id(uuid)
+            return
+        self.__restore_selection(sel_items, self.get_item_from_id(uuid))
+
+    def __restore_selection(
+        self,
+        sel_items: list[QW.QTreeWidgetItem],
+        current_item: QW.QTreeWidgetItem | None,
+    ) -> None:
+        """Select items in their original order, then notify the selection once
+
+        Args:
+            sel_items: items to select
+            current_item: item to make current, or None to use the last selected item
+        """
+        if current_item is None:
+            current_item = sel_items[-1]
+        with block_signals(widget=self):
+            for item in sel_items:
+                item.setSelected(True)
+            self.setCurrentItem(current_item, 0, QC.QItemSelectionModel.NoUpdate)
+        self.itemSelectionChanged.emit()
 
     def update_tree(self) -> None:
         """Update tree

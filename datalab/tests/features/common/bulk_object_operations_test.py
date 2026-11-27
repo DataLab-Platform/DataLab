@@ -5,6 +5,8 @@
 from __future__ import annotations
 
 import pytest
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima.objects import create_signal
 
 from datalab.objectmodel import ObjectModel, get_number, get_title_reference, get_uuid
@@ -237,6 +239,83 @@ def test_atomic_selection_preserves_empty_and_group_object_invariants() -> None:
         assert panel.objview.get_sel_groups() == []
         assert panel.objview.get_sel_objects() == [second]
         assert notifications == [None, None, None]
+
+
+def test_populate_tree_preserves_object_selection() -> None:
+    """Rebuilding the tree keeps the selection order and the current object."""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        objview = win.signalpanel.objview
+        signals = tuple(create_test_signal(f"Signal {index}") for index in range(4))
+        win.signalpanel.add_objects(signals, set_current=False)
+        selection = [signals[1], signals[3], signals[0]]
+        objview.select_objects(selection)
+        current_item = objview.get_item_from_id(get_uuid(signals[3]))
+        objview.setCurrentItem(current_item, 0, QC.QItemSelectionModel.NoUpdate)
+        notifications: list[tuple] = []
+        objview.SIG_SELECTION_CHANGED.connect(
+            lambda: notifications.append(tuple(objview.get_sel_objects()))
+        )
+
+        objview.populate_tree()
+
+        assert objview.get_sel_objects() == selection
+        assert objview.get_current_object() is signals[3]
+        assert notifications == [tuple(selection)]
+
+
+def test_populate_tree_preserves_group_selection() -> None:
+    """Rebuilding the tree keeps a group selection and selects no object."""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        panel = win.signalpanel
+        groups = [panel.add_group(f"Group {index}") for index in range(3)]
+        for group in groups:
+            panel.add_objects(
+                (create_test_signal(f"In {group.title}"),),
+                get_uuid(group),
+                set_current=False,
+            )
+        panel.objview.select_groups([get_uuid(groups[0]), get_uuid(groups[2])])
+
+        panel.objview.populate_tree()
+
+        assert panel.objview.get_sel_groups() == [groups[0], groups[2]]
+        assert panel.objview.get_sel_objects() == []
+        assert panel.objview.get_current_item_id() == get_uuid(groups[2])
+
+
+def test_populate_tree_ignores_removed_selected_objects() -> None:
+    """Selected objects removed from the model are no longer selected."""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        panel = win.signalpanel
+        signals = tuple(create_test_signal(f"Signal {index}") for index in range(4))
+        panel.add_objects(signals, set_current=False)
+        panel.objview.select_objects(signals[:3])
+
+        panel.objmodel.remove_object(signals[2])
+        panel.objview.populate_tree()
+
+        assert panel.objview.get_sel_objects() == list(signals[:2])
+        assert panel.objview.get_current_object() is signals[1]
+
+        for obj in signals[:2]:
+            panel.objmodel.remove_object(obj)
+        panel.objview.populate_tree()
+
+        assert panel.objview.get_sel_objects() == []
+
+
+def test_console_command_keeps_multiple_selection() -> None:
+    """A selection made from the internal console survives the new prompt."""
+    with datalab_test_app_context(console=True, exec_loop=False) as win:
+        panel = win.signalpanel
+        signals = tuple(create_test_signal(f"Signal {index}") for index in range(4))
+        panel.add_objects(signals, set_current=False)
+
+        win.console.interpreter.run_command('dl.select_objects([1, 2, 3], "signal")')
+        QW.QApplication.processEvents()
+
+        assert panel.objview.get_sel_objects() == list(signals[:3])
+        assert panel.objview.get_current_object() is signals[2]
 
 
 def test_panel_add_objects_rolls_back_tree_failure(
