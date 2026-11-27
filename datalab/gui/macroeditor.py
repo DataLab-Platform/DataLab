@@ -16,6 +16,7 @@ import os
 import os.path as osp
 import re
 import sys
+import tempfile
 import time
 import uuid
 
@@ -103,6 +104,7 @@ print("All done!")
         self._autosave_timer.setInterval(_AUTOSAVE_DELAY_MS)
         self._autosave_timer.timeout.connect(self._autosave_pending)
         self.process = None
+        self._temp_script_path: str | None = None
         self.__last_exit_code = None
 
     @property
@@ -319,20 +321,41 @@ print("All done!")
             msg = os.linesep + msg
         self.console.write(msg, error=error, prompt=not error)
 
+    def _cleanup_temp_script(self) -> None:
+        """Remove the temporary script file created by ``run`` if it still exists."""
+        if self._temp_script_path is not None:
+            path = self._temp_script_path
+            self._temp_script_path = None
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
     def run(self) -> None:
         """Run macro"""
         self.flush_autosave()
+        self._cleanup_temp_script()
         self.__last_exit_code = None
         self.process = QC.QProcess()
         code = self.get_code()
+        with tempfile.NamedTemporaryFile(
+            mode="wb", prefix="datalab_macro_", suffix=".py", delete=False
+        ) as fdesc:
+            fdesc.write(code.encode("utf-8"))
+            self._temp_script_path = fdesc.name
         datalab_path = osp.abspath(osp.join(osp.dirname(datalab.__file__), os.pardir))
-        # Reconfigure stdout/stderr to use UTF-8 encoding to avoid UnicodeEncodeError
-        # on Windows with locales that don't support all Unicode characters
-        # (e.g., cp1252)
-        code = (
-            f"import sys; sys.path.append(r'{datalab_path}'); "
-            f"sys.stdout.reconfigure(encoding='utf-8'); "
-            f"sys.stderr.reconfigure(encoding='utf-8'){os.linesep}{code}"
+        # Write macro code to a temporary UTF-8 file instead of passing it on the
+        # command line (which hits Windows' 32,767-char limit and QProcess quoting).
+        # Reconfigure stdout/stderr to UTF-8 to avoid UnicodeEncodeError on Windows
+        # locales such as cp1252, and execute via `-c` so standalone `start.pyw`
+        # handles macros identically.
+        bootstrap = (
+            f"import pathlib, sys; sys.path.append({datalab_path!r}); "
+            "sys.stdout.reconfigure(encoding='utf-8'); "
+            "sys.stderr.reconfigure(encoding='utf-8'); "
+            f"_p = {self._temp_script_path!r}; "
+            "exec(compile(pathlib.Path(_p).read_bytes(), _p, 'exec'), "
+            "{'__name__': '__main__', '__file__': _p})"
         )
         env = QC.QProcessEnvironment()
         env.insert(execenv.XMLRPCPORT_ENV, str(execenv.xmlrpcport))
@@ -345,7 +368,7 @@ print("All done!")
         self.process.errorOccurred.connect(self.error_occurred)
         self.process.finished.connect(self.finished)
         self.process.setProcessEnvironment(env)
-        args = ["-c", code]
+        args = ["-c", bootstrap]
         # The process starts asynchronously, without a timeout: its start may be
         # slow, e.g. when an antivirus scans the standalone executable.
         self.process.start(sys.executable, args)
@@ -367,6 +390,7 @@ print("All done!")
         # Other errors (e.g. a crash) are followed by the `finished` signal
         if error != QC.QProcess.FailedToStart:
             return
+        self._cleanup_temp_script()
         reason = self.process.errorString()
         self.print(
             _("# ==> Unable to run '%s' macro") % self.title + f": {reason}",
@@ -406,6 +430,7 @@ print("All done!")
             exit_status: Exit status
         """
         self.__last_exit_code = exit_code
+        self._cleanup_temp_script()
         self.print(_("# <== '%s' macro has finished") % self.title, eol_before=False)
         self.FINISHED.emit()
         self.process = None

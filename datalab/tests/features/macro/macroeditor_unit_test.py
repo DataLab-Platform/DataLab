@@ -282,6 +282,15 @@ print("All Unicode tests passed! ✓")
             win.macropanel.remove_all_objects()
 
 
+def _wait_macro(macro: Macro, timeout_ms: int = 10000) -> None:
+    """Process Qt events until ``macro`` finishes or ``timeout_ms`` elapses."""
+    timer = QC.QElapsedTimer()
+    timer.start()
+    while macro.is_running() and timer.elapsed() < timeout_ms:
+        QW.QApplication.processEvents()
+        time.sleep(0.05)
+
+
 def test_macro_start_failure():
     """Test that a macro which cannot start reports why (issue #587).
 
@@ -302,9 +311,17 @@ def test_macro_start_failure():
         states = []
         macro.STARTED.connect(lambda: states.append("started"))
         macro.FINISHED.connect(lambda: states.append("finished"))
+        created_scripts: list[str | None] = []
+        orig_start = QC.QProcess.start
+
+        def spy_start(self_proc, program, arguments, *rest, **kwargs):
+            created_scripts.append(macro._temp_script_path)
+            return orig_start(self_proc, program, arguments, *rest, **kwargs)
+
         with (
             mock.patch.object(sys, "executable", missing),
             mock.patch.object(QW.QMessageBox, "critical", side_effect=critical),
+            mock.patch.object(QC.QProcess, "start", spy_start),
         ):
             widget.run_macro()
             timer = QC.QElapsedTimer()
@@ -315,6 +332,8 @@ def test_macro_start_failure():
         assert states and states[-1] == "finished"
         assert not macro.is_running()
         assert macro.get_exit_code() is None
+        assert len(created_scripts) == 1 and created_scripts[0] is not None
+        assert not osp.exists(created_scripts[0])
         assert len(messages) == 1 and missing in messages[0]
         error_msg = _("# ==> Unable to run '%s' macro") % macro.title
         assert error_msg in widget.console.toPlainText()
@@ -326,8 +345,69 @@ def test_macro_start_failure():
         widget.remove_all_objects()
 
 
+def test_macro_temp_script_long_code_and_traceback():
+    """Test running long macros via a temporary file with accurate line numbers.
+
+    Regression test for issue #588: macro code must not be passed on the command
+    line, traceback line numbers must match the editor, and the temporary file
+    must be removed after execution (both on success and on error).
+    """
+    with qt_app_context():
+        widget = MacroPanel(None)
+        macro = widget.add_macro()
+
+        # 1. Long macro (>40,000 chars, exceeding Windows' 32,767 char limit)
+        # with an encoding cookie and special shell/quoting characters.
+        padding = ("# " + "x" * 78 + "\n") * 550
+        special = r"""quote' "double" \backslash\ %percent% $dollar$ → ✓"""
+        long_code = (
+            "# -*- coding: utf-8 -*-\n"
+            f"{padding}"
+            f"MARKER = {special!r}\n"
+            "print('LONG_OK:', len(MARKER), __name__)\n"
+        )
+        assert len(long_code) > 40000
+        macro.set_code(long_code)
+
+        recorded_args: list[list[str]] = []
+        orig_start = QC.QProcess.start
+
+        def spy_start(self_proc, program, arguments, *rest, **kwargs):
+            recorded_args.append(list(arguments))
+            return orig_start(self_proc, program, arguments, *rest, **kwargs)
+
+        with mock.patch.object(QC.QProcess, "start", spy_start):
+            widget.run_macro()
+            script_path = getattr(macro, "_temp_script_path", None)
+            _wait_macro(macro)
+
+        assert not macro.is_running()
+        assert macro.get_exit_code() == 0
+        assert recorded_args and all(len(a) < 4096 for a in recorded_args[0])
+        assert f"LONG_OK: {len(special)} __main__" in widget.console.toPlainText()
+        assert script_path is not None and not osp.exists(script_path)
+
+        # 2. Traceback line numbers must match the editor (line 3 -> "line 3"),
+        # and the temporary script file must still be removed after an error.
+        macro.set_code("a = 1\nb = 2\nraise ValueError('boom_line_3')\n")
+        before = len(widget.console.toPlainText())
+        widget.run_macro()
+        err_script_path = getattr(macro, "_temp_script_path", None)
+        _wait_macro(macro)
+
+        assert not macro.is_running()
+        assert macro.get_exit_code() != 0
+        err_output = widget.console.toPlainText()[before:]
+        assert "line 3" in err_output
+        assert "ValueError: boom_line_3" in err_output
+        assert err_script_path is not None and not osp.exists(err_script_path)
+
+        widget.remove_all_objects()
+
+
 if __name__ == "__main__":
     test_macro_editor()
     test_macro_uid_and_new_actions()
     test_macro_unicode_encoding()
     test_macro_start_failure()
+    test_macro_temp_script_long_code_and_traceback()
