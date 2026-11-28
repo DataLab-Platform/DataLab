@@ -12,12 +12,158 @@ from guidata.dataset.qtitemwidgets import HistogramRangeWidget
 from guidata.dataset.qtwidgets import DataSetEditDialog
 from qtpy.QtCore import Qt
 from qtpy.QtTest import QTest
-from sigima.objects import create_image
+from sigima.objects import create_image, create_image_roi
 
 from datalab.gui.actionhandler import SelectCond
 from datalab.gui.processor.base import extract_processing_parameters
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context, helpers
+
+
+def test_create_image_from_contrast_range(monkeypatch) -> None:
+    """The contrast action uses the histogram bounds and records the operation."""
+    with datalab_test_app_context(console=False) as win:
+        win.set_current_panel("image")
+        panel = win.imagepanel
+        action = panel.contrast_to_image_action
+        assert not action.isEnabled()
+        data = np.array([[0, 64, 128, 255]], dtype=np.uint8)
+        source = create_image("Source", data.copy())
+        panel.add_object(source)
+        panel.objview.select_objects([source])
+
+        contrast = panel.plothandler.plotwidget.contrast
+        contrast.histogram.range.set_range(64.0, 192.0)
+        assert action.isEnabled()
+
+        def unexpected_init(*args):
+            raise AssertionError("The histogram bounds are already known")
+
+        with monkeypatch.context() as patch:
+            patch.setattr(
+                sigima.params.BrightnessContrastParam,
+                "update_from_obj",
+                unexpected_init,
+            )
+            QTest.mouseClick(contrast.toolbar.widgetForAction(action), Qt.LeftButton)
+
+        result = panel.objmodel.get_all_objects()[-1]
+        assert result is not source
+        metadata = extract_processing_parameters(result)
+        assert metadata.source_uuid == get_uuid(source)
+        assert (metadata.param.minimum, metadata.param.maximum) == (64.0, 192.0)
+        np.testing.assert_array_equal(result.data, [[0, 0, 128, 255]])
+        np.testing.assert_array_equal(source.data, data)
+        assert panel.objprop.setup_processing_tab(result)
+        edited = panel.objprop.processing_param_editor.dataset
+        assert (edited.minimum, edited.maximum) == (64.0, 192.0)
+        assert edited.histogram["domain"] == [0.0, 255.0]
+
+
+def test_contrast_action_requires_current_histogram() -> None:
+    """A missing or stale display range is never mistaken for a usable window."""
+    with datalab_test_app_context(console=False) as win:
+        win.set_current_panel("image")
+        win.toggle_auto_refresh(False)
+        panel = win.imagepanel
+        action = panel.contrast_to_image_action
+        a = create_image("A", np.array([[100, 128, 200]], dtype=np.uint8))
+        b = create_image("B", np.array([[0.0, 0.5, 1.0]]))
+        panel.add_object(a)
+        assert not action.isEnabled()
+        assert "refresh" in action.toolTip().lower()
+        panel.manual_refresh()
+        assert action.isEnabled()
+        panel.add_object(b)
+        assert not action.isEnabled()
+        panel.create_image_from_contrast_range()
+        assert panel.objmodel.get_all_objects() == [a, b]
+        panel.manual_refresh()
+        assert action.isEnabled()
+        b.data = np.array([[1.0, 1.5, 2.0]])
+        panel.refresh_plot(get_uuid(b), update_items=True)
+        assert not action.isEnabled()
+        panel.manual_refresh()
+        assert action.isEnabled()
+        panel.remove_object(force=True)
+        assert not action.isEnabled()
+
+
+def test_contrast_action_refuses_complex_batch() -> None:
+    """Neither an FFT alone nor its position in a group starts a partial batch."""
+    with datalab_test_app_context(console=False, history=True) as win:
+        win.set_current_panel("image")
+        panel = win.imagepanel
+        action = panel.contrast_to_image_action
+        for complex_first in (True, False):
+            group = panel.add_group("Mixed")
+            real = create_image("Real", np.array([[0, 2]], dtype=np.uint8))
+            fft = create_image("FFT", np.array([[1 + 1j, 2 + 3j]]))
+            pair = [fft, real] if complex_first else [real, fft]
+            panel.add_objects(pair, group_id=get_uuid(group))
+            panel.objview.select_objects([fft])
+            assert not action.isEnabled()
+            panel.objview.select_groups([group])
+            assert not action.isEnabled()
+            assert "real" in action.toolTip().lower()
+            groups = panel.objmodel.get_groups()
+            objects = panel.objmodel.get_all_objects()
+            panel.create_image_from_contrast_range()
+            assert panel.objmodel.get_groups() == groups
+            assert panel.objmodel.get_all_objects() == objects
+        panel.remove_all_objects()
+        assert not action.isEnabled()
+
+
+def test_contrast_action_recovers_after_invalid_bounds(monkeypatch) -> None:
+    """Dragging the handles or synchronizing the ROI editor updates readiness."""
+    with datalab_test_app_context(console=False) as win:
+        win.set_current_panel("image")
+        panel = win.imagepanel
+        src = create_image("Float", np.array([[0.0, 0.5, 1.0]]))
+        panel.add_object(src)
+        action = panel.contrast_to_image_action
+        bounds = panel.plothandler.plotwidget.contrast.histogram.range
+        for low in (1.0, 2.0):
+            bounds.set_range(0.0, 1.0)
+            bounds.move_point_to(0, (low, 0.0))
+            assert not action.isEnabled()
+            assert "minimum" in action.toolTip().lower()
+            panel.apply_shared_contrast(src, 0.0, 1.0)
+            assert action.isEnabled()
+        with monkeypatch.context() as patch:
+            patch.setattr(bounds, "get_range", lambda: (0.0, np.inf))
+            panel.create_image_from_contrast_range()
+            assert not action.isEnabled()
+            assert panel.objmodel.get_all_objects() == [src]
+
+
+def test_contrast_action_processes_group_from_one_visible_image() -> None:
+    """The visible window serves all real sources, respecting their dtype and ROI."""
+    with datalab_test_app_context(console=False) as win:
+        win.set_current_panel("image")
+        win.toggle_show_first_only(True)
+        panel = win.imagepanel
+        group = panel.add_group("Images")
+        data = np.array([[10, 64, 96, 128, 240]] * 3, np.uint8)
+        a = create_image("ROI", data.copy())
+        a.roi = create_image_roi("rectangle", [1, 0, 3, 3], indices=True)
+        b = create_image("Float", np.array([[0.0, 64.0, 96.0, 128.0, 255.0]]))
+        panel.add_objects([a, b], group_id=get_uuid(group))
+        panel.objview.select_groups([group])
+        histogram = panel.plothandler.plotwidget.contrast.histogram
+        histogram.set_range(64.0, 128.0)
+        assert panel.contrast_to_image_action.isEnabled()
+        panel.contrast_to_image_action.trigger()
+        dst_a, dst_b = panel.objmodel.get_groups()[-1].get_objects()
+        np.testing.assert_array_equal(dst_a.data, [[10, 0, 128, 255, 240]] * 3)
+        np.testing.assert_array_equal(dst_b.data, [[0.0, 0.0, 127.5, 255.0, 255.0]])
+        np.testing.assert_array_equal(a.data, data)
+        for src, dst in ((a, dst_a), (b, dst_b)):
+            metadata = extract_processing_parameters(dst)
+            assert metadata.source_uuid == get_uuid(src)
+            assert (metadata.param.minimum, metadata.param.maximum) == (64.0, 128.0)
+            assert dst.data.dtype == src.data.dtype
 
 
 def test_brightness_contrast_integration() -> None:

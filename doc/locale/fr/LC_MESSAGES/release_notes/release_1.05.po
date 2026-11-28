@@ -1,0 +1,27 @@
+# Copyright (C) DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Version 1.5"
+msgstr "Version 1.5"
+
+msgid "DataLab Version 1.5.0"
+msgstr "DataLab Version 1.5.0"
+
+msgid "Requirements"
+msgstr "Prérequis"
+
+msgid "Runtime requirements are unchanged since version 1.4.2."
+msgstr "Les prérequis d'exécution sont inchangés depuis la version 1.4.2."
+
+msgid "New Features"
+msgstr "Nouvelles fonctionnalités"
+
+msgid "**Image contrast**: the contrast panel can now create an image from the histogram bounds without re-entering them in a processing dialog. The bounds apply to every selected real-valued image; source pixels stay unchanged and the bounds remain editable on each result (part of [Issue #370](https://github.com/DataLab-Platform/DataLab/issues/370))."
+msgstr "**Contraste des images** : le panneau de contraste permet de créer une image à partir des bornes de l'histogramme sans les ressaisir dans une boîte de dialogue de traitement. Les bornes s'appliquent à chaque image à valeurs réelles sélectionnée ; les pixels sources restent inchangés et les bornes restent modifiables sur chaque résultat (contribue à [l'issue #370](https://github.com/DataLab-Platform/DataLab/issues/370))."

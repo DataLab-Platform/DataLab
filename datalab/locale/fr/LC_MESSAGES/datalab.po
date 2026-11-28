@@ -3375,6 +3375,28 @@ msgstr "Seuillage Yen"
 msgid "Brightness and contrast"
 msgstr "Luminosité et contraste"
 
+msgid "Create image"
+msgstr "Créer une image"
+
+msgid "Select one or more images."
+msgstr "Sélectionnez une ou plusieurs images."
+
+msgid "Refresh the image view to use the selected images' histogram."
+msgstr "Actualisez la vue des images pour utiliser l'histogramme de la sélection."
+
+msgid "Select only real-valued images; complex images cannot be processed."
+msgstr "Sélectionnez uniquement des images à valeurs réelles ; les images complexes ne peuvent pas être traitées."
+
+msgid "The minimum must be lower than the maximum and both must be finite."
+msgstr "Le minimum doit être inférieur au maximum et les deux bornes doivent être finies."
+
+msgid ""
+"Create a new image for each selected image using the histogram bounds.\n"
+"The bounds are applied linearly, without copying the display scale."
+msgstr ""
+"Créer une nouvelle image pour chaque image sélectionnée à partir des bornes de l'histogramme.\n"
+"Les bornes sont appliquées linéairement, sans copier l'échelle d'affichage."
+
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
