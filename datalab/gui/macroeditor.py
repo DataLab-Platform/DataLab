@@ -443,7 +443,10 @@ print("All done!")
             self._stopping = True
             try:
                 self.kill()
-                if self.process is process and not process.waitForFinished(5000):
+                if self.process is not process:
+                    return
+                # The finished signal may release the process during the wait.
+                if not process.waitForFinished(5000) and self.process is process:
                     raise RuntimeError(
                         _("Unable to stop '%s' macro: %s")
                         % (self.title, process.errorString())

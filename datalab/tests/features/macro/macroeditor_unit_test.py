@@ -465,6 +465,23 @@ def test_macro_preparation_error(tmp_path, monkeypatch, operation):
         panel.remove_all_objects()
 
 
+def test_macro_finalized_during_stop_wait():
+    """A finalization delivered during the wait owns the final process cleanup."""
+    with qt_app_context():
+        panel = MacroPanel(None)
+        macro = panel.add_macro()
+        process = macro.process = mock.Mock(spec=QC.QProcess)
+
+        def finish_during_wait(_timeout):
+            macro._finish_run(process)
+            return False
+
+        process.waitForFinished.side_effect = finish_during_wait
+        macro.stop_and_wait()
+        process.errorString.assert_not_called()
+        assert not macro.is_running()
+
+
 def test_removing_running_macro_stops_and_cleans():
     """Removing a running tab stops its child and removes its script."""
     with qt_app_context():
