@@ -549,6 +549,12 @@ msgstr "Exposition"
 msgid "Create new images by applying exposure corrections. Brightness and contrast uses the first selected image to initialize one shared input window, then applies that window independently to every selected image. Each result retains the output range of its own source image."
 msgstr "Crée de nouvelles images en appliquant des corrections d'exposition. Le réglage de la luminosité et du contraste utilise la première image sélectionnée pour initialiser une plage d'entrée commune, puis applique cette plage indépendamment à chaque image sélectionnée. Chaque résultat conserve la plage de sortie propre à son image source."
 
+msgid "In the contrast panel, adjust the histogram window and choose **Create image**. The two bounds are applied linearly to every selected image, including images in selected groups, even if only one image is displayed. The source pixels are unchanged. Each result stores the bounds for later editing in the **Processing** tab."
+msgstr "Dans le panneau de contraste, réglez les bornes de l'histogramme et choisissez **Créer une image**. Les deux bornes sont appliquées linéairement à chaque image sélectionnée, y compris celles des groupes sélectionnés, même si une seule image est affichée. Les pixels des images sources restent inchangés. Chaque résultat conserve les bornes, qui restent modifiables dans l'onglet **Traitement**."
+
+msgid "The action does not copy the display scale: a logarithmic Z axis is not part of the processing, and the result may be displayed with a different intensity range. If the selection contains a complex image, no image is processed. If the histogram is empty or out of date, refresh the image view. If the bounds coincide or cross, move the minimum below the maximum."
+msgstr "L'action ne copie pas l'échelle d'affichage : un axe Z logarithmique n'intervient pas dans le traitement, et le résultat peut être affiché sur une autre plage d'intensité. Si la sélection contient une image complexe, aucune image n'est traitée. Si l'histogramme est vide ou n'est plus à jour, actualisez la vue des images. Si les bornes se superposent ou se croisent, ramenez le minimum en dessous du maximum."
+
 msgid "Comments"
 msgstr "Commentaires"
 

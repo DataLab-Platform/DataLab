@@ -48,7 +48,7 @@ from sigima.params import BrightnessContrastParam
 from datalab.config import Conf, _
 from datalab.env import execenv
 from datalab.gui import roieditor
-from datalab.gui.actionhandler import ImageActionHandler, SelectCond
+from datalab.gui.actionhandler import ImageActionHandler
 from datalab.gui.newobject import create_image_gui
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.plothandler import ImagePlotHandler
@@ -733,32 +733,78 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         self.processor = ImageProcessor(self, dockableplotwidget.plotwidget)
         view_toolbar = dockableplotwidget.toolbar
         self.acthandler = ImageActionHandler(self, panel_toolbar, view_toolbar)
-        self._setup_contrast_action()
 
-    def _setup_contrast_action(self) -> None:
-        """Expose the current display range as an image processing operation."""
+    def setup_panel(self) -> None:
+        """Set up the image panel and its histogram processing action."""
+        super().setup_panel()
         contrast = self.plothandler.plotwidget.contrast
         self.contrast_to_image_action = create_action(
             contrast,
-            _("Create image from contrast range"),
+            _("Create image"),
+            icon=get_icon("new_ima.svg"),
             triggered=self.create_image_from_contrast_range,
         )
         contrast.toolbar.addAction(self.contrast_to_image_action)
-        self.acthandler.add_action(self.contrast_to_image_action, SelectCond.at_least_one)
-        self.contrast_to_image_action.setEnabled(False)
+        self.SIG_REFRESH_PLOT.connect(self._update_contrast_action)
+        plot = self.plothandler.plot
+        plot.SIG_ACTIVE_ITEM_CHANGED.connect(self._update_contrast_action)
+        plot.SIG_ITEM_SELECTION_CHANGED.connect(self._update_contrast_action)
+        contrast.histogram.SIG_RANGE_CHANGED.connect(self._update_contrast_action)
+        self._update_contrast_action()
+
+    def _contrast_range_problem(self, bounds: tuple[float, float]) -> str | None:
+        """Explain why the displayed bounds cannot be used for this selection."""
+        sources = (
+            self.objview.get_sel_objects(include_groups=True)
+            if self.objmodel and self.objview.selectedItems()
+            else []
+        )
+        if not sources:
+            return _("Select one or more images.")
+        if any(np.iscomplexobj(obj.data) for obj in sources):
+            return _(
+                "Select only real-valued images; complex images cannot be processed."
+            )
+        if not np.isfinite(bounds).all() or bounds[0] >= bounds[1]:
+            return _(
+                "The minimum must be lower than the maximum and both must be finite."
+            )
+        histogram = self.plothandler.plotwidget.contrast.histogram
+        active = self.plothandler.plot.get_last_active_item(IVoiImageItemType)
+        if (
+            active is None
+            or not active.isVisible()
+            or self.plothandler.get_obj_from_item(active) not in sources
+            or self.plothandler.is_update_pending(active)
+            or not any(item is active for item, _curve in histogram.tracked_items_gen())
+            or active.get_lut_range() != bounds
+        ):
+            return _("Refresh the image view to use the selected images' histogram.")
+        return None
+
+    def _update_contrast_action(self) -> tuple[float, float] | None:
+        """Synchronize the toolbar and return the input window only if usable."""
+        bounds = self.plothandler.plotwidget.contrast.histogram.range.get_range()
+        problem = self._contrast_range_problem(bounds)
+        action = self.contrast_to_image_action
+        action.setEnabled(problem is None)
+        action.setToolTip(
+            problem
+            or _(
+                "Create a new image for each selected image "
+                "using the histogram bounds.\n"
+                "The bounds are applied linearly, without copying the display scale."
+            )
+        )
+        return bounds if problem is None else None
 
     def create_image_from_contrast_range(self) -> None:
-        """Process selected images using the visible histogram range."""
-        sources = self.objview.get_sel_objects(include_groups=True)
-        if not sources:
+        """Process all selected real images using the visible histogram range."""
+        bounds = self._update_contrast_action()
+        if bounds is None:
+            self.SIG_STATUS_MESSAGE.emit(self.contrast_to_image_action.toolTip(), 5000)
             return
-        contrast = self.plothandler.plotwidget.contrast
-        minimum, maximum = contrast.histogram.range.get_range()
-        if not np.isfinite([minimum, maximum]).all() or minimum >= maximum:
-            return
-        param = BrightnessContrastParam()
-        param.update_from_obj(sources[0])
-        param.minimum, param.maximum = minimum, maximum
+        param = BrightnessContrastParam.create(minimum=bounds[0], maximum=bounds[1])
         self.processor.run_feature("adjust_brightness_contrast", param, edit=False)
 
     def register_contrast_editor(
@@ -786,6 +832,7 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
             return
         contrast.histogram.range.set_range(zmin, zmax, dosignal=False)
         contrast.histogram.replot()
+        self._update_contrast_action()
 
     def _update_object_contrast_state(
         self, obj: ImageObj, zmin: float, zmax: float, update_panel: bool = False

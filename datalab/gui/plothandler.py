@@ -30,7 +30,7 @@ from __future__ import annotations
 import hashlib
 from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING, Generic
-from weakref import WeakKeyDictionary
+from weakref import WeakKeyDictionary, WeakSet
 
 import numpy as np
 from plotpy.constants import PlotType
@@ -770,6 +770,20 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
 
     PLOT_TYPE = PlotType.IMAGE
 
+    def __init__(self, panel: BaseDataPanel, plotwidget: PlotWidget) -> None:
+        super().__init__(panel, plotwidget)
+        self._pending_updates: WeakSet[MaskedXYImageItem] = WeakSet()
+
+    def is_update_pending(self, item: MaskedXYImageItem) -> bool:
+        """Return whether an image update was requested but not drawn yet."""
+        return item in self._pending_updates
+
+    def update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
+        """Clear a pending update only after the image has actually been updated."""
+        super().update_item_on_plot(oid, just_show)
+        if not just_show:
+            self._pending_updates.discard(self[oid])
+
     def reduce_shown_oids(self, oids: list[str]) -> list[str]:
         """Reduce the number of shown objects to visible items only. The base
         implementation is to show only the first selected item if the option
@@ -895,6 +909,19 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
         Raises:
             ValueError: if `what` is not a valid value
         """
+        if what == "selected":
+            oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
+        elif what == "existing":
+            oids = self.get_existing_oids()
+        elif what == "all":
+            oids = self.panel.objmodel.get_object_ids()
+        else:
+            oids = [what]
+        if update_items:
+            # Manual refresh mode and occlusion may defer updates to existing items.
+            self._pending_updates.update(
+                item for oid in oids if (item := self.get(oid)) is not None
+            )
         super().refresh_plot(
             what=what,
             update_items=update_items,
@@ -912,20 +939,6 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
             new_lock = True
         else:
             # Use physical pixel size to set aspect ratio
-            # Determine which objects to check based on the 'what' parameter
-            if what == "selected":
-                # Use selected objects to determine aspect ratio
-                oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
-            elif what == "existing":
-                # Use existing objects
-                oids = self.get_existing_oids()
-            elif what == "all":
-                # Use all objects
-                oids = self.panel.objmodel.get_object_ids()
-            else:
-                # Single object by uuid
-                oids = [what]
-
             # Reduce to visible items and check aspect ratio
             for oid in reversed(self.reduce_shown_oids(oids)):
                 if oid in self.get_existing_oids() and self.get(oid).isVisible():

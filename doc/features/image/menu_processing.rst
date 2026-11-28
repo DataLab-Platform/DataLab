@@ -384,10 +384,9 @@ Exposure
 
 Create new images by applying exposure corrections. Brightness and contrast uses the first selected image to initialize one shared input window, then applies that window independently to every selected image. Each result retains the output range of its own source image.
 
-Adjust the histogram range in the contrast panel and choose
-**Create image from contrast range** to use that input window in the brightness
-and contrast operation. Each selected image produces a new image that stores
-the parameters for later editing.
+In the contrast panel, adjust the histogram window and choose **Create image**. The two bounds are applied linearly to every selected image, including images in selected groups, even if only one image is displayed. The source pixels are unchanged. Each result stores the bounds for later editing in the **Processing** tab.
+
+The action does not copy the display scale: a logarithmic Z axis is not part of the processing, and the result may be displayed with a different intensity range. If the selection contains a complex image, no image is processed. If the histogram is empty or out of date, refresh the image view. If the bounds coincide or cross, move the minimum below the maximum.
 
 The following functions are available:
 
