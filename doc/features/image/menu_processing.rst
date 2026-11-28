@@ -384,6 +384,11 @@ Exposure
 
 Create new images by applying exposure corrections. Brightness and contrast uses the first selected image to initialize one shared input window, then applies that window independently to every selected image. Each result retains the output range of its own source image.
 
+Adjust the histogram range in the contrast panel and choose
+**Create image from contrast range** to use that input window in the brightness
+and contrast operation. Each selected image produces a new image that stores
+the parameters for later editing.
+
 The following functions are available:
 
 .. list-table::

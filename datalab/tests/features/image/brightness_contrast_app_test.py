@@ -20,6 +20,32 @@ from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context, helpers
 
 
+def test_create_image_from_contrast_range() -> None:
+    """The contrast action uses the histogram bounds and records the operation."""
+    with datalab_test_app_context(console=False) as win:
+        win.set_current_panel("image")
+        panel = win.imagepanel
+        action = panel.contrast_to_image_action
+        assert not action.isEnabled()
+        data = np.array([[0, 64, 128, 255]], dtype=np.uint8)
+        source = create_image("Source", data.copy())
+        panel.add_object(source)
+        panel.objview.select_objects([source])
+
+        histogram = panel.plothandler.plotwidget.contrast.histogram
+        histogram.range.set_range(64.0, 192.0)
+        assert action.isEnabled()
+        action.trigger()
+
+        result = panel.objmodel.get_all_objects()[-1]
+        assert result is not source
+        metadata = extract_processing_parameters(result)
+        assert metadata.source_uuid == get_uuid(source)
+        assert (metadata.param.minimum, metadata.param.maximum) == (64.0, 192.0)
+        np.testing.assert_array_equal(result.data, [[0, 0, 128, 255]])
+        np.testing.assert_array_equal(source.data, data)
+
+
 def test_brightness_contrast_integration() -> None:
     """One parameter window produces an independent result for every source."""
     with datalab_test_app_context(console=False) as win:

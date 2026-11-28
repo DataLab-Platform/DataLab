@@ -19,7 +19,7 @@ import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
-from guidata.qthelpers import exec_dialog
+from guidata.qthelpers import create_action, exec_dialog
 from plotpy.interfaces import IVoiImageItemType
 from plotpy.tools import (
     AnnotatedCircleTool,
@@ -43,11 +43,12 @@ from sigima.io import (
 )
 from sigima.io.image import ImageIORegistry
 from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
+from sigima.params import BrightnessContrastParam
 
 from datalab.config import Conf, _
 from datalab.env import execenv
 from datalab.gui import roieditor
-from datalab.gui.actionhandler import ImageActionHandler
+from datalab.gui.actionhandler import ImageActionHandler, SelectCond
 from datalab.gui.newobject import create_image_gui
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.plothandler import ImagePlotHandler
@@ -732,6 +733,33 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         self.processor = ImageProcessor(self, dockableplotwidget.plotwidget)
         view_toolbar = dockableplotwidget.toolbar
         self.acthandler = ImageActionHandler(self, panel_toolbar, view_toolbar)
+        self._setup_contrast_action()
+
+    def _setup_contrast_action(self) -> None:
+        """Expose the current display range as an image processing operation."""
+        contrast = self.plothandler.plotwidget.contrast
+        self.contrast_to_image_action = create_action(
+            contrast,
+            _("Create image from contrast range"),
+            triggered=self.create_image_from_contrast_range,
+        )
+        contrast.toolbar.addAction(self.contrast_to_image_action)
+        self.acthandler.add_action(self.contrast_to_image_action, SelectCond.at_least_one)
+        self.contrast_to_image_action.setEnabled(False)
+
+    def create_image_from_contrast_range(self) -> None:
+        """Process selected images using the visible histogram range."""
+        sources = self.objview.get_sel_objects(include_groups=True)
+        if not sources:
+            return
+        contrast = self.plothandler.plotwidget.contrast
+        minimum, maximum = contrast.histogram.range.get_range()
+        if not np.isfinite([minimum, maximum]).all() or minimum >= maximum:
+            return
+        param = BrightnessContrastParam()
+        param.update_from_obj(sources[0])
+        param.minimum, param.maximum = minimum, maximum
+        self.processor.run_feature("adjust_brightness_contrast", param, edit=False)
 
     def register_contrast_editor(
         self, obj: ImageObj, editor: roieditor.ImageROIEditor
