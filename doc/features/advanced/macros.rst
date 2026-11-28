@@ -128,8 +128,11 @@ comfortable:
 - **Find / Replace** (``Ctrl+F`` / ``Ctrl+H``): an inline bar at the bottom
   of the editor supports case-sensitive search, whole-word matching, and
   replace (or replace-all) inside the active macro.
-- **Python autocompletion** is enabled out of the box (``Ctrl+Space`` to
-  trigger it manually), backed by the embedded code editor.
+- **Python completion**: type ``.`` after an object to list its attributes and
+  methods, or press ``Ctrl+Space`` to request suggestions at the cursor. Use
+  the arrow keys to select a suggestion and press ``Tab`` or ``Enter`` to insert it.
+- **Signature help**: type ``(`` after a function or method name to see its
+  parameters when its signature can be determined, without running the macro.
 
 Console
 -------

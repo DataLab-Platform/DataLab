@@ -33,7 +33,6 @@ from datalab.utils.qthelpers import (
     qt_try_loadsave_file,
     save_restore_stds,
 )
-from datalab.widgets.codecompleter import PythonCompleter
 from datalab.widgets.findreplace import FindReplaceBar
 
 if TYPE_CHECKING:
@@ -438,9 +437,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """
         self.__macros.append(obj)
         number = self.tabwidget.add_tab(obj)
-        # Attach Python autocompletion to the editor of this new macro.
-        # Stored on the macro itself to keep it alive for the editor's lifetime.
-        obj.completer = PythonCompleter(obj.editor)  # type: ignore[attr-defined]
         self.SIG_OBJECT_ADDED.emit()
         self.tabwidget.set_current_number(number)
         # Try to restore the previously-active tab once its macro is loaded.
