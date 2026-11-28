@@ -275,8 +275,7 @@ print("All done!")
         """
         # Python 3 outputs UTF-8 by default, so we need to decode as UTF-8
         # instead of using the system locale codec (which might be cp1252 on Windows)
-        utf8_codec = QC.QTextCodec.codecForName(b"UTF-8")
-        return utf8_codec.toUnicode(bytearr.data())
+        return bytes(bytearr).decode("utf-8", errors="replace")
 
     def get_stdout(self) -> str:
         """Return standard output str

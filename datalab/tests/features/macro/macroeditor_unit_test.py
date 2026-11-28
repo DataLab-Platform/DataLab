@@ -22,6 +22,7 @@ import os.path as osp
 import sys
 import tempfile
 import time
+from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
 
@@ -436,22 +437,17 @@ def test_macro_preparation_error(tmp_path, monkeypatch, operation):
     """Report preparation errors and remove even a partially written file."""
     create_file = tempfile.NamedTemporaryFile
 
+    @contextmanager
     def failing_file(*args, **kwargs):
         error = OSError(f"test: {operation} failed")
         if operation == "create":
             raise error
-        stream = create_file(*args, dir=tmp_path, **kwargs)
-        if operation == "write":
-            stream.write = mock.Mock(side_effect=error)
-        else:
-            real_close = stream.close
-
-            def failing_close():
-                real_close()
-                raise error
-
-            stream.close = failing_close
-        return stream
+        with create_file(*args, dir=tmp_path, **kwargs) as stream:
+            if operation == "write":
+                stream.write = mock.Mock(side_effect=error)
+            yield stream
+        if operation == "close":
+            raise error
 
     with qt_app_context():
         panel = MacroPanel(None)
