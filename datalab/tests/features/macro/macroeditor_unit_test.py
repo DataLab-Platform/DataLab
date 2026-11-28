@@ -17,6 +17,8 @@ All other methods should be tested here.
 
 # guitest: show
 
+from __future__ import annotations
+
 import os
 import os.path as osp
 import sys
@@ -27,9 +29,12 @@ from pathlib import Path
 from unittest import mock
 
 import pytest
+from guidata import qapplication
 from guidata.io import HDF5Reader, HDF5Writer
 from guidata.qthelpers import qt_app_context
+from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.QtTest import QTest
 
@@ -41,6 +46,7 @@ from datalab.gui.macros_templates import list_templates
 from datalab.gui.panel.macro import MacroPanel
 from datalab.tests import datalab_test_app_context, helpers
 from datalab.utils import macrorecovery
+from datalab.widgets.codecompleter import MacroCodeEditor, PythonCompleter
 
 
 @pytest.fixture(autouse=True)
@@ -51,6 +57,126 @@ def isolate_macro_cache(tmp_path, monkeypatch):
         "get_path",
         staticmethod(lambda n: str(tmp_path / n)),
     )
+
+
+@pytest.fixture
+def editor():
+    """A focused macro editor without a running macro or recovery file."""
+    app = qapplication()
+    widget = MacroCodeEditor()
+    widget.show()
+    widget.activateWindow()
+    widget.setFocus()
+    app.processEvents()
+    yield widget
+    widget.close()
+
+
+@pytest.mark.parametrize("key", [QC.Qt.Key_Tab, QC.Qt.Key_Return, QC.Qt.Key_Enter])
+def test_macro_completion_keys(editor: MacroCodeEditor, key: QC.Qt.Key):
+    """Accept the highlighted row, without inserting a tab or a newline."""
+    editor.setPlainText("print(str.st)")
+    editor.moveCursor(QG.QTextCursor.End)
+    editor.moveCursor(QG.QTextCursor.PreviousCharacter)
+    QTest.keyClick(editor, QC.Qt.Key_Space, QC.Qt.ControlModifier)
+    popup = QW.QApplication.activePopupWidget()
+    assert isinstance(popup, QW.QAbstractItemView)
+    assert popup.currentIndex().data() == "startswith"
+    if key != QC.Qt.Key_Tab:
+        QTest.keyClick(popup, QC.Qt.Key_Down)
+        assert popup.currentIndex().data() == "strip"
+    selected = popup.currentIndex().data()
+    QTest.keyClick(popup, key)
+    assert editor.toPlainText() == f"print(str.{selected})"
+    assert not popup.isVisible()
+    editor.moveCursor(QG.QTextCursor.End)
+    QTest.keyClick(editor, QC.Qt.Key_Return)
+    QTest.keyClick(editor, QC.Qt.Key_Tab)
+    assert editor.toPlainText() == f"print(str.{selected})\n\t"
+
+
+def test_macro_member_completion(editor: MacroCodeEditor):
+    """A dot offers the inferred object's members, not unrelated global names."""
+    editor.setPlainText('sample = ""\nsample')
+    editor.moveCursor(QG.QTextCursor.End)
+    QTest.keyClicks(editor, ".")
+    QW.QApplication.processEvents()
+    popup = QW.QApplication.activePopupWidget()
+    assert isinstance(popup, QW.QAbstractItemView)
+    QTest.keyClicks(popup, "st")
+    assert popup.currentIndex().data() == "startswith"
+    QTest.keyClick(popup, QC.Qt.Key_Tab)
+    assert editor.toPlainText() == 'sample = ""\nsample.startswith'
+
+    for text in ("3", "# sample", "unknown_object"):
+        editor.setPlainText(text)
+        editor.moveCursor(QG.QTextCursor.End)
+        QTest.keyClicks(editor, ".")
+        QW.QApplication.processEvents()
+        assert not popup.isVisible()
+        assert editor.toPlainText() == text + "."
+
+
+def test_macro_signature_help(editor: MacroCodeEditor):
+    """An opening parenthesis shows the local function's signature, not a menu."""
+    editor.setPlainText(
+        "def calibrate(gain, offset=0): pass\ndef calibrate_raw(): pass\ncalibrate"
+    )
+    editor.moveCursor(QG.QTextCursor.End)
+    QTest.keyClick(editor, QC.Qt.Key_Space, QC.Qt.ControlModifier)
+    popup = QW.QApplication.activePopupWidget()
+    assert popup is not None
+    QTest.keyClicks(popup, "(")
+    QW.QApplication.processEvents()
+    tip = editor.calltip_widget
+    assert tip.isVisible() and QW.QApplication.activePopupWidget() is None
+    doc = QG.QTextDocument()
+    doc.setHtml(tip.text())
+    assert "calibrate(gain, offset=0)" in doc.toPlainText().replace("\xa0", " ")
+    QTest.keyClicks(editor, "2)")
+    assert not tip.isVisible()
+    assert editor.toPlainText().endswith("calibrate(2)")
+
+
+def test_macro_completion_suspended(editor: MacroCodeEditor):
+    """Showcase suspends all automatic prompts by blocking the helper's timers."""
+    (completer,) = editor.findChildren(PythonCompleter)
+    (timer,) = completer.findChildren(QC.QTimer)
+    with QC.QSignalBlocker(timer):
+        for text in ("pri", "str.", "len("):
+            editor.clear()
+            editor.insertPlainText(text)
+            QTest.qWait(timer.interval() + 50)
+            assert QW.QApplication.activePopupWidget() is None
+            assert not editor.calltip_widget.isVisible()
+        timer.stop()
+    editor.clear()
+    QTest.keyClicks(editor, "str.")
+    QW.QApplication.processEvents()
+    assert completer.popup().isVisible()
+    QTest.keyClick(completer.popup(), QC.Qt.Key_Escape)
+    editor.clear()
+    QTest.keyClicks(editor, "len(")
+    QW.QApplication.processEvents()
+    assert editor.calltip_widget.isVisible()
+
+
+def test_python_completer_on_plain_editor():
+    """Plugins can still attach the helper to a guidata editor and trigger it."""
+    app = qapplication()
+    widget = CodeEditor(language="python")
+    helper = PythonCompleter(widget)
+    widget.show()
+    widget.activateWindow()
+    widget.setFocus()
+    app.processEvents()
+    widget.insertPlainText("str.st")
+    helper.trigger()
+    popup = helper.popup()
+    assert popup.isVisible() and popup.currentIndex().data() == "startswith"
+    QTest.keyClick(popup, QC.Qt.Key_Tab)
+    assert widget.toPlainText() == "str.startswith"
+    widget.close()
 
 
 def get_macro_example_path() -> str:

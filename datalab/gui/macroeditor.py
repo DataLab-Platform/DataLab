@@ -22,7 +22,6 @@ import uuid
 
 from guidata.io import BaseIOHandler
 from guidata.utils.misc import to_string
-from guidata.widgets.codeeditor import CodeEditor
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -32,6 +31,7 @@ from datalab.config import _
 from datalab.env import execenv
 from datalab.gui import ObjItf
 from datalab.utils import macrorecovery
+from datalab.widgets.codecompleter import MacroCodeEditor
 
 UNTITLED_NB = 0
 
@@ -95,7 +95,8 @@ print("All done!")
         self.console = console
         self.title = self.get_untitled_title() if title is None else title
         self.uid = uuid.uuid4().hex
-        self.editor = CodeEditor(language="python")
+        self.editor = MacroCodeEditor()
+        self.completer = self.editor.completer
         self.editor.setLineWrapMode(QW.QPlainTextEdit.NoWrap)
         self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)

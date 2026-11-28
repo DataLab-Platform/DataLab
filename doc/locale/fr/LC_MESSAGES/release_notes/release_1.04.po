@@ -46,6 +46,10 @@ msgstr "**Macros** : l'exécution d'une macro pouvait échouer avec une erreur `
 
 msgid "**Internal console**: selecting several objects from the internal console, e.g. with `dl.select_objects([1, 2, 3])`, kept only the last one selected, whereas the same call from a macro selected them all. Every console command now keeps the selection of objects or groups, and the current object (fixes [Issue #592](https://github.com/DataLab-Platform/DataLab/issues/592))."
 msgstr "**Console interne** : la sélection de plusieurs objets depuis la console interne, par exemple avec `dl.select_objects([1, 2, 3])`, ne conservait que le dernier objet sélectionné, alors que le même appel depuis une macro les sélectionnait tous. Chaque commande de la console conserve désormais la sélection d'objets ou de groupes, ainsi que l'objet courant (corrige [l'issue #592](https://github.com/DataLab-Platform/DataLab/issues/592))."
+
+msgid "**Macro editor**: Tab and Enter now insert the highlighted completion instead of indenting or starting a new line. Typing `.` after an object lists its members, and typing `(` after a function or method name shows its signature when available (fixes [Issue #596](https://github.com/DataLab-Platform/DataLab/issues/596))."
+msgstr "**Éditeur de macros** : les touches Tab et Entrée insèrent désormais la suggestion sélectionnée au lieu d'ajouter une tabulation ou un saut de ligne. Saisir `.` après un objet affiche ses attributs et ses méthodes ; saisir `(` après le nom d'une fonction ou d'une méthode affiche sa signature si elle est disponible (corrige [l'issue #596](https://github.com/DataLab-Platform/DataLab/issues/596))."
+
 msgid "DataLab Version 1.4.1"
 msgstr "DataLab Version 1.4.1"
 
