@@ -11,6 +11,7 @@ of a reply), the "Show in Macro panel" link and the macro tool run with
 from __future__ import annotations
 
 import re
+import tempfile
 
 import pytest
 from qtpy import QtCore as QC
@@ -79,6 +80,33 @@ def test_macro_tool_without_autorun_does_not_run() -> None:
         assert "note" in result
         assert console.toPlainText() == before
         assert win.macropanel.get_macro_titles() == titles
+
+
+def test_macro_tool_timeout_reaps_child(tmp_path, monkeypatch) -> None:
+    """A timed-out transient macro has an exit status and leaves no script."""
+    monkeypatch.setattr(tempfile, "tempdir", str(tmp_path))
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        result = {}
+
+        def call_tool():
+            result.update(
+                _tool_create_and_run_macro(
+                    None,
+                    win,
+                    title="timeout",
+                    code="import time; time.sleep(30)",
+                    timeout=0.1,
+                )
+            )
+            QW.QApplication.quit()
+
+        # The tool enters a nested event loop; invoke it in a running application
+        # loop, not after a previous test application has already quit.
+        QC.QTimer.singleShot(0, call_tool)
+        QW.QApplication.instance().exec_()
+        assert result["timed_out"] and not result["ok"]
+        assert result["exit_code"] is not None
+        assert not list(tmp_path.glob("datalab_macro_*.py"))
 
 
 def test_save_links_of_a_reloaded_conversation() -> None:

@@ -1095,6 +1095,22 @@ msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
 #, python-format
+msgid "Unable to remove temporary macro file '%s': %s"
+msgstr "Impossible de supprimer le fichier temporaire de la macro « %s » : %s"
+
+#, python-format
+msgid "Macro '%s' is already running"
+msgstr "La macro « %s » est déjà en cours d'exécution"
+
+#, python-format
+msgid "Unable to prepare '%s' macro: %s"
+msgstr "Impossible de préparer la macro « %s » : %s"
+
+#, python-format
+msgid "Unable to stop '%s' macro: %s"
+msgstr "Impossible d'arrêter la macro « %s » : %s"
+
+#, python-format
 msgid "# ==> Unable to run '%s' macro"
 msgstr "# ==> Impossible d'exécuter la macro '%s'"
 

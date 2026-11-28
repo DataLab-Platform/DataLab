@@ -29,6 +29,9 @@ The ``gui`` and ``probe`` commands run steps 5 and 6 on an executable, e.g.
 ``dist/DataLab/DataLab.exe``. Each run of the executable uses its own user profile
 and working directory. Screenshots, reports, logs and ``summary.json`` are collected
 in ``WORKDIR/evidence``. The exit code is 0 if every step passed, 1 otherwise.
+
+The independent ``macro --exe EXE --workdir DIR`` command verifies that a frozen
+Macro panel starts and stops macros in another instance of that same executable.
 """
 
 from __future__ import annotations
@@ -265,7 +268,9 @@ class ExecutableRun:
         os.makedirs(self.cwd)
         os.makedirs(self.profile)
 
-    def execute(self, arguments: list[str], timeout: float) -> list[str]:
+    def execute(
+        self, arguments: list[str], timeout: float, *, tempdir: str | None = None
+    ) -> list[str]:
         """Run the executable and return the problems found.
 
         Problems: timeout, non-zero exit code, ``datalab_error.log`` written in the
@@ -273,6 +278,8 @@ class ExecutableRun:
         """
         env = {k: v for k, v in os.environ.items() if k not in UNSET_VARIABLES}
         env.update(dict.fromkeys(PROFILE_VARIABLES, self.profile))
+        if tempdir is not None:
+            env.update(dict.fromkeys(("TEMP", "TMP", "TMPDIR"), tempdir))
         command = [self.exe, *arguments]
         log(subprocess.list2cmdline(command))
         start = time.monotonic()
@@ -327,6 +334,40 @@ def check_gui(
         if problems:
             raise SmokeTestError("; ".join(problems))
         return f"main window started and closed, screenshots: {', '.join(names)}"
+
+    return step
+
+
+def check_macros(
+    exe: str, workdir: str, evidence: str, timeout: float
+) -> Callable[[], str]:
+    """Check a frozen panel and its children without installing the MSI."""
+
+    def step() -> str:
+        run = ExecutableRun(exe, workdir, evidence, "macro")
+        tempdir = osp.join(run.cwd, "temp d'essai été")
+        os.mkdir(tempdir)
+        driver = shutil.copy(
+            osp.join(ROOT, "scripts", "frozen_macro_probe.py"), run.cwd
+        )
+        report = osp.join(evidence, "macro.json")
+        logfile = osp.join(evidence, "macro-driver.log")
+        code = (
+            f"import runpy, sys; sys.stdout = sys.stderr = open({logfile!r}, "
+            f"'w', encoding='utf-8'); runpy.run_path({driver!r})['main']"
+            f"({exe!r}, {report!r})"
+        )
+        problems = run.execute(["-c", code], timeout, tempdir=tempdir)
+        if not osp.isfile(report):
+            problems.append(f"no macro report (see {logfile})")
+        if problems:
+            raise SmokeTestError("; ".join(problems))
+        with open(report, encoding="utf-8") as stream:
+            result = json.load(stream)
+        return (
+            f"parent {result['parent']['pid']}, child {result['child']['pid']}; "
+            "long macro, traceback and stop passed"
+        )
 
     return step
 
@@ -519,7 +560,7 @@ class MsiSmokeTest:
 
 
 def run_executable_step(args: argparse.Namespace) -> int:
-    """Run the ``gui`` or ``probe`` command on an executable."""
+    """Run the requested standalone check on an executable."""
     exe = osp.abspath(args.exe)
     workdir = osp.abspath(args.workdir)
     evidence = prepare_workdir(workdir)
@@ -528,6 +569,11 @@ def run_executable_step(args: argparse.Namespace) -> int:
         name, step = (
             "Start DataLab",
             check_gui(exe, workdir, evidence, args.delay, args.timeout),
+        )
+    elif args.command == "macro":
+        name, step = (
+            "Run macros in the standalone",
+            check_macros(exe, workdir, evidence, args.timeout),
         )
     else:
         name = "Check the installation (--smoke-test)"
@@ -554,6 +600,9 @@ def main(argv: list[str] | None = None) -> int:
             "gui", help="start an executable with screenshots"
         ),
         "probe": subparsers.add_parser("probe", help="run an executable --smoke-test"),
+        "macro": subparsers.add_parser(
+            "macro", help="run macros in a frozen parent and child"
+        ),
     }
     for command, sub in commands.items():
         sub.add_argument(
@@ -583,7 +632,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         else:
             sub.add_argument("--exe", required=True, help="DataLab executable")
-        if command != "probe":
+        if command in ("all", "gui"):
             sub.add_argument(
                 "--delay",
                 type=int,
