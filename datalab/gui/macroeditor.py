@@ -16,6 +16,7 @@ import os
 import os.path as osp
 import re
 import sys
+import tempfile
 import time
 import uuid
 
@@ -102,7 +103,9 @@ print("All done!")
         self._autosave_timer.setSingleShot(True)
         self._autosave_timer.setInterval(_AUTOSAVE_DELAY_MS)
         self._autosave_timer.timeout.connect(self._autosave_pending)
-        self.process = None
+        self.process: QC.QProcess | None = None
+        self._stopping = False
+        self._temp_script_path: str | None = None
         self.__last_exit_code = None
 
     @property
@@ -272,8 +275,7 @@ print("All done!")
         """
         # Python 3 outputs UTF-8 by default, so we need to decode as UTF-8
         # instead of using the system locale codec (which might be cp1252 on Windows)
-        utf8_codec = QC.QTextCodec.codecForName(b"UTF-8")
-        return utf8_codec.toUnicode(bytearr.data())
+        return bytes(bytearr).decode("utf-8", errors="replace")
 
     def get_stdout(self) -> str:
         """Return standard output str
@@ -281,11 +283,8 @@ print("All done!")
         Returns:
             Standard output str
         """
-        self.process.setReadChannel(QC.QProcess.StandardOutput)
-        bytearr = QC.QByteArray()
-        while self.process.bytesAvailable():
-            bytearr += self.process.readAllStandardOutput()
-        return self.transcode(bytearr)
+        assert self.process is not None
+        return self.transcode(self.process.readAllStandardOutput())
 
     def get_stderr(self) -> str:
         """Return standard error str
@@ -293,11 +292,8 @@ print("All done!")
         Returns:
             Standard error str
         """
-        self.process.setReadChannel(QC.QProcess.StandardError)
-        bytearr = QC.QByteArray()
-        while self.process.bytesAvailable():
-            bytearr += self.process.readAllStandardError()
-        return self.transcode(bytearr)
+        assert self.process is not None
+        return self.transcode(self.process.readAllStandardError())
 
     def write_output(self) -> None:
         """Write text as standard output"""
@@ -317,41 +313,82 @@ print("All done!")
         msg = f"---({time.ctime()})---[{text}]{os.linesep}"
         if eol_before:
             msg = os.linesep + msg
-        self.console.write(msg, error=error, prompt=not error)
+        self.console.write(msg, flush=error, error=error, prompt=not error)
+
+    def _cleanup_temp_script(self) -> None:
+        """Remove the temporary script file created by ``run`` if it still exists."""
+        path = self._temp_script_path
+        if path is None:
+            return
+        for attempt in range(2):
+            try:
+                os.remove(path)
+                break
+            except FileNotFoundError:
+                break
+            except OSError as exc:
+                # Windows scanners may briefly keep the closed file open.
+                if attempt == 0:
+                    time.sleep(0.02)
+                else:
+                    self.print(
+                        _("Unable to remove temporary macro file '%s': %s")
+                        % (path, exc),
+                        error=True,
+                    )
+        self._temp_script_path = None
+
+    def _finish_run(self, process: QC.QProcess) -> None:
+        """Release this run before notifying slots that may start another one."""
+        if self.process is not process:
+            return
+        self._cleanup_temp_script()
+        process.deleteLater()
+        self.process = None
+        self.FINISHED.emit()
 
     def run(self) -> None:
         """Run macro"""
-        self.flush_autosave()
+        if self.process is not None or self._stopping:
+            self.print(_("Macro '%s' is already running") % self.title, error=True)
+            return
+        process = self.process = QC.QProcess(self)
         self.__last_exit_code = None
-        self.process = QC.QProcess()
-        code = self.get_code()
+        self.flush_autosave()
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="wb", prefix="datalab_macro_", suffix=".py", delete=False
+            ) as fdesc:
+                self._temp_script_path = fdesc.name
+                fdesc.write(self.get_code().encode("utf-8"))
+        except (OSError, UnicodeError) as exc:
+            message = _("Unable to prepare '%s' macro: %s") % (self.title, exc)
+            self.print(message, error=True)
+            QW.QMessageBox.critical(self.console, _("Error"), message)
+            self._finish_run(process)
+            return
         datalab_path = osp.abspath(osp.join(osp.dirname(datalab.__file__), os.pardir))
-        # Reconfigure stdout/stderr to use UTF-8 encoding to avoid UnicodeEncodeError
-        # on Windows with locales that don't support all Unicode characters
-        # (e.g., cp1252)
-        code = (
-            f"import sys; sys.path.append(r'{datalab_path}'); "
-            f"sys.stdout.reconfigure(encoding='utf-8'); "
-            f"sys.stderr.reconfigure(encoding='utf-8'){os.linesep}{code}"
+        filename = "<macro:" + " ".join(self.title[:128].splitlines()) + ">"
+        bootstrap = (
+            f"import sys; sys.path.append({datalab_path!r}); "
+            "from datalab.utils.macrorunner import run as _run_macro; "
+            f"_run_macro({self._temp_script_path!r}, {filename!r})"
         )
-        env = QC.QProcessEnvironment()
+        env = QC.QProcessEnvironment.systemEnvironment()
         env.insert(execenv.XMLRPCPORT_ENV, str(execenv.xmlrpcport))
-        sysenv = env.systemEnvironment()
-        for key in sysenv.keys():
-            env.insert(key, sysenv.value(key))
-        self.process.readyReadStandardOutput.connect(self.write_output)
-        self.process.readyReadStandardError.connect(self.write_error)
-        self.process.started.connect(self.started)
-        self.process.errorOccurred.connect(self.error_occurred)
-        self.process.finished.connect(self.finished)
-        self.process.setProcessEnvironment(env)
-        args = ["-c", code]
+        process.readyReadStandardOutput.connect(self.write_output)
+        process.readyReadStandardError.connect(self.write_error)
+        process.started.connect(self.started)
+        process.errorOccurred.connect(self.error_occurred)
+        process.finished.connect(self.finished)
+        process.setProcessEnvironment(env)
+        args = ["-c", bootstrap]
         # The process starts asynchronously, without a timeout: its start may be
         # slow, e.g. when an antivirus scans the standalone executable.
-        self.process.start(sys.executable, args)
+        process.start(sys.executable, args)
         # On Windows, a start failure is reported (and FINISHED emitted) by
         # `error_occurred` before `start` returns
-        if self.is_running():
+        if self.process is process:
             self.STARTED.emit()
 
     def started(self) -> None:
@@ -367,7 +404,9 @@ print("All done!")
         # Other errors (e.g. a crash) are followed by the `finished` signal
         if error != QC.QProcess.FailedToStart:
             return
-        reason = self.process.errorString()
+        process = self.process
+        assert process is not None
+        reason = process.errorString()
         self.print(
             _("# ==> Unable to run '%s' macro") % self.title + f": {reason}",
             error=True,
@@ -377,9 +416,9 @@ print("All done!")
             _("Error"),
             _("Macro Python interpreter failed to start!")
             + f"\n\n{reason}\n\n"
-            + _("Executable: %s") % self.process.program(),
+            + _("Executable: %s") % process.program(),
         )
-        self.FINISHED.emit()
+        self._finish_run(process)
 
     def is_running(self) -> bool:
         """Is macro running?
@@ -387,15 +426,30 @@ print("All done!")
         Returns:
             True if macro is running
         """
-        if self.process is not None:
-            return self.process.state() != QC.QProcess.NotRunning
-        return False
+        return self.process is not None
 
     def kill(self) -> None:
         """Kill process associated to macro"""
-        if self.process is not None:
+        process = self.process
+        if process is not None:
             self.print(_("Terminating '%s' macro") % self.title, error=True)
-            self.process.kill()
+            if self.process is process:
+                process.kill()
+
+    def stop_and_wait(self) -> None:
+        """Stop the child before its tab or its transient owner is discarded."""
+        process = self.process
+        if process is not None and process.state() != QC.QProcess.NotRunning:
+            self._stopping = True
+            try:
+                self.kill()
+                if self.process is process and not process.waitForFinished(5000):
+                    raise RuntimeError(
+                        _("Unable to stop '%s' macro: %s")
+                        % (self.title, process.errorString())
+                    )
+            finally:
+                self._stopping = False
 
     # pylint: disable=unused-argument
     def finished(self, exit_code: int, exit_status: QC.QProcess.ExitStatus) -> None:
@@ -405,10 +459,15 @@ print("All done!")
             exit_code: Exit code
             exit_status: Exit status
         """
+        process = self.process
+        assert process is not None
         self.__last_exit_code = exit_code
+        for read, error in ((self.get_stdout, False), (self.get_stderr, True)):
+            text = read()
+            if text:
+                self.console.write(text, error=error, flush=True)
         self.print(_("# <== '%s' macro has finished") % self.title, eol_before=False)
-        self.FINISHED.emit()
-        self.process = None
+        self._finish_run(process)
 
     def get_exit_code(self) -> int | None:
         """Return last exit code of the macro process

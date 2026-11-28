@@ -457,6 +457,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
+        for macro in self.__macros:
+            macro.stop_and_wait()
         # Note: the autosave/recovery cache is intentionally NOT cleared here,
         # so that closing DataLab (which calls ``reset_all`` → this method)
         # without saving the workspace preserves unsaved macros for the next
@@ -1045,6 +1047,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         if choice == QW.QMessageBox.StandardButton.Yes:
             macro = self.get_macro(number_or_title)
             if macro is not None:
+                macro.stop_and_wait()
                 macro.clear_autosave()
             self.tabwidget.remove_tab(number_or_title)
             self.__macros.pop(number_or_title - 1)

@@ -17,15 +17,21 @@ All other methods should be tested here.
 
 # guitest: show
 
+import os
 import os.path as osp
 import sys
+import tempfile
 import time
+from contextlib import contextmanager
+from pathlib import Path
 from unittest import mock
 
+import pytest
 from guidata.io import HDF5Reader, HDF5Writer
 from guidata.qthelpers import qt_app_context
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from qtpy.QtTest import QTest
 
 from datalab.aiassistant.tools.builtin import _wait_macro_finished
 from datalab.config import _
@@ -34,6 +40,17 @@ from datalab.gui.macroeditor import Macro
 from datalab.gui.macros_templates import list_templates
 from datalab.gui.panel.macro import MacroPanel
 from datalab.tests import datalab_test_app_context, helpers
+from datalab.utils import macrorecovery
+
+
+@pytest.fixture(autouse=True)
+def isolate_macro_cache(tmp_path, monkeypatch):
+    """Keep the editor tests out of the user's recovery and recent caches."""
+    monkeypatch.setattr(
+        macrorecovery.Configuration,
+        "get_path",
+        staticmethod(lambda n: str(tmp_path / n)),
+    )
 
 
 def get_macro_example_path() -> str:
@@ -282,6 +299,15 @@ print("All Unicode tests passed! ✓")
             win.macropanel.remove_all_objects()
 
 
+def _wait_macro(macro: Macro, timeout_ms: int = 10000) -> None:
+    """Wait for all runs, including an immediate restart from FINISHED."""
+    timer = QC.QElapsedTimer()
+    timer.start()
+    while macro.is_running() and timer.elapsed() < timeout_ms:
+        QTest.qWait(10)
+    assert not macro.is_running(), "macro did not finish before the deadline"
+
+
 def test_macro_start_failure():
     """Test that a macro which cannot start reports why (issue #587).
 
@@ -302,9 +328,17 @@ def test_macro_start_failure():
         states = []
         macro.STARTED.connect(lambda: states.append("started"))
         macro.FINISHED.connect(lambda: states.append("finished"))
+        created_scripts: list[str | None] = []
+        orig_start = QC.QProcess.start
+
+        def spy_start(self_proc, program, arguments, *rest, **kwargs):
+            created_scripts.append(macro._temp_script_path)
+            return orig_start(self_proc, program, arguments, *rest, **kwargs)
+
         with (
             mock.patch.object(sys, "executable", missing),
             mock.patch.object(QW.QMessageBox, "critical", side_effect=critical),
+            mock.patch.object(QC.QProcess, "start", spy_start),
         ):
             widget.run_macro()
             timer = QC.QElapsedTimer()
@@ -315,6 +349,8 @@ def test_macro_start_failure():
         assert states and states[-1] == "finished"
         assert not macro.is_running()
         assert macro.get_exit_code() is None
+        assert len(created_scripts) == 1 and created_scripts[0] is not None
+        assert not osp.exists(created_scripts[0])
         assert len(messages) == 1 and missing in messages[0]
         error_msg = _("# ==> Unable to run '%s' macro") % macro.title
         assert error_msg in widget.console.toPlainText()
@@ -326,8 +362,206 @@ def test_macro_start_failure():
         widget.remove_all_objects()
 
 
+def test_macro_temp_script_long_code_and_traceback():
+    """Test running long macros via a temporary file with accurate line numbers.
+
+    Regression test for issue #588: macro code must not be passed on the command
+    line, traceback line numbers must match the editor, and the temporary file
+    must be removed after execution (both on success and on error).
+    """
+    with qt_app_context():
+        widget = MacroPanel(None)
+        macro = widget.add_macro()
+
+        # 1. Long macro (>40,000 chars, exceeding Windows' 32,767 char limit)
+        # with an encoding cookie and special shell/quoting characters.
+        padding = ("# " + "x" * 78 + "\n") * 550
+        special = r"""quote' "double" \backslash\ %percent% $dollar$ → ✓"""
+        long_code = (
+            "\ufeff# -*- coding: latin-1 -*-\n"
+            "from __future__ import annotations\n"
+            f"{padding}"
+            "import pickle, sys\n"
+            "class Example: pass\n"
+            "assert globals() is vars(sys.modules['__main__'])\n"
+            "assert '__file__' not in globals()\n"
+            "assert type(pickle.loads(pickle.dumps(Example()))) is Example\n"
+            f"MARKER = {special!r}\n"
+            "print('LONG_OK:', MARKER.encode().hex(), __name__)\n"
+        )
+        assert len(long_code) > 40000
+        macro.set_code(long_code)
+
+        recorded_args: list[list[str]] = []
+        orig_start = QC.QProcess.start
+
+        def spy_start(self_proc, program, arguments, *rest, **kwargs):
+            recorded_args.append(list(arguments))
+            return orig_start(self_proc, program, arguments, *rest, **kwargs)
+
+        with mock.patch.object(QC.QProcess, "start", spy_start):
+            widget.run_macro()
+            script_path = macro._temp_script_path
+            _wait_macro(macro)
+
+        assert not macro.is_running()
+        assert macro.get_exit_code() == 0
+        assert len(recorded_args) == 1 and len(" ".join(recorded_args[0])) < 4096
+        assert (
+            f"LONG_OK: {special.encode().hex()} __main__"
+            in widget.console.toPlainText()
+        )
+        assert script_path is not None and not osp.exists(script_path)
+
+        # 2. Traceback line numbers must match the editor (line 3 -> "line 3"),
+        # and the temporary script file must still be removed after an error.
+        macro.set_code("a = 1\nb = 2\nraise ValueError('boom_line_3')\n")
+        before = len(widget.console.toPlainText())
+        widget.run_macro()
+        err_script_path = macro._temp_script_path
+        _wait_macro(macro)
+
+        assert not macro.is_running()
+        assert macro.get_exit_code() == 1
+        err_output = widget.console.toPlainText()[before:]
+        assert f'File "<macro:{macro.title}>", line 3,' in err_output
+        assert "raise ValueError('boom_line_3')" in err_output
+        assert "ValueError: boom_line_3" in err_output
+        assert err_script_path is not None and not osp.exists(err_script_path)
+
+        widget.remove_all_objects()
+
+
+@pytest.mark.parametrize("operation", ["create", "write", "close"])
+def test_macro_preparation_error(tmp_path, monkeypatch, operation):
+    """Report preparation errors and remove even a partially written file."""
+    create_file = tempfile.NamedTemporaryFile
+
+    @contextmanager
+    def failing_file(*args, **kwargs):
+        error = OSError(f"test: {operation} failed")
+        if operation == "create":
+            raise error
+        with create_file(*args, dir=tmp_path, **kwargs) as stream:
+            if operation == "write":
+                stream.write = mock.Mock(side_effect=error)
+            yield stream
+        if operation == "close":
+            raise error
+
+    with qt_app_context():
+        panel = MacroPanel(None)
+        macro = panel.add_macro()
+        states = []
+        macro.STARTED.connect(lambda: states.append("started"))
+        macro.FINISHED.connect(lambda: states.append("finished"))
+        monkeypatch.setattr(tempfile, "NamedTemporaryFile", failing_file)
+        with mock.patch.object(QW.QMessageBox, "critical"):
+            macro.run()
+        assert states == ["finished"]
+        assert macro.get_exit_code() is None and not macro.is_running()
+        assert f"test: {operation} failed" in panel.console.toPlainText()
+        assert not list(tmp_path.glob("datalab_macro_*.py"))
+        panel.remove_all_objects()
+
+
+def test_removing_running_macro_stops_and_cleans():
+    """Removing a running tab stops its child and removes its script."""
+    with qt_app_context():
+        panel = MacroPanel(None)
+        macro = panel.add_macro()
+        macro.set_code("import time; time.sleep(20)")
+        macro.run()
+        path = Path(macro._temp_script_path)
+        try:
+            panel.remove_macro(1)
+            assert not macro.is_running()
+            assert not path.exists()
+        finally:
+            if macro.is_running():
+                macro.kill()
+                _wait_macro(macro)
+
+
+def test_macro_independent_runs_and_restart():
+    """A refused duplicate must not disturb another tab or a FINISHED restart."""
+    with qt_app_context():
+        panel = MacroPanel(None)
+        first = panel.add_macro_with_code("one", "import time; time.sleep(30)")
+        second = panel.add_macro_with_code("two", "raise SystemExit(7)")
+        exits = []
+        first_finished = []
+        first.FINISHED.connect(lambda: first_finished.append(True))
+
+        def restart():
+            exits.append(second.get_exit_code())
+            if len(exits) == 1:
+                second.set_code("print('second run completed')")
+                panel.run_macro(2)
+
+        second.FINISHED.connect(restart)
+        panel.run_macro(1)
+        try:
+            path = Path(first._temp_script_path)
+            panel.run_macro(1)
+            panel.run_macro(2)
+            _wait_macro(second)
+            assert exits == [7, 0]
+            assert "second run completed" in panel.console.toPlainText()
+            assert first.is_running() and not first_finished
+            assert path == Path(first._temp_script_path) and path.is_file()
+        finally:
+            panel.remove_all_objects()
+        assert first_finished == [True] and not path.exists()
+
+
+def test_hiding_macro_panel_is_not_shutdown():
+    """Only closing the application stops the hidden tab and preserves recovery."""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        panel = win.macropanel
+        macro = panel.add_macro_with_code("hidden", "import time; time.sleep(30)")
+        panel.run_macro()
+        path = Path(macro._temp_script_path)
+        win.docks[panel].hide()
+        assert macro.is_running() and path.exists()
+    assert not macro.is_running() and not path.exists()
+    assert macro.uid in macrorecovery.load_pending()
+
+
+@pytest.mark.parametrize("permanent_lock", [False, True])
+def test_macro_syntax_error_and_cleanup_retry(monkeypatch, permanent_lock):
+    """Retry locks and report persistent locks without hiding the syntax error."""
+    with qt_app_context():
+        panel = MacroPanel(None)
+        macro = panel.add_macro_with_code("syntax", "a = 1\nb = 2\nif :")
+        macro.run()
+        path = macro._temp_script_path
+        remove = os.remove
+        attempts = []
+
+        def locked_once(filename):
+            if filename == path:
+                attempts.append(filename)
+                if permanent_lock or len(attempts) == 1:
+                    raise PermissionError("locked")
+            return remove(filename)
+
+        monkeypatch.setattr(os, "remove", locked_once)
+        _wait_macro(macro)
+        assert attempts == [path, path] and osp.exists(path) == permanent_lock
+        output = panel.console.toPlainText()
+        if permanent_lock:
+            remove(path)
+            assert path in output and "locked" in output
+        assert macro.get_exit_code() == 1
+        assert 'File "<macro:syntax>", line 3' in output
+        assert "if :" in output and "SyntaxError:" in output
+        panel.remove_all_objects()
+
+
 if __name__ == "__main__":
     test_macro_editor()
     test_macro_uid_and_new_actions()
     test_macro_unicode_encoding()
     test_macro_start_failure()
+    test_macro_temp_script_long_code_and_traceback()

@@ -98,6 +98,9 @@ msgstr "Les macros sont intégrées dans l'espace de travail de DataLab, elles s
 msgid "Macro are executed in a separate process, so they won't block the main DataLab application. This means that you can continue working with DataLab while a macro is running and that *you can stop a macro at any time* using the |libre-camera-flash-off| button."
 msgstr "Les macros sont exécutées dans un processus séparé, elles ne bloqueront donc pas l'application principale de DataLab. Cela signifie que vous pouvez continuer à travailler avec DataLab pendant qu'une macro est en cours d'exécution et que *vous pouvez arrêter une macro à tout moment* en utilisant le bouton |libre-camera-flash-off|."
 
+msgid "Different macros can run at the same time, but the same macro cannot be started twice while it is running. Closing its tab stops it; hiding the panel does not. If a macro raises a Python exception, the console shows the macro title and the corresponding line in the editor."
+msgstr "Plusieurs macros peuvent s'exécuter en parallèle, mais une macro déjà en cours d'exécution ne peut pas être lancée une seconde fois. Fermer son onglet l'arrête ; masquer le panneau ne l'arrête pas. En cas d'exception Python, la console indique le titre de la macro et la ligne correspondante dans l'éditeur."
+
 msgid "Editor features"
 msgstr "Fonctionnalités de l'éditeur"
 

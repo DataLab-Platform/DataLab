@@ -108,6 +108,11 @@ workspace file.
    is running and that *you can stop a macro at any time* using the
    |libre-camera-flash-off| button.
 
+   Different macros can run at the same time, but the same macro cannot be started
+   twice while it is running. Closing its tab stops it; hiding the panel does not.
+   If a macro raises a Python exception, the console shows the macro title and the
+   corresponding line in the editor.
+
 Editor features
 ---------------
 

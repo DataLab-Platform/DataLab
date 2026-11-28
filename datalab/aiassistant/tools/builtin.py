@@ -549,6 +549,9 @@ def _wait_macro_finished(macro, console, console_before_len: int, timeout: float
     timer.start(int(max(timeout, 0.1) * 1000))
     loop.exec_()
     timer.stop()
+    # A timeout or application shutdown can end the loop before FINISHED.
+    if macro.is_running():
+        macro.stop_and_wait()
 
     full = console.toPlainText()
     output = full[console_before_len:]
